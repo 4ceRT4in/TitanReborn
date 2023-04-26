@@ -3,20 +3,25 @@
 	"id": "titanfabric",
 	"version": "${version}",
 	"name": "Titan Fabric",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Fabric 1.16.5 Port of the \"Titan\" mod",
 	"authors": [
-		"Me!"
+		"Fab - forge dev",
+		"ShiroJR - fabric dev",
+		"4ceRT4in - art"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "",
+		"sources": "https://github.com/4ceRT4in/TitanReborn"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/titanfabric/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.shirojr.titanfabric.ExampleMod"
+			"net.shirojr.titanfabric.TitanFabric"
+		],
+		"client": [
+			"net.shirojr.titanfabric.TitanFabricClient"
 		]
 	},
 	"mixins": [
