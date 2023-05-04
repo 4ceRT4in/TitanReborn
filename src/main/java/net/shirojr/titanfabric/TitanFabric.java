@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.effect.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import org.slf4j.Logger;
@@ -20,7 +21,9 @@ public class TitanFabric implements ModInitializer {
         ConfigInit.init();
         TitanFabricItems.registerModItems();
         TitanFabricBlocks.registerModBlocks();
+
         TitanFabricStatusEffects.registerStatusEffects();
+        TitanFabricPotions.registerAllPotions();
     }
 
     /**
