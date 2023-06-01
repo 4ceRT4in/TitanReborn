@@ -2,18 +2,23 @@
 
 Fabric 1.16.5 Port of the Forgemod Titan
 
+This mod uses the [Fabric Shield Lib](https://modrinth.com/mod/fabricshieldlib/version/1.7-1.18.2).
+It has been included within the jar so no extra download has to be made.
+
+
+
 ---
 
 # TODO:
 
 ### Custom Bows
 
-- MultiBow
-- LegendBow
-- LegendArrows (Effect arrows?)
-- FinalLegendBow
-- EffectArrows?
-- CitrinStarItem (+ Entity)
+- [ ] MultiBow
+- [ ] LegendBow
+- [ ] LegendArrows (Effect arrows?)
+- [ ] FinalLegendBow
+- [ ] EffectArrows?
+- [ ] CitrinStarItem (+ Entity)
 
 ### Custom Shields
 
@@ -22,36 +27,36 @@ Fabric 1.16.5 Port of the Forgemod Titan
 
 ### effect armor
 
-- CitrinArmor
-- ExtendedArmor
-- LegendArmor
-- LegendBoots
-- LegendChestplate
-- LegendHelmet
-- LegendLeggings
-- NetherArmor?
+- [ ] CitrinArmor
+- [ ] ExtendedArmor
+- [ ] LegendArmor
+- [ ] LegendBoots
+- [ ] LegendChestplate
+- [ ] LegendHelmet
+- [ ] LegendLeggings
+- [ ] NetherArmor?
 
 ### effect essence Items
 
-- BlindnessEssence
-- FireEssence
-- PoisonEssence
-- WeaknessEssence
-- WitherEssence
+- [ ] BlindnessEssence
+- [ ] FireEssence
+- [ ] PoisonEssence
+- [ ] WeaknessEssence
+- [ ] WitherEssence
 
 ### effect sword
 
-- CitrinSword (+ effect versions) -> extend CitrinSwordItem
-- Vanilla Dia? (+ effect versions) -> extend SwordItem
-- LegendSword (+ effect versions) -> extend LegendSwordItem
-- NetherSword (+ effect versions) -> extend NetherSwordItem
+- [ ] CitrinSword (+ effect versions) -> extend CitrinSwordItem
+- [ ] ?Vanilla Dia? (+ effect versions) -> extend SwordItem
+- [ ] LegendSword (+ effect versions) -> extend LegendSwordItem
+- [ ] NetherSword (+ effect versions) -> extend NetherSwordItem
 
 ### effect entities
 
-- BlindnessArrow
-- PoisonArrow
-- WeaknessArrow
-- WitherArrow
+- [ ] BlindnessArrow
+- [ ] PoisonArrow
+- [ ] WeaknessArrow
+- [ ] WitherArrow
 
 ### events
 
@@ -72,11 +77,11 @@ Fabric 1.16.5 Port of the Forgemod Titan
 
 ### ores
 
-- CitrinOre
-- LegendOre
-- NetherOre
+- [ ] CitrinOre
+- [ ] LegendOre
+- [ ] NetherOre
 
-### ling potion brewing recipe
+### lingering potion brewing recipe
 - extends BrewingRecipe
 - check if input is splashpotion
 - 
