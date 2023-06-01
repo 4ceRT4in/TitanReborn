@@ -1,0 +1,6 @@
+{
+  "parent": "legendmod:item/multi_bow_1",
+  "textures": {
+    "layer0": "legendmod:items/multi_bow_1_pulling_0"
+  }
+}

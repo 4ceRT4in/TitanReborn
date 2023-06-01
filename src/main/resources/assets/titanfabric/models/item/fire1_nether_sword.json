@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "titanfabric:items/fire1_nether_sword"
+  }
+
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "legendmod:blocks/diamond_furnace_top",
+    "front": "legendmod:blocks/diamond_furnace_front",
+    "side": "legendmod:blocks/diamond_furnace_side"
+  }
+}

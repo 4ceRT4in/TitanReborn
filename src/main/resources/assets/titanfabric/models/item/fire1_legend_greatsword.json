@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "legendmod:items/fire1_legend_greatsword"
+  }
+
+}

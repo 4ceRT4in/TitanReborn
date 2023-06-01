@@ -1,0 +1,10 @@
+{
+  "hagebuddne": {
+    "sounds": [
+      {
+        "name": "titanfabric:hagebuddne",
+        "stream": true
+      }
+    ]
+  }
+}
