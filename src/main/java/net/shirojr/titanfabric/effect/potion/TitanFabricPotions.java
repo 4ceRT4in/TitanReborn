@@ -17,5 +17,6 @@ public class TitanFabricPotions {
 
     public static void registerAllPotions() {
         INDESTRUCTIBILITY_POTION = registerPotion("indestructibility_potion");  //TODO: Potion crafting
+
     }
 }
