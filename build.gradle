@@ -18,6 +18,9 @@ repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
 
+	// ModMenu (for shield lib)
+	maven {url "https://maven.terraformersmc.com/releases/com/terraformersmc/modmenu/"}
+
 	// Modrinth
 	exclusiveContent {
 		forRepository {
@@ -48,7 +51,14 @@ dependencies {
 	}
 
 	// Fabric Shield lib
+/*
 	modApi include("maven.modrinth:fabricshieldlib:1.7-1.18.2")
+*/
+
+	// ModMenu
+/*	modCompileOnly modRuntimeOnly ("com.terraformersmc:modmenu:${project.mod_menu_version}"), {
+		exclude(group: "net.fabricmc.fabric-api")
+	}*/
 }
 
 processResources {

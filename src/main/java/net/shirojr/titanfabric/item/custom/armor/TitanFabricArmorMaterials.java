@@ -11,13 +11,15 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import java.util.function.Supplier;
 
 public enum TitanFabricArmorMaterials implements ArmorMaterial {
-    CITRIN("citrin", 3.6D, new int[] { 2, 6, 7, 2 }, 9,
+    CITRIN("citrin", 4, new int[] { 2, 6, 7, 2 }, 9,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.CITRIN_INGOT)),
-    NETHER("nether", 4.8D, new int[] { 3, 6, 8, 3 }, 10,
+    NETHER("nether", 5, new int[] { 3, 6, 8, 3 }, 10,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
-    LEGEND("legend", 9.99999999E8D, new int[] { 3, 6, 8, 3 }, 25,
+
+    // TODO: implement infinite / no durability
+    LEGEND("legend", 10, new int[] { 3, 6, 8, 3 }, 25,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
 
