@@ -11,7 +11,7 @@ public class TitanFabricPotions {
     public static Potion INDESTRUCTIBILITY_POTION;
 
     private static Potion registerPotion(String name) {
-        return Registry.register(Registry.POTION, new Identifier(TitanFabric.MOD_ID, name),
+        return Registry.register(Registry.POTION, new Identifier(TitanFabric.MODID, name),
                 new Potion(new StatusEffectInstance(TitanFabricStatusEffects.INDESTRUCTIBILITY, 200, 0)));
     }
 

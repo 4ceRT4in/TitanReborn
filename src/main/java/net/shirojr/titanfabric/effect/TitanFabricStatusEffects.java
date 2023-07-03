@@ -10,7 +10,7 @@ public class TitanFabricStatusEffects {
     public static StatusEffect INDESTRUCTIBILITY;
 
     private static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect) {
-        return Registry.register(Registry.STATUS_EFFECT, new Identifier(TitanFabric.MOD_ID, name), statusEffect);
+        return Registry.register(Registry.STATUS_EFFECT, new Identifier(TitanFabric.MODID, name), statusEffect);
     }
 
     public static void registerStatusEffects() {

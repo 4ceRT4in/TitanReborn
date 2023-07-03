@@ -6,14 +6,12 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 
 public class TitanFabricItems {
-
-
     private static Item registerItem(String name, Item item) {
-        return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MOD_ID, name), item);
+        return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MODID, name), item);
     }
 
     public static void registerModItems() {
-        TitanFabric.devLogger("Registering " + TitanFabric.MOD_ID + " Mod items");
+        TitanFabric.devLogger("Registering " + TitanFabric.MODID + " Mod items");
     }
 
 }

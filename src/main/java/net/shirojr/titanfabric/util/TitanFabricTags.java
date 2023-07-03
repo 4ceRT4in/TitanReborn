@@ -13,7 +13,7 @@ public class TitanFabricTags {
     public static class Blocks {
         // public static final TagKey<Block> RANDOMENTRY = createCommonTag("random_blocks");
         private static TagKey<Block> createTag(String name) {
-            return TagKey.of(Registry.BLOCK_KEY, new Identifier(TitanFabric.MOD_ID, name));
+            return TagKey.of(Registry.BLOCK_KEY, new Identifier(TitanFabric.MODID, name));
         }
 
         private static TagKey<Block> createCommonTag(String name) {
@@ -26,7 +26,7 @@ public class TitanFabricTags {
 
         private static TagKey<Item> createTag(String name) {
 
-            return TagKey.of(Registry.ITEM_KEY ,new Identifier(TitanFabric.MOD_ID, name));
+            return TagKey.of(Registry.ITEM_KEY ,new Identifier(TitanFabric.MODID, name));
         }
 
         private static TagKey<Item> createCommonTag(String name) {

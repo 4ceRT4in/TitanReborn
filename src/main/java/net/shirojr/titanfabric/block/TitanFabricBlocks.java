@@ -14,19 +14,19 @@ public class TitanFabricBlocks {
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
         registerBlockItem(name, block, group);
-        return Registry.register(Registry.BLOCK, new Identifier(TitanFabric.MOD_ID, name), block);
+        return Registry.register(Registry.BLOCK, new Identifier(TitanFabric.MODID, name), block);
     }
 
     private static Item registerBlockItem(String name, Block block, ItemGroup group) {
-        return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MOD_ID, name),
+        return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MODID, name),
                 new BlockItem(block, new FabricItemSettings().group(group)));
     }
 
     private static Block registerBlockWithoutItem(String name, Block block, ItemGroup group) {
-        return Registry.register(Registry.BLOCK, new Identifier(TitanFabric.MOD_ID, name), block);
+        return Registry.register(Registry.BLOCK, new Identifier(TitanFabric.MODID, name), block);
     }
 
     public static void registerModBlocks() {
-        TitanFabric.devLogger("Registering " + TitanFabric.MOD_ID + " Mod blocks");
+        TitanFabric.devLogger("Registering " + TitanFabric.MODID + " Mod blocks");
     }
 }

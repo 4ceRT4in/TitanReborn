@@ -3,10 +3,10 @@
 	"id": "titanfabric",
 	"version": "${version}",
 	"name": "Titan Fabric",
-	"description": "Fabric 1.16.5 Port of the \"Titan\" mod",
+	"description": "Fabric Port of the Titan mod",
 	"authors": [
-		"Fab - forge dev",
-		"ShiroJR - fabric dev",
+		"Fab - Forge dev",
+		"ShiroJR - Fabric dev",
 		"4ceRT4in - art"
 	],
 	"contact": {

@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 public class TitanFabric implements ModInitializer {
 
-    public static final String MOD_ID = "titanfabric";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final String MODID = "titanfabric";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
     @Override
     public void onInitialize() {
