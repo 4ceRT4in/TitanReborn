@@ -2,7 +2,7 @@
 
 <h1 align="center">
   	<a href="https://github.com/4ceRT4in/TitanReborn/blob/master/LICENSE">
-      <img src="https://img.shields.io/github/license/Creators-of-Create/Create?style=for-the-badge&labelWidth=15&color=900c3f" alt="License">
+      <img src="https://img.shields.io/github/license/4ceRT4in/TitanReborn?style=for-the-badge&labelWidth=15&color=900c3f" alt="License">
     </a>
     <a href="https://github.com/4ceRT4in/TitanReborn">
       <img src="https://img.shields.io/badge/Available_for-MC_1.18.2-c70039?style=for-the-badge&labelWidth=15" alt="Supported Versions">
