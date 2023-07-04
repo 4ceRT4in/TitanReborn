@@ -7,6 +7,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorBootsItem;
@@ -30,10 +31,10 @@ public class TitanFabricItems {
     //endregion
 
     //region citrin armor
-    public static final Item LEGEND_HELMET = registerItem("legend_helmet", new LegendArmorHelmetItem(2.0));
-    public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate", new LegendArmorChestplateItem(4.0));
-    public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings", new LegendArmorLeggingsItem(3.0));
-    public static final Item LEGEND_BOOTS = registerItem("legend_boots", new LegendArmorBootsItem(1.0));
+    public static final Item LEGEND_HELMET = registerItem("legend_helmet", new LegendArmorHelmetItem(ConfigInit.CONFIG.TitanArmorHelmetHealth));
+    public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate", new LegendArmorChestplateItem(ConfigInit.CONFIG.TitanArmorChestplateHealth));
+    public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings", new LegendArmorLeggingsItem(ConfigInit.CONFIG.TitanArmorLeggingsHealth));
+    public static final Item LEGEND_BOOTS = registerItem("legend_boots", new LegendArmorBootsItem(ConfigInit.CONFIG.TitanArmorBootsHealth));
     //endregion
 
     public static final Item CITRIN_INGOT = registerItem("citrin_ingot",
