@@ -9,4 +9,8 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 public class TitanFabricConfig implements ConfigData {
     @Comment("Change value of WEAKNESS StatusEffect")
     public double weaknessStatusEffectModifier = -4.0;
+    public double TitanArmorHelmetHealth = 2.0;
+    public double TitanArmorChestplateHealth = 4.0;
+    public double TitanArmorLeggingsHealth = 3.0;
+    public double TitanArmorBootsHealth = 1.0;
 }

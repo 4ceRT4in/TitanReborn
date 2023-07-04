@@ -30,10 +30,10 @@ public class TitanFabricItems {
     //endregion
 
     //region citrin armor
-    public static final Item LEGEND_HELMET = registerItem("legend_helmet", new LegendArmorHelmetItem());
-    public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate", new LegendArmorChestplateItem());
-    public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings", new LegendArmorLeggingsItem());
-    public static final Item LEGEND_BOOTS = registerItem("legend_boots", new LegendArmorBootsItem());
+    public static final Item LEGEND_HELMET = registerItem("legend_helmet", new LegendArmorHelmetItem(2.0));
+    public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate", new LegendArmorChestplateItem(4.0));
+    public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings", new LegendArmorLeggingsItem(3.0));
+    public static final Item LEGEND_BOOTS = registerItem("legend_boots", new LegendArmorBootsItem(1.0));
     //endregion
 
     public static final Item CITRIN_INGOT = registerItem("citrin_ingot",
