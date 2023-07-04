@@ -17,9 +17,7 @@ public enum TitanFabricArmorMaterials implements ArmorMaterial {
     NETHER("nether", 5, new int[] { 3, 6, 8, 3 }, 10,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
-
-    // TODO: implement infinite / no durability
-    LEGEND("legend", 10, new int[] { 3, 6, 8, 3 }, 25,
+    LEGEND("legend", -1, new int[] { 3, 6, 8, 3 }, 25,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
 

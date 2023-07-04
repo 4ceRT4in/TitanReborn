@@ -18,7 +18,7 @@
     </a>
 </h1>
 
-<h1 align="center">Made by 4ceRT4in and ShiroJR<br></h1>
+<h1 align="center">Made by 4ceRT4in, Fab and ShiroJR<br></h1>
 
 # TitanReborn
 
