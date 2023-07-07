@@ -43,11 +43,11 @@ public class TitanFabricItems {
     public static final Item CITRIN_GREATSWORD = registerItem("citrin_greatsword", new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, 5, -2.4f));
     public static final Item NETHER_SWORD = registerItem("nether_sword", new NetherSwordItem(false, TitanFabricToolMaterials.NETHER, 6, -2.4f));
     public static final Item NETHER_GREATSWORD = registerItem("nether_greatsword", new NetherSwordItem(true, TitanFabricToolMaterials.NETHER_GREAT, 6, -2.4f));
-    public static final Item LEGEND_SWORD = registerItem("legend_sword", new LegendSwordItem(TitanFabricToolMaterials.LEGEND, 7, -2.4f));
-    public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword", new LegendSwordItem(TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
+    public static final Item LEGEND_SWORD = registerItem("legend_sword", new LegendSwordItem(false, TitanFabricToolMaterials.LEGEND, 7, -2.4f));
+    public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword", new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
 
-    public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword", new DiamondSwordItem(TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
-    public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword", new NetheriteSwordItem(TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
+    public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword", new DiamondSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
+    public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword", new NetheriteSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
 
     public static final Item LEGEND_SLINGSGOT = registerItem("legend_slingshot", new TitanFabricShootableItem());
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());

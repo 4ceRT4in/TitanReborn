@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class LegendSwordItem extends TitanFabricSwordItem {
-    public LegendSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(toolMaterial, attackDamage, attackSpeed);
+    public LegendSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
+        super(isGreatsword, toolMaterial, attackDamage, attackSpeed);
     }
 
     @Override

@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class NetheriteSwordItem extends TitanFabricSwordItem {
-    public NetheriteSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(toolMaterial, attackDamage, attackSpeed);
+    public NetheriteSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
+        super(isGreatsword, toolMaterial, attackDamage, attackSpeed);
     }
 
     @Override

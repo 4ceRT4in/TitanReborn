@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class DiamondSwordItem extends TitanFabricSwordItem {
-    public DiamondSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(toolMaterial, attackDamage, attackSpeed);
+    public DiamondSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
+        super(isGreatsword, toolMaterial, attackDamage, attackSpeed);
     }
 
     @Override
