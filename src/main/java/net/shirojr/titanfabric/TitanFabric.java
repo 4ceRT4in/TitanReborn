@@ -8,6 +8,8 @@ import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.effect.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
+import net.shirojr.titanfabric.world.gen.TitanFabricWorldGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,12 +20,16 @@ public class TitanFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        TitanFabricConfiguredFeatures.registerConfiguredFeatures();
+
         ConfigInit.init();
         TitanFabricItems.registerModItems();
         TitanFabricBlocks.registerModBlocks();
 
         TitanFabricStatusEffects.registerStatusEffects();
         TitanFabricPotions.registerAllPotions();
+
+        TitanFabricWorldGen.generateTitanFabricWorldGen();
     }
 
     /**
