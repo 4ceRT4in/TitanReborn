@@ -1,4 +1,6 @@
 package net.shirojr.titanfabric.item.custom.shield;
 
-public class LegendShieldItem {
+import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
+
+public class LegendShieldItem extends TitanFabricShieldItem {
 }

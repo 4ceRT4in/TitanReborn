@@ -1,4 +1,9 @@
 package net.shirojr.titanfabric.item.custom.bow;
 
-public class MultiBowItem {
+import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
+
+public class MultiBowItem extends TitanFabricBowItem {
+    public MultiBowItem() {
+        super();
+    }
 }

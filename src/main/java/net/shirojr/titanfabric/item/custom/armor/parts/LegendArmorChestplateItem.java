@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +24,7 @@ public class LegendArmorChestplateItem extends LegendArmorItem {
 
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
     public LegendArmorChestplateItem(double health) {
-        super(EquipmentSlot.CHEST, new FabricItemSettings().group(ItemGroup.COMBAT));
+        super(EquipmentSlot.CHEST, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
         ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         UUID GENERIC_MAX_HEALTH_ID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CD");
         builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(GENERIC_MAX_HEALTH_ID, "Chestplate Health modifier", health, EntityAttributeModifier.Operation.ADDITION));
@@ -31,7 +32,7 @@ public class LegendArmorChestplateItem extends LegendArmorItem {
     }
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.legendmod.LegendChestplateItem"));
+        tooltip.add(new TranslatableText("tooltip.titanfabric.LegendChestplateItem"));
         super.appendTooltip(stack, world, tooltip, context);
     }
 

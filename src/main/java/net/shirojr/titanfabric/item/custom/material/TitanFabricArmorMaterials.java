@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.item.custom.armor;
+package net.shirojr.titanfabric.item.custom.material;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;

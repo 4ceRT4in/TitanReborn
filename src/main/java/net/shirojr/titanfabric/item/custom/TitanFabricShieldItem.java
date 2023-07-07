@@ -1,4 +1,4 @@
 package net.shirojr.titanfabric.item.custom;
 
-public class TitanFabricBow {
+public class TitanFabricShieldItem {
 }

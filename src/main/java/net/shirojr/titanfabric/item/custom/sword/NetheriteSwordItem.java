@@ -14,14 +14,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class NetherSwordItem extends TitanFabricSwordItem {
-    public NetherSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(isGreatsword, toolMaterial, attackDamage, attackSpeed);
+public class NetheriteSwordItem extends TitanFabricSwordItem {
+    public NetheriteSwordItem(ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
+        super(toolMaterial, attackDamage, attackSpeed);
     }
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.NetherSwordItem"));
+        tooltip.add(new TranslatableText("tooltip.titanfabric.CitrinSwordItem"));
         super.appendTooltip(stack, world, tooltip, context);
     }
 

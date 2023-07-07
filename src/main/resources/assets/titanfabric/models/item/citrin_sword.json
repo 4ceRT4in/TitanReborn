@@ -2,6 +2,77 @@
   "parent": "item/handheld",
   "textures": {
     "layer0": "titanfabric:items/citrin_sword"
-  }
-
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "effect": 1,
+        "strength": 1
+      },
+      "model": "titanfabric:item/blind1_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 2,
+        "strength": 1
+      },
+      "model": "titanfabric:item/fire1_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 3,
+        "strength": 1
+      },
+      "model": "titanfabric:item/poison1_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 4,
+        "strength": 1
+      },
+      "model": "titanfabric:item/weak1_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 5,
+        "strength": 1
+      },
+      "model": "titanfabric:item/wither1_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 1,
+        "strength": 2
+      },
+      "model": "titanfabric:item/blind2_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 2,
+        "strength": 2
+      },
+      "model": "titanfabric:item/fire2_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 3,
+        "strength": 2
+      },
+      "model": "titanfabric:item/poison2_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 4,
+        "strength": 2
+      },
+      "model": "titanfabric:item/weak2_citrin_sword"
+    },
+    {
+      "predicate": {
+        "effect": 5,
+        "strength": 2
+      },
+      "model": "titanfabric:item/wither2_citrin_sword"
+    }
+  ]
 }
