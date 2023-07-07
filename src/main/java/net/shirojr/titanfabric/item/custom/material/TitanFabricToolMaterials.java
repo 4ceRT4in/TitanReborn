@@ -5,12 +5,27 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.tag.ItemTags;
 import net.minecraft.util.Lazy;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 
 import java.util.function.Supplier;
 
 public enum TitanFabricToolMaterials implements ToolMaterial {
+
+    WOOD(59, 1.0f, 0.0f, 1, 15,
+            () -> Ingredient.fromTag(ItemTags.PLANKS)),
+    GOLD(32, 6.0f, 0.0f, 6, 22,
+            () -> Ingredient.ofItems(Items.GOLD_INGOT)),
+    STONE(131, 2.0f, 0.0f, 2, 5,
+            () -> Ingredient.fromTag(ItemTags.STONE_TOOL_MATERIALS)),
+    IRON(250, 3.0f, 0.0f, 3, 14,
+            () -> Ingredient.ofItems(Items.IRON_INGOT)),
+    DIAMOND(1561, 4.0f, 0.0f, 4, 10,
+            () -> Ingredient.ofItems(Items.DIAMOND)),
+    NETHERITE(2031, 5.0f, 0.0f, 5, 15,
+            () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
+
     CITRIN(250, 3.0f, 0.0f, 2, 14,
             () -> Ingredient.ofItems(TitanFabricItems.CITRIN_INGOT)),
     NETHER(375, 3.0f, 0.0f, 2, 14,
