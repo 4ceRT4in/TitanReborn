@@ -1,6 +1,6 @@
 # TitanReborn
 
-Fabric 1.18.2 Port of the Forgemod Titan
+Fabric 1.18.2 Port of Combat Mod "Titan"
 
 This mod uses the [Fabric Shield Lib](https://modrinth.com/mod/fabricshieldlib/version/1.7-1.18.2).
 It has been included within the jar so no extra download has to be made.
