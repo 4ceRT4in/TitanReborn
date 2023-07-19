@@ -51,7 +51,7 @@ public class TitanFabricItems {
 
     public static final Item LEGEND_SLINGSGOT = registerItem("legend_slingshot", new TitanFabricShootableItem());
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
-    public static final Item MULTI_BOW = registerItem("legend_bow", new MultiBowItem());
+    public static final Item MULTI_BOW = registerItem("multi_bow", new MultiBowItem());
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
     //TODO: implement fabric shield lib

@@ -33,7 +33,7 @@ public class LegendArmorBootsItem extends LegendArmorItem {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.LegendBootsItem"));
+        tooltip.add(new TranslatableText("tooltip.titanfabric.legendBootsItem"));
         super.appendTooltip(stack, world, tooltip, context);
     }
 

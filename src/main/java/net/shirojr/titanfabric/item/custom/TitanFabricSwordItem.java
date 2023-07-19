@@ -23,7 +23,11 @@ public class TitanFabricSwordItem extends SwordItem {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        super.appendTooltip(stack, world, EffectHelper.appendToolTip(tooltip, stack), context);
+        if (EffectHelper.stackHasWeaponEffect(stack)) {
+            super.appendTooltip(stack, world, EffectHelper.appendToolTip(tooltip, stack), context);
+            return;
+        }
+        super.appendTooltip(stack, world, tooltip, context);
     }
 
     @Override

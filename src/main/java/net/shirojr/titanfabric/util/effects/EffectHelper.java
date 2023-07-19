@@ -109,7 +109,6 @@ public class EffectHelper {
                         WeaponEffects.getEffect(currentEffect).getStatusEffect(), strength > 1 ? 7 : 10, strength - 1)
                 );
             }
-
         }
     }
 }

@@ -21,7 +21,7 @@ public class CitrinSwordItem extends TitanFabricSwordItem {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.CitrinSwordItem"));
+        tooltip.add(new TranslatableText("tooltip.titanfabric.citrinSwordItem"));
         super.appendTooltip(stack, world, tooltip, context);
     }
 
