@@ -69,6 +69,7 @@ public class EffectHelper {
         return Arrays.stream(WeaponEffects.values()).filter(effect -> effect != WeaponEffects.FIRE).toList();
     }
 
+    //TODO: relocate to each weapon for custom handling
     public static DefaultedList<ItemStack> generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
         List<WeaponEffects> possibleEffects = getSwordEffects();
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
@@ -81,6 +82,7 @@ public class EffectHelper {
         return stacks;
     }
 
+    //TODO: relocate to each weapon for custom handling
     public static void applyWeaponEffectOnTarget(World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
         String currentEffect = itemStack.getOrCreateNbt().getString(EFFECTS_NBT_KEY);
         if (world.isClient() || currentEffect == null) return;
