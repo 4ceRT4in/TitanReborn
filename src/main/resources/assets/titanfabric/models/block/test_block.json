@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "legendmod:blocks/test_block"
+    "all": "titanfabric:blocks/test_block"
   }
 
 }

@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "legendmod:items/fire2_legend_greatsword"
+    "layer0": "titanfabric:items/fire2_legend_greatsword"
   }
 
 }

@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "legendmod:items/netherite_greatsword"
+    "layer0": "titanfabric:items/netherite_greatsword"
   }
 
 }

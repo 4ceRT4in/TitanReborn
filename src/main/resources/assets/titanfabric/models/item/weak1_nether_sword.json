@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "legendmod:items/weak1_nether_sword"
+    "layer0": "titanfabric:items/weak1_nether_sword"
   }
 
 }

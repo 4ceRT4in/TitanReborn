@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "legendmod:items/blind2_diamond_sword"
+    "layer0": "titanfabric:items/blind2_diamond_sword"
   }
 
 }

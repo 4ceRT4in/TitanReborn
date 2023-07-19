@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "legendmod:items/blind1_legend_greatsword"
+    "layer0": "titanfabric:items/blind1_legend_greatsword"
   }
 
 }

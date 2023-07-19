@@ -1,6 +1,6 @@
 {
-  "parent": "legendmod:item/multi_bow_3",
+  "parent": "titanfabric:item/multi_bow_3",
   "textures": {
-    "layer0": "legendmod:items/multi_bow_3_pulling_1"
+    "layer0": "titanfabric:items/multi_bow_3_pulling_1"
   }
 }

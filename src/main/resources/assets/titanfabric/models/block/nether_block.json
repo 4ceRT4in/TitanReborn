@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "legendmod:blocks/nether_block"
+    "all": "titanfabric:blocks/nether_block"
   }
 
 }
