@@ -13,6 +13,7 @@ import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Helper class for TitanFabric Weapon Effects.<br><br>
@@ -69,7 +70,6 @@ public class EffectHelper {
         return Arrays.stream(WeaponEffects.values()).filter(effect -> effect != WeaponEffects.FIRE).toList();
     }
 
-    //TODO: relocate to each weapon for custom handling
     public static DefaultedList<ItemStack> generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
         List<WeaponEffects> possibleEffects = getSwordEffects();
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
@@ -83,33 +83,47 @@ public class EffectHelper {
         return stacks;
     }
 
-    //TODO: relocate to each weapon for custom handling
-    public static void applyWeaponEffectOnTarget(World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
+
+    public static void applyWeaponEffectOnTargetFromNBT(World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
         String currentEffect = itemStack.getOrCreateNbt().getString(EFFECTS_NBT_KEY);
-        if (world.isClient() || currentEffect == null) return;
+        if (currentEffect == null) return;
 
         int strength = EffectHelper.getEffectStrength(itemStack);
 
-        switch (WeaponEffects.getEffect(currentEffect)) {
+        applyWeaponEffectOnTarget(WeaponEffects.getEffect(currentEffect), strength, world, itemStack, user, target);
+    }
+
+
+    public static void applyWeaponEffectOnTarget(WeaponEffects effect, int effectStrength, World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
+        if (world.isClient() || effect == null) return;
+
+
+        // chance to apply effect (strength = 1 = 25%, strength = 2 = 50%)
+        if(world.getRandom().nextInt(100) >= (25 * effectStrength)){
+            return;
+        }
+
+
+        switch (effect) {
             case BLIND -> {
                 target.addStatusEffect(new StatusEffectInstance(
-                        WeaponEffects.getEffect(currentEffect).getStatusEffect(), strength > 1 ? 4 : 10, strength - 1)
+                        effect.getStatusEffect(), effectStrength > 1 ? 4 : 10, effectStrength - 1)
                 );
             }
-            case FIRE -> target.setOnFireFor(strength > 1 ? 10 : 5);
+            case FIRE -> target.setOnFireFor(effectStrength > 1 ? 10 : 5);
             case POISON -> {
                 target.addStatusEffect(new StatusEffectInstance(
-                        WeaponEffects.getEffect(currentEffect).getStatusEffect(), strength > 1 ? 5 : 10, strength - 1)
+                        effect.getStatusEffect(), effectStrength > 1 ? 5 : 10, effectStrength - 1)
                 );
             }
             case WEAK -> {
                 target.addStatusEffect(new StatusEffectInstance(
-                        WeaponEffects.getEffect(currentEffect).getStatusEffect(), strength > 1 ? 6 : 10, strength - 1)
+                        effect.getStatusEffect(), effectStrength > 1 ? 6 : 10, effectStrength - 1)
                 );
             }
             case WITHER -> {
                 target.addStatusEffect(new StatusEffectInstance(
-                        WeaponEffects.getEffect(currentEffect).getStatusEffect(), strength > 1 ? 7 : 10, strength - 1)
+                        effect.getStatusEffect(), effectStrength > 1 ? 7 : 10, effectStrength - 1)
                 );
             }
         }

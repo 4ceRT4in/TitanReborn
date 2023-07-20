@@ -10,15 +10,18 @@ import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class TitanFabricSwordItem extends SwordItem {
     private final boolean isGreatsword;
-    public TitanFabricSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
+    private final WeaponEffects baseEffect;
+    public TitanFabricSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffects baseEffect) {
         super(toolMaterial, attackDamage, attackSpeed, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
         this.isGreatsword = isGreatsword;
+        this.baseEffect = baseEffect;
     }
 
     @Override
@@ -32,7 +35,14 @@ public class TitanFabricSwordItem extends SwordItem {
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        EffectHelper.applyWeaponEffectOnTarget(target.getWorld(), stack, attacker, target);
+        //Apply extra effects
+        EffectHelper.applyWeaponEffectOnTargetFromNBT(target.getWorld(), stack, attacker, target);
+
+        //Apply base effect
+        if(this.baseEffect != null) {
+            EffectHelper.applyWeaponEffectOnTarget(this.baseEffect, 1 , target.getWorld(), stack, attacker, target);
+
+        }
         return super.postHit(stack, target, attacker);
     }
 }

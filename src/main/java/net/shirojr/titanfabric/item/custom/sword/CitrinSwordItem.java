@@ -10,13 +10,14 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class CitrinSwordItem extends TitanFabricSwordItem {
     public CitrinSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(isGreatsword, toolMaterial, attackDamage, attackSpeed);
+        super(isGreatsword, toolMaterial, attackDamage, attackSpeed, WeaponEffects.POISON);
     }
 
     @Override

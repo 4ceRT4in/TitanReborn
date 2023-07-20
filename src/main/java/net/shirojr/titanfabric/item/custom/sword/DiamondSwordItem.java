@@ -16,7 +16,7 @@ import java.util.List;
 
 public class DiamondSwordItem extends TitanFabricSwordItem {
     public DiamondSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(isGreatsword, toolMaterial, attackDamage, attackSpeed);
+        super(isGreatsword, toolMaterial, attackDamage, attackSpeed, null);
     }
 
     @Override
