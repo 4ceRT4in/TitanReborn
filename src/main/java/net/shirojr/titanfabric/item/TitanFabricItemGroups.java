@@ -8,5 +8,5 @@ import net.shirojr.titanfabric.TitanFabric;
 
 public class TitanFabricItemGroups {
     public static final ItemGroup TITAN = FabricItemGroupBuilder.build(new Identifier(TitanFabric.MODID,"titan"),
-            () -> new ItemStack(TitanFabricItems.LEGEND_INGOT));
+            () -> new ItemStack(TitanFabricItems.LEGEND_CRYSTAL));
 }

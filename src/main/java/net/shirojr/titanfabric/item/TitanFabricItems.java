@@ -17,6 +17,7 @@ import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorHelmetItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorLeggingsItem;
 import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
+import net.shirojr.titanfabric.item.custom.essence.*;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
 import net.shirojr.titanfabric.item.custom.sword.*;
@@ -75,6 +76,20 @@ public class TitanFabricItems {
 
     public static final Item PARACHUTE = registerItem("parachute",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
+
+    public static final Item POISON_ESSENCE = registerItem("poison_essence",
+            new PoisonEssenceItem());
+
+    public static final Item FIRE_ESSENCE = registerItem("fire_essence",
+            new FireEssenceItem());
+
+    public static final Item WEAKNESS_ESSENCE = registerItem("weakness_essence",
+            new WeaknessEssenceItem());
+
+    public static final Item WITHER_ESSENCE = registerItem("wither_essence",
+            new WitherEssenceItem());
+    public static final Item BLINDNESS_ESSENCE = registerItem("blindness_essence",
+            new BlindnessEssence());
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
     public static final Item DIAMOND_APPLE = registerItem("diamond_apple",
