@@ -75,9 +75,10 @@ public class EffectHelper {
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
 
         for (WeaponEffects entry : possibleEffects) {
-            ItemStack newStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
-            stacks.add(setEffectStrength(newStack, 1));
-            stacks.add(setEffectStrength(newStack, 2));
+            ItemStack firstEffect = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
+            stacks.add(setEffectStrength(firstEffect, 1));
+            ItemStack secondEffect = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
+            stacks.add(setEffectStrength(secondEffect, 2));
         }
         return stacks;
     }
