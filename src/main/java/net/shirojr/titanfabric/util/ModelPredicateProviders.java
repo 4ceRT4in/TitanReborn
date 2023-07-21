@@ -8,6 +8,13 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ModelPredicateProviders {
 
     public static void registerAll() {
