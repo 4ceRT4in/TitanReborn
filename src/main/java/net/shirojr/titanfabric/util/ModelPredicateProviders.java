@@ -17,26 +17,20 @@ public class ModelPredicateProviders {
 
     private static void registerEffectProvider(Item item, Identifier identifier) {
         ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> {
-                WeaponEffects effect = WeaponEffects.getEffect(itemStack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
+            WeaponEffects effect = WeaponEffects.getEffect(itemStack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
             if (effect == null) return 0f;
-            if (livingEntity == null) return 0f;
-            if (itemStack.getItem() != item) return 0f;
-
             TitanFabric.LOGGER.info(String.valueOf(effect));
             return switch (effect) {
-                    case BLIND -> 0.1f;
-                    case FIRE -> 0.2f;
-                    case POISON -> 0.3f;
-                    case WEAK -> 0.4f;
-                    case WITHER -> 0.5f;
-                };
+                case BLIND -> 0.1f;
+                case FIRE -> 0.2f;
+                case POISON -> 0.3f;
+                case WEAK -> 0.4f;
+                case WITHER -> 0.5f;
+            };
         });
     }
 
     private static void registerStrengthProvider(Item item, Identifier identifier) {
-        ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> {
-                TitanFabric.LOGGER.info("Effect strength: " + EffectHelper.getEffectStrength(itemStack));
-                return EffectHelper.getEffectStrength(itemStack) * 0.1f;
-        });
+        ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> EffectHelper.getEffectStrength(itemStack) * 0.1f);
     }
 }
