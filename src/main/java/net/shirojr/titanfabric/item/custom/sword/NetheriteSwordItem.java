@@ -21,7 +21,7 @@ public class NetheriteSwordItem extends TitanFabricSwordItem {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.CitrinSwordItem"));
+        tooltip.add(new TranslatableText("tooltip.titanfabric.netherite_greatsword"));
         super.appendTooltip(stack, world, tooltip, context);
     }
 
