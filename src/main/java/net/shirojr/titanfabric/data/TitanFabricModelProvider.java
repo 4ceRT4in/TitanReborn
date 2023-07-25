@@ -10,10 +10,7 @@ import net.minecraft.data.client.Models;
 import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.block.TitanFabricBlocks;
-import net.shirojr.titanfabric.item.TitanFabricItems;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TitanFabricModelProvider extends FabricModelProvider {
