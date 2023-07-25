@@ -1,42 +1,45 @@
 {
-	"schemaVersion": 1,
-	"id": "titanfabric",
-	"version": "${version}",
-	"name": "Titan Fabric",
-	"description": "Fabric Port of the Titan mod",
-	"authors": [
-		"Fab - Forge dev",
-		"ShiroJR - Fabric dev",
-		"4ceRT4in - art"
-	],
-	"contact": {
-		"homepage": "",
-		"sources": "https://github.com/4ceRT4in/TitanReborn"
-	},
-	"license": "All Rights Reserved",
-	"icon": "assets/titanfabric/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"preLaunch": [
-			"net.shirojr.titanfabric.TitanFabricPreLaunch"
-		],
-		"main": [
-			"net.shirojr.titanfabric.TitanFabric"
-		],
-		"client": [
-			"net.shirojr.titanfabric.TitanFabricClient"
-		]
-	},
-	"mixins": [
-		"titanfabric.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.14.19",
-		"minecraft": "~1.18.2",
-		"java": ">=17",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+  "schemaVersion": 1,
+  "id": "titanfabric",
+  "version": "${version}",
+  "name": "Titan Fabric",
+  "description": "Fabric Port of the Titan mod",
+  "authors": [
+    "Fab - Forge dev",
+    "ShiroJR - Fabric dev",
+    "4ceRT4in - art"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": "https://github.com/4ceRT4in/TitanReborn"
+  },
+  "license": "All Rights Reserved",
+  "icon": "assets/titanfabric/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "preLaunch": [
+      "net.shirojr.titanfabric.TitanFabricPreLaunch"
+    ],
+    "main": [
+      "net.shirojr.titanfabric.TitanFabric"
+    ],
+    "client": [
+      "net.shirojr.titanfabric.TitanFabricClient"
+    ],
+    "fabric-datagen": [
+      "net.shirojr.titanfabric.TitanFabricDatagen"
+    ]
+  },
+  "mixins": [
+    "titanfabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "minecraft": "~1.18.2",
+    "java": ">=17",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
 }
