@@ -2,12 +2,14 @@ package net.shirojr.titanfabric;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.effect.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.network.TitanFabricNetworking;
 import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
 import net.shirojr.titanfabric.world.gen.TitanFabricWorldGen;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ public class TitanFabric implements ModInitializer {
         TitanFabricPotions.registerAllPotions();
 
         TitanFabricWorldGen.generateTitanFabricWorldGen();
+
+        ServerPlayNetworking.registerGlobalReceiver(TitanFabricNetworking.BOW_SCREEN_CHANNEL, TitanFabricNetworking::handleBowScreenPacket);
     }
 
     /**
