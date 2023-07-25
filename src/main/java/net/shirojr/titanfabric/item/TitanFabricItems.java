@@ -3,12 +3,14 @@ package net.shirojr.titanfabric.item;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricShootableItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
@@ -56,8 +58,8 @@ public class TitanFabricItems {
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
     //TODO: implement fabric shield lib
-    //public static final Item DIAMOND_SHIELD = registerItem("diamond_shield", new DiamondShieldItem());
-    //public static final Item LEGEND_SHIELD = registerItem("legend_shield", new LegendShieldItem());
+    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield", new TitanFabricShieldItem(1250, 40, 14, Items.DIAMOND));
+    public static final Item LEGEND_SHIELD = registerItem("legend_shield", new TitanFabricShieldItem(2500, 10, 24, TitanFabricItems.LEGEND_INGOT));
 
     public static final Item CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
 
