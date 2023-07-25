@@ -10,16 +10,10 @@ import net.shirojr.titanfabric.util.effects.WeaponEffects;
 
 public class ModelPredicateProviders {
 
-    public static void registerAll() {
-        registerEffectProvider(TitanFabricItems.CITRIN_SWORD, new Identifier("effect"));
-        registerStrengthProvider(TitanFabricItems.CITRIN_SWORD, new Identifier("strength"));
-    }
-
-    private static void registerEffectProvider(Item item, Identifier identifier) {
+    public static void registerEffectProvider(Item item, Identifier identifier) {
         ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> {
             WeaponEffects effect = WeaponEffects.getEffect(itemStack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
             if (effect == null) return 0f;
-            TitanFabric.LOGGER.info(String.valueOf(effect));
             return switch (effect) {
                 case BLIND -> 0.1f;
                 case FIRE -> 0.2f;
@@ -30,7 +24,7 @@ public class ModelPredicateProviders {
         });
     }
 
-    private static void registerStrengthProvider(Item item, Identifier identifier) {
+    public static void registerStrengthProvider(Item item, Identifier identifier) {
         ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> EffectHelper.getEffectStrength(itemStack) * 0.1f);
     }
 }

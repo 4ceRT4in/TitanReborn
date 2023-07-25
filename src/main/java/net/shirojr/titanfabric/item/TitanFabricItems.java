@@ -2,7 +2,10 @@ package net.shirojr.titanfabric.item;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
@@ -91,7 +94,7 @@ public class TitanFabricItems {
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
     public static final Item DIAMOND_APPLE = registerItem("diamond_apple",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64).food((new net.minecraft.item.FoodComponent.Builder()).hunger(4).saturationModifier(10.0F).alwaysEdible().statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F).build())));
 
 
     private static Item registerItem(String name, Item item) {
