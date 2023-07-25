@@ -98,6 +98,11 @@ public class TitanFabricItems {
 
 
     private static Item registerItem(String name, Item item) {
+
+        if(item == null){
+            return null;
+        }
+
         return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MODID, name), item);
     }
 

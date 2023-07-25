@@ -21,7 +21,7 @@ public class LegendSwordItem extends TitanFabricSwordItem {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.LegendSwordItem"));
+        tooltip.add(new TranslatableText("tooltip.titanfabric.legendSwordItem"));
         super.appendTooltip(stack, world, tooltip, context);
     }
 

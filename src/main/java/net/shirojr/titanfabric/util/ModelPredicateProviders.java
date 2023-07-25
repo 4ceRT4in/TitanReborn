@@ -8,9 +8,21 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ModelPredicateProviders {
 
     public static void registerEffectProvider(Item item, Identifier identifier) {
+
+        if(item == null){
+            return;
+        }
+
         ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> {
             WeaponEffects effect = WeaponEffects.getEffect(itemStack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
             if (effect == null) return 0f;
@@ -25,6 +37,9 @@ public class ModelPredicateProviders {
     }
 
     public static void registerStrengthProvider(Item item, Identifier identifier) {
+        if(item == null){
+            return;
+        }
         ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> EffectHelper.getEffectStrength(itemStack) * 0.1f);
     }
 }
