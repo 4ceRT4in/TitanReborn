@@ -16,15 +16,15 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Helper class for TitanFabric Weapon Effects.<br><br>
+ * Helper class for TitanFabric {@linkplain WeaponEffects}
  */
 public class EffectHelper {
     public static final String EFFECTS_NBT_KEY = TitanFabric.MODID + ".effect";
     public static final String EFFECTS_STRENGTH_NBT_KEY = TitanFabric.MODID + ".effect.strength";
 
     /**
-     * Returns the Weapon Effect strength. It does not translate directly to StatusEffect's amplifier!<br><br>
-     * It is used for StatusEffect duration and amplifier calculation
+     * Returns {@linkplain WeaponEffects TitanFabric WeaponEffect} strength. It does not translate directly to StatusEffect's amplifier!<br><br>
+     * Used for StatusEffect duration and amplifier calculation
      *
      * @param itemStack
      * @return Strength of the Weapon Effect
@@ -33,20 +33,46 @@ public class EffectHelper {
         return itemStack.getOrCreateNbt().getInt(EFFECTS_STRENGTH_NBT_KEY);
     }
 
+    /**
+     * Sets the {@linkplain WeaponEffects TitanFabric WeaponEffect} strength. It does not translate directly to StatusEffect's amplifier!<br><br>
+     * Used to write custom NBT information to the ItemStack
+     *
+     * @param itemStack
+     * @param strength
+     * @return
+     */
     public static ItemStack setEffectStrength(ItemStack itemStack, int strength) {
         itemStack.getOrCreateNbt().putInt(EFFECTS_STRENGTH_NBT_KEY, strength);
         return itemStack;
     }
 
+    /**
+     * Sets the {@linkplain WeaponEffects TitanFabric WeaponEffect}.<br><br>
+     * Used to write custom NBT information to the ItemStack
+     * @param itemStack
+     * @param effect
+     * @return
+     */
     public static ItemStack getStackWithEffect(ItemStack itemStack, WeaponEffects effect) {
         itemStack.getOrCreateNbt().putString(EFFECTS_NBT_KEY, effect.getId());
         return itemStack;
     }
 
+    /**
+     *
+     * @param itemStack
+     * @return True, if the ItemStack contains any {@linkplain WeaponEffects TitanFabric WeaponEffect}
+     */
     public static boolean stackHasWeaponEffect(ItemStack itemStack) {
         return itemStack.getOrCreateNbt().contains(EFFECTS_NBT_KEY);
     }
 
+    /**
+     * Builds the ToolTip TranslationKey for the ItemStack which has a TitanFabric Weapon Effect
+     * @param tooltip original tooltip of the ItemStack
+     * @param stack original ItemStack
+     * @return ItemStack with description for current {@linkplain WeaponEffects TitanFabric WeaponEffect}
+     */
     public static List<Text> appendToolTip(List<Text> tooltip, ItemStack stack) {
         String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack);
 
@@ -70,7 +96,16 @@ public class EffectHelper {
         return Arrays.stream(WeaponEffects.values()).filter(effect -> effect != WeaponEffects.FIRE).toList();
     }
 
+    /**
+     * Generates a List of ItemStacks from a single base ItemStack. The List contains all possible variants of the
+     * base ItemStack in combination with the {@linkplain WeaponEffects TitanFabric WeaponEffects}
+     * @param baseItem original ItemStack
+     * @param stacks list of all registered ItemStacks.
+     * @return list of all registered ItemStacks with the newly generated {@linkplain WeaponEffects TitanFabric WeaponEffect} ItemStack variants
+     */
     public static DefaultedList<ItemStack> generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
+        //FIXME: wrong rendering of the creative menu's "clear items" slot might be coming from here?
+        // breakpoint it and see, if any stacks from the incoming stacks parameter are being overwritten
         List<WeaponEffects> possibleEffects = getSwordEffects();
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
 
@@ -96,14 +131,9 @@ public class EffectHelper {
 
     public static void applyWeaponEffectOnTarget(WeaponEffects effect, int effectStrength, World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
         if (world.isClient() || effect == null) return;
+        if(world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
 
-
-        // chance to apply effect (strength = 1 = 25%, strength = 2 = 50%)
-        if(world.getRandom().nextInt(100) >= (25 * effectStrength)){
-            return;
-        }
-
-
+        //TODO: change values for balancing as needed
         switch (effect) {
             case BLIND -> {
                 target.addStatusEffect(new StatusEffectInstance(
