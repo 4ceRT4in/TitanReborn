@@ -16,18 +16,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class CitrinSwordItem extends TitanFabricSwordItem {
-    public CitrinSwordItem(boolean isGreatsword, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(isGreatsword, toolMaterial, attackDamage, attackSpeed, WeaponEffects.POISON);
+    public CitrinSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
+        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, WeaponEffects.POISON);
     }
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(new TranslatableText("tooltip.titanfabric.citrinSwordItem"));
         super.appendTooltip(stack, world, tooltip, context);
-    }
-
-    @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        super.appendStacks(group, EffectHelper.generateAllEffectVersionStacks(this, stacks));
     }
 }
