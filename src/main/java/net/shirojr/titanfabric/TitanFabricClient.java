@@ -6,5 +6,6 @@ import net.shirojr.titanfabric.util.ModelPredicateProviders;
 public class TitanFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        ModelPredicateProviders.register();
     }
 }
