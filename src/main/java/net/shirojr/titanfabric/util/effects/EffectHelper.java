@@ -13,7 +13,6 @@ import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Helper class for TitanFabric {@linkplain WeaponEffects}
@@ -49,6 +48,7 @@ public class EffectHelper {
     /**
      * Sets the {@linkplain WeaponEffects TitanFabric WeaponEffect}.<br><br>
      * Used to write custom NBT information to the ItemStack
+     *
      * @param itemStack
      * @param effect
      * @return
@@ -59,7 +59,6 @@ public class EffectHelper {
     }
 
     /**
-     *
      * @param itemStack
      * @return True, if the ItemStack contains any {@linkplain WeaponEffects TitanFabric WeaponEffect}
      */
@@ -69,14 +68,17 @@ public class EffectHelper {
 
     /**
      * Builds the ToolTip TranslationKey for the ItemStack which has a TitanFabric Weapon Effect
+     *
      * @param tooltip original tooltip of the ItemStack
-     * @param stack original ItemStack
+     * @param stack   original ItemStack
      * @return ItemStack with description for current {@linkplain WeaponEffects TitanFabric WeaponEffect}
      */
     public static List<Text> appendToolTip(List<Text> tooltip, ItemStack stack) {
-        String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack);
+        WeaponEffects effect = WeaponEffects.getEffect(stack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
+        if (effect == null) return tooltip;
 
-        switch (WeaponEffects.getEffect(stack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY))) {
+        String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack);
+        switch (effect) {
             case BLIND -> translation += "Blind";
             case FIRE -> translation += "Fire";
             case POISON -> translation += "Poison";
@@ -99,8 +101,9 @@ public class EffectHelper {
     /**
      * Generates a List of ItemStacks from a single base ItemStack. The List contains all possible variants of the
      * base ItemStack in combination with the {@linkplain WeaponEffects TitanFabric WeaponEffects}
+     *
      * @param baseItem original ItemStack
-     * @param stacks list of all registered ItemStacks.
+     * @param stacks   list of all registered ItemStacks.
      * @return list of all registered ItemStacks with the newly generated {@linkplain WeaponEffects TitanFabric WeaponEffect} ItemStack variants
      */
     public static DefaultedList<ItemStack> generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
@@ -131,7 +134,7 @@ public class EffectHelper {
 
     public static void applyWeaponEffectOnTarget(WeaponEffects effect, int effectStrength, World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
         if (world.isClient() || effect == null) return;
-        if(world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
+        if (world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
 
         //TODO: change values for balancing as needed
         switch (effect) {
