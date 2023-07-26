@@ -5,14 +5,12 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.ConfigInit;
-import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricShootableItem;
+import net.shirojr.titanfabric.item.custom.*;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorBootsItem;
@@ -23,7 +21,9 @@ import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
-import net.shirojr.titanfabric.item.custom.sword.*;
+import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
+import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
+import net.shirojr.titanfabric.item.custom.sword.NetherSwordItem;
 
 public class TitanFabricItems {
     //region armor
@@ -43,24 +43,23 @@ public class TitanFabricItems {
     public static final Item LEGEND_BOOTS = registerItem("legend_boots", new LegendArmorBootsItem(ConfigInit.CONFIG.TitanArmorBootsHealth));
     //endregion
 
-    public static final Item CITRIN_SWORD = registerItem("citrin_sword", new CitrinSwordItem(false, TitanFabricToolMaterials.CITRIN, 5, -2.4f));
+    public static final Item CITRIN_SWORD = registerItem("citrin_sword", new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, 5, -2.4f));
     public static final Item CITRIN_GREATSWORD = registerItem("citrin_greatsword", new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, 5, -2.4f));
-    public static final Item NETHER_SWORD = registerItem("nether_sword", new NetherSwordItem(false, TitanFabricToolMaterials.NETHER, 6, -2.4f));
+    public static final Item NETHER_SWORD = registerItem("nether_sword", new NetherSwordItem(true, TitanFabricToolMaterials.NETHER, 6, -2.4f));
     public static final Item NETHER_GREATSWORD = registerItem("nether_greatsword", new NetherSwordItem(true, TitanFabricToolMaterials.NETHER_GREAT, 6, -2.4f));
-    public static final Item LEGEND_SWORD = registerItem("legend_sword", new LegendSwordItem(false, TitanFabricToolMaterials.LEGEND, 7, -2.4f));
+    public static final Item LEGEND_SWORD = registerItem("legend_sword", new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, 7, -2.4f));
     public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword", new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
 
-    public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword", new DiamondSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
-    public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword", new NetheriteSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
+    public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword", new TitanFabricSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f, null));
+    public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword", new TitanFabricSwordItem(false, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f, null));
 
     public static final Item LEGEND_SLINGSGOT = registerItem("legend_slingshot", new TitanFabricShootableItem());
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
     public static final Item MULTI_BOW = registerItem("multi_bow", new MultiBowItem());
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
-    //TODO: implement fabric shield lib
-    //public static final Item DIAMOND_SHIELD = registerItem("diamond_shield", new DiamondShieldItem());
-    //public static final Item LEGEND_SHIELD = registerItem("legend_shield", new LegendShieldItem());
+    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield", new TitanFabricShieldItem(1250, 40, 14, Items.DIAMOND));
+    public static final Item LEGEND_SHIELD = registerItem("legend_shield", new TitanFabricShieldItem(2500, 10, 24, TitanFabricItems.LEGEND_INGOT));
 
     public static final Item CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
 
@@ -98,11 +97,6 @@ public class TitanFabricItems {
 
 
     private static Item registerItem(String name, Item item) {
-
-        if(item == null){
-            return null;
-        }
-
         return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MODID, name), item);
     }
 
