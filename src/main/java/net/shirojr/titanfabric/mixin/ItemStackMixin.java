@@ -1,19 +1,23 @@
 package net.shirojr.titanfabric.mixin;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Random;
 
 @Mixin(ItemStack.class)
@@ -40,3 +44,4 @@ public abstract class ItemStackMixin implements FabricItemStack {
     }
 
 }
+
