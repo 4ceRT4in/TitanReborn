@@ -104,23 +104,25 @@ public class EffectHelper {
      *
      * @param baseItem original ItemStack
      * @param stacks   list of all registered ItemStacks.
-     * @return list of all registered ItemStacks with the newly generated {@linkplain WeaponEffects TitanFabric WeaponEffect} ItemStack variants
+     * @return list of all ItemStacks with the newly generated {@linkplain WeaponEffects TitanFabric WeaponEffect} ItemStack variants
      */
     public static DefaultedList<ItemStack> generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
-        //FIXME: wrong rendering of the creative menu's "clear items" slot might be coming from here?
-        // breakpoint it and see, if any stacks from the incoming stacks parameter are being overwritten
         List<WeaponEffects> possibleEffects = getSwordEffects();
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
 
         for (WeaponEffects entry : possibleEffects) {
-            ItemStack firstEffect = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
-            stacks.add(setEffectStrength(firstEffect, 1));
-            ItemStack secondEffect = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
-            stacks.add(setEffectStrength(secondEffect, 2));
+            if (baseItem instanceof TitanFabricArrowItem) {
+                ItemStack effectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
+                stacks.add(effectStack);
+            } else {
+                ItemStack firstEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
+                ItemStack secondEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
+                stacks.add(setEffectStrength(firstEffectStack, 1));
+                stacks.add(setEffectStrength(secondEffectStack, 2));
+            }
         }
         return stacks;
     }
-
 
     public static void applyWeaponEffectOnTargetFromNBT(World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
         String currentEffect = itemStack.getOrCreateNbt().getString(EFFECTS_NBT_KEY);
@@ -130,7 +132,6 @@ public class EffectHelper {
 
         applyWeaponEffectOnTarget(WeaponEffects.getEffect(currentEffect), strength, world, itemStack, user, target);
     }
-
 
     public static void applyWeaponEffectOnTarget(WeaponEffects effect, int effectStrength, World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
         if (world.isClient() || effect == null) return;

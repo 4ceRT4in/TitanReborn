@@ -10,7 +10,6 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
@@ -23,7 +22,8 @@ public class TitanFabricSwordItem extends SwordItem {
     private final boolean hasWeaponEffects;
     private final WeaponEffects baseEffect;
 
-    public TitanFabricSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffects baseEffect) {
+    public TitanFabricSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial,
+                                int attackDamage, float attackSpeed, WeaponEffects baseEffect) {
         super(toolMaterial, attackDamage, attackSpeed, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
         this.hasWeaponEffects = hasWeaponEffects;
         this.baseEffect = baseEffect;
@@ -35,10 +35,13 @@ public class TitanFabricSwordItem extends SwordItem {
 
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
+        if (!isIn(group)) return;
+
         if (this.hasWeaponEffects) {
-            TitanFabric.devLogger("Registering Weapon Effects for " + this.getDefaultStack().getName());
-            super.appendStacks(group, EffectHelper.generateAllEffectVersionStacks(this, stacks));
-        } else super.appendStacks(group, stacks);
+            EffectHelper.generateAllEffectVersionStacks(this, stacks);
+        } else {
+            stacks.add(new ItemStack(this));
+        }
     }
 
     @Override
@@ -49,10 +52,7 @@ public class TitanFabricSwordItem extends SwordItem {
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        //Apply extra effects
         EffectHelper.applyWeaponEffectOnTargetFromNBT(target.getWorld(), stack, attacker, target);
-
-        //Apply base effect
         if (this.baseEffect != null) {
             EffectHelper.applyWeaponEffectOnTarget(this.baseEffect, 1, target.getWorld(), stack, attacker, target);
         }
