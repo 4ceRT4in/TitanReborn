@@ -6,27 +6,28 @@
   "overrides": [
     {
       "predicate": {
-        "effect": 1,
-        "strength": 1
-      }
+        "effect": 0.1
+      },
+      "model": "titanfabric:item/blindness_arrow"
     },
     {
       "predicate": {
-        "effect": 3,
-        "strength": 1
-      }
+        "effect": 0.3
+      },
+      "model": "titanfabric:item/poison_arrow"
     },
     {
       "predicate": {
-        "effect": 4,
-        "strength": 1
-      }
+        "effect": 0.4
+      },
+      "model": "titanfabric:item/weakness_arrow"
     },
     {
       "predicate": {
-        "effect": 5,
-        "strength": 1
-      }
+        "effect": 0.5,
+        "strength": 0.1
+      },
+      "model": "titanfabric:item/wither_arrow"
     }
   ]
 }

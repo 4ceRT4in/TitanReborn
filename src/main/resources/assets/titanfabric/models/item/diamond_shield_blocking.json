@@ -32,14 +32,6 @@
             }
         }
     ],
-    "overrides": [
-        {
-            "predicate": {
-                "blocking": 1
-            },
-            "model": "titanfabric:item/diamoogershield__blocking"
-        }
-    ],
     "display": {
         "thirdperson_righthand": {
             "rotation": [45, 135, 0],
