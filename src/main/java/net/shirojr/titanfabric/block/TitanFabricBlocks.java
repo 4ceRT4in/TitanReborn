@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.block.custom.CitrinOreBlock;
+import net.shirojr.titanfabric.block.custom.DiamondFurnaceBlock;
 import net.shirojr.titanfabric.block.custom.NetherOreBlock;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 
@@ -44,6 +45,9 @@ public class TitanFabricBlocks {
     public static final Block STONE_LIGHT = registerBlock("stone_light",
             new Block(FabricBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(1.5f).strength(6.0f).luminance(15).requiresTool()), TitanFabricItemGroups.TITAN);
+
+    public static final Block DIAMOND_FURNACE = registerBlock("diamond_furnace",
+            new DiamondFurnaceBlock(), TitanFabricItemGroups.TITAN);
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
