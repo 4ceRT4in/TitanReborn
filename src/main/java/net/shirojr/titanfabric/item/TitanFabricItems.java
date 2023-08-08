@@ -27,39 +27,61 @@ import net.shirojr.titanfabric.item.custom.sword.NetherSwordItem;
 
 public class TitanFabricItems {
     //region armor
-    public static final Item CITRIN_HELMET = registerItem("citrin_helmet", new CitrinArmorItem(EquipmentSlot.HEAD));
-    public static final Item CITRIN_CHESTPLATE = registerItem("citrin_chestplate", new CitrinArmorItem(EquipmentSlot.CHEST));
-    public static final Item CITRIN_LEGGINGS = registerItem("citrin_leggings", new CitrinArmorItem(EquipmentSlot.LEGS));
-    public static final Item CITRIN_BOOTS = registerItem("citrin_boots", new CitrinArmorItem(EquipmentSlot.FEET));
+    public static final Item CITRIN_HELMET = registerItem("citrin_helmet",
+            new CitrinArmorItem(EquipmentSlot.HEAD));
+    public static final Item CITRIN_CHESTPLATE = registerItem("citrin_chestplate",
+            new CitrinArmorItem(EquipmentSlot.CHEST));
+    public static final Item CITRIN_LEGGINGS = registerItem("citrin_leggings",
+            new CitrinArmorItem(EquipmentSlot.LEGS));
+    public static final Item CITRIN_BOOTS = registerItem("citrin_boots",
+            new CitrinArmorItem(EquipmentSlot.FEET));
 
-    public static final Item NETHER_HELMET = registerItem("nether_helmet", new NetherArmorItem(EquipmentSlot.HEAD));
-    public static final Item NETHER_CHESTPLATE = registerItem("nether_chestplate", new NetherArmorItem(EquipmentSlot.CHEST));
-    public static final Item NETHER_LEGGINGS = registerItem("nether_leggings", new NetherArmorItem(EquipmentSlot.LEGS));
-    public static final Item NETHER_BOOTS = registerItem("nether_boots", new NetherArmorItem(EquipmentSlot.FEET));
+    public static final Item NETHER_HELMET = registerItem("nether_helmet",
+            new NetherArmorItem(EquipmentSlot.HEAD));
+    public static final Item NETHER_CHESTPLATE = registerItem("nether_chestplate",
+            new NetherArmorItem(EquipmentSlot.CHEST));
+    public static final Item NETHER_LEGGINGS = registerItem("nether_leggings",
+            new NetherArmorItem(EquipmentSlot.LEGS));
+    public static final Item NETHER_BOOTS = registerItem("nether_boots",
+            new NetherArmorItem(EquipmentSlot.FEET));
 
-    public static final Item LEGEND_HELMET = registerItem("legend_helmet", new LegendArmorHelmetItem(ConfigInit.CONFIG.TitanArmorHelmetHealth));
-    public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate", new LegendArmorChestplateItem(ConfigInit.CONFIG.TitanArmorChestplateHealth));
-    public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings", new LegendArmorLeggingsItem(ConfigInit.CONFIG.TitanArmorLeggingsHealth));
-    public static final Item LEGEND_BOOTS = registerItem("legend_boots", new LegendArmorBootsItem(ConfigInit.CONFIG.TitanArmorBootsHealth));
+    public static final Item LEGEND_HELMET = registerItem("legend_helmet",
+            new LegendArmorHelmetItem(ConfigInit.CONFIG.TitanArmorHelmetHealth));
+    public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate",
+            new LegendArmorChestplateItem(ConfigInit.CONFIG.TitanArmorChestplateHealth));
+    public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings",
+            new LegendArmorLeggingsItem(ConfigInit.CONFIG.TitanArmorLeggingsHealth));
+    public static final Item LEGEND_BOOTS = registerItem("legend_boots",
+            new LegendArmorBootsItem(ConfigInit.CONFIG.TitanArmorBootsHealth));
     //endregion
 
-    public static final Item CITRIN_SWORD = registerItem("citrin_sword", new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, 5, -2.4f));
-    public static final Item CITRIN_GREATSWORD = registerItem("citrin_greatsword", new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, 5, -2.4f));
-    public static final Item NETHER_SWORD = registerItem("nether_sword", new NetherSwordItem(true, TitanFabricToolMaterials.NETHER, 6, -2.4f));
-    public static final Item NETHER_GREATSWORD = registerItem("nether_greatsword", new NetherSwordItem(true, TitanFabricToolMaterials.NETHER_GREAT, 6, -2.4f));
-    public static final Item LEGEND_SWORD = registerItem("legend_sword", new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, 7, -2.4f));
-    public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword", new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
+    public static final Item CITRIN_SWORD = registerItem("citrin_sword",
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, 5, -2.4f));
+    public static final Item CITRIN_GREATSWORD = registerItem("citrin_greatsword",
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, 5, -2.4f));
+    public static final Item NETHER_SWORD = registerItem("nether_sword",
+            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER, 6, -2.4f));
+    public static final Item NETHER_GREATSWORD = registerItem("nether_greatsword",
+            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER_GREAT, 6, -2.4f));
+    public static final Item LEGEND_SWORD = registerItem("legend_sword",
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, 7, -2.4f));
+    public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword",
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
 
-    public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword", new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, 7, -2.4f, null));
-    public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword", new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, 7, -2.4f, null));
+    public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
+            new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, 7, -2.4f, null));
+    public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
+            new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, 7, -2.4f, null));
 
     public static final Item LEGEND_SLINGSGOT = registerItem("legend_slingshot", new TitanFabricShootableItem());
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
     public static final Item MULTI_BOW = registerItem("multi_bow", new MultiBowItem());
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
-    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield", new TitanFabricShieldItem(1250, 40, 14, Items.DIAMOND));
-    public static final Item LEGEND_SHIELD = registerItem("legend_shield", new TitanFabricShieldItem(2500, 10, 24, TitanFabricItems.LEGEND_INGOT));
+    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
+            new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
+    public static final Item LEGEND_SHIELD = registerItem("legend_shield",
+            new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
 
     public static final Item CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
 
@@ -93,7 +115,11 @@ public class TitanFabricItems {
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
     public static final Item DIAMOND_APPLE = registerItem("diamond_apple",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64).food((new net.minecraft.item.FoodComponent.Builder()).hunger(4).saturationModifier(10.0F).alwaysEdible().statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F).statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F).build())));
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)
+                    .food((new net.minecraft.item.FoodComponent.Builder()).hunger(4).saturationModifier(10.0F).alwaysEdible()
+                            .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F)
+                            .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
+                            .build())));
 
 
     private static Item registerItem(String name, Item item) {
