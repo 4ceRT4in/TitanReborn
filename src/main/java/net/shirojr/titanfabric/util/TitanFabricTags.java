@@ -23,6 +23,7 @@ public class TitanFabricTags {
 
     public static class Items {
         public static final TagKey<Item> ARROWS = createCommonTag("arrows");
+        public static final TagKey<Item> ORES = createCommonTag("diamond_furnace_ores");
 
         private static TagKey<Item> createTag(String name) {
 

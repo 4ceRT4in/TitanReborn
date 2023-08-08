@@ -187,7 +187,10 @@
   "block.titanfabric.legend_block": "§e§kl §r§3Titan Block §e§kl",
   "block.titanfabric.stone_light": "Stone Light",
   "block.titanfabric.dirt_light": "Dirt Light",
-  "block.titanfabric.diamond_furnace": "§bDiamond Furnace",
+  "block.titanfabric.diamond_furnace": "Diamond Furnace",
+
+  "container.titanfabric.diamond_furnace": "§bDiamond Furnace",
+
 
 
   "itemGroup.titanfabric.titan": "§3Titan Mod"
