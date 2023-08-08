@@ -7,10 +7,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.BowItem;
 import net.minecraft.text.LiteralText;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.TitanFabricClient;
 import net.shirojr.titanfabric.event.TitanFabricKeyBindEvents;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
-import net.shirojr.titanfabric.screen.ArrowSelectionScreen;
+import net.shirojr.titanfabric.screen.custom.ArrowSelectionScreen;
 
 public class TitanFabricBowItem extends BowItem {
     public TitanFabricBowItem() {

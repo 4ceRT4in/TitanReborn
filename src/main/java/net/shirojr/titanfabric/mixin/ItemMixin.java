@@ -19,8 +19,10 @@ public abstract class ItemMixin {
 
     @Inject(method = "appendTooltip", at = @At("RETURN"))
     private void appendCustomTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
-        // Check if the item is Netherite armor
-        if (stack.getItem() == Items.NETHERITE_HELMET || stack.getItem() == Items.NETHERITE_CHESTPLATE || stack.getItem() == Items.NETHERITE_LEGGINGS || stack.getItem() == Items.NETHERITE_BOOTS) {
+        if (stack.getItem() == Items.NETHERITE_HELMET ||
+                stack.getItem() == Items.NETHERITE_CHESTPLATE ||
+                stack.getItem() == Items.NETHERITE_LEGGINGS ||
+                stack.getItem() == Items.NETHERITE_BOOTS) {
             tooltip.add(new TranslatableText("tooltip.titanfabric.netherite_effect"));
         }
     }
