@@ -4,9 +4,10 @@
   "package": "net.shirojr.titanfabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ItemsMixin",
     "ItemMixin",
+    "ItemsMixin",
     "ItemStackMixin",
+    "LivingEntityMixin",
     "StatusEffectsMixin"
   ],
   "injectors": {

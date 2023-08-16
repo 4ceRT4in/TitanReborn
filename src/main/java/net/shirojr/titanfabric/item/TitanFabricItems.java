@@ -78,10 +78,10 @@ public class TitanFabricItems {
     public static final Item MULTI_BOW = registerItem("multi_bow", new MultiBowItem());
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
-    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
+/*    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
             new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
     public static final Item LEGEND_SHIELD = registerItem("legend_shield",
-            new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
+            new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));*/
 
     public static final Item CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
 

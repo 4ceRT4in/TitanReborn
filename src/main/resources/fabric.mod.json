@@ -41,6 +41,5 @@
   },
   "suggests": {
     "another-mod": "*"
-  },
-  "accessWidener" : "titanfabric.accesswidener"
+  }
 }

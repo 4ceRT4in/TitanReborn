@@ -9,18 +9,25 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.ClickType;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.config.TitanFabricConfig;
+import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 public class LegendArmorBootsItem extends LegendArmorItem {
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
@@ -45,5 +52,14 @@ public class LegendArmorBootsItem extends LegendArmorItem {
             return this.attributeModifiers;
         }
         return super.getAttributeModifiers(slot);
+    }
+
+    @Override
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType,
+                             PlayerEntity player, StackReference cursorStackReference) {
+        List<ItemStack> armorSet = IntStream.rangeClosed(0, 3) .mapToObj(player.getInventory()::getArmorStack).toList();
+        float damageValue =  (float) ConfigInit.CONFIG.TitanArmorBootsHealth;
+        if (armorSet.contains(stack) && player.getHealth() > damageValue) player.setHealth(player.getMaxHealth() - damageValue);
+        return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
     }
 }

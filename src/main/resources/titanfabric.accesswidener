@@ -1,2 +1,0 @@
-accessWidener   v1  named
-extendable  method net/minecraft/block/entity/AbstractFurnaceBlockEntity getCookTime (Lnet/minecraft/world/World;Lnet/minecraft/recipe/RecipeType;Lnet/minecraft/inventory/Inventory;)I

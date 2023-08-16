@@ -1,18 +1,15 @@
 package net.shirojr.titanfabric.mixin;
 
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.*;
-import net.minecraft.text.Text;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolMaterial;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
 
 @Mixin(Items.class)
 public abstract class ItemsMixin {

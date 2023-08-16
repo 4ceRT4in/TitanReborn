@@ -1,4 +1,5 @@
 package net.shirojr.titanfabric.item.custom;
+/*
 
 import com.github.crimsondawn45.fabricshieldlib.lib.object.FabricShieldItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -11,3 +12,4 @@ public class TitanFabricShieldItem extends FabricShieldItem {
                 cooldownTicks, enchantability, repairItems);
     }
 }
+*/
