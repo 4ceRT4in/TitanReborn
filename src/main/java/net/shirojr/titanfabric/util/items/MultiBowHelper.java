@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -18,7 +19,7 @@ import java.util.function.Predicate;
  * Utillity Class to clean up {@linkplain net.shirojr.titanfabric.item.custom.bow.MultiBowItem MultiBowItem class} a bit.
  */
 public final class MultiBowHelper {
-    public static final String CONCURRENT_ARROWS_NBT_KEY = TitanFabric.MODID + ".concurrent_arrows";
+    public static final String FULL_ARROW_COUNT_NBT_KEY = TitanFabric.MODID + ".concurrent_arrows";
     public static final String ARROWS_LEFT_NBT_KEY = TitanFabric.MODID + ".arrows_left";
 
     private MultiBowHelper() {
@@ -32,8 +33,9 @@ public final class MultiBowHelper {
      * @param arrows    count of concurrent arrows
      * @return ItemStack with the new NBT information
      */
-    public static ItemStack setConcurrentArrowCount(ItemStack bowStack, int arrows) {
-        bowStack.getOrCreateNbt().putInt(CONCURRENT_ARROWS_NBT_KEY, arrows);
+    public static ItemStack setFullArrowCount(ItemStack bowStack, int arrows) {
+        bowStack.getOrCreateNbt().putInt(FULL_ARROW_COUNT_NBT_KEY, arrows);
+        if (arrows < 1) bowStack.removeSubNbt(FULL_ARROW_COUNT_NBT_KEY);
         return bowStack;
     }
 
@@ -43,9 +45,20 @@ public final class MultiBowHelper {
      * @param itemStack Bow ItemStack to get the necessary information
      * @return amount of arrows, which will be shot at the same time
      */
-    public static int getConcurrentArrowCount(ItemStack itemStack) {
-        if (!itemStack.getOrCreateNbt().contains(CONCURRENT_ARROWS_NBT_KEY)) return 0;
-        return itemStack.getOrCreateNbt().getInt(CONCURRENT_ARROWS_NBT_KEY);
+    public static int getFullArrowCount(ItemStack itemStack) {
+        if (!itemStack.getOrCreateNbt().contains(FULL_ARROW_COUNT_NBT_KEY)) return 0;
+        return itemStack.getOrCreateNbt().getInt(FULL_ARROW_COUNT_NBT_KEY);
+    }
+
+    public static ItemStack setArrowsLeft(ItemStack bowStack, int arrows) {
+        bowStack.getOrCreateNbt().putInt(ARROWS_LEFT_NBT_KEY, arrows);
+        if (arrows < 1) bowStack.removeSubNbt(ARROWS_LEFT_NBT_KEY);
+        return bowStack;
+    }
+
+    public static int getArrowsLeft(ItemStack itemStack) {
+        if (!itemStack.getOrCreateNbt().contains(ARROWS_LEFT_NBT_KEY)) return 0;
+        return itemStack.getOrCreateNbt().getInt(ARROWS_LEFT_NBT_KEY);
     }
 
     public static int getAfterShotLevel(ItemStack itemStack) {
@@ -63,6 +76,7 @@ public final class MultiBowHelper {
      */
     public static boolean handleArrowConsumption(PlayerEntity player, ItemStack bowStack, ItemStack arrowStack) {
         PlayerInventory inventory = player.getInventory();
+        if (player.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, bowStack) > 0) return true;
         if (!inventory.contains(arrowStack) || arrowStack.getCount() < MultiBowHelper.getAfterShotLevel(bowStack)) return false;
 
         inventory.removeStack(inventory.getSlotWithStack(arrowStack), MultiBowHelper.getAfterShotLevel(bowStack));
@@ -75,7 +89,9 @@ public final class MultiBowHelper {
      * @return returns either an Empty ItemStack or the first possible Arrow ItemStack
      */
     public static ItemStack searchFirstArrowStack(PlayerEntity player) {
-        Predicate<ItemStack> isArrow = itemStack -> itemStack.isIn(TitanFabricTags.Items.ARROWS);
+        Predicate<ItemStack> isArrow = itemStack -> itemStack.isIn(TitanFabricTags.Items.ARROWS) &&
+                itemStack.getCount() >= MultiBowHelper.getFullArrowCount(player.getMainHandStack());
+
         for (ItemStack stack : player.getInventory().main) {
             if (isArrow.test(stack)) return stack;
         }

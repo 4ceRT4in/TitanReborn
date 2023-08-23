@@ -21,9 +21,11 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 
-        registerBowProviders(TitanFabricItems.LEGEND_BOW);
-        registerBowProviders(TitanFabricItems.MULTI_BOW);
+        registerBowProviders(TitanFabricItems.LEGEND_BOW); // vanilla pfeile, spectral, nicht tipped, modded effect arrows
+        registerBowProviders(TitanFabricItems.MULTI_BOW); // nur vanilla pfeile, spectral
         registerBowArrowCount(TitanFabricItems.MULTI_BOW);
+
+        // crossbow: vanilla pfeile, spectral, vanilla splash potions, vanilla lingering potions, keine Raketen!
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -79,7 +81,7 @@ public class ModelPredicateProviders {
         if (item == null) return;
         ModelPredicateProviderRegistry.register(item, new Identifier("arrows"), (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
-            return MultiBowHelper.getConcurrentArrowCount(stack) * 0.1f;
+            return MultiBowHelper.getFullArrowCount(stack) * 0.1f;
         });
     }
 }

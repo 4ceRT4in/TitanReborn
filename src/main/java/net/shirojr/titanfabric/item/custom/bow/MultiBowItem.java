@@ -1,16 +1,16 @@
 package net.shirojr.titanfabric.item.custom.bow;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.enchant.TitanFabricEnchantments;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
+import net.shirojr.titanfabric.network.TitanFabricNetworking;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 public class MultiBowItem extends TitanFabricBowItem {
@@ -30,17 +31,17 @@ public class MultiBowItem extends TitanFabricBowItem {
     @Override
     public ItemStack getDefaultStack() {
         ItemStack itemStack = new ItemStack(this);
-        MultiBowHelper.setConcurrentArrowCount(itemStack, 1);
+        MultiBowHelper.setFullArrowCount(itemStack, 1);
         return itemStack;
     }
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         ItemStack itemStack = context.getStack();
-        int arrows = MultiBowHelper.getConcurrentArrowCount(itemStack) + 1;
+        int arrows = MultiBowHelper.getFullArrowCount(itemStack) + 1;
         if (arrows > MultiBowHelper.getAfterShotLevel(itemStack)) arrows = 1;
-        if (!context.getWorld().isClient()) MultiBowHelper.setConcurrentArrowCount(itemStack, arrows);
-        TitanFabric.devLogger("Concurrent Arrows: " + MultiBowHelper.getConcurrentArrowCount(itemStack));
+        if (!context.getWorld().isClient()) MultiBowHelper.setFullArrowCount(itemStack, arrows);
+        TitanFabric.devLogger("Concurrent Arrows: " + MultiBowHelper.getFullArrowCount(itemStack));
         return ActionResult.SUCCESS;
     }
 
@@ -55,48 +56,47 @@ public class MultiBowItem extends TitanFabricBowItem {
         int cooldown = 30 * EnchantmentHelper.getLevel(TitanFabricEnchantments.AFTER_SHOT, stack);
         playerEntity.getItemCooldownManager().set(stack.getItem(), cooldown);
 
-        if (!stack.getOrCreateNbt().contains(MultiBowHelper.ARROWS_LEFT_NBT_KEY)) {
-            stack.getOrCreateNbt().putInt(MultiBowHelper.ARROWS_LEFT_NBT_KEY, MultiBowHelper.getAfterShotLevel(stack));
-            projectileTick = 10 * EnchantmentHelper.getLevel(TitanFabricEnchantments.AFTER_SHOT, stack);
-        }
+        MultiBowHelper.setArrowsLeft(stack, MultiBowHelper.getFullArrowCount(stack));
+        projectileTick = 10 * MultiBowHelper.getAfterShotLevel(stack);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         if (MultiBowHelper.getAfterShotLevel(stack) < 1) return;
-        if (!selected || !(entity instanceof PlayerEntity player)) return;
+        if (world.isClient() || !selected || !(entity instanceof PlayerEntity player)) return;
 
-        if (projectileTick > 0) {
-            projectileTick--;
-            if (projectileTick % 10 != 0) return;
-        }
-
-        if (!stack.getOrCreateNbt().contains(MultiBowHelper.CONCURRENT_ARROWS_NBT_KEY)) {
-            stack.getOrCreateNbt().putInt(MultiBowHelper.CONCURRENT_ARROWS_NBT_KEY, 1);
-        }
-
-        boolean noArrowsNeeded = player.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0;
         double pullProgress = BowItem.getPullProgress(this.getMaxUseTime(stack) - player.getItemUseTimeLeft());
-        ItemStack arrowStack = MultiBowHelper.searchFirstArrowStack(player);
-        int powerEnchantLevel = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
-        int punchEnchantLevel = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
-        int flameEnchantLevel = EnchantmentHelper.getLevel(Enchantments.FLAME, stack);
 
-        if (pullProgress < 0.1) return;
+        if (projectileTick < 1) return;
+        projectileTick--;
+        if (!validTick(projectileTick)) return;
 
-        world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,
-                1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + (float) pullProgress * 0.5f);
 
-        if (world.isClient()) return;
+        if (!stack.getOrCreateNbt().contains(MultiBowHelper.FULL_ARROW_COUNT_NBT_KEY)) MultiBowHelper.setFullArrowCount(stack, 1);
 
-        PersistentProjectileEntity persistentProjectileEntity = MultiBowHelper.prepareArrow(world, player, arrowStack,
-                player.getPitch(), player.getYaw(), pullProgress, powerEnchantLevel, punchEnchantLevel, flameEnchantLevel);
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeItemStack(MultiBowHelper.searchFirstArrowStack(player));
+        buf.writeDouble(pullProgress);
+        ClientPlayNetworking.send(TitanFabricNetworking.MULTI_BOW_ARROWS_CHANNEL, buf);
 
-        //TODO: reduce arrow stack
+        stack.damage(MultiBowHelper.getAfterShotLevel(stack), player, p -> p.sendToolBreakStatus(p.getActiveHand()));
+        handleAfterShotNbtValues(stack);
+    }
 
-        stack.damage(1, player, p -> p.sendToolBreakStatus(p.getActiveHand()));
-        world.spawnEntity(persistentProjectileEntity);
+    private static void resetStats(ItemStack bowStack) {
+        MultiBowHelper.setArrowsLeft(bowStack, 0);
+    }
+
+    private static boolean validTick(int tick) {
+        return tick % 10 == 0;
+    }
+
+    private static void handleAfterShotNbtValues(ItemStack bowStack) {
+        if (bowStack.getOrCreateNbt().contains(MultiBowHelper.ARROWS_LEFT_NBT_KEY)) {
+            int arrows = bowStack.getOrCreateNbt().getInt(MultiBowHelper.ARROWS_LEFT_NBT_KEY) - 1;
+            if (arrows > 0) bowStack.getOrCreateNbt().putInt(MultiBowHelper.ARROWS_LEFT_NBT_KEY, arrows);
+            else bowStack.removeSubNbt(MultiBowHelper.ARROWS_LEFT_NBT_KEY);
+        }
     }
 }
