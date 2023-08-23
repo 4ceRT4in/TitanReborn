@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.util;
+package net.shirojr.titanfabric.util.items;
 
 public enum ArrowCyclerUtil {
     Arrow("minecraft:arrow"),

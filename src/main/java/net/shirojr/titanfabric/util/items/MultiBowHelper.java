@@ -1,0 +1,101 @@
+package net.shirojr.titanfabric.util.items;
+
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.ArrowItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.world.World;
+import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.enchant.TitanFabricEnchantments;
+import net.shirojr.titanfabric.util.TitanFabricTags;
+
+import java.util.function.Predicate;
+
+/**
+ * Utillity Class to clean up {@linkplain net.shirojr.titanfabric.item.custom.bow.MultiBowItem MultiBowItem class} a bit.
+ */
+public final class MultiBowHelper {
+    public static final String CONCURRENT_ARROWS_NBT_KEY = TitanFabric.MODID + ".concurrent_arrows";
+    public static final String ARROWS_LEFT_NBT_KEY = TitanFabric.MODID + ".arrows_left";
+
+    private MultiBowHelper() {
+        // private ctor to avoid instantiating this utility class
+    }
+
+    /**
+     * Set the arrow count, which will be shot at the same time.
+     *
+     * @param bowStack for editing the NBT information
+     * @param arrows    count of concurrent arrows
+     * @return ItemStack with the new NBT information
+     */
+    public static ItemStack setConcurrentArrowCount(ItemStack bowStack, int arrows) {
+        bowStack.getOrCreateNbt().putInt(CONCURRENT_ARROWS_NBT_KEY, arrows);
+        return bowStack;
+    }
+
+    /**
+     * Get the concurrent arrow count, which is currently saved in the ItemStack's NBT information
+     *
+     * @param itemStack Bow ItemStack to get the necessary information
+     * @return amount of arrows, which will be shot at the same time
+     */
+    public static int getConcurrentArrowCount(ItemStack itemStack) {
+        if (!itemStack.getOrCreateNbt().contains(CONCURRENT_ARROWS_NBT_KEY)) return 0;
+        return itemStack.getOrCreateNbt().getInt(CONCURRENT_ARROWS_NBT_KEY);
+    }
+
+    public static int getAfterShotLevel(ItemStack itemStack) {
+        return EnchantmentHelper.getLevel(TitanFabricEnchantments.AFTER_SHOT, itemStack);
+    }
+
+    /**
+     * Handles Arrow management for the {@linkplain net.shirojr.titanfabric.item.custom.bow.MultiBowItem MultiBow}.
+     * Only if the player has enough Arrow items, specified in {@linkplain TitanFabricTags} the Arrow ItemStack will be removed.
+     *
+     * @param player     for inventory management
+     * @param bowStack   for reading concurrent arrow consumption information
+     * @param arrowStack for consuming the correct arrow item
+     * @return false, if not enough arrows were found in the inventory
+     */
+    public static boolean handleArrowConsumption(PlayerEntity player, ItemStack bowStack, ItemStack arrowStack) {
+        PlayerInventory inventory = player.getInventory();
+        if (!inventory.contains(arrowStack) || arrowStack.getCount() < MultiBowHelper.getAfterShotLevel(bowStack)) return false;
+
+        inventory.removeStack(inventory.getSlotWithStack(arrowStack), MultiBowHelper.getAfterShotLevel(bowStack));
+        return true;
+    }
+
+    /**
+     * Finds the first possible ArrowStack in an inventory, defined in {@linkplain TitanFabricTags}
+     * @param player used to get access to the inventory
+     * @return returns either an Empty ItemStack or the first possible Arrow ItemStack
+     */
+    public static ItemStack searchFirstArrowStack(PlayerEntity player) {
+        Predicate<ItemStack> isArrow = itemStack -> itemStack.isIn(TitanFabricTags.Items.ARROWS);
+        for (ItemStack stack : player.getInventory().main) {
+            if (isArrow.test(stack)) return stack;
+        }
+        return player.getAbilities().creativeMode ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
+    }
+
+    public static PersistentProjectileEntity prepareArrow(World world, PlayerEntity player, ItemStack arrowStack,
+                                                   float pitch, float yaw, double pullProgress,
+                                                          int powerLevel, int punchLevel, int flameLevel) {
+
+        ArrowItem arrowItem = (ArrowItem) (arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
+        PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world, arrowStack, player);
+        persistentProjectileEntity.setVelocity(player, pitch, yaw,0.0f, (float) pullProgress * 3.0f, 1.0f);
+
+        double powerDamage = persistentProjectileEntity.getDamage() + powerLevel * 0.5 + 0.5;
+        if (powerLevel > 0) persistentProjectileEntity.setDamage(powerDamage);
+        if (punchLevel > 0) persistentProjectileEntity.setPunch(punchLevel);
+        if (flameLevel > 0) persistentProjectileEntity.setOnFireFor(100);
+        if (pullProgress == 1.0f) persistentProjectileEntity.setCritical(true);
+
+        return persistentProjectileEntity;
+    }
+}

@@ -17,9 +17,13 @@ import java.util.List;
 /**
  * Helper class for TitanFabric {@linkplain WeaponEffects}
  */
-public class EffectHelper {
+public final class EffectHelper {
     public static final String EFFECTS_NBT_KEY = TitanFabric.MODID + ".effect";
     public static final String EFFECTS_STRENGTH_NBT_KEY = TitanFabric.MODID + ".effect.strength";
+
+    private EffectHelper() {
+        // private ctor to avoid instantiating this utility class
+    }
 
     /**
      * Returns {@linkplain WeaponEffects TitanFabric WeaponEffect} strength. It does not translate directly to StatusEffect's amplifier!<br><br>
