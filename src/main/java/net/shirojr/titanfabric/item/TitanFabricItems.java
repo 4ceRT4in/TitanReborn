@@ -5,7 +5,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
@@ -19,6 +18,7 @@ import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorHelmetItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorLeggingsItem;
 import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
+import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
@@ -73,7 +73,7 @@ public class TitanFabricItems {
     public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, 7, -2.4f, null));
 
-    public static final Item LEGEND_SLINGSGOT = registerItem("legend_slingshot", new TitanFabricShootableItem());
+    public static final Item TITAN_CROSSBOW = registerItem("titan_crossbow", new TitanCrossBowItem());
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
     public static final Item MULTI_BOW = registerItem("multi_bow", new MultiBowItem());
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());

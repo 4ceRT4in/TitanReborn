@@ -24,6 +24,7 @@ public class ModelPredicateProviders {
         registerBowProviders(TitanFabricItems.LEGEND_BOW); // vanilla pfeile, spectral, nicht tipped, modded effect arrows
         registerBowProviders(TitanFabricItems.MULTI_BOW); // nur vanilla pfeile, spectral
         registerBowArrowCount(TitanFabricItems.MULTI_BOW);
+        registerCrossBowProviders(TitanFabricItems.TITAN_CROSSBOW);
 
         // crossbow: vanilla pfeile, spectral, vanilla splash potions, vanilla lingering potions, keine Raketen!
     }
@@ -36,6 +37,11 @@ public class ModelPredicateProviders {
     private static void registerBowProviders(Item item) {
         registerBowPull(item, new Identifier("pull"));
         registerBowPulling(item, new Identifier("pulling"));
+    }
+
+    private static void registerCrossBowProviders(Item item) {
+        registerBowProviders(item);
+        registerCrossBow(item);
     }
 
     private static void registerEffectProvider(Item item, Identifier identifier) {
@@ -83,6 +89,10 @@ public class ModelPredicateProviders {
             if (stack == null || entity == null) return 0.0f;
             return MultiBowHelper.getFullArrowCount(stack) * 0.1f;
         });
+    }
+
+    private static void registerCrossBow(Item item) {
+
     }
 }
 
