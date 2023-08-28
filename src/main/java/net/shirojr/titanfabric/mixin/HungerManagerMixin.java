@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(HungerManager.class)
 public abstract class HungerManagerMixin {
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;canFoodHeal()Z"))
-    public boolean titanFabric$heal(PlayerEntity instance) {
+    public boolean titanfabric$heal(PlayerEntity instance) {
         if (!ConfigInit.CONFIG.canFoodHeal) return false;
         else return instance.getHealth() > 0.0f && instance.getHealth() < instance.getMaxHealth();
     }
