@@ -16,5 +16,5 @@ public class TitanFabricConfig implements ConfigData {
     public int netheriteSwordAttackDamage = 8;
     public float netheriteSwordAttackSpeed = -2.4f;
     public int netheriteSwordMaxDamage = 2031;
-    public boolean canFoodHeal = false;
+    public boolean restrictFoodHealing = true;
 }
