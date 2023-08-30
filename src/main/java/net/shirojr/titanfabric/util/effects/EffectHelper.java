@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.util.effects;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -144,22 +145,29 @@ public final class EffectHelper {
         //TODO: change values for balancing as needed
         switch (effect) {
             case BLIND -> {
+                if (target.hasStatusEffect(StatusEffects.BLINDNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
                         effect.getStatusEffect(), effectStrength > 1 ? 4 : 10, effectStrength - 1)
                 );
             }
-            case FIRE -> target.setOnFireFor(effectStrength > 1 ? 10 : 5);
+            case FIRE -> {
+                if (target.isOnFire()) return;
+                target.setOnFireFor(effectStrength > 1 ? 10 : 5);
+            }
             case POISON -> {
+                if (target.hasStatusEffect(StatusEffects.POISON)) return;
                 target.addStatusEffect(new StatusEffectInstance(
                         effect.getStatusEffect(), effectStrength > 1 ? 5 : 10, effectStrength - 1)
                 );
             }
             case WEAK -> {
+                if (target.hasStatusEffect(StatusEffects.WEAKNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
                         effect.getStatusEffect(), effectStrength > 1 ? 6 : 10, effectStrength - 1)
                 );
             }
             case WITHER -> {
+                if (target.hasStatusEffect(StatusEffects.WITHER)) return;
                 target.addStatusEffect(new StatusEffectInstance(
                         effect.getStatusEffect(), effectStrength > 1 ? 7 : 10, effectStrength - 1)
                 );
