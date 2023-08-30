@@ -22,14 +22,17 @@
   "item.titanfabric.netherite_greatsword": "§8Netherite Greatsword",
   "item.titanfabric.legend_greatsword": "§e§kl §r§3Titan Greatsword §e§kl",
 
+  "item.titanfabric.arrow": "§7Arrow",
   "item.titanfabric.weakness_arrow": "§7Weakness Arrow",
   "item.titanfabric.poison_arrow": "§2Poison Arrow",
   "item.titanfabric.wither_arrow": "§8Wither Arrow",
   "item.titanfabric.blindness_arrow": "§1Blindness Arrow",
   "item.titanfabric.legend_bow": "§e§kl §r§3Titan Bow §e§kl",
+  "item.titanfabric.multi_bow": "§cMulti Bow",
   "item.titanfabric.multi_bow_1": "§cMulti Bow Level 1",
   "item.titanfabric.multi_bow_2": "§cMulti Bow Level 2",
   "item.titanfabric.multi_bow_3": "§cMulti Bow Level 3",
+  "item.titanfabric.titan_crossbow": "§cTitan Crossbow",
   "item.titanfabric.citrin_boots": "§eCitrin Boots",
   "item.titanfabric.citrin_leggings": "§eCitrin Leggings",
   "item.titanfabric.citrin_chestplate": "§eCitrin Chestplate",
@@ -176,9 +179,6 @@
   "tooltip.titanfabric.witherArrowItem":"Applies §8Wither §rfor 5 Seconds",
   "tooltip.titanfabric.netherite_effect": "§6Full Set: Resistance I",
 
-
-
-
   "block.titanfabric.citrin_ore": "§eCitrin Ore",
   "block.titanfabric.citrin_block": "§eCitrin Block",
   "block.titanfabric.legend_ore": "§e§kl §r§3Titan Ore §e§kl",
@@ -191,7 +191,6 @@
 
   "container.titanfabric.diamond_furnace": "§bDiamond Furnace",
 
-
-
-  "itemGroup.titanfabric.titan": "§3Titan Mod"
+  "itemGroup.titanfabric.titan": "§3Titan Mod",
+  "keys.titanfabric.misc": "Titan Reborn"
 }
