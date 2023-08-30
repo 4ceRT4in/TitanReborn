@@ -48,6 +48,12 @@ public class MultiBowItem extends TitanFabricBowItem {
     }
 
     @Override
+    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
+        if (world.isClient()) return;
+
+    }
+
+    @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         if (world.isClient() || !(entity instanceof PlayerEntity player)) return;

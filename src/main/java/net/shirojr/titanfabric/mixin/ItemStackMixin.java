@@ -26,7 +26,7 @@ public abstract class ItemStackMixin implements FabricItemStack {
     }
 
     @Inject(at = @At("HEAD"), method = "finishUsing")
-    public void titanfabric$finishUsing(World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
+    private void titanfabric$finishUsing(World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
         if (((ItemStack) (Object) this).getItem() == Items.GOLDEN_APPLE) {
             if (user.hasStatusEffect(StatusEffects.ABSORPTION)) {
                 StatusEffectInstance absorptionEffect = user.getStatusEffect(StatusEffects.ABSORPTION);

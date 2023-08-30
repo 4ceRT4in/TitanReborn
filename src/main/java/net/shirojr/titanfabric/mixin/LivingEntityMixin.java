@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
     @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
-    public void titanfabric$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void titanfabric$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (source != DamageSource.IN_FIRE || source != DamageSource.ON_FIRE) return;
         if (!(((LivingEntity) (Object) this) instanceof PlayerEntity player)) return;
 
@@ -37,7 +37,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z",
             cancellable = true, at = @At("HEAD"))
-    public void titanfabric$addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
+    private void titanfabric$addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (LivingEntity) (Object) this;
 
         if (!(entity instanceof PlayerEntity player) || effect.getEffectType().isBeneficial()) return;

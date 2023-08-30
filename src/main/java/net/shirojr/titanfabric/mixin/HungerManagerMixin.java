@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(HungerManager.class)
 public abstract class HungerManagerMixin {
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;canFoodHeal()Z", ordinal = 1))
-    public boolean titanfabric$heal(PlayerEntity instance) {
+    private boolean titanfabric$heal(PlayerEntity instance) {
         int foodLevel = instance.getHungerManager().getFoodLevel();
 
         return !ConfigInit.CONFIG.restrictFoodHealing && foodLevel >= 18 &&
