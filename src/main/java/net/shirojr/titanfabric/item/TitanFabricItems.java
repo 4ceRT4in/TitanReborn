@@ -75,7 +75,9 @@ public class TitanFabricItems {
 
     public static final Item TITAN_CROSSBOW = registerItem("titan_crossbow", new TitanCrossBowItem());
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
-    public static final Item MULTI_BOW = registerItem("multi_bow", new MultiBowItem());
+    public static final Item MULTI_BOW = registerItem("multi_bow_1", new MultiBowItem(1));
+    public static final Item MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2));
+    public static final Item MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3));
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
 /*    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",

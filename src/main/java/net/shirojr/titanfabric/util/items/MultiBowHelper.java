@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.enchant.TitanFabricEnchantments;
 import net.shirojr.titanfabric.util.TitanFabricTags;
 
 import java.util.function.Predicate;
@@ -30,7 +29,7 @@ public final class MultiBowHelper {
      * Set the arrow count, which will be shot at the same time.
      *
      * @param bowStack for editing the NBT information
-     * @param arrows    count of concurrent arrows
+     * @param arrows   count of concurrent arrows
      * @return ItemStack with the new NBT information
      */
     public static ItemStack setFullArrowCount(ItemStack bowStack, int arrows) {
@@ -61,9 +60,9 @@ public final class MultiBowHelper {
         return itemStack.getOrCreateNbt().getInt(ARROWS_LEFT_NBT_KEY);
     }
 
-    public static int getAfterShotLevel(ItemStack itemStack) {
+/*    public static int getAfterShotLevel(ItemStack itemStack) {
         return EnchantmentHelper.getLevel(TitanFabricEnchantments.AFTER_SHOT, itemStack);
-    }
+    }*/
 
     /**
      * Handles Arrow management for the {@linkplain net.shirojr.titanfabric.item.custom.bow.MultiBowItem MultiBow}.
@@ -76,15 +75,18 @@ public final class MultiBowHelper {
      */
     public static boolean handleArrowConsumption(PlayerEntity player, ItemStack bowStack, ItemStack arrowStack) {
         PlayerInventory inventory = player.getInventory();
-        if (player.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, bowStack) > 0) return true;
-        if (!inventory.contains(arrowStack) || arrowStack.getCount() < MultiBowHelper.getAfterShotLevel(bowStack)) return false;
+        if (player.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, bowStack) > 0)
+            return true;
+        if (!inventory.contains(arrowStack) || arrowStack.getCount() < MultiBowHelper.getFullArrowCount(bowStack))
+            return false;
 
-        inventory.removeStack(inventory.getSlotWithStack(arrowStack), MultiBowHelper.getAfterShotLevel(bowStack));
+        inventory.removeStack(inventory.getSlotWithStack(arrowStack), MultiBowHelper.getFullArrowCount(bowStack));
         return true;
     }
 
     /**
      * Finds the first possible ArrowStack in an inventory, defined in {@linkplain TitanFabricTags}
+     *
      * @param player used to get access to the inventory
      * @return returns either an Empty ItemStack or the first possible Arrow ItemStack
      */
@@ -99,12 +101,12 @@ public final class MultiBowHelper {
     }
 
     public static PersistentProjectileEntity prepareArrow(World world, PlayerEntity player, ItemStack arrowStack,
-                                                   float pitch, float yaw, double pullProgress,
+                                                          float pitch, float yaw, double pullProgress,
                                                           int powerLevel, int punchLevel, int flameLevel) {
 
         ArrowItem arrowItem = (ArrowItem) (arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
         PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world, arrowStack, player);
-        persistentProjectileEntity.setVelocity(player, pitch, yaw,0.0f, (float) pullProgress * 3.0f, 1.0f);
+        persistentProjectileEntity.setVelocity(player, pitch, yaw, 0.0f, (float) pullProgress * 3.0f, 1.0f);
 
         double powerDamage = persistentProjectileEntity.getDamage() + powerLevel * 0.5 + 0.5;
         if (powerLevel > 0) persistentProjectileEntity.setDamage(powerDamage);
