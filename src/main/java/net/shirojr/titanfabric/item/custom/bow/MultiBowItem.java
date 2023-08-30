@@ -7,11 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
@@ -20,7 +16,8 @@ import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 public class MultiBowItem extends TitanFabricBowItem {
     private int projectileTick = 0;
-    private int fullArrowCount;
+    private final int fullArrowCount;
+    private float pullProgress;
 
     public MultiBowItem(int arrowCount) {
         super();
@@ -35,23 +32,14 @@ public class MultiBowItem extends TitanFabricBowItem {
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        ItemStack itemStack = context.getStack();
-        //int arrows = MultiBowHelper.getFullArrowCount(itemStack) + 1;
-        //if (arrows > MultiBowHelper.getAfterShotLevel(itemStack)) arrows = 1;
-        if (!context.getWorld().isClient()) MultiBowHelper.setFullArrowCount(itemStack, this.fullArrowCount);
-        TitanFabric.devLogger("Concurrent Arrows: " + MultiBowHelper.getFullArrowCount(itemStack));
-        return ActionResult.SUCCESS;
-    }
-
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        return super.use(world, user, hand);
-    }
-
-    @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (!(user instanceof PlayerEntity playerEntity) || world.isClient()) return;
+
+        int maxUseTime = this.getMaxUseTime(stack);
+        int useTimeLeft = playerEntity.getItemUseTimeLeft();
+        this.pullProgress = BowItem.getPullProgress(maxUseTime - useTimeLeft);
+        if (pullProgress < 0.2f) return;
+
         int cooldown = 30 * MultiBowHelper.getFullArrowCount(stack);
         playerEntity.getItemCooldownManager().set(stack.getItem(), cooldown);
 
@@ -67,34 +55,28 @@ public class MultiBowItem extends TitanFabricBowItem {
             MultiBowHelper.setFullArrowCount(stack, this.fullArrowCount);
         if (!selected) return;
 
-        double pullProgress = BowItem.getPullProgress(this.getMaxUseTime(stack) - player.getItemUseTimeLeft());
-
         if (projectileTick < 1) return;
         projectileTick--;
-        if (!validTick(projectileTick)) return;
+        if (!validTick(projectileTick + 1)) return;
 
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeItemStack(MultiBowHelper.searchFirstArrowStack(player));
-        buf.writeDouble(pullProgress);
+        buf.writeDouble(this.pullProgress);
         ClientPlayNetworking.send(TitanFabricNetworking.MULTI_BOW_ARROWS_CHANNEL, buf);
 
-        stack.damage(MultiBowHelper.getFullArrowCount(stack), player, p -> p.sendToolBreakStatus(p.getActiveHand()));
-        handleAfterShotNbtValues(stack);
-    }
-
-    private static void resetStats(ItemStack bowStack) {
-        MultiBowHelper.setArrowsLeft(bowStack, 0);
+        handleAfterShotValues(stack, player);
     }
 
     private static boolean validTick(int tick) {
         return tick % 10 == 0;
     }
 
-    private static void handleAfterShotNbtValues(ItemStack bowStack) {
+    private static void handleAfterShotValues(ItemStack bowStack, PlayerEntity player) {
         if (bowStack.getOrCreateNbt().contains(MultiBowHelper.ARROWS_LEFT_NBT_KEY)) {
             int arrows = bowStack.getOrCreateNbt().getInt(MultiBowHelper.ARROWS_LEFT_NBT_KEY) - 1;
             if (arrows > 0) bowStack.getOrCreateNbt().putInt(MultiBowHelper.ARROWS_LEFT_NBT_KEY, arrows);
             else bowStack.removeSubNbt(MultiBowHelper.ARROWS_LEFT_NBT_KEY);
         }
+        bowStack.damage(MultiBowHelper.getFullArrowCount(bowStack), player, p -> p.sendToolBreakStatus(p.getActiveHand()));
     }
 }

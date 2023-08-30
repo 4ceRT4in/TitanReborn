@@ -47,9 +47,6 @@ public class TitanFabricNetworking {
             int flameEnchantLevel = EnchantmentHelper.getLevel(Enchantments.FLAME, stack);
 
             if (!MultiBowHelper.handleArrowConsumption(player, stack, arrowStack)) return;
-            if (MultiBowHelper.getArrowsLeft(stack) == MultiBowHelper.getFullArrowCount(stack)) {
-                if (pullProgress < 0.1) return;
-            }
 
             world.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,
