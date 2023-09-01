@@ -25,12 +25,10 @@ public class TitanFabricNetworking {
 
     private static void handleBowScreenPacket(MinecraftServer server, ServerPlayerEntity player,
                                              ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        int slotIndex = buf.readByte();
-        int action = buf.readByte();
+        ItemStack selectedStack = buf.readItemStack();
 
         server.execute(() -> {
-            ItemStack selectedStack = player.getInventory().getStack(slotIndex);
-            selectedStack.getOrCreateNbt().putInt("testing_action", action);
+
         });
     }
 

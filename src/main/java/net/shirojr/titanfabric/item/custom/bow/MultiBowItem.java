@@ -6,15 +6,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.network.TitanFabricNetworking;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
+import net.shirojr.titanfabric.util.items.SelectableArrows;
 
-public class MultiBowItem extends TitanFabricBowItem {
+import java.util.List;
+
+public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows {
     private int projectileTick = 0;
     private final int fullArrowCount;
     private float pullProgress;
@@ -22,6 +27,11 @@ public class MultiBowItem extends TitanFabricBowItem {
     public MultiBowItem(int arrowCount) {
         super();
         this.fullArrowCount = arrowCount;
+    }
+
+    @Override
+    public List<Item> supportedArrows() {
+        return List.of(Items.ARROW, Items.SPECTRAL_ARROW);
     }
 
     @Override
