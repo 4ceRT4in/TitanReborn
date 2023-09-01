@@ -6,15 +6,12 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.BowItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.event.KeyBindEvents;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.screen.custom.ArrowSelectionScreen;
-import net.shirojr.titanfabric.util.TitanFabricTags;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
 import java.util.List;
@@ -38,6 +35,4 @@ public class TitanFabricBowItem extends BowItem {
             TitanFabric.devLogger("opened arrow selection screen");
         }
     }
-
-
 }

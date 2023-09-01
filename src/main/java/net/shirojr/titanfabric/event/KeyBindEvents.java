@@ -17,7 +17,8 @@ public class KeyBindEvents {
                 InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, KEYBIND_GROUP
         ));
 
+        // might relocate onClientTick to another class since it's not only used for the TitanFabricBowItem class
+        // to improve readability
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricBowItem::onClientTick);
-
     }
 }
