@@ -149,6 +149,7 @@
 
   "tooltip.titanfabric.citrinSwordItem": "§225% Poison Chance",
   "tooltip.titanfabric.netherSwordItem": "§625% Fire Chance",
+  "tooltip.titanfabric.legendSwordItem": "Durable",
   "tooltip.titanfabric.legendBootsItem": "§5+1 Max Health",
   "tooltip.titanfabric.legendChestplateItem": "§5+4 Max Health",
   "tooltip.titanfabric.legendLeggingsItem": "§5+3 Max Health",
@@ -188,6 +189,7 @@
   "block.titanfabric.stone_light": "Stone Light",
   "block.titanfabric.dirt_light": "Dirt Light",
   "block.titanfabric.diamond_furnace": "Diamond Furnace",
+  "block.titanfabric.advanced_anvil": "Anvil",
 
   "container.titanfabric.diamond_furnace": "§bDiamond Furnace",
 

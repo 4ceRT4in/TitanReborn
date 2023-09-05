@@ -13,12 +13,13 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.items.Anvilable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 
-public class TitanFabricSwordItem extends SwordItem {
+public class TitanFabricSwordItem extends SwordItem implements Anvilable {
     private final boolean hasWeaponEffects;
     private final WeaponEffects baseEffect;
 
