@@ -8,6 +8,7 @@ import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.effect.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.enchant.TitanFabricEnchantments;
+import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.network.TitanFabricNetworking;
@@ -37,6 +38,7 @@ public class TitanFabric implements ModInitializer {
         TitanFabricPotions.registerAllPotions();
         TitanFabricWorldGen.generateWorldGen();
         TitanFabricNetworking.registerServerReceivers();
+        TitanFabricGamerules.register();
     }
 
     /**
