@@ -18,30 +18,34 @@ import java.util.List;
 
 public class ArrowSelectionScreen extends Screen {
     private final List<ItemStack> itemStacks;
-    private static final int BUTTONS_WIDTH = 45, BUTTONS_HEIGHT = 45;
-    private final int BUTTONS_X = this.width / 2, BUTTONS_Y = this.height / 2 - 80;
+    private static final int BUTTONS_WIDTH = 45, BUTTONS_HEIGHT = 45, BUTTONS_MARGIN = 20;
+    private int BUTTONS_X, BUTTONS_Y;
 
     public ArrowSelectionScreen(Text title, List<ItemStack> itemStacks) {
         super(title);
         this.itemStacks = itemStacks;
+
     }
 
     @Override
     protected void init() {
         super.init();
 
+        this.BUTTONS_X = this.width / 2;
+        this.BUTTONS_Y = this.height / 2 - 80;
+
         for (int i = 0; i < itemStacks.size(); i++) {
             ItemStack itemStack = itemStacks.get(i);
 
-            int elementX = BUTTONS_X + (BUTTONS_X / itemStacks.size() * (i + 1));
+            int elementX = BUTTONS_X + ((BUTTONS_WIDTH + BUTTONS_MARGIN) / itemStacks.size() * i);
             int elementY = BUTTONS_Y;
 
-            this.addDrawableChild(new ArrowButtonWidget(elementX, elementY, BUTTONS_WIDTH, BUTTONS_HEIGHT,
-                    new LiteralText("Arrow stack button " + (i + 1)), arrowButtonWidget -> {
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeItemStack(itemStack);
-                ClientPlayNetworking.send(TitanFabricNetworking.BOW_SCREEN_CHANNEL, buf);
-            }));
+            this.addDrawableChild(new ArrowButtonWidget(elementX, elementY, BUTTONS_WIDTH, BUTTONS_HEIGHT, null,
+                    arrowButtonWidget -> {
+                        PacketByteBuf buf = PacketByteBufs.create();
+                        buf.writeItemStack(itemStack);
+                        ClientPlayNetworking.send(TitanFabricNetworking.BOW_SCREEN_CHANNEL, buf);
+                    }, itemRenderer));
         }
 
         //TODO: remove this element when done with testing

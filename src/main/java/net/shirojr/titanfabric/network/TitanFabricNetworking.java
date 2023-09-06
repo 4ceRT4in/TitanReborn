@@ -12,6 +12,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -28,7 +29,8 @@ public class TitanFabricNetworking {
         ItemStack selectedStack = buf.readItemStack();
 
         server.execute(() -> {
-
+            player.sendMessage(new LiteralText("Arrow Packet arrived on server side"), false);
+            player.sendMessage(new LiteralText("Selected Arrow: " + selectedStack), false);
         });
     }
 
