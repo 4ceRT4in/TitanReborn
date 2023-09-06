@@ -1,7 +1,10 @@
 package net.shirojr.titanfabric;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.render.RenderLayer;
+import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.event.KeyBindEvents;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.DiamondFurnaceScreen;
@@ -13,5 +16,7 @@ public class TitanFabricClient implements ClientModInitializer {
         ModelPredicateProviders.register();
         KeyBindEvents.register();
         HandledScreens.register(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER, DiamondFurnaceScreen::new);
+
+        BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.ANVIL, RenderLayer.getCutout());
     }
 }

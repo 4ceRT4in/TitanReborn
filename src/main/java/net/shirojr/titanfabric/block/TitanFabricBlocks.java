@@ -12,6 +12,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.block.custom.AdvancedAnvilBlock;
 import net.shirojr.titanfabric.block.custom.CitrinOreBlock;
 import net.shirojr.titanfabric.block.custom.DiamondFurnaceBlock;
 import net.shirojr.titanfabric.block.custom.NetherOreBlock;
@@ -48,6 +49,9 @@ public class TitanFabricBlocks {
 
     public static final Block DIAMOND_FURNACE = registerBlock("diamond_furnace",
             new DiamondFurnaceBlock(), TitanFabricItemGroups.TITAN);
+
+    public static final Block ANVIL = registerBlock("anvil",
+            new AdvancedAnvilBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()), TitanFabricItemGroups.TITAN);
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {
