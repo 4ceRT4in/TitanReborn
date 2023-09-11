@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " /S",
+        "t S",
+        " /S"
+    ],
+    "key": {
+        "/": {
+            "item": "minecraft:stick"
+        },
+        "S": {
+            "item": "minecraft:string"
+        },
+        "t": {
+            "item": "titanfabric:nether_ingot"
+        }
+    },
+    "result": {
+        "item": "titanfabric:multi_bow_1",
+        "count": 1
+    }
+}

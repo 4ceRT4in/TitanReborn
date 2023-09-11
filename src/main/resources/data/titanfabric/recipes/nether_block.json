@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "ttt",
+        "ttt",
+        "ttt"
+    ],
+    "key": {
+        "t": {
+            "item": "titanfabric:nether_ingot"
+        }
+    },
+    "result": {
+        "item": "titanfabric:nether_block",
+        "count": 1
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "t t",
+        "tTt"
+    ],
+    "key": {
+        "t": {
+            "item": "titanfabric:legend_ingot"
+        },
+        "T": {
+            "item": "titanfabric:legend_crystal"
+        }
+    },
+    "result": {
+        "item": "titanfabric:legend_boots",
+        "count": 1
+    }
+}

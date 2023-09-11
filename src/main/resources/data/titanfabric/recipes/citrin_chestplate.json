@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "t t",
+        "ttt",
+        "ttt"
+    ],
+    "key": {
+        "t": {
+            "item": "titanfabric:citrin_ingot"
+        }
+    },
+    "result": {
+        "item": "titanfabric:citrin_chestplate",
+        "count": 1
+    }
+}

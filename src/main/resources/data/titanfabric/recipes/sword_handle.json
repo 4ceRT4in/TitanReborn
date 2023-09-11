@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "i",
+        "i"
+    ],
+    "key": {
+        "i": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "titanfabric:sword_handle",
+        "count": 1
+    }
+}
