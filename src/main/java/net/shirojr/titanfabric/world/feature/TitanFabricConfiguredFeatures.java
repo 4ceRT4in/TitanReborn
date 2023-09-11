@@ -17,18 +17,30 @@ public class TitanFabricConfiguredFeatures {
                     TitanFabricBlocks.NETHER_ORE.getDefaultState())
     );
     public static final List<OreFeatureConfig.Target> OVERWORLD_LEGEND_ORES = List.of(
-            OreFeatureConfig.createTarget(OreConfiguredFeatures.STONE_ORE_REPLACEABLES,
-                    TitanFabricBlocks.LEGEND_ORE.getDefaultState())
+            OreFeatureConfig.createTarget(OreConfiguredFeatures.DEEPSLATE_ORE_REPLACEABLES,
+                    TitanFabricBlocks.DEEPSTALE_LEGEND_ORE.getDefaultState())
     );
 
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> CITRIN_ORE =
-            ConfiguredFeatures.register("citrin_ore", Feature.ORE, new OreFeatureConfig(OVERWORLD_CITRIN_ORES, 5));
+            ConfiguredFeatures.register("citrin_ore", Feature.ORE, new OreFeatureConfig(OVERWORLD_CITRIN_ORES, 9));
+    public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> CITRIN_ORE_SMALL =
+            ConfiguredFeatures.register("citrin_ore_small", Feature.ORE, new OreFeatureConfig(OVERWORLD_CITRIN_ORES, 4));
+
+
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> NETHER_ORE =
-            ConfiguredFeatures.register("nether_ore", Feature.ORE, new OreFeatureConfig(NETHER_NETHER_ORES, 7));
-    public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE =
-            ConfiguredFeatures.register("legend_ore", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 3));
+            ConfiguredFeatures.register("nether_ore", Feature.ORE, new OreFeatureConfig(NETHER_NETHER_ORES, 9));
+    public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> NETHER_ORE_BURIED =
+            ConfiguredFeatures.register("nether_ore_buried", Feature.ORE, new OreFeatureConfig(NETHER_NETHER_ORES, 9, 0.5f));
+
+
+    public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE_SMALL =
+            ConfiguredFeatures.register("legend_ore_small", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 4, 0.5f));
+    public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE_LARGE =
+            ConfiguredFeatures.register("legend_ore_large", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 12, 0.7f));
+    public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE_BURIED =
+            ConfiguredFeatures.register("legend_ore_buried", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 8, 1.0f));
 
     public static void registerConfiguredFeatures() {
-        TitanFabric.LOGGER.info("Registering " + TitanFabric.MODID + " ConfiguredFeatures");
+        TitanFabric.devLogger("Registering " + TitanFabric.MODID + " ConfiguredFeatures");
     }
 }

@@ -27,8 +27,8 @@ public class TitanFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ConfigInit.init();
         TitanFabricConfiguredFeatures.registerConfiguredFeatures();
+        ConfigInit.init();
         TitanFabricEnchantments.registerModEnchantments();
         TitanFabricItems.registerModItems();
         TitanFabricRecipies.registerModRecipies();

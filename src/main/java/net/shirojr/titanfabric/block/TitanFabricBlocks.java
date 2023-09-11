@@ -12,10 +12,7 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.block.custom.AdvancedAnvilBlock;
-import net.shirojr.titanfabric.block.custom.CitrinOreBlock;
-import net.shirojr.titanfabric.block.custom.DiamondFurnaceBlock;
-import net.shirojr.titanfabric.block.custom.NetherOreBlock;
+import net.shirojr.titanfabric.block.custom.*;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 
 public class TitanFabricBlocks {
@@ -26,8 +23,8 @@ public class TitanFabricBlocks {
     public static final Block NETHER_ORE = registerBlock("nether_ore",
             new NetherOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(4.5f).strength(6.0f).requiresTool()), TitanFabricItemGroups.TITAN);
-    public static final Block LEGEND_ORE = registerBlock("legend_ore",
-            new NetherOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
+    public static final Block DEEPSTALE_LEGEND_ORE = registerBlock("deepslate_legend_ore",
+            new LegendOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(10.0f).strength(7.0f).requiresTool()), TitanFabricItemGroups.TITAN);
 
     public static final Block CITRIN_BLOCK = registerBlock("citrin_block",

@@ -7,13 +7,35 @@ import net.minecraft.world.gen.feature.PlacedFeatures;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 
 public class TitanFabricPlacedFeatures {
-    public static final RegistryEntry<PlacedFeature> CITRIN_ORE_PLACED = PlacedFeatures.register("citrin_ore_placed",
-            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(3,
-                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(0), YOffset.aboveBottom(40))));
-    public static final RegistryEntry<PlacedFeature> NETHER_ORE_PLACED = PlacedFeatures.register("nether_ore_placed",
-            TitanFabricConfiguredFeatures.NETHER_ORE, TitanFabricOreFeatures.modifiersWithCount(9,
-                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.aboveBottom(80))));
-    public static final RegistryEntry<PlacedFeature> LEGEND_ORE_PLACED = PlacedFeatures.register("legend_ore_placed",
-            TitanFabricConfiguredFeatures.LEGEND_ORE, TitanFabricOreFeatures.modifiersWithCount(1,
-                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-64), YOffset.aboveBottom(-30))));
+    public static final RegistryEntry<PlacedFeature> CITRIN_ORE_UPPER = PlacedFeatures.register("citrin_ore_upper",
+            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(90,
+                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(80), YOffset.aboveBottom(384))));
+    public static final RegistryEntry<PlacedFeature> CITRIN_ORE_MIDDLE = PlacedFeatures.register("citrin_ore_middle",
+            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(9,
+                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(0), YOffset.aboveBottom(56))));
+    public static final RegistryEntry<PlacedFeature> CITRIN_ORE_SMALL = PlacedFeatures.register("citrin_ore_small",
+            TitanFabricConfiguredFeatures.CITRIN_ORE_SMALL, TitanFabricOreFeatures.modifiersWithCount(7,
+                    HeightRangePlacementModifier.trapezoid(YOffset.fixed(0), YOffset.fixed(72))));
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public static final RegistryEntry<PlacedFeature> NETHER_ORE_EXTRA = PlacedFeatures.register("nether_ore_extra",
+            TitanFabricConfiguredFeatures.NETHER_ORE, TitanFabricOreFeatures.modifiersWithCount(50,
+                    HeightRangePlacementModifier.uniform(YOffset.fixed(32), YOffset.fixed(256))));
+    public static final RegistryEntry<PlacedFeature> NETHER_ORE = PlacedFeatures.register("nether_ore",
+            TitanFabricConfiguredFeatures.NETHER_ORE_BURIED, TitanFabricOreFeatures.modifiersWithCount(2,
+                    HeightRangePlacementModifier.trapezoid(YOffset.fixed(0), YOffset.fixed(32))));
+
+    //------------------------------------------------------------------------------------------------------------------
+    public static final RegistryEntry<PlacedFeature> LEGEND_ORE = PlacedFeatures.register("legend_ore",
+            TitanFabricConfiguredFeatures.LEGEND_ORE_SMALL, TitanFabricOreFeatures.modifiersWithCount(5,
+                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.fixed(0))));
+    public static final RegistryEntry<PlacedFeature> LEGEND_ORE_LARGE = PlacedFeatures.register("legend_ore_large",
+            TitanFabricConfiguredFeatures.LEGEND_ORE_LARGE, TitanFabricOreFeatures.modifiersWithCount(7,
+                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.fixed(0))));
+    public static final RegistryEntry<PlacedFeature> LEGEND_ORE_BURIED = PlacedFeatures.register("legend_ore_buried",
+            TitanFabricConfiguredFeatures.LEGEND_ORE_BURIED, TitanFabricOreFeatures.modifiersWithCount(3,
+                    HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.fixed(0))));
+
+    
 }
