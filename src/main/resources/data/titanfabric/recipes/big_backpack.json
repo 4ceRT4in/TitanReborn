@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#A#",
+        "AdA",
+        "lAl"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "A": {
+            "tag": "minecraft:wool"
+        },
+        "d": {
+            "item": "minecraft:diamond"
+        },
+        "l": {
+            "item": "minecraft:leather"
+        }
+    },
+    "result": {
+        "item": "titanfabric:big_backpack",
+        "count": 1
+    }
+}

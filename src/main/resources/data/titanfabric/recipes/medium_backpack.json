@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#A#",
+        "AgA",
+        "lAl"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "A": {
+            "tag": "minecraft:wool"
+        },
+        "g": {
+            "item": "minecraft:gold_ingot"
+        },
+        "l": {
+            "item": "minecraft:leather"
+        }
+    },
+    "result": {
+        "item": "titanfabric:medium_backpack",
+        "count": 1
+    }
+}

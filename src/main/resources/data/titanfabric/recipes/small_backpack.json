@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#A#",
+        "AiA",
+        "AAA"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "A": {
+            "tag": "minecraft:wool"
+        },
+        "i": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "titanfabric:smalll_backpack",
+        "count": 1
+    }
+}
