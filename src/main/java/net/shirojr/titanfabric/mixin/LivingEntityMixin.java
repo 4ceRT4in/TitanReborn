@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +22,7 @@ import java.util.stream.IntStream;
 public abstract class LivingEntityMixin {
     @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
     private void titanfabric$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source != DamageSource.IN_FIRE || source != DamageSource.ON_FIRE) return;
+        if (source != DamageSource.IN_FIRE && source != DamageSource.ON_FIRE && source != DamageSource.HOT_FLOOR) return;
         if (!(((LivingEntity) (Object) this) instanceof PlayerEntity player)) return;
 
         List<Item> armorSet = IntStream.rangeClosed(0, 3)
@@ -30,7 +31,10 @@ public abstract class LivingEntityMixin {
 
         armorSet.forEach(item -> {
             if (item instanceof NetherArmorItem) {
-                if (player.getWorld().getRandom().nextInt(4) > 0) cir.setReturnValue(false);
+                if (player.getWorld().getRandom().nextInt(4) > 0) {
+                    player.extinguish();
+                    cir.setReturnValue(false);
+                }
             }
         });
     }
