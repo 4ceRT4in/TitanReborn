@@ -17,6 +17,7 @@
   },
   "client": [
     "AbstractClientPlayerEntityMixin",
+    "AbstractInventoryScreenMixin",
     "GameOptionsMixin"
   ]
 }

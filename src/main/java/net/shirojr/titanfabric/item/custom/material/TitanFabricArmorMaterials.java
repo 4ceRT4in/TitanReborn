@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.item.custom.material;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -11,15 +12,18 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import java.util.function.Supplier;
 
 public enum TitanFabricArmorMaterials implements ArmorMaterial {
-    CITRIN("citrin", 4, new int[] { 2, 6, 7, 2 }, 9,
+    CITRIN("citrin", 15, new int[] { 2, 6, 7, 2 }, 9,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.CITRIN_INGOT)),
-    NETHER("nether", 5, new int[] { 3, 6, 8, 3 }, 10,
-            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
+    NETHER("nether", 23, new int[] { 3, 6, 8, 3 }, 10,
+            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
     LEGEND("legend", -1, new int[] { 3, 6, 8, 3 }, 25,
-            SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
-            () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
+            SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f, 0.0f,
+            () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
+    NETHERITE("legend", 37, new int[] { 3, 6, 8, 3 }, 15,
+    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0f, 0.1f,
+            () -> Ingredient.ofItems(Items.NETHERITE_INGOT));
 
     private static final int[] BASE_DURABILITY;
     private final String name;

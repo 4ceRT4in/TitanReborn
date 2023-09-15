@@ -194,5 +194,7 @@
 
   "itemGroup.titanfabric.titan": "§3Titan Mod",
   "keys.titanfabric.misc": "Titan Reborn",
-  "key.titanfabric.arrow.screen.open": "Open Arrow Selection Screen"
+  "key.titanfabric.arrow.screen.open": "Open Arrow Selection Screen",
+
+  "overlay.titanfabric.netherite.resistance": "Active"
 }
