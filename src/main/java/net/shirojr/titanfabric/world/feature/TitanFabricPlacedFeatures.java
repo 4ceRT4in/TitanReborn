@@ -8,19 +8,19 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 
 public class TitanFabricPlacedFeatures {
     public static final RegistryEntry<PlacedFeature> CITRIN_ORE_UPPER = PlacedFeatures.register("citrin_ore_upper",
-            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(90,
+            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(70,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(80), YOffset.aboveBottom(384))));
     public static final RegistryEntry<PlacedFeature> CITRIN_ORE_MIDDLE = PlacedFeatures.register("citrin_ore_middle",
-            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(9,
+            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(7,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(0), YOffset.aboveBottom(56))));
     public static final RegistryEntry<PlacedFeature> CITRIN_ORE_SMALL = PlacedFeatures.register("citrin_ore_small",
-            TitanFabricConfiguredFeatures.CITRIN_ORE_SMALL, TitanFabricOreFeatures.modifiersWithCount(7,
+            TitanFabricConfiguredFeatures.CITRIN_ORE_SMALL, TitanFabricOreFeatures.modifiersWithCount(6,
                     HeightRangePlacementModifier.trapezoid(YOffset.fixed(0), YOffset.fixed(72))));
 
     //------------------------------------------------------------------------------------------------------------------
 
     public static final RegistryEntry<PlacedFeature> NETHER_ORE_EXTRA = PlacedFeatures.register("nether_ore_extra",
-            TitanFabricConfiguredFeatures.NETHER_ORE, TitanFabricOreFeatures.modifiersWithCount(50,
+            TitanFabricConfiguredFeatures.NETHER_ORE, TitanFabricOreFeatures.modifiersWithCount(30,
                     HeightRangePlacementModifier.uniform(YOffset.fixed(32), YOffset.fixed(256))));
     public static final RegistryEntry<PlacedFeature> NETHER_ORE = PlacedFeatures.register("nether_ore",
             TitanFabricConfiguredFeatures.NETHER_ORE_BURIED, TitanFabricOreFeatures.modifiersWithCount(2,
