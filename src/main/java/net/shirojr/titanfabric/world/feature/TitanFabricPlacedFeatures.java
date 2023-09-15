@@ -24,17 +24,17 @@ public class TitanFabricPlacedFeatures {
                     HeightRangePlacementModifier.uniform(YOffset.fixed(32), YOffset.fixed(256))));
     public static final RegistryEntry<PlacedFeature> NETHER_ORE = PlacedFeatures.register("nether_ore",
             TitanFabricConfiguredFeatures.NETHER_ORE_BURIED, TitanFabricOreFeatures.modifiersWithCount(2,
-                    HeightRangePlacementModifier.trapezoid(YOffset.fixed(0), YOffset.fixed(32))));
+                    HeightRangePlacementModifier.trapezoid(YOffset.fixed(10), YOffset.fixed(90))));
 
     //------------------------------------------------------------------------------------------------------------------
     public static final RegistryEntry<PlacedFeature> LEGEND_ORE = PlacedFeatures.register("legend_ore",
-            TitanFabricConfiguredFeatures.LEGEND_ORE_SMALL, TitanFabricOreFeatures.modifiersWithCount(5,
+            TitanFabricConfiguredFeatures.LEGEND_ORE_SMALL, TitanFabricOreFeatures.modifiersWithCount(3,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.fixed(0))));
     public static final RegistryEntry<PlacedFeature> LEGEND_ORE_LARGE = PlacedFeatures.register("legend_ore_large",
-            TitanFabricConfiguredFeatures.LEGEND_ORE_LARGE, TitanFabricOreFeatures.modifiersWithCount(7,
+            TitanFabricConfiguredFeatures.LEGEND_ORE_LARGE, TitanFabricOreFeatures.modifiersWithCount(5,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.fixed(0))));
     public static final RegistryEntry<PlacedFeature> LEGEND_ORE_BURIED = PlacedFeatures.register("legend_ore_buried",
-            TitanFabricConfiguredFeatures.LEGEND_ORE_BURIED, TitanFabricOreFeatures.modifiersWithCount(3,
+            TitanFabricConfiguredFeatures.LEGEND_ORE_BURIED, TitanFabricOreFeatures.modifiersWithCount(2,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.fixed(0))));
 
     

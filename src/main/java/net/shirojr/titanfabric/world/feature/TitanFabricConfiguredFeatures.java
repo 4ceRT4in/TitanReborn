@@ -36,7 +36,7 @@ public class TitanFabricConfiguredFeatures {
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE_SMALL =
             ConfiguredFeatures.register("legend_ore_small", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 4, 0.5f));
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE_LARGE =
-            ConfiguredFeatures.register("legend_ore_large", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 12, 0.7f));
+            ConfiguredFeatures.register("legend_ore_large", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 6, 0.7f));
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE_BURIED =
             ConfiguredFeatures.register("legend_ore_buried", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 8, 1.0f));
 
