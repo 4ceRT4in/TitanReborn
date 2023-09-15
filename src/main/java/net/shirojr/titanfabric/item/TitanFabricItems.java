@@ -4,12 +4,15 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.ConfigInit;
-import net.shirojr.titanfabric.item.custom.*;
+import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorBootsItem;
@@ -118,7 +121,7 @@ public class TitanFabricItems {
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
     public static final Item DIAMOND_APPLE = registerItem("diamond_apple",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)
-                    .food((new net.minecraft.item.FoodComponent.Builder()).hunger(4).saturationModifier(10.0F).alwaysEdible()
+                    .food((new FoodComponent.Builder()).hunger(4).saturationModifier(1.125F).alwaysEdible()
                             .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F)
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
