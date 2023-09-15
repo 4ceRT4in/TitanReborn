@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "nOn",
+        "PtP",
+        "FtF"
+    ],
+    "key": {
+        "n": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "O": {
+            "item": "minecraft:obsidian"
+        },
+        "P": {
+            "item": "minecraft:phantom_membrane"
+        },
+        "t": {
+            "item": "titanfabric:legend_ingot"
+        },
+        "F": {
+            "item": "minecraft:feather"
+        }
+    },
+    "result": {
+        "item": "minecraft:elytra",
+        "count": 1
+    }
+}
