@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/citrin_ingot"
+    "layer0": "titanfabric:items/citrin_shard"
   }
 
 }

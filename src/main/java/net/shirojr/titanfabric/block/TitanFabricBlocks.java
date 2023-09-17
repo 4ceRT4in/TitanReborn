@@ -47,7 +47,7 @@ public class TitanFabricBlocks {
     public static final Block DIAMOND_FURNACE = registerBlock("diamond_furnace",
             new DiamondFurnaceBlock(), TitanFabricItemGroups.TITAN);
 
-    public static final Block ANVIL = registerBlock("anvil",
+    public static final Block NETHERITE_ANVIL = registerBlock("netherite_anvil",
             new AdvancedAnvilBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()), TitanFabricItemGroups.TITAN);
 
 

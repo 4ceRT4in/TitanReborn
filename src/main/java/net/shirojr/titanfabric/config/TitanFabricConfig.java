@@ -13,9 +13,6 @@ public class TitanFabricConfig implements ConfigData {
     public double TitanArmorChestplateHealth = 4.0;
     public double TitanArmorLeggingsHealth = 3.0;
     public double TitanArmorBootsHealth = 1.0;
-    public int netheriteSwordAttackDamage = 8;
-    public float netheriteSwordAttackSpeed = -2.4f;
-    public int netheriteSwordMaxDamage = 2031;
     public boolean restrictFoodHealing = true;
     public double anvilXpMultiplier = 0.5;
 }

@@ -14,14 +14,14 @@ import java.util.function.Supplier;
 public enum TitanFabricArmorMaterials implements ArmorMaterial {
     CITRIN("citrin", 15, new int[] { 2, 6, 7, 2 }, 9,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
-            () -> Ingredient.ofItems(TitanFabricItems.CITRIN_INGOT)),
-    NETHER("nether", 23, new int[] { 3, 6, 8, 3 }, 10,
+            () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
+    NETHER("nether", 30, new int[] { 3, 6, 8, 3 }, 10,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
     LEGEND("legend", -1, new int[] { 3, 6, 8, 3 }, 25,
             SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
-    NETHERITE("legend", 37, new int[] { 3, 6, 8, 3 }, 15,
+    NETHERITE("legend", 74, new int[] { 3, 6, 8, 3 }, 15,
     SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0f, 0.1f,
             () -> Ingredient.ofItems(Items.NETHERITE_INGOT));
 

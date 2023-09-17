@@ -57,7 +57,7 @@ public class TitanFabricNetworking {
 
             world.spawnEntity(projectile);
 
-            MultiBowHelper.setArrowsLeft(stack, MultiBowHelper.getArrowsLeft(stack) - 1);
+            MultiBowHelper.setArrowsLeftNbt(stack, MultiBowHelper.getArrowsLeftNbt(stack) - 1);
         });
     }
 

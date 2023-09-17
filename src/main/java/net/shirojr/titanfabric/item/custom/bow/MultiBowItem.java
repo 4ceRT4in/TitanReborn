@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.item.custom.bow;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -11,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.network.TitanFabricNetworking;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
@@ -21,12 +22,14 @@ import java.util.List;
 
 public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows {
     private int projectileTick = 0;
+    private final int coolDownTicks;
     private final int fullArrowCount;
     private float pullProgress;
 
-    public MultiBowItem(int arrowCount) {
-        super();
+    public MultiBowItem(int arrowCount, int tickCooldown, int durability) {
+        super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(durability));
         this.fullArrowCount = arrowCount;
+        this.coolDownTicks = tickCooldown;
     }
 
     @Override
@@ -50,17 +53,10 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         this.pullProgress = BowItem.getPullProgress(maxUseTime - useTimeLeft);
         if (pullProgress < 0.2f) return;
 
-        int cooldown = 30 * MultiBowHelper.getFullArrowCount(stack);
-        playerEntity.getItemCooldownManager().set(stack.getItem(), cooldown);
+        playerEntity.getItemCooldownManager().set(stack.getItem(), this.coolDownTicks);
 
-        MultiBowHelper.setArrowsLeft(stack, MultiBowHelper.getFullArrowCount(stack));
+        MultiBowHelper.setArrowsLeftNbt(stack, MultiBowHelper.getFullArrowCount(stack));
         projectileTick = 10 * MultiBowHelper.getFullArrowCount(stack);
-    }
-
-    @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
-        if (world.isClient()) return;
-
     }
 
     @Override

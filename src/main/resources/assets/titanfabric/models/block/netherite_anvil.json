@@ -1,5 +1,6 @@
 {
-	"credit": "Made with Blockbench by ShiroJR",
+	"parent": "block/block",
+	"credit": "Made with Blockbench by 4ceRT4in",
 	"textures": {
 		"1": "block/netherite_block",
 		"4": "block/obsidian",

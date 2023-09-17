@@ -22,8 +22,12 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 
         registerBowProviders(TitanFabricItems.LEGEND_BOW); // vanilla pfeile, spectral, nicht tipped, modded effect arrows
-        registerBowProviders(TitanFabricItems.MULTI_BOW); // nur vanilla pfeile, spectral
-        registerBowArrowCount(TitanFabricItems.MULTI_BOW);
+        registerBowProviders(TitanFabricItems.MULTI_BOW_1); // nur vanilla pfeile, spectral
+        registerBowArrowCount(TitanFabricItems.MULTI_BOW_1);
+        registerBowProviders(TitanFabricItems.MULTI_BOW_2);
+        registerBowArrowCount(TitanFabricItems.MULTI_BOW_2);
+        registerBowProviders(TitanFabricItems.MULTI_BOW_3);
+        registerBowArrowCount(TitanFabricItems.MULTI_BOW_3);
         registerCrossBowProviders(TitanFabricItems.TITAN_CROSSBOW);
 
         // crossbow: vanilla pfeile, spectral, vanilla splash potions, vanilla lingering potions, keine Raketen!

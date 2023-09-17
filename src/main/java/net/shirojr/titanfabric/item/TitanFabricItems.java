@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
+import net.minecraft.item.SwordItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
@@ -59,28 +60,30 @@ public class TitanFabricItems {
     //endregion
 
     public static final Item CITRIN_SWORD = registerItem("citrin_sword",
-            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, 5, -2.4f));
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f));
     public static final Item CITRIN_GREATSWORD = registerItem("citrin_greatsword",
-            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, 5, -2.4f));
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -2.4f));
     public static final Item NETHER_SWORD = registerItem("nether_sword",
-            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER, 6, -2.4f));
+            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER, removeBaseDamage(7), -2.4f));
     public static final Item NETHER_GREATSWORD = registerItem("nether_greatsword",
-            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER_GREAT, 6, -2.4f));
+            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER_GREAT, removeBaseDamage(8), -2.4f));
     public static final Item LEGEND_SWORD = registerItem("legend_sword",
-            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, 7, -2.4f));
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f));
     public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword",
-            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, 7, -2.4f));
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f));
+    public static final SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f,
+            new FabricItemSettings().maxDamage(2031));  // registered in ItemsMixin class
 
     public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
-            new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, 7, -2.4f, null));
+            new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, removeBaseDamage(8), -2.4f, null));
     public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
-            new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, 7, -2.4f, null));
+            new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, removeBaseDamage(10), -2.4f, null));
 
-    public static final Item TITAN_CROSSBOW = registerItem("titan_crossbow", new TitanCrossBowItem());
+    public static final Item TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem());
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
-    public static final Item MULTI_BOW = registerItem("multi_bow_1", new MultiBowItem(1));
-    public static final Item MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2));
-    public static final Item MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3));
+    public static final Item MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(1, 20, 500));
+    public static final Item MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2, 40, 1000));
+    public static final Item MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3, 60, 1500));
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
 /*    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
@@ -90,7 +93,7 @@ public class TitanFabricItems {
 
     public static final Item CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
 
-    public static final Item CITRIN_INGOT = registerItem("citrin_ingot",
+    public static final Item CITRIN_SHARD = registerItem("citrin_shard",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
     public static final Item NETHER_INGOT = registerItem("nether_ingot",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
@@ -135,4 +138,7 @@ public class TitanFabricItems {
         TitanFabric.devLogger("Registering " + TitanFabric.MODID + " Mod items");
     }
 
+    private static int removeBaseDamage(int damage) {
+        return damage - 1;
+    }
 }

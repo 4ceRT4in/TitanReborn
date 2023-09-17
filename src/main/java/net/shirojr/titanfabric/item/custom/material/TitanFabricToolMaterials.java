@@ -3,8 +3,6 @@ package net.shirojr.titanfabric.item.custom.material;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.util.Lazy;
 import net.shirojr.titanfabric.item.TitanFabricItems;
@@ -23,25 +21,25 @@ public enum TitanFabricToolMaterials implements ToolMaterial {
             () -> Ingredient.ofItems(Items.IRON_INGOT)),
     DIAMOND(1561, 4.0f, 0.0f, 4, 10,
             () -> Ingredient.ofItems(Items.DIAMOND)),
-    NETHERITE(2031, 5.0f, 9.0f, 5, 15,
+    NETHERITE(2031, 5.0f, 0.0f, 5, 15,
             () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
 
-    CITRIN(250, 3.0f, 6.0f, 2, 14,
-            () -> Ingredient.ofItems(TitanFabricItems.CITRIN_INGOT)),
-    NETHER(375, 3.0f, 7.0f, 2, 18,
+    CITRIN(250, 3.0f, 0.0f, 2, 14,
+            () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
+    NETHER(375, 3.0f, 0.0f, 2, 18,
             () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
-    LEGEND(-1, 4.0f, 8.0f, 3, 22,
+    LEGEND(-1, 4.0f, 0.0f, 3, 22,
             () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
 
-    CITRIN_GREAT(1000, 3.0f, 7.0f, 2, 10,
-                         () -> Ingredient.ofItems(TitanFabricItems.CITRIN_INGOT)),
-    NETHER_GREAT(1500, 3.0f, 8.0f, 2, 14,
+    CITRIN_GREAT(1000, 3.0f, 0.0f, 2, 10,
+                         () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
+    NETHER_GREAT(1500, 3.0f, 0.0f, 2, 14,
                          () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
-    DIAMOND_GREAT(2000, 4.0f, 8.0f, 3, 10,
+    DIAMOND_GREAT(2000, 4.0f, 0.0f, 3, 10,
             () -> Ingredient.ofItems(Items.DIAMOND)),
-    NETHERITE_GREAT(2500, 5.0f, 10.0f, 4, 15,
+    NETHERITE_GREAT(2500, 5.0f, 0.0f, 4, 15,
             () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
-    LEGEND_GREAT(-1, 5.0f, 9.0f, 4, 18,
+    LEGEND_GREAT(-1, 5.0f, 0.0f, 4, 18,
                          () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
 
 

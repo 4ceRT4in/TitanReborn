@@ -25,9 +25,15 @@ public class LegendArmorHelmetItem extends LegendArmorItem {
 
     public LegendArmorHelmetItem(double health) {
         super(EquipmentSlot.HEAD, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+
         UUID GENERIC_MAX_HEALTH_ID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CC");
+        UUID uUID = MODIFIERS[slot.getEntitySlotId()];
+
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(GENERIC_MAX_HEALTH_ID, "Helmet Health modifier", health, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(uUID, "Armor modifier", this.getProtection(), EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(uUID, "Armor toughness", this.getToughness(), EntityAttributeModifier.Operation.ADDITION));
+
         this.attributeModifiers = builder.build();
     }
 

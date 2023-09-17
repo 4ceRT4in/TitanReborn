@@ -17,8 +17,8 @@ import net.shirojr.titanfabric.util.items.SelectableArrows;
 import java.util.List;
 
 public class TitanFabricBowItem extends BowItem {
-    public TitanFabricBowItem() {
-        super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
+    public TitanFabricBowItem(Settings settings) {
+        super(settings);
     }
 
     @Environment(EnvType.CLIENT)

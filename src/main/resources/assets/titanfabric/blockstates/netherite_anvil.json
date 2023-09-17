@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north":  { "model": "titanfabric:block/netherite_anvil" },
+    "facing=east":   { "model": "titanfabric:block/netherite_anvil", "y": 90 },
+    "facing=south":   { "model": "titanfabric:block/netherite_anvil", "y": 180 },
+    "facing=west":   { "model": "titanfabric:block/netherite_anvil", "y": 270 }
+  }
+}

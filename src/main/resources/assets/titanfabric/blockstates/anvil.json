@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north":  { "model": "titanfabric:block/anvil" },
-    "facing=east":   { "model": "titanfabric:block/anvil", "y": 90 },
-    "facing=south":   { "model": "titanfabric:block/anvil", "y": 180 },
-    "facing=west":   { "model": "titanfabric:block/anvil", "y": 270 }
-  }
-}

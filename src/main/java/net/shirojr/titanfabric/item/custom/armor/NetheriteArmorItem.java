@@ -10,6 +10,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricArmorMaterials;
 
@@ -24,7 +25,7 @@ public class NetheriteArmorItem extends ArmorItem {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if (!(entity instanceof PlayerEntity player)) return;
+        if (!(entity instanceof ServerPlayerEntity player)) return;
 
         List<Item> armorSet = IntStream.rangeClosed(0, 3)
                 .mapToObj(player.getInventory()::getArmorStack)
@@ -32,7 +33,7 @@ public class NetheriteArmorItem extends ArmorItem {
 
         boolean fullSet = armorSet.stream().allMatch(item -> item instanceof NetheriteArmorItem);
 
-        if (!world.isClient()) return;
+        if (world.isClient()) return;
         if (fullSet && !player.hasStatusEffect(StatusEffects.RESISTANCE)) {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 40, 0,
                     false, false, true));

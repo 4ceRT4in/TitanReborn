@@ -25,9 +25,15 @@ public class LegendArmorLeggingsItem extends LegendArmorItem {
 
     public LegendArmorLeggingsItem(double health) {
         super(EquipmentSlot.LEGS, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
-        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
+
+        UUID uUID = MODIFIERS[slot.getEntitySlotId()];
         UUID GENERIC_MAX_HEALTH_ID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CE");
+
+        ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
         builder.put(EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier(GENERIC_MAX_HEALTH_ID, "Leggings Health modifier", health, EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(uUID, "Armor modifier", this.getProtection(), EntityAttributeModifier.Operation.ADDITION));
+        builder.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(uUID, "Armor toughness", this.getToughness(), EntityAttributeModifier.Operation.ADDITION));
+
         this.attributeModifiers = builder.build();
     }
 

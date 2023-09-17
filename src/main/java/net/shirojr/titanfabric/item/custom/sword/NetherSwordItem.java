@@ -19,4 +19,10 @@ public class NetherSwordItem extends TitanFabricSwordItem {
     public NetherSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
         super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, WeaponEffects.FIRE);
     }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        tooltip.add(new TranslatableText("tooltip.titanfabric.netherSwordItem"));
+        super.appendTooltip(stack, world, tooltip, context);
+    }
 }

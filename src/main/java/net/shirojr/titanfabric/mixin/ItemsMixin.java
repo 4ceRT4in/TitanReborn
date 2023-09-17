@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.mixin;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
 import net.shirojr.titanfabric.init.ConfigInit;
+import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.armor.NetheriteArmorItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,10 +18,9 @@ public abstract class ItemsMixin {
             slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=netherite_sword")),
             at = @At(value = "NEW", target = "(Lnet/minecraft/item/ToolMaterial;IFLnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/SwordItem;", ordinal = 0)
     )
-    private static SwordItem titanfabric$netheriteSwordBalancing(ToolMaterial toolMaterial, int attackDamage,
-                                                                 float attackSpeed, Item.Settings settings) {
-        return new SwordItem(TitanFabricToolMaterials.NETHERITE, ConfigInit.CONFIG.netheriteSwordAttackDamage,
-                ConfigInit.CONFIG.netheriteSwordAttackSpeed, settings.maxDamage(ConfigInit.CONFIG.netheriteSwordMaxDamage));
+    private static SwordItem titanfabric$netheriteSword(ToolMaterial toolMaterial, int attackDamage,
+                                                        float attackSpeed, Item.Settings settings) {
+        return TitanFabricItems.NETHERITE_SWORD;
     }
 
     //FIXME: Renders wrong textures!!!

@@ -17,6 +17,6 @@ public class TitanFabricClient implements ClientModInitializer {
         KeyBindEvents.register();
         HandledScreens.register(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER, DiamondFurnaceScreen::new);
 
-        BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.ANVIL, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());
     }
 }

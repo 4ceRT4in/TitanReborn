@@ -49,20 +49,22 @@ public final class MultiBowHelper {
         return itemStack.getOrCreateNbt().getInt(FULL_ARROW_COUNT_NBT_KEY);
     }
 
-    public static ItemStack setArrowsLeft(ItemStack bowStack, int arrows) {
-        bowStack.getOrCreateNbt().putInt(ARROWS_LEFT_NBT_KEY, arrows);
-        if (arrows < 1) bowStack.removeSubNbt(ARROWS_LEFT_NBT_KEY);
-        return bowStack;
-    }
-
-    public static int getArrowsLeft(ItemStack itemStack) {
+    public static int getArrowsLeftNbt(ItemStack itemStack) {
         if (!itemStack.getOrCreateNbt().contains(ARROWS_LEFT_NBT_KEY)) return 0;
         return itemStack.getOrCreateNbt().getInt(ARROWS_LEFT_NBT_KEY);
     }
 
-/*    public static int getAfterShotLevel(ItemStack itemStack) {
-        return EnchantmentHelper.getLevel(TitanFabricEnchantments.AFTER_SHOT, itemStack);
-    }*/
+    /**
+     * Set the currently loaded arrow ammount in the NBT values of the ItemStack
+     * @param bowStack original Bow ItemStack
+     * @param arrows new value of arrows
+     * @return new Bow ItemStack
+     */
+    public static ItemStack setArrowsLeftNbt(ItemStack bowStack, int arrows) {
+        bowStack.getOrCreateNbt().putInt(ARROWS_LEFT_NBT_KEY, arrows);
+        if (arrows < 1) bowStack.removeSubNbt(ARROWS_LEFT_NBT_KEY);
+        return bowStack;
+    }
 
     /**
      * Handles Arrow management for the {@linkplain net.shirojr.titanfabric.item.custom.bow.MultiBowItem MultiBow}.
@@ -77,10 +79,11 @@ public final class MultiBowHelper {
         PlayerInventory inventory = player.getInventory();
         if (player.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, bowStack) > 0)
             return true;
-        if (!inventory.contains(arrowStack) || arrowStack.getCount() < MultiBowHelper.getFullArrowCount(bowStack))
+        if (!inventory.contains(arrowStack) || arrowStack.getCount() < 1)
             return false;
 
-        inventory.removeStack(inventory.getSlotWithStack(arrowStack), MultiBowHelper.getFullArrowCount(bowStack));
+        //arrowStack.decrement(1);
+        inventory.removeStack(inventory.getSlotWithStack(arrowStack), 1);
         return true;
     }
 

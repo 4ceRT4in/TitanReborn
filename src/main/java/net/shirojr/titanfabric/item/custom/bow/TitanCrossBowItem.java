@@ -17,7 +17,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows 
     public static final String CHARGED_KEY = TitanFabric.MODID + ".charged";
 
     public TitanCrossBowItem() {
-        super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
+        super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(-1));
     }
 
     @Override

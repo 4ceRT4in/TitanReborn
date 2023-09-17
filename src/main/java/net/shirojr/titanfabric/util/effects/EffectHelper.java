@@ -11,6 +11,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -115,17 +116,22 @@ public final class EffectHelper {
         List<WeaponEffects> possibleEffects = getSwordEffects();
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
 
-        for (WeaponEffects entry : possibleEffects) {
-            if (baseItem instanceof TitanFabricArrowItem) {
+
+        if (baseItem instanceof TitanFabricArrowItem) {
+            for (WeaponEffects entry : possibleEffects) {
                 ItemStack effectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
                 stacks.add(effectStack);
-            } else {
+            }
+        } else {
+            stacks.add(new ItemStack(baseItem));
+            for (WeaponEffects entry : possibleEffects) {
                 ItemStack firstEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
                 ItemStack secondEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
                 stacks.add(setEffectStrength(firstEffectStack, 1));
                 stacks.add(setEffectStrength(secondEffectStack, 2));
             }
         }
+
         return stacks;
     }
 
@@ -147,31 +153,41 @@ public final class EffectHelper {
             case BLIND -> {
                 if (target.hasStatusEffect(StatusEffects.BLINDNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), effectStrength > 1 ? 4 : 10, effectStrength - 1)
+                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
             case FIRE -> {
                 if (target.isOnFire()) return;
-                target.setOnFireFor(effectStrength > 1 ? 10 : 5);
+                target.setOnFireFor(5);
             }
             case POISON -> {
                 if (target.hasStatusEffect(StatusEffects.POISON)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), effectStrength > 1 ? 5 : 10, effectStrength - 1)
+                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
             case WEAK -> {
                 if (target.hasStatusEffect(StatusEffects.WEAKNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), effectStrength > 1 ? 6 : 10, effectStrength - 1)
+                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
             case WITHER -> {
                 if (target.hasStatusEffect(StatusEffects.WITHER)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), effectStrength > 1 ? 7 : 10, effectStrength - 1)
+                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
         }
+    }
+
+    /**
+     * Translates from seconds to ticks
+     *
+     * @param seconds
+     * @return calculated ticks
+     */
+    public static int secondsToTicks(int seconds) {
+        return seconds * 20;
     }
 }
