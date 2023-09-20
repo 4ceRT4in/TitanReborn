@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -17,15 +18,18 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.init.ConfigInit;
+import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 public class TitanFabricNetworking {
     public static final Identifier BOW_SCREEN_CHANNEL = new Identifier(TitanFabric.MODID, "bow_screen");
     public static final Identifier MULTI_BOW_ARROWS_CHANNEL = new Identifier(TitanFabric.MODID, "shoot_multi_bow");
+    public static final Identifier ARMOR_HANDLING_CHANNEL = new Identifier(TitanFabric.MODID, "armor_handling");
 
 
     private static void handleBowScreenPacket(MinecraftServer server, ServerPlayerEntity player,
-                                             ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+                                              ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         ItemStack selectedStack = buf.readItemStack();
 
         server.execute(() -> {
@@ -35,7 +39,7 @@ public class TitanFabricNetworking {
     }
 
     private static void handleMultiBowShotPacket(MinecraftServer server, ServerPlayerEntity player,
-                                             ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+                                                 ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         ItemStack arrowStack = buf.readItemStack();
         double pullProgress = buf.readDouble();
 
@@ -61,8 +65,43 @@ public class TitanFabricNetworking {
         });
     }
 
+    private static void handleArmorLifeHandlingPacket(MinecraftServer server, ServerPlayerEntity player,
+                                                      ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
+        Item oldItem = buf.readItemStack().getItem();
+        Item newItem = buf.readItemStack().getItem();
+
+        server.execute(() -> {
+            float healthValue = 0;
+
+            if (oldItem instanceof LegendArmorItem legendArmorItem) {
+                switch (legendArmorItem.getSlotType()) {
+                    case HEAD -> healthValue = (float) ConfigInit.CONFIG.TitanArmorHelmetHealth;
+                    case CHEST -> healthValue = (float) ConfigInit.CONFIG.TitanArmorChestplateHealth;
+                    case LEGS -> healthValue = (float) ConfigInit.CONFIG.TitanArmorLeggingsHealth;
+                    case FEET -> healthValue = (float) ConfigInit.CONFIG.TitanArmorBootsHealth;
+                }
+                if (player.getHealth() > healthValue) {
+                    player.setHealth(player.getMaxHealth() - healthValue);
+                }
+            }
+
+            if (newItem instanceof LegendArmorItem legendArmorItem) {
+                switch (legendArmorItem.getSlotType()) {
+                    case HEAD -> healthValue = (float) ConfigInit.CONFIG.TitanArmorHelmetHealth;
+                    case CHEST -> healthValue = (float) ConfigInit.CONFIG.TitanArmorChestplateHealth;
+                    case LEGS -> healthValue = (float) ConfigInit.CONFIG.TitanArmorLeggingsHealth;
+                    case FEET -> healthValue = (float) ConfigInit.CONFIG.TitanArmorBootsHealth;
+                }
+                if (player.getHealth() > healthValue) {
+                    player.setHealth(player.getMaxHealth() + healthValue);
+                }
+            }
+        });
+    }
+
     public static void registerServerReceivers() {
         ServerPlayNetworking.registerGlobalReceiver(BOW_SCREEN_CHANNEL, TitanFabricNetworking::handleBowScreenPacket);
         ServerPlayNetworking.registerGlobalReceiver(MULTI_BOW_ARROWS_CHANNEL, TitanFabricNetworking::handleMultiBowShotPacket);
+        ServerPlayNetworking.registerGlobalReceiver(ARMOR_HANDLING_CHANNEL, TitanFabricNetworking::handleArmorLifeHandlingPacket);
     }
 }

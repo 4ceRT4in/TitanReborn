@@ -55,14 +55,4 @@ public class LegendArmorBootsItem extends LegendArmorItem {
         }
         return super.getAttributeModifiers(slot);
     }
-
-    @Override
-    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType,
-                             PlayerEntity player, StackReference cursorStackReference) {
-        List<ItemStack> armorSet = IntStream.rangeClosed(0, 3).mapToObj(player.getInventory()::getArmorStack).toList();
-        float damageValue = (float) ConfigInit.CONFIG.TitanArmorBootsHealth;
-        if (armorSet.contains(stack) && player.getHealth() > damageValue)
-            player.setHealth(player.getMaxHealth() - damageValue);
-        return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
-    }
 }
