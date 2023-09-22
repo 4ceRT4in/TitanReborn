@@ -10,6 +10,7 @@
     "ItemsMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
+    "PlayerEntityMixin",
     "StatusEffectsMixin"
   ],
   "injectors": {
