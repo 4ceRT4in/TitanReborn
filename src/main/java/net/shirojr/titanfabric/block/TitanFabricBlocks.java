@@ -18,14 +18,14 @@ import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 public class TitanFabricBlocks {
 
     public static final Block CITRIN_ORE = registerBlock("citrin_ore",
-            new CitrinOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
-                    .hardness(4.5f).strength(5.0f).requiresTool()), TitanFabricItemGroups.TITAN);
+            new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
+                    .hardness(4.5f).strength(3.0f, 3.0f).requiresTool(), 3), TitanFabricItemGroups.TITAN);
     public static final Block NETHER_ORE = registerBlock("nether_ore",
-            new NetherOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
-                    .hardness(4.5f).strength(6.0f).requiresTool()), TitanFabricItemGroups.TITAN);
+            new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
+                    .hardness(4.5f).strength(3.5f, 3.0f).requiresTool(), 4), TitanFabricItemGroups.TITAN);
     public static final Block DEEPSTALE_LEGEND_ORE = registerBlock("deepslate_legend_ore",
-            new LegendOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
-                    .hardness(10.0f).strength(7.0f).requiresTool()), TitanFabricItemGroups.TITAN);
+            new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
+                    .hardness(10.0f).strength(4.5f, 3.0f).requiresTool(), 7), TitanFabricItemGroups.TITAN);
 
     public static final Block CITRIN_BLOCK = registerBlock("citrin_block",
             new Block(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.METAL).mapColor(DyeColor.YELLOW)
