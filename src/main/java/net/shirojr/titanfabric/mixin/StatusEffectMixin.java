@@ -16,10 +16,9 @@ import java.util.stream.IntStream;
 
 @Mixin(StatusEffect.class)
 public class StatusEffectMixin {
-    @Redirect(method = "applyUpdateEffect",
+    @Redirect(method = "applyInstantEffect",
             at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z",
-                    ordinal = 2)
+                    target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z")
     )
     private boolean test(LivingEntity instance, DamageSource source, float amount) {
         float newAmount = amount;
@@ -28,10 +27,13 @@ public class StatusEffectMixin {
             List<Item> armorSet = IntStream.rangeClosed(0, 3)
                     .mapToObj(player.getInventory()::getArmorStack)
                     .map(ItemStack::getItem).toList();
-
+            int itemCount = 0;
             for (Item armorItem : armorSet) {
-                if (armorItem instanceof CitrinArmorItem) newAmount /= 4;
+                if (armorItem instanceof CitrinArmorItem) itemCount++;
             }
+
+            float chance = (float) itemCount / armorSet.size();
+            newAmount = newAmount - (newAmount * chance);
 
             if (armorSet.stream().allMatch(item -> item instanceof CitrinArmorItem)) {
                 newAmount = 0;

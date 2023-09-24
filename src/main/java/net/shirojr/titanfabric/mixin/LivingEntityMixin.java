@@ -9,6 +9,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
 import org.jetbrains.annotations.Nullable;
@@ -40,11 +43,12 @@ public abstract class LivingEntityMixin {
 
     @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
     private void titanfabric$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        List<DamageSource> handledDamageTypes = List.of(DamageSource.IN_FIRE,
-                DamageSource.ON_FIRE,
-                DamageSource.HOT_FLOOR,
+        List<DamageSource> handledDamageTypes = List.of(
                 DamageSource.MAGIC, // POISON & INSTANT DAMAGE
-                DamageSource.WITHER);
+                DamageSource.WITHER,
+                DamageSource.IN_FIRE,
+                DamageSource.ON_FIRE,
+                DamageSource.HOT_FLOOR);
 
         if (!source.getName().equals("lava") && !handledDamageTypes.contains(source)) return;
         if (!(((LivingEntity) (Object) this) instanceof PlayerEntity player)) return;
@@ -53,20 +57,27 @@ public abstract class LivingEntityMixin {
                 .mapToObj(player.getInventory()::getArmorStack)
                 .map(ItemStack::getItem).toList();
 
+        if (source == DamageSource.IN_FIRE || source == DamageSource.HOT_FLOOR || source.getName().equals("lava")) {
+            if (armorSet.stream().allMatch(armorItem -> armorItem instanceof NetherArmorItem)) {
+                player.extinguish();
+                cir.setReturnValue(false);
+                return;
+            }
 
-        for (var item : armorSet) {
-            if (item instanceof NetherArmorItem) {
-                if (player.getWorld().getRandom().nextInt(4) < 1) {
-                    if (source.getName().equals("lava") || source == DamageSource.ON_FIRE || source == DamageSource.IN_FIRE) {
-                        //player.extinguish();
+            for (var item : armorSet) {
+                if (item instanceof NetherArmorItem) {
+                    if (player.getWorld().getRandom().nextInt(4) < 1) {
                         cir.setReturnValue(false);
+                        return;
                     }
                 }
             }
-            if (item instanceof CitrinArmorItem) {
-                if (player.getRandom().nextInt(4) < 1) return;
+        }
 
-                if (source.equals(DamageSource.WITHER) || source.equals(DamageSource.MAGIC)) {
+        if (source.equals(DamageSource.WITHER) || source.equals(DamageSource.MAGIC)) {
+            for (var item : armorSet) {
+                if (item instanceof CitrinArmorItem) {
+                    if (player.getRandom().nextInt(4) > 0) return;
                     cir.setReturnValue(false);
                     return;
                 }
@@ -97,11 +108,22 @@ public abstract class LivingEntityMixin {
             return;
         }
 
-        int effectDuration = effect.getDuration();
+        int itemCounter = 0;
         for (Item entry : armorSet) {
             if (entry instanceof CitrinArmorItem) {
-                effectDuration /= 4;
+                itemCounter++;
             }
+        }
+
+        int effectDuration;
+
+        //TODO: helper class
+        switch (itemCounter) {
+            case 1 -> effectDuration = (int) (effect.getDuration() * 0.75);
+            case 2 -> effectDuration = (int) (effect.getDuration() * 0.5);
+            case 3 -> effectDuration = (int) (effect.getDuration() * 0.25);
+            case 4 -> effectDuration = 0;
+            default -> effectDuration = effect.getDuration();
         }
 
         StatusEffectInstance statusEffectInstance = activeStatusEffects.get(effect.getEffectType());
