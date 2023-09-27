@@ -15,6 +15,7 @@ import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Helper class for TitanFabric {@linkplain WeaponEffects}
@@ -102,6 +103,10 @@ public final class EffectHelper {
 
     private static List<WeaponEffects> getArrowEffects() {
         return Arrays.stream(WeaponEffects.values()).filter(effect -> effect != WeaponEffects.FIRE).toList();
+    }
+
+    public static boolean shouldEffectApply(Random random, int strength) {
+        return random.nextInt(100) <= (25 * strength);
     }
 
     /**

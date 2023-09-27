@@ -14,6 +14,7 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
+import net.shirojr.titanfabric.util.effects.EffectHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -64,23 +65,18 @@ public abstract class LivingEntityMixin {
                 return;
             }
 
-            for (var item : armorSet) {
-                if (item instanceof NetherArmorItem) {
-                    if (player.getWorld().getRandom().nextInt(4) < 1) {
-                        cir.setReturnValue(false);
-                        return;
-                    }
-                }
+            int effectStrengthNether = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof NetherArmorItem).count());
+            if(EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthNether)) {
+                cir.setReturnValue(false);
+                return;
             }
         }
 
         if (source.equals(DamageSource.WITHER) || source.equals(DamageSource.MAGIC)) {
-            for (var item : armorSet) {
-                if (item instanceof CitrinArmorItem) {
-                    if (player.getRandom().nextInt(4) > 0) return;
-                    cir.setReturnValue(false);
-                    return;
-                }
+            int effectStrengthCitrin = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof CitrinArmorItem).count());
+            if(EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthCitrin)) {
+                cir.setReturnValue(false);
+                return;
             }
         }
     }

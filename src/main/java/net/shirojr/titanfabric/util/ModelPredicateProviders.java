@@ -75,7 +75,7 @@ public class ModelPredicateProviders {
             if (stack == null || entity == null || entity.getActiveItem() != stack) return 0.0f;
             float maxUseTime = stack.getMaxUseTime();
             float leftUseTime = entity.getItemUseTimeLeft();
-            return (maxUseTime - leftUseTime) / 20;
+            return 0.65f;
         });
     }
 

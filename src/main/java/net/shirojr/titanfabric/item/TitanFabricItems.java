@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -13,6 +14,7 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
@@ -86,10 +88,10 @@ public class TitanFabricItems {
     public static final Item MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3, 60, 1500));
     public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
 
-/*    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
+    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
             new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
     public static final Item LEGEND_SHIELD = registerItem("legend_shield",
-            new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));*/
+            new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
 
     public static final Item CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
 

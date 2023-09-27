@@ -28,29 +28,25 @@
   "overrides": [
     {
       "predicate": {
-        "pulling": 1,
-        "arrows": 0.1
+        "pulling": 1
       },
       "model": "titanfabric:item/multi_bow_1_pulling_0"
     },
     {
       "predicate": {
-        "pulling": 1,
-        "arrows": 0.2
+        "pulling": 1
       },
       "model": "titanfabric:item/multi_bow_2_pulling_0"
     },
     {
       "predicate": {
-        "pulling": 1,
-        "arrows": 0.3
+        "pulling": 1
       },
       "model": "titanfabric:item/multi_bow_3_pulling_0"
     },
     {
       "predicate": {
         "pulling": 1,
-        "arrows": 0.1,
         "pull": 0.65
       },
       "model": "titanfabric:item/multi_bow_1_pulling_1"
@@ -58,7 +54,6 @@
     {
       "predicate": {
         "pulling": 1,
-        "arrows": 0.2,
         "pull": 0.65
       },
       "model": "titanfabric:item/multi_bow_2_pulling_1"
@@ -66,7 +61,6 @@
     {
       "predicate": {
         "pulling": 1,
-        "arrows": 0.3,
         "pull": 0.65
       },
       "model": "titanfabric:item/multi_bow_3_pulling_1"
@@ -74,7 +68,6 @@
     {
       "predicate": {
         "pulling": 1,
-        "arrows": 0.1,
         "pull": 0.9
       },
       "model": "titanfabric:item/multi_bow_1_pulling_2"
@@ -82,7 +75,6 @@
     {
       "predicate": {
         "pulling": 1,
-        "arrows": 0.2,
         "pull": 0.9
       },
       "model": "titanfabric:item/multi_bow_2_pulling_2"
@@ -90,7 +82,6 @@
     {
       "predicate": {
         "pulling": 1,
-        "arrows": 0.3,
         "pull": 0.9
       },
       "model": "titanfabric:item/multi_bow_3_pulling_2"

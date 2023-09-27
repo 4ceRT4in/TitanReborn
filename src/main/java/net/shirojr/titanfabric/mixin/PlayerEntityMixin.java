@@ -39,15 +39,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         boolean allMatch = armorSet.stream().allMatch(item -> item instanceof NetherArmorItem);
         if (allMatch) return 0;
 
-        if (player.getFireTicks() < 0) TitanFabric.devLogger(String.valueOf(player.getFireTicks()));
         if (player.getFireTicks() > fireTicks) return fireTicks;
 
-        int itemCounter = 0;
-        for (Item armorItem : armorSet) {
-            if (armorItem instanceof NetherArmorItem) {
-                itemCounter++;
-            }
-        }
+        int itemCounter = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof NetherArmorItem).count());
 
         if (fireTicks > 1 && itemCounter > 0) {
             float chance = (float) itemCounter / armorSet.size();
