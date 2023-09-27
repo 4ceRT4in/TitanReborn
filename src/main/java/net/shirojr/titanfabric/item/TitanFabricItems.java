@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -14,6 +15,7 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -26,6 +28,7 @@ import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
+import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
@@ -74,7 +77,7 @@ public class TitanFabricItems {
     public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f));
     public static final SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f,
-            new FabricItemSettings().maxDamage(2031));  // registered in ItemsMixin class
+            new FabricItemSettings().maxDamage(2031).group(ItemGroup.COMBAT));  // registered in ItemsMixin class
 
     public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
             new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, removeBaseDamage(8), -2.4f, null));
@@ -109,7 +112,7 @@ public class TitanFabricItems {
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
     public static final Item PARACHUTE = registerItem("parachute",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
+            new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
     public static final Item BLINDNESS_ESSENCE = registerItem("blindness_essence",
             new TitanFabricEssenceItem("tooltip.titanfabric.blindnessEssenceItem"));
@@ -131,6 +134,14 @@ public class TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
 
+    public static final Item BACKPACK_SMALL = registerItem("backpack_small",
+            new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.SMALL));
+
+    public static final Item BACKPACK_MEDIUM = registerItem("backpack_medium",
+            new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.SMALL));
+
+    public static final Item BACKPACK_BIG = registerItem("backpack_big",
+            new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.SMALL));
 
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MODID, name), item);

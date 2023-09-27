@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.screen.custom;
+package net.shirojr.titanfabric.screen.screen;
 
 import net.minecraft.client.gui.screen.ingame.AbstractFurnaceScreen;
 import net.minecraft.client.gui.screen.recipebook.FurnaceRecipeBookScreen;

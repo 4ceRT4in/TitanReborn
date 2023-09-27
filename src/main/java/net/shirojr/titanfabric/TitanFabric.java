@@ -34,13 +34,15 @@ public class TitanFabric implements ModInitializer {
         TitanFabricRecipies.registerModRecipies();
         TitanFabricBlocks.registerModBlocks();
         TitanFabricBlockEntities.registerBlockEntities();
-        TitanFabricScreenHandlers.registerAllScreenHandlers();
+        TitanFabricScreenHandlers.register();
         TitanFabricStatusEffects.registerStatusEffects();
         TitanFabricPotions.registerAllPotions();
         TitanFabricWorldGen.generateWorldGen();
         TitanFabricNetworking.registerServerReceivers();
         TitanFabricGamerules.register();
         TitanFabricStats.register();
+
+        LOGGER.info("Initialized all " + MODID + " common components");
     }
 
     /**
