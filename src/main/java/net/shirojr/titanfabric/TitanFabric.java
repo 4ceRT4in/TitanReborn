@@ -15,6 +15,7 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.network.TitanFabricNetworking;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipies;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
 import net.shirojr.titanfabric.world.gen.TitanFabricWorldGen;
 import org.slf4j.Logger;
@@ -43,15 +44,6 @@ public class TitanFabric implements ModInitializer {
         TitanFabricStats.register();
 
         LOGGER.info("Initialized all " + MODID + " common components");
-    }
-
-    /**
-     * Uses LOGGER only in a development environment
-     * @param input input String for the LOGGER
-     */
-    public static void devLogger(String input) {
-        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            LOGGER.info("[dev] - " + input);
-        }
+        LoggerUtil.devLogger("Initialized Instance in development environment!");
     }
 }

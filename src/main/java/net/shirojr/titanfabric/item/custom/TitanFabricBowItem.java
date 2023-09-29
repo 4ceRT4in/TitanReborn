@@ -10,6 +10,7 @@ import net.minecraft.text.LiteralText;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.event.KeyBindEvents;
 import net.shirojr.titanfabric.screen.screen.ArrowSelectionScreen;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class TitanFabricBowItem extends BowItem {
                     .filter(itemStack -> bowStack.supportedArrows().contains(itemStack.getItem())).toList();
 
             client.setScreen(new ArrowSelectionScreen(new LiteralText("Noice Title"), arrowStacks));
-            TitanFabric.devLogger("opened arrow selection screen");
+            LoggerUtil.devLogger("opened arrow selection screen");
         }
     }
 }

@@ -14,6 +14,7 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.block.custom.*;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
+import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricBlocks {
 
@@ -66,6 +67,6 @@ public class TitanFabricBlocks {
     }
 
     public static void registerModBlocks() {
-        TitanFabric.devLogger("Registering " + TitanFabric.MODID + " Mod blocks");
+        LoggerUtil.devLogger("Registering " + TitanFabric.MODID + " Mod blocks");
     }
 }

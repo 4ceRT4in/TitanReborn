@@ -33,6 +33,7 @@ import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.NetherSwordItem;
+import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricItems {
     //region armor
@@ -148,7 +149,7 @@ public class TitanFabricItems {
     }
 
     public static void registerModItems() {
-        TitanFabric.devLogger("Registering " + TitanFabric.MODID + " Mod items");
+        LoggerUtil.devLogger("Registering " + TitanFabric.MODID + " Mod items");
     }
 
     private static int removeBaseDamage(int damage) {
