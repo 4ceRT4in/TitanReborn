@@ -2,8 +2,8 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "#A#",
-        "AdA",
-        "lAl"
+        "AiA",
+        "AAA"
     ],
     "key": {
         "#": {
@@ -12,15 +12,12 @@
         "A": {
             "tag": "minecraft:wool"
         },
-        "d": {
-            "item": "minecraft:diamond"
-        },
-        "l": {
-            "item": "minecraft:leather"
+        "i": {
+            "item": "minecraft:iron_ingot"
         }
     },
     "result": {
-        "item": "titanfabric:big_backpack",
+        "item": "titanfabric:backpack_small",
         "count": 1
     }
 }
