@@ -24,5 +24,5 @@
 
 Fabric 1.18.2 Port of the Combat Mod "Titan"
 
-This mod uses the [Fabric Shield Lib](https://modrinth.com/mod/fabricshieldlib/version/1.7-1.18.2).
+
 
