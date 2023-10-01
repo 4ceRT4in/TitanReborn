@@ -2,17 +2,16 @@ package net.shirojr.titanfabric;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
-import net.shirojr.titanfabric.effect.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.enchant.TitanFabricEnchantments;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.network.TitanFabricNetworking;
+import net.shirojr.titanfabric.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipies;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.util.LoggerUtil;
@@ -37,7 +36,7 @@ public class TitanFabric implements ModInitializer {
         TitanFabricBlockEntities.registerBlockEntities();
         TitanFabricScreenHandlers.register();
         TitanFabricStatusEffects.registerStatusEffects();
-        TitanFabricPotions.registerAllPotions();
+        TitanFabricPotions.register();
         TitanFabricWorldGen.generateWorldGen();
         TitanFabricNetworking.registerServerReceivers();
         TitanFabricGamerules.register();

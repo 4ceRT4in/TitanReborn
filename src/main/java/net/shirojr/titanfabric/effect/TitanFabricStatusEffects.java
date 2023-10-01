@@ -14,6 +14,6 @@ public class TitanFabricStatusEffects {
     }
 
     public static void registerStatusEffects() {
-        INDESTRUCTIBILITY = registerStatusEffect("indestructibility", new IndestructibileStatusEffect(StatusEffectCategory.BENEFICIAL, 0xCC0000));
+        INDESTRUCTIBILITY = registerStatusEffect("indestructibility", new IndestructibileStatusEffect(StatusEffectCategory.BENEFICIAL, 0x8379E0));
     }
 }

@@ -147,6 +147,13 @@
   "item.minecraft.netherite_leggings": "§8Netherite Leggings",
   "item.minecraft.netherite_boots": "§8Netherite Boots",
 
+  "item.minecraft.potion.effect.long_indestructibility_potion": "Indestructibility Potion",
+  "item.minecraft.splash_potion.effect.long_indestructibility_potion": "Splash Potion of Indestructibility",
+  "item.minecraft.lingering_potion.effect.long_indestructibility_potion": "Lingering Potion of Indestructibility",
+
+  "item.minecraft.tipped_arrow.effect.indestructibility_potion": "Arrow of Indestructibility",
+  "item.minecraft.tipped_arrow.effect.long_indestructibility_potion": "Arrow of Indestructibility",
+
   "tooltip.titanfabric.citrinSwordItem": "§225% Poison Chance",
   "tooltip.titanfabric.netherSwordItem": "§625% Fire Chance",
   "tooltip.titanfabric.legendBootsItem": "§5+1 Max Health",
