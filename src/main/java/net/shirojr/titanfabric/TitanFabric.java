@@ -1,12 +1,10 @@
 package net.shirojr.titanfabric;
 
 import net.fabricmc.api.ModInitializer;
-
 import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
-import net.shirojr.titanfabric.enchant.TitanFabricEnchantments;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
@@ -29,7 +27,6 @@ public class TitanFabric implements ModInitializer {
     public void onInitialize() {
         TitanFabricConfiguredFeatures.registerConfiguredFeatures();
         ConfigInit.init();
-        TitanFabricEnchantments.registerModEnchantments();
         TitanFabricItems.registerModItems();
         TitanFabricRecipies.registerModRecipies();
         TitanFabricBlocks.registerModBlocks();
