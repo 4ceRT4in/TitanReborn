@@ -21,6 +21,9 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 
+        registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
+        registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
+
         registerBowProviders(TitanFabricItems.LEGEND_BOW); // vanilla pfeile, spectral, nicht tipped, modded effect arrows
         registerBowProviders(TitanFabricItems.MULTI_BOW_1); // nur vanilla pfeile, spectral
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_1);
@@ -38,6 +41,10 @@ public class ModelPredicateProviders {
         registerStrengthProvider(item, new Identifier("strength"));
     }
 
+    private static void registerShieldProviders(Item item) {
+        registerShieldBlockingProvider(item);
+    }
+
     private static void registerBowProviders(Item item) {
         registerBowPull(item, new Identifier("pull"));
         registerBowPulling(item, new Identifier("pulling"));
@@ -45,7 +52,7 @@ public class ModelPredicateProviders {
 
     private static void registerCrossBowProviders(Item item) {
         registerBowProviders(item);
-        registerCrossBow(item);
+        //registerCrossBow(item);
     }
 
     private static void registerEffectProvider(Item item, Identifier identifier) {
@@ -95,8 +102,11 @@ public class ModelPredicateProviders {
         });
     }
 
-    private static void registerCrossBow(Item item) {
-
+    private static void registerShieldBlockingProvider(Item item) {
+        ModelPredicateProviderRegistry.register(item, new Identifier("blocking"), (stack, world, entity, seed) -> {
+            if (stack == null || entity == null) return 0.0f;
+            return entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f;
+        });
     }
 }
 
