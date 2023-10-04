@@ -1,11 +1,7 @@
 package net.shirojr.titanfabric.screen.handler;
 
-import net.minecraft.block.AnvilBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
@@ -13,11 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldEvents;
-import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,6 +35,7 @@ public class AdvancedAnvilScreenHandler extends AnvilScreenHandler {
         this.levelCost.set(1);
         int i = 0;
         int repairCost = 0;
+        float xpCostMultiplier = 0.5f;
         int k = 0;
         if (itemStack.isEmpty()) {
             this.output.setStack(0, ItemStack.EMPTY);
@@ -148,7 +141,7 @@ public class AdvancedAnvilScreenHandler extends AnvilScreenHandler {
             i += k;
             itemStack2.setCustomName(new LiteralText(this.newItemName));
         }
-        this.levelCost.set((int) ((repairCost + i) * ConfigInit.CONFIG.anvilXpMultiplier));
+        this.levelCost.set((int) ((repairCost + i) * xpCostMultiplier));
         if (i <= 0) {
             itemStack2 = ItemStack.EMPTY;
         }
