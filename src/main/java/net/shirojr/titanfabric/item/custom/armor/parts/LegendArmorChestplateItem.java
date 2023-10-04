@@ -23,8 +23,8 @@ public class LegendArmorChestplateItem extends LegendArmorItem {
 
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
 
-    public LegendArmorChestplateItem(double health) {
-        super(EquipmentSlot.CHEST, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
+    public LegendArmorChestplateItem(float health) {
+        super(EquipmentSlot.CHEST, new FabricItemSettings().group(TitanFabricItemGroups.TITAN), health);
 
         UUID uUID = MODIFIERS[slot.getEntitySlotId()];
         UUID GENERIC_MAX_HEALTH_ID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CD");

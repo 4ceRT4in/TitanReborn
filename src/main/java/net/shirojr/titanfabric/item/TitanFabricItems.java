@@ -4,20 +4,11 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.init.ConfigInit;
-import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.item.custom.*;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorBootsItem;
@@ -56,13 +47,13 @@ public class TitanFabricItems {
             new NetherArmorItem(EquipmentSlot.FEET));
 
     public static final Item LEGEND_HELMET = registerItem("legend_helmet",
-            new LegendArmorHelmetItem(ConfigInit.CONFIG.TitanArmorHelmetHealth));
+            new LegendArmorHelmetItem(2.0f));
     public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate",
-            new LegendArmorChestplateItem(ConfigInit.CONFIG.TitanArmorChestplateHealth));
+            new LegendArmorChestplateItem(4.0f));
     public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings",
-            new LegendArmorLeggingsItem(ConfigInit.CONFIG.TitanArmorLeggingsHealth));
+            new LegendArmorLeggingsItem(3.0f));
     public static final Item LEGEND_BOOTS = registerItem("legend_boots",
-            new LegendArmorBootsItem(ConfigInit.CONFIG.TitanArmorBootsHealth));
+            new LegendArmorBootsItem(1.0f));
     //endregion
 
     public static final Item CITRIN_SWORD = registerItem("citrin_sword",

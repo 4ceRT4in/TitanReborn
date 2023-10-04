@@ -8,28 +8,22 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ClickType;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 public class LegendArmorBootsItem extends LegendArmorItem {
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
 
-    public LegendArmorBootsItem(double health) {
-        super(EquipmentSlot.FEET, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
+    public LegendArmorBootsItem(float health) {
+        super(EquipmentSlot.FEET, new FabricItemSettings().group(TitanFabricItemGroups.TITAN), health);
 
         UUID uUID = MODIFIERS[slot.getEntitySlotId()];
         UUID GENERIC_MAX_HEALTH_ID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CF");

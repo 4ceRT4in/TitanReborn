@@ -6,7 +6,6 @@ import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
-import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.network.TitanFabricNetworking;
 import net.shirojr.titanfabric.potion.TitanFabricPotions;
@@ -26,7 +25,6 @@ public class TitanFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         TitanFabricConfiguredFeatures.registerConfiguredFeatures();
-        ConfigInit.init();
         TitanFabricItems.registerModItems();
         TitanFabricRecipies.registerModRecipies();
         TitanFabricBlocks.registerModBlocks();

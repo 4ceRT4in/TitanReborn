@@ -2,10 +2,8 @@ package net.shirojr.titanfabric.mixin;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
-import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.armor.NetheriteArmorItem;
-import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;

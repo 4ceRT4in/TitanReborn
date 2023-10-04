@@ -8,7 +8,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -23,8 +22,8 @@ import java.util.UUID;
 public class LegendArmorLeggingsItem extends LegendArmorItem {
     private final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
 
-    public LegendArmorLeggingsItem(double health) {
-        super(EquipmentSlot.LEGS, new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
+    public LegendArmorLeggingsItem(float health) {
+        super(EquipmentSlot.LEGS, new FabricItemSettings().group(TitanFabricItemGroups.TITAN), health);
 
         UUID uUID = MODIFIERS[slot.getEntitySlotId()];
         UUID GENERIC_MAX_HEALTH_ID = UUID.fromString("5D6F0BA2-1186-46AC-B896-C61C5CEE99CE");

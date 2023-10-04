@@ -18,7 +18,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.init.ConfigInit;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
@@ -71,27 +70,19 @@ public class TitanFabricNetworking {
         Item newItem = buf.readItemStack().getItem();
 
         server.execute(() -> {
-            float healthValue = 0;
+            float healthValue;
 
             if (oldItem instanceof LegendArmorItem legendArmorItem) {
-                switch (legendArmorItem.getSlotType()) {
-                    case HEAD -> healthValue = (float) ConfigInit.CONFIG.TitanArmorHelmetHealth;
-                    case CHEST -> healthValue = (float) ConfigInit.CONFIG.TitanArmorChestplateHealth;
-                    case LEGS -> healthValue = (float) ConfigInit.CONFIG.TitanArmorLeggingsHealth;
-                    case FEET -> healthValue = (float) ConfigInit.CONFIG.TitanArmorBootsHealth;
-                }
+                healthValue = legendArmorItem.getHealthValue();
+
                 if (player.getHealth() > healthValue) {
                     player.setHealth(player.getMaxHealth() - healthValue);
                 }
             }
 
             if (newItem instanceof LegendArmorItem legendArmorItem) {
-                switch (legendArmorItem.getSlotType()) {
-                    case HEAD -> healthValue = (float) ConfigInit.CONFIG.TitanArmorHelmetHealth;
-                    case CHEST -> healthValue = (float) ConfigInit.CONFIG.TitanArmorChestplateHealth;
-                    case LEGS -> healthValue = (float) ConfigInit.CONFIG.TitanArmorLeggingsHealth;
-                    case FEET -> healthValue = (float) ConfigInit.CONFIG.TitanArmorBootsHealth;
-                }
+                healthValue = legendArmorItem.getHealthValue();
+
                 if (player.getHealth() > healthValue) {
                     player.setHealth(player.getMaxHealth() + healthValue);
                 }

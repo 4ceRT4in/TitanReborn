@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
 import net.minecraft.entity.effect.StatusEffects;
-import net.shirojr.titanfabric.init.ConfigInit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -22,6 +21,7 @@ public abstract class StatusEffectsMixin {
             target = "Lnet/minecraft/entity/effect/DamageModifierStatusEffect;<init>(Lnet/minecraft/entity/effect/StatusEffectCategory;ID)V"),
             index = 2)
     private static double titanfabric$weaknessBalancingArgsMod(double modifier) {
-        return ConfigInit.CONFIG.weaknessStatusEffectModifier;
+        //TODO: differentiate between strength and weakness
+        return -2.0;
     }
 }
