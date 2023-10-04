@@ -34,6 +34,14 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+
+	// Curseforge
+	maven {
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
 }
 
 dependencies {
@@ -51,6 +59,8 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
+/*	// included minemenue refabricated for radial menu //TODO: make custom version
+	include implementation("curse.maven:minemenu_refrabricated-662722:3943063")*/
 }
 
 processResources {
