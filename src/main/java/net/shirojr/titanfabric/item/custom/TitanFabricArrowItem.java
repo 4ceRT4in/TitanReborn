@@ -30,7 +30,7 @@ public class TitanFabricArrowItem extends ArrowItem {
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
         //TODO: implement new arrow entity for hit effect handling
         WeaponEffects effectId = WeaponEffects.getEffect(stack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
-        TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(EntityType.ARROW, shooter, world, effectId);
+        TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(EntityType.ARROW, shooter, world, effectId, stack);
         arrowEntity.initFromStack(stack);
         return arrowEntity;
     }
