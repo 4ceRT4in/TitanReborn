@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.util.items;
 
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -13,6 +14,7 @@ import java.util.List;
 
 public class ArrowSelectionHelper {
     public static final String ARROW_TYPE_NBT_KEY = TitanFabric.MODID + ".arrowType";
+    public static final String ARROW_DATA_NBT_KEY = TitanFabric.MODID + ".arrowData";
     private ArrowSelectionHelper() {
         // private ctor to avoid instantiation
     }
@@ -44,7 +46,7 @@ public class ArrowSelectionHelper {
     }
 
     @Nullable
-    public static ItemStack findFirstArrowStackByData(Inventory inventory, ArrowType arrowType) {
+    public static ItemStack findFirstMatchingArrowStack(Inventory inventory, ItemStack itemStack) {
         if (inventory.isEmpty()) return null;
 
         ItemStack outputStack = null;
@@ -73,19 +75,27 @@ public class ArrowSelectionHelper {
     public static void consumeArrowFromBowData(ItemStack bowStack, Inventory inventory, int amount) {
         ArrowType arrowType = ArrowType.get(bowStack.getOrCreateNbt().getString(ARROW_TYPE_NBT_KEY));
 
-
+        //TODO: consume correct ItemStack
     }
 
     public enum ArrowType {
         ARROW("arrow"),
-        SPECTRAL_ARROW("spectral_arrow"),
-        POTION_ARROW("potion_arrow"),
-        EFFECT_ARROW("effect_arrow"),
-        TIPPED_ARROW("tipped_arrow");
+        SPECTRAL_ARROW("spectral_arrow", true),
+        POTION_ARROW("potion_arrow", true),
+        EFFECT_ARROW("effect_arrow", true),
+        TIPPED_ARROW("tipped_arrow", true);
 
         private final String id;
+        private final boolean hasEffect;
+
+        ArrowType(String id, boolean hasEffect) {
+            this.id = id;
+            this.hasEffect = hasEffect;
+        }
+
         ArrowType(String id) {
             this.id = id;
+            this.hasEffect = false;
         }
 
         public String getNbtKey() {
