@@ -25,6 +25,7 @@ import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.NetherSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 
 public class TitanFabricItems {
     //region armor
@@ -81,7 +82,7 @@ public class TitanFabricItems {
     public static final Item MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(1, 20, 500));
     public static final Item MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2, 40, 1000));
     public static final Item MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3, 60, 1500));
-    public static final Item ARROW = registerItem("arrow", new TitanFabricArrowItem());
+    public static final Item ARROW = registerItem("effect_arrow", new TitanFabricArrowItem(ArrowSelectionHelper.ArrowType.EFFECT_ARROW));
 
     public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
             new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));

@@ -14,10 +14,13 @@ import net.shirojr.titanfabric.entity.TitanFabricArrowEntity;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 
 public class TitanFabricArrowItem extends ArrowItem {
-    public TitanFabricArrowItem() {
+    private final ArrowSelectionHelper.ArrowType arrowType;
+    public TitanFabricArrowItem(ArrowSelectionHelper.ArrowType arrowType) {
         super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
+        this.arrowType = arrowType;
     }
 
     @Override
@@ -30,8 +33,10 @@ public class TitanFabricArrowItem extends ArrowItem {
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
         //TODO: implement new arrow entity for hit effect handling
         WeaponEffects effectId = WeaponEffects.getEffect(stack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
+
         TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(EntityType.ARROW, shooter, world, effectId, stack);
         arrowEntity.initFromStack(stack);
         return arrowEntity;
     }
+
 }
