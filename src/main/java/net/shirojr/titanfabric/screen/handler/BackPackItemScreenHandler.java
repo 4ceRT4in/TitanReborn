@@ -4,6 +4,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
@@ -14,30 +16,32 @@ import java.awt.*;
 public class BackPackItemScreenHandler extends ScreenHandler {
     private final Inventory inventory;
     private final BackPackItem.Type backPackType;
+    private final ItemStack backpackStack;
 
-    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, BackPackItem.Type type) {
-        this(syncId, playerInventory, new SimpleInventory(type.getSize()), type);
+    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, BackPackItem.Type type, PacketByteBuf buf) {
+        this(syncId, playerInventory, new SimpleInventory(type.getSize()), type, buf.readItemStack());
     }
 
-    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType) {
+    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType, ItemStack backpackStack) {
         super(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, syncId);
         checkSize(inventory, backPackType.getSize());
 
         this.inventory = inventory;
         this.backPackType = backPackType;
+        this.backpackStack = backpackStack;
 
         inventory.onOpen(playerInventory.player);
 
         addStorageSlots(backPackType, new Point(20, 20));
     }
 
-    public BackPackItem.Type getBackPackitemType() {
+    public BackPackItem.Type getBackPackItemType() {
         return this.backPackType;
     }
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return false;
+        return this.backpackStack.getItem() instanceof BackPackItem;
     }
 
     private void addStorageSlots(BackPackItem.Type type, Point pos) {

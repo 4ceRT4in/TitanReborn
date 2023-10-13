@@ -7,46 +7,54 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
-import org.jetbrains.annotations.Nullable;
 
 public class BackPackItem extends Item {
     private final BackPackItem.Type backpackType;
-    private final Text itemDisplayName;
+
     public BackPackItem(Settings settings, Type backPackType) {
         super(settings.rarity(backPackType.getRarity()));
         this.backpackType = backPackType;
-        this.itemDisplayName = this.getName();
+    }
+
+    public BackPackItem.Type getBackpackType() {
+        return this.backpackType;
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        openScreen(user, user.getStackInHand(hand));
+        return super.use(world, user, hand);
+    }
+
+    public static void openScreen(PlayerEntity user, ItemStack backpackItemStack) {
+        World world = user.getWorld();
+        if (!(backpackItemStack.getItem() instanceof BackPackItem backPackItem)) return;
         if (!world.isClient()) {
             user.openHandledScreen(new ExtendedScreenHandlerFactory() {
                 @Override
                 public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-                    buf.writeItemStack(user.getStackInHand(hand));
+                    buf.writeItemStack(backpackItemStack);
                 }
 
                 @Override
                 public Text getDisplayName() {
-                    return itemDisplayName;
+                    return new TranslatableText(backpackItemStack.getItem().getTranslationKey());
                 }
 
                 @Override
                 public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-                    return new BackPackItemScreenHandler(syncId, player.getInventory(), inv, backpackType);
+                    return new BackPackItemScreenHandler(syncId, player.getInventory(), inv, backPackItem.getBackpackType(), backpackItemStack);
                 }
             });
         }
-        return super.use(world, user, hand);
     }
 
     @Override
@@ -76,6 +84,7 @@ public class BackPackItem extends Item {
         public int getSize() {
             return size;
         }
+
         public Rarity getRarity() {
             return rarity;
         }

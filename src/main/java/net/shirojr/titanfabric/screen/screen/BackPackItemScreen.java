@@ -28,7 +28,7 @@ public class BackPackItemScreen extends HandledScreen<BackPackItemScreenHandler>
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        switch (handler.getBackPackitemType()) {
+        switch (handler.getBackPackItemType()) {
             case BIG -> RenderSystem.setShaderTexture(0, TEXTURE_BIG);
             case MEDIUM -> RenderSystem.setShaderTexture(0, TEXTURE_MEDIUM);
             default -> RenderSystem.setShaderTexture(0, TEXTURE_SMALL);
