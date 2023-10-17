@@ -3,8 +3,11 @@ package net.shirojr.titanfabric.item.custom.misc;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,10 +17,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 
 public class BackPackItem extends Item {
     private final BackPackItem.Type backpackType;
+    public static final String INVENTORY_NBT_KEY = TitanFabric.MODID + ".backpack.inventory";
 
     public BackPackItem(Settings settings, Type backPackType) {
         super(settings.rarity(backPackType.getRarity()));
@@ -50,11 +55,35 @@ public class BackPackItem extends Item {
                 }
 
                 @Override
-                public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-                    return new BackPackItemScreenHandler(syncId, player.getInventory(), inv, backPackItem.getBackpackType(), backpackItemStack);
+                public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+                    Type backPackType = backPackItem.getBackpackType();
+                    Inventory inventory = getInventoryFromNbt(backpackItemStack, backPackType);
+
+                    return new BackPackItemScreenHandler(syncId, playerInventory, inventory, backPackType, backpackItemStack);
                 }
             });
         }
+    }
+
+    public static Inventory getInventoryFromNbt(ItemStack itemStack, Type type) {
+        NbtCompound nbtCompound = itemStack.getOrCreateNbt().getCompound(INVENTORY_NBT_KEY);
+
+        Inventory inventory = new SimpleInventory(type.getSize());
+        for (int i = 0; i < nbtCompound.getSize(); i++) {
+            NbtCompound nbtStack = nbtCompound.getCompound(String.valueOf(i));
+            inventory.setStack(i, ItemStack.fromNbt(nbtStack));
+        }
+
+        return inventory;
+    }
+
+    public static void writeNbtFromInventory(ItemStack itemStack, Inventory inventory) {
+        //FIXME: implement proper inventory to itemstack's nbt handling
+        /*NbtCompound itemStackCompound = new NbtCompound();
+        for (int i = 0; i < inventory.size(); i++) {
+            itemStack.writeNbt(itemStackCompound);
+        }
+        itemStack.getOrCreateNbt().put(INVENTORY_NBT_KEY, itemStackCompound);*/
     }
 
     @Override

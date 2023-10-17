@@ -23,7 +23,9 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     }
 
     public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType, ItemStack backpackStack) {
-        super(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, syncId);
+        super(backPackType == BackPackItem.Type.SMALL ? TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER :
+                backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER :
+                        TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
         checkSize(inventory, backPackType.getSize());
 
         this.inventory = inventory;
@@ -32,7 +34,9 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
         inventory.onOpen(playerInventory.player);
 
-        addStorageSlots(backPackType, new Point(20, 20));
+        addStorageSlots(backPackType, new Point(35, 18)); //TODO: change pos depending on type
+        addPlayerInventory(playerInventory);
+        addPlayerHotbar(playerInventory);
     }
 
     public BackPackItem.Type getBackPackItemType() {
@@ -44,19 +48,41 @@ public class BackPackItemScreenHandler extends ScreenHandler {
         return this.backpackStack.getItem() instanceof BackPackItem;
     }
 
+    @Override
+    public void close(PlayerEntity player) {
+        super.close(player);
+        BackPackItem.writeNbtFromInventory(backpackStack, inventory);
+    }
+
     private void addStorageSlots(BackPackItem.Type type, Point pos) {
-        int columns = 6, margin = 5, slotSize = 16;
+        int columns = 6, margin = 1, slotSize = 18;
         int rows = (int) (double) (type.getSize() / columns);
-        
+        Point slotPos = new Point(pos);
+
         int slotIndex = 0;
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
-                pos.y = pos.y + ((slotSize + margin) * row);
-                pos.x = pos.x + ((slotSize + margin) * column);
+                slotPos.y = pos.y + (slotSize * row);
+                slotPos.x = pos.x + (slotSize * column);
 
-                this.addSlot(new Slot(this.inventory, slotIndex, pos.x, pos.y));
+                this.addSlot(new Slot(this.inventory, slotIndex, slotPos.x, slotPos.y));
                 slotIndex++;
             }
+            slotPos.x = pos.x;
+        }
+    }
+
+    private void addPlayerInventory(PlayerInventory playerInventory) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 9; j++) {
+                this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+            }
+        }
+    }
+
+    private void addPlayerHotbar(PlayerInventory playerInventory) {
+        for (int i = 0; i < 9; i++) {
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
     }
 }
