@@ -34,7 +34,13 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
         inventory.onOpen(playerInventory.player);
 
-        addStorageSlots(backPackType, new Point(35, 18)); //TODO: change pos depending on type
+        Point location;
+        switch (backPackType) {
+            case MEDIUM -> location = new Point(35, 22);
+            case BIG -> location = new Point(35, 18);
+            default -> location = new Point(35, 34);
+        }
+        addStorageSlots(backPackType, location); //TODO: change pos depending on type
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
     }
