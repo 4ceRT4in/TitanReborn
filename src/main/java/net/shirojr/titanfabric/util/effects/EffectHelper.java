@@ -73,6 +73,11 @@ public final class EffectHelper {
         return itemStack.getOrCreateNbt().contains(EFFECTS_NBT_KEY);
     }
 
+    public static boolean stackHasWeaponEffect(ItemStack itemStack, WeaponEffects effect) {
+        if (!itemStack.getOrCreateNbt().contains(EFFECTS_NBT_KEY)) return false;
+        return WeaponEffects.getEffect(itemStack.getOrCreateNbt().getString(EFFECTS_NBT_KEY)).equals(effect);
+    }
+
     /**
      * Builds the ToolTip TranslationKey for the ItemStack which has a TitanFabric Weapon Effect
      *

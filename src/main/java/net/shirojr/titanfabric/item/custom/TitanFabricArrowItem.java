@@ -3,7 +3,6 @@ package net.shirojr.titanfabric.item.custom;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemGroup;
@@ -15,12 +14,18 @@ import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
+import net.shirojr.titanfabric.util.items.EssenceCrafting;
 
-public class TitanFabricArrowItem extends ArrowItem {
+public class TitanFabricArrowItem extends ArrowItem implements EssenceCrafting {
     private final ArrowSelectionHelper.ArrowType arrowType;
     public TitanFabricArrowItem(ArrowSelectionHelper.ArrowType arrowType) {
         super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
         this.arrowType = arrowType;
+    }
+
+    @Override
+    public ItemType isType() {
+        return ItemType.PRODUCT;
     }
 
     @Override
@@ -38,5 +43,4 @@ public class TitanFabricArrowItem extends ArrowItem {
         arrowEntity.initFromStack(stack);
         return arrowEntity;
     }
-
 }

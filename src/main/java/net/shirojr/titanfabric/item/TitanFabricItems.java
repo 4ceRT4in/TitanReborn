@@ -25,6 +25,7 @@ import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.NetherSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 
 public class TitanFabricItems {
@@ -108,15 +109,15 @@ public class TitanFabricItems {
             new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
     public static final Item BLINDNESS_ESSENCE = registerItem("blindness_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.blindnessEssenceItem"));
+            new TitanFabricEssenceItem("tooltip.titanfabric.blindnessEssenceItem", WeaponEffects.BLIND));
     public static final Item FIRE_ESSENCE = registerItem("fire_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.fireEssenceItem"));
+            new TitanFabricEssenceItem("tooltip.titanfabric.fireEssenceItem", WeaponEffects.FIRE));
     public static final Item POISON_ESSENCE = registerItem("poison_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.poisonEssenceItem"));
+            new TitanFabricEssenceItem("tooltip.titanfabric.poisonEssenceItem", WeaponEffects.POISON));
     public static final Item WEAKNESS_ESSENCE = registerItem("weakness_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.weaknessEssenceItem"));
+            new TitanFabricEssenceItem("tooltip.titanfabric.weaknessEssenceItem", WeaponEffects.WEAK));
     public static final Item WITHER_ESSENCE = registerItem("wither_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.witherEssenceItem"));
+            new TitanFabricEssenceItem("tooltip.titanfabric.witherEssenceItem", WeaponEffects.WITHER));
 
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));

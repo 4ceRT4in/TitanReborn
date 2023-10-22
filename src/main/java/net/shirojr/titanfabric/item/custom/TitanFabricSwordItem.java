@@ -14,12 +14,13 @@ import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import net.shirojr.titanfabric.util.items.Anvilable;
+import net.shirojr.titanfabric.util.items.EssenceCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 
-public class TitanFabricSwordItem extends SwordItem implements Anvilable {
+public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, Anvilable {
     private final boolean hasWeaponEffects;
     private final WeaponEffects baseEffect;
 
@@ -30,8 +31,9 @@ public class TitanFabricSwordItem extends SwordItem implements Anvilable {
         this.baseEffect = baseEffect;
     }
 
-    public boolean hasWeaponEffects() {
-        return this.hasWeaponEffects;
+    @Override
+    public ItemType isType() {
+        return ItemType.PRODUCT;
     }
 
     @Override

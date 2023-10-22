@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -9,9 +10,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
@@ -21,7 +22,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 import java.util.Map;
@@ -66,7 +70,7 @@ public abstract class LivingEntityMixin {
             }
 
             int effectStrengthNether = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof NetherArmorItem).count());
-            if(EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthNether)) {
+            if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthNether)) {
                 cir.setReturnValue(false);
                 return;
             }
@@ -74,7 +78,7 @@ public abstract class LivingEntityMixin {
 
         if (source.equals(DamageSource.WITHER) || source.equals(DamageSource.MAGIC)) {
             int effectStrengthCitrin = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof CitrinArmorItem).count());
-            if(EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthCitrin)) {
+            if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthCitrin)) {
                 cir.setReturnValue(false);
                 return;
             }
@@ -138,5 +142,16 @@ public abstract class LivingEntityMixin {
             cir.setReturnValue(true);
         }
         cir.setReturnValue(false);
+    }
+
+    @Inject(method = "travel", at = @At(value = "FIELD",
+            target = "Lnet/minecraft/entity/effect/StatusEffects;SLOW_FALLING:Lnet/minecraft/entity/effect/StatusEffect;",
+            shift = At.Shift.BEFORE, by = 1), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void titanfabric$handleSafeLandingEffect(Vec3d movementInput, CallbackInfo ci, double downForce, boolean test) {
+        LivingEntity entity = (LivingEntity)(Object) this;
+        if (!entity.hasStatusEffect(TitanFabricStatusEffects.SAFE_FALLING) || entity.getVelocity().y > 0.0) return;
+        downForce = 0.01;
+
+        entity.onLanding();
     }
 }
