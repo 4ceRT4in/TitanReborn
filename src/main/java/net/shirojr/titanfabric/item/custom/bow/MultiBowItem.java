@@ -93,6 +93,6 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
             if (arrows > 0) bowStack.getOrCreateNbt().putInt(MultiBowHelper.ARROWS_LEFT_NBT_KEY, arrows);
             else bowStack.removeSubNbt(MultiBowHelper.ARROWS_LEFT_NBT_KEY);
         }
-        bowStack.damage(MultiBowHelper.getFullArrowCount(bowStack), player, p -> p.sendToolBreakStatus(p.getActiveHand()));
+        bowStack.damage(1, player, p -> p.sendToolBreakStatus(p.getActiveHand()));
     }
 }
