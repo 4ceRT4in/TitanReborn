@@ -32,6 +32,10 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         this.coolDownTicks = tickCooldown;
     }
 
+    public int getFullArrowCount() {
+        return this.fullArrowCount;
+    }
+
     @Override
     public List<Item> supportedArrows() {
         return List.of(Items.ARROW, Items.SPECTRAL_ARROW);
