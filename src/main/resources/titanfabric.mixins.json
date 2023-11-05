@@ -23,6 +23,7 @@
     "AbstractClientPlayerEntityMixin",
     "AbstractInventoryScreenMixin",
     "GameOptionsMixin",
-    "PlayerEntityRendererMixin"
+    "ItemRendererMixin",
+    "PlayerHeldItemFeatureRendererMixin"
   ]
 }

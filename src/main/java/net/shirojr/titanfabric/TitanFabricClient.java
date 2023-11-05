@@ -7,6 +7,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.event.ArmorHandlingEvent;
 import net.shirojr.titanfabric.event.KeyBindEvents;
+import net.shirojr.titanfabric.event.ParachuteFeatureRendererEventHandler;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.screen.BackPackItemScreen;
 import net.shirojr.titanfabric.screen.screen.DiamondFurnaceScreen;
@@ -24,7 +25,7 @@ public class TitanFabricClient implements ClientModInitializer {
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, BackPackItemScreen::new);
 
-
+        ParachuteFeatureRendererEventHandler.register();
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());
 
         TitanFabric.LOGGER.info("Initialized all " + TitanFabric.MODID + " client components");
