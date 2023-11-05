@@ -20,6 +20,7 @@ import java.util.Random;
 public abstract class ItemStackMixin implements FabricItemStack {
     @Inject(method = "damage(ILjava/util/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z", at = @At("HEAD"), cancellable = true)
     private void titanfabric$ItemStackDamage(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+        if (player == null) return;
         if (player.hasStatusEffect(TitanFabricStatusEffects.INDESTRUCTIBILITY)) {
             cir.setReturnValue(false);
         }
@@ -38,6 +39,5 @@ public abstract class ItemStackMixin implements FabricItemStack {
             }
         }
     }
-
 }
 
