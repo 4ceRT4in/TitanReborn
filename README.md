@@ -18,11 +18,11 @@
     </a>
 </h1>
 
-<h1 align="center">Made by 4ceRT4in, Fab and ShiroJR<br></h1>
+<h1 align="center">Made by ShiroJr, FabCode and 4ceRT4in<br></h1>
 
 # TitanReborn
 
-Fabric 1.18.2 Port of the PVP expansion mod "Titan Combat"
+**Titan Reborn is vanilla-styled combat-oriented expansion that introduces distinct materials, weapons and armor sets, aswell as some unique additions to dominate your opponent in intense PVP battles!**
 
 
 
