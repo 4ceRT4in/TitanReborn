@@ -19,6 +19,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
+import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 public class TitanFabricNetworking {
@@ -40,9 +41,12 @@ public class TitanFabricNetworking {
     private static void handleMultiBowShotPacket(MinecraftServer server, ServerPlayerEntity player,
                                                  ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         ItemStack arrowStack = buf.readItemStack();
+        //int arrowCount = buf.readInt();
         double pullProgress = buf.readDouble();
 
         server.execute(() -> {
+            if (!(player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof MultiBowItem)) return;
+
             World world = player.getWorld();
             ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
             int powerEnchantLevel = EnchantmentHelper.getLevel(Enchantments.POWER, stack);

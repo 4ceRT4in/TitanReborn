@@ -59,8 +59,10 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
 
         playerEntity.getItemCooldownManager().set(stack.getItem(), this.coolDownTicks);
 
-        MultiBowHelper.setArrowsLeftNbt(stack, MultiBowHelper.getFullArrowCount(stack));
-        projectileTick = 10 * MultiBowHelper.getFullArrowCount(stack);
+        int possibleArrowCount = Math.min(MultiBowHelper.searchFirstValidArrowStack(playerEntity, this).getCount(), MultiBowHelper.getFullArrowCount(stack));
+
+        MultiBowHelper.setArrowsLeftNbt(stack, possibleArrowCount);
+        projectileTick = 10 * possibleArrowCount;
     }
 
     @Override
@@ -76,8 +78,9 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (!validTick(projectileTick + 1)) return;
 
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeItemStack(MultiBowHelper.searchFirstArrowStack(player));
-        buf.writeInt(1); //TODO: implement proper arrow number handling
+        ItemStack arrowStack = MultiBowHelper.searchFirstValidArrowStack(player, this);
+        buf.writeItemStack(arrowStack);
+        // buf.writeInt(1); //TODO: implement proper arrow number handling
         buf.writeDouble(this.pullProgress);
         ClientPlayNetworking.send(TitanFabricNetworking.MULTI_BOW_ARROWS_CHANNEL, buf);
 

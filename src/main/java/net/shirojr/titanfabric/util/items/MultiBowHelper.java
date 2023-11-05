@@ -93,9 +93,8 @@ public final class MultiBowHelper {
      * @param player used to get access to the inventory
      * @return returns either an Empty ItemStack or the first possible Arrow ItemStack
      */
-    public static ItemStack searchFirstArrowStack(PlayerEntity player) {
-        Predicate<ItemStack> isArrow = itemStack -> itemStack.isIn(TitanFabricTags.Items.ARROWS) &&
-                itemStack.getCount() >= MultiBowHelper.getFullArrowCount(player.getMainHandStack());
+    public static ItemStack searchFirstValidArrowStack(PlayerEntity player, SelectableArrows selectableArrows) {
+        Predicate<ItemStack> isArrow = itemStack -> selectableArrows.supportedArrows().contains(itemStack.getItem());
 
         for (ItemStack stack : player.getInventory().main) {
             if (isArrow.test(stack)) return stack;
