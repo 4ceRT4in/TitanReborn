@@ -22,7 +22,7 @@
 
 # TitanReborn
 
-Fabric 1.18.2 Port of the Combat Mod "Titan"
+Fabric 1.18.2 Port of the PVP expansion mod "Titan Combat"
 
 
 
