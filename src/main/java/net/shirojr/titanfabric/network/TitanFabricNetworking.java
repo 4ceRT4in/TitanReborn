@@ -41,7 +41,6 @@ public class TitanFabricNetworking {
     private static void handleMultiBowShotPacket(MinecraftServer server, ServerPlayerEntity player,
                                                  ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
         ItemStack arrowStack = buf.readItemStack();
-        //int arrowCount = buf.readInt();
         double pullProgress = buf.readDouble();
 
         server.execute(() -> {

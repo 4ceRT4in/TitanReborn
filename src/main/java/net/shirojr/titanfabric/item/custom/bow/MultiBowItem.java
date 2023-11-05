@@ -80,7 +80,6 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         PacketByteBuf buf = PacketByteBufs.create();
         ItemStack arrowStack = MultiBowHelper.searchFirstValidArrowStack(player, this);
         buf.writeItemStack(arrowStack);
-        // buf.writeInt(1); //TODO: implement proper arrow number handling
         buf.writeDouble(this.pullProgress);
         ClientPlayNetworking.send(TitanFabricNetworking.MULTI_BOW_ARROWS_CHANNEL, buf);
 
