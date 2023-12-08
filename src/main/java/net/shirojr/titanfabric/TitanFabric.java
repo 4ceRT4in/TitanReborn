@@ -5,11 +5,12 @@ import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.event.CommandRegistrationEvent;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.network.TitanFabricNetworking;
 import net.shirojr.titanfabric.potion.TitanFabricPotions;
-import net.shirojr.titanfabric.recipe.TitanFabricRecipies;
+import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
@@ -26,7 +27,7 @@ public class TitanFabric implements ModInitializer {
     public void onInitialize() {
         TitanFabricConfiguredFeatures.registerConfiguredFeatures();
         TitanFabricItems.registerModItems();
-        TitanFabricRecipies.registerModRecipies();
+        TitanFabricRecipes.registerModRecipes();
         TitanFabricBlocks.registerModBlocks();
         TitanFabricBlockEntities.registerBlockEntities();
         TitanFabricScreenHandlers.register();
@@ -36,6 +37,8 @@ public class TitanFabric implements ModInitializer {
         TitanFabricNetworking.registerServerReceivers();
         TitanFabricGamerules.register();
         TitanFabricStats.register();
+
+        CommandRegistrationEvent.register();
 
         LOGGER.info("Initialized all " + MODID + " common components");
         LoggerUtil.devLogger("Initialized Instance in development environment!");

@@ -7,7 +7,7 @@ import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
-import net.shirojr.titanfabric.recipe.TitanFabricRecipies;
+import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 
 public class DiamondFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
@@ -18,7 +18,7 @@ public class DiamondFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
     public DiamondFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory,
                                        PropertyDelegate propertyDelegate) {
         super(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER,
-                TitanFabricRecipies.DIAMOND_FURNACE_RECIPE_TYPE, RecipeBookCategory.FURNACE,
+                TitanFabricRecipes.DIAMOND_FURNACE_RECIPE_TYPE, RecipeBookCategory.FURNACE,
                 syncId, playerInventory, inventory, propertyDelegate);
     }
 }

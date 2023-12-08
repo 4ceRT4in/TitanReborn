@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.render.model.ParachuteFeatureModel;
+import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
     private static final Identifier PARACHUTE_TEXTURE = new Identifier(TitanFabric.MODID, "textures/entity/parachute/parachute.png");
@@ -26,11 +27,10 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
 
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-        //if (entity.isInvisibleTo(MinecraftClient.getInstance().player)) return;
+        LoggerUtil.devLogger(String.valueOf(tickDelta));
 
         if (!entity.getMainHandStack().isOf(TitanFabricItems.PARACHUTE) &&
                 !entity.getOffHandStack().isOf(TitanFabricItems.PARACHUTE)) return;
-
         matrices.push();
 
         //matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(n));

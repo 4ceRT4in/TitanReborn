@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:weapon_effect",
+  "base": {
+    "item": "minecraft:arrow"
+  },
+  "effect_modifier": {
+    "item": "minecraft:stick"
+  }
+}

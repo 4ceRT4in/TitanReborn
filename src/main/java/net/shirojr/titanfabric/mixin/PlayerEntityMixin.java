@@ -5,8 +5,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
@@ -18,15 +21,19 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
+import net.shirojr.titanfabric.util.items.SelectableArrows;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 @Mixin(PlayerEntity.class)
@@ -41,6 +48,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow public abstract void incrementStat(Stat<?> stat);
 
     @Shadow public abstract ItemCooldownManager getItemCooldownManager();
+
+    @Shadow @Final private PlayerInventory inventory;
 
     @ModifyArg(method = "setFireTicks", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setFireTicks(I)V"))
     private int titanfabric$modifyFireTicks(int fireTicks) {
@@ -95,5 +104,24 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     public void titanfabric$disableNeMuelchShield(boolean sprinting, CallbackInfo ci) {
         this.getItemCooldownManager().set(TitanFabricItems.DIAMOND_SHIELD.asItem(), 90);
         this.getItemCooldownManager().set(TitanFabricItems.LEGEND_SHIELD.asItem(), 90);
+    }
+
+    @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$arrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+        PlayerEntity playerEntity = (PlayerEntity) (Object) this;
+        if (!(playerEntity instanceof ServerPlayerEntity serverPlayerEntity)) return;
+        if (serverPlayerEntity.getAbilities().creativeMode) return;
+        if (!(stack.getItem() instanceof SelectableArrows weaponWithSelectableArrows)) return;
+
+        Predicate<ItemStack> predicate = possibleArrowStack -> weaponWithSelectableArrows.supportedArrows().contains(possibleArrowStack.getItem());
+        ItemStack itemStack = RangedWeaponItem.getHeldProjectile(serverPlayerEntity, predicate);
+        if (!itemStack.isEmpty()) {
+            cir.setReturnValue(itemStack);
+            return;
+        }
+
+        for (int i = 0; i < inventory.size(); i++) {
+
+        }
     }
 }

@@ -6,6 +6,7 @@
   "mixins": [
     "AnvilScreenHandlerMixin",
     "BrewingRecipeRegistryMixin",
+    "CraftingScreenHandlerMixin",
     "HungerManagerMixin",
     "ItemMixin",
     "ItemsMixin",
@@ -23,7 +24,6 @@
     "AbstractClientPlayerEntityMixin",
     "AbstractInventoryScreenMixin",
     "GameOptionsMixin",
-    "ItemRendererMixin",
     "PlayerHeldItemFeatureRendererMixin"
   ]
 }
