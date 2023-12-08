@@ -49,7 +49,7 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if (!EffectHelper.stackHasWeaponEffect(stack)) super.appendTooltip(stack, world, tooltip, context);
+        if (!EffectHelper.stackHasWeaponEffect(stack.getOrCreateNbt())) super.appendTooltip(stack, world, tooltip, context);
         super.appendTooltip(stack, world, EffectHelper.appendToolTip(tooltip, stack), context);
     }
 

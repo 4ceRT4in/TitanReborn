@@ -29,53 +29,46 @@
 
     {
       "predicate": {
-        "pulling": 1,
-        "titanfabric:currentarrows": 1
+        "pulling": 1
       },
       "model": "titanfabric:item/multi_bow_1_pulling_0"
     },
     {
       "predicate": {
         "pulling": 1,
-        "pull": 0.65,
-        "titanfabric:currentarrows": 1
+        "pull": 0.65
       },
       "model": "titanfabric:item/multi_bow_1_pulling_1"
     },
     {
       "predicate": {
         "pulling": 1,
-        "pull": 0.9,
-        "titanfabric:currentarrows": 1
+        "pull": 0.9
       },
       "model": "titanfabric:item/multi_bow_1_pulling_2"
     },
     {
       "predicate": {
-        "pulling": 1,
-        "titanfabric:currentarrows": 2
+        "pulling": 1
       },
       "model": "titanfabric:item/multi_bow_2_pulling_0"
     },
     {
       "predicate": {
         "pulling": 1,
-        "pull": 0.65,
-        "titanfabric:currentarrows": 2
+        "pull": 0.65
       },
       "model": "titanfabric:item/multi_bow_2_pulling_1"
     },
     {
       "predicate": {
         "pulling": 1,
-        "pull": 0.9,
-        "titanfabric:currentarrows": 2
+        "pull": 0.9
       },
       "model": "titanfabric:item/multi_bow_2_pulling_2"
     },
     {
       "predicate": {
-        "titanfabric:currentarrows":3,
         "pulling": 1
       },
       "model": "titanfabric:item/multi_bow_3_pulling_0"
@@ -83,7 +76,6 @@
     {
       "predicate": {
         "pulling": 1,
-        "titanfabric:currentarrows": 3,
         "pull": 0.65
       },
       "model": "titanfabric:item/multi_bow_3_pulling_1"
@@ -91,9 +83,7 @@
     {
       "predicate": {
         "pulling": 1,
-        "pull": 0.9,
-        "titanfabric:currentarrows": 3
-
+        "pull": 0.9
       },
       "model": "titanfabric:item/multi_bow_3_pulling_2"
     }

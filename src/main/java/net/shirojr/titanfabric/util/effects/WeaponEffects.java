@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.util.effects;
 
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
 public enum WeaponEffects {
@@ -41,7 +42,23 @@ public enum WeaponEffects {
      */
     @Nullable
     public static WeaponEffects getEffect(String id) {
-        for (var entry : WeaponEffects.values()) {
+        for (WeaponEffects entry : WeaponEffects.values()) {
+            if (entry.id.equals(id)) return entry;
+        }
+        return null;
+    }
+
+    /**
+     * Get WeaponEffect from an ItemStack
+     *
+     * @param nbtCompound nbt containing the Weapon Effect
+     * @return Weapon Effect
+     */
+    @Nullable
+    public static WeaponEffects getEffect(NbtCompound nbtCompound) {
+        if (!EffectHelper.stackHasWeaponEffect(nbtCompound)) return null;
+        String id = nbtCompound.getString(EffectHelper.EFFECTS_NBT_KEY);
+        for (WeaponEffects entry : WeaponEffects.values()) {
             if (entry.id.equals(id)) return entry;
         }
         return null;

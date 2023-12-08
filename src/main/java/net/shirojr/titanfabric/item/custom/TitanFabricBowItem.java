@@ -30,7 +30,7 @@ public class TitanFabricBowItem extends BowItem {
             List<ItemStack> arrowStacks = inventory.main.stream()
                     .filter(itemStack -> bowStack.supportedArrows().contains(itemStack.getItem())).toList();
 
-            client.setScreen(new ArrowSelectionScreen(new LiteralText("Noice Title"), arrowStacks));
+            client.setScreen(new ArrowSelectionScreen(new LiteralText("Test title"), arrowStacks));
             LoggerUtil.devLogger("opened arrow selection screen");
         }
     }

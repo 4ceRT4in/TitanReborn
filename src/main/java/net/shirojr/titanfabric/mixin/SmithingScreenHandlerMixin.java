@@ -61,7 +61,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
         if (!titanfabric$essenceCraftingItemsInSlots(productStack, essenceStack)) return;
 
         ItemStack outputStack = productStack.copy();
-        if (EffectHelper.stackHasWeaponEffect(productStack)) {
+        if (EffectHelper.stackHasWeaponEffect(productStack.getOrCreateNbt())) {
             EffectHelper.setEffectStrength(outputStack, EffectHelper.getEffectStrength(outputStack) + 1);
         } else EffectHelper.setEffectStrength(outputStack, 1);
 

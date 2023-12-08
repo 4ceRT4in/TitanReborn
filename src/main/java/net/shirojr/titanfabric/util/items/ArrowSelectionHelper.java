@@ -1,31 +1,33 @@
 package net.shirojr.titanfabric.util.items;
 
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.util.Pair;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
+import net.shirojr.titanfabric.item.TitanFabricItems;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class ArrowSelectionHelper {
     public static final String ARROW_TYPE_NBT_KEY = TitanFabric.MODID + ".arrowType";
-    public static final String ARROW_DATA_NBT_KEY = TitanFabric.MODID + ".arrowData";
     private ArrowSelectionHelper() {
         // private ctor to avoid instantiation
     }
 
     @Nullable
-    public static ItemStack findFirstSupportedArrowStack(Inventory inventory, List<ItemStack> supportedArrows) {
+    public static ItemStack findFirstSupportedArrowStack(Inventory inventory, SelectableArrows rangedWeapon) {
         if (inventory.isEmpty()) return null;
 
         ItemStack outputStack = null;
         for (int i = 0; i < inventory.size(); i++) {
-            if (supportedArrows.contains(inventory.getStack(i))) {
+            if (rangedWeapon.supportedArrows().contains(inventory.getStack(i).getItem())) {
                 outputStack = inventory.getStack(i);
                 break;
             }
@@ -33,44 +35,42 @@ public class ArrowSelectionHelper {
         return outputStack;
     }
 
-    public static List<ItemStack> findAllSupportedArrowStacks(Inventory inventory, List<ItemStack> supportedArrows) {
+    public static List<ItemStack> findAllSupportedArrowStacks(Inventory inventory, SelectableArrows rangedWeapon) {
         if (inventory.isEmpty()) return List.of();
 
         List<ItemStack> outputStacks = new ArrayList<>();
         for (int i = 0; i < inventory.size(); i++) {
-            if (supportedArrows.contains(inventory.getStack(i))) {
+            if (rangedWeapon.supportedArrows().contains(inventory.getStack(i).getItem())) {
                 outputStacks.add(inventory.getStack(i));
             }
         }
         return outputStacks;
     }
 
-    @Nullable
-    public static ItemStack findFirstMatchingArrowStack(Inventory inventory, ItemStack itemStack) {
-        if (inventory.isEmpty()) return null;
-
-        ItemStack outputStack = null;
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = inventory.getStack(i);
-            if (stack.getItem() instanceof TitanFabricArrowItem arrowItem) {
-                outputStack = inventory.getStack(i);
-                break;
-            }
-        }
-        return outputStack;
+    public static void writeProjectileData(ItemStack bowStack, Pair<ArrowType, Potion> map) {
+        bowStack.getOrCreateNbt().putString(ARROW_TYPE_NBT_KEY, map.getLeft().getNbtKey());
     }
 
-    public static void writeBowProjectileData(ItemStack bowStack, ArrowType arrowType) {
-        bowStack.getOrCreateNbt().putString(ARROW_TYPE_NBT_KEY, arrowType.getNbtKey());
-    }
-
-    @Nullable
-    public static ArrowType getBowProjectileData(ItemStack bowStack) {
+    /**
+     * Gets information from a Ranged Weapon to find similar ItemStacks in inventories.
+     * This method avoids checks for ItemStack count, durability and other information
+     * which would get in the way of accessing correct ItemStacks in inventories
+     *
+     * @param bowStack original ItemStack, where the information will be retrieved from
+     * @return Returns a Pair consisting of the {@link ArrowType ArrowType}, and its
+     */
+/*    @Nullable
+    public static Pair<ArrowType, EffectNbtKeys> readProjectileData(ItemStack bowStack) {
         NbtCompound bowNbt = bowStack.getOrCreateNbt();
         if (!bowNbt.contains(ARROW_TYPE_NBT_KEY)) return null;
+        ArrowType arrowType = ArrowType.valueOf(bowNbt.getString(ARROW_TYPE_NBT_KEY));
+        EffectNbtKeys effectKeys;
 
-        return ArrowType.valueOf(bowNbt.getString(ARROW_TYPE_NBT_KEY));
-    }
+        if (bowNbt.contains(POTION_DATA_NBT_KEY)) {
+            effectHandler = EffectNbtKeys.POTION;
+        }
+        return new Pair<>(arrowType, potion);
+    }*/
 
     public static void consumeArrowFromBowData(ItemStack bowStack, Inventory inventory, int amount) {
         ArrowType arrowType = ArrowType.get(bowStack.getOrCreateNbt().getString(ARROW_TYPE_NBT_KEY));
@@ -79,32 +79,46 @@ public class ArrowSelectionHelper {
     }
 
     public enum ArrowType {
-        ARROW("arrow"),
-        SPECTRAL_ARROW("spectral_arrow", true),
-        POTION_ARROW("potion_arrow", true),
-        EFFECT_ARROW("effect_arrow", true),
-        TIPPED_ARROW("tipped_arrow", true);
+        ARROW("arrow", stack -> stack.getItem().equals(Items.ARROW)),
+        SPECTRAL_ARROW("spectral_arrow", stack -> stack.getItem().equals(Items.SPECTRAL_ARROW)),
+        POTION_PROJECTILE("potion_projectile", stack -> stack.getItem().equals(Items.POTION));
+        // WEAPON_EFFECT_ARROW("effect_arrow", TitanFabricItems.ARROW),
+        // TIPPED_ARROW("tipped_arrow", Items.TIPPED_ARROW);
 
         private final String id;
-        private final boolean hasEffect;
+        private final Predicate<ItemStack> predicate;
 
-        ArrowType(String id, boolean hasEffect) {
+        ArrowType(String id, Predicate<ItemStack> matchesLoosely) {
             this.id = id;
-            this.hasEffect = hasEffect;
-        }
-
-        ArrowType(String id) {
-            this.id = id;
-            this.hasEffect = false;
+            this.predicate = matchesLoosely;
         }
 
         public String getNbtKey() {
             return this.id;
         }
 
+        public boolean doesMatch(ItemStack stack) {
+            return this.predicate.test(stack);
+        }
+
         @Nullable
-        public static ArrowType get(final String arrowId) {
+        public static ArrowType get(String arrowId) {
             return Arrays.stream(values()).filter(arrowType -> arrowType.id.equals(arrowId)).findFirst().orElse(null);
+        }
+    }
+
+    enum EffectNbtKeys {
+        POTION(TitanFabric.MODID + ".potionData"),
+        WEAPON_EFFECT(TitanFabric.MODID + ".weaponEffectData"),
+        NONE(TitanFabric.MODID + ".noData");
+
+        private final String nbtKey;
+        EffectNbtKeys(String nbtKey) {
+            this.nbtKey = nbtKey;
+        }
+
+        public String getNbtKey() {
+            return this.nbtKey;
         }
     }
 }

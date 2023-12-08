@@ -5,6 +5,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
@@ -69,8 +70,8 @@ public final class EffectHelper {
      * @param itemStack
      * @return True, if the ItemStack contains any {@linkplain WeaponEffects TitanFabric WeaponEffect}
      */
-    public static boolean stackHasWeaponEffect(ItemStack itemStack) {
-        return itemStack.getOrCreateNbt().contains(EFFECTS_NBT_KEY);
+    public static boolean stackHasWeaponEffect(NbtCompound nbtCompound) {
+        return nbtCompound.contains(EFFECTS_NBT_KEY);
     }
 
     public static boolean stackHasWeaponEffect(ItemStack itemStack, WeaponEffects effect) {

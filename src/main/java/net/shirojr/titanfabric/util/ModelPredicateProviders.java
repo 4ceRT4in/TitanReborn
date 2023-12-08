@@ -90,7 +90,9 @@ public class ModelPredicateProviders {
         if (item == null) return;
         ModelPredicateProviderRegistry.register(item, identifier, (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
-            return entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f;
+            if (!entity.isUsingItem()) return 0.0f;
+            if (entity.getActiveItem() != stack) return 0.0f;
+            return 1.0f;
         });
     }
 
