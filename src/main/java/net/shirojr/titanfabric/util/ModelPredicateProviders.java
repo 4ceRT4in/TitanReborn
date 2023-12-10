@@ -21,11 +21,13 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 
+        registerEssenceProviders(TitanFabricItems.ESSENCE);
+
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
 
-        registerBowProviders(TitanFabricItems.LEGEND_BOW); // vanilla pfeile, spectral, nicht tipped, modded effect arrows
-        registerBowProviders(TitanFabricItems.MULTI_BOW_1); // nur vanilla pfeile, spectral
+        registerBowProviders(TitanFabricItems.LEGEND_BOW); // vanilla arrows, spectral, not tipped, modded effect arrows
+        registerBowProviders(TitanFabricItems.MULTI_BOW_1); // only vanilla arrows, spectral
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_1);
         registerBowProviders(TitanFabricItems.MULTI_BOW_2);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_2);
@@ -33,12 +35,16 @@ public class ModelPredicateProviders {
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_3);
         registerCrossBowProviders(TitanFabricItems.TITAN_CROSSBOW);
 
-        // crossbow: vanilla pfeile, spectral, vanilla splash potions, vanilla lingering potions, keine Raketen!
+        // crossbow: vanilla arrows, spectral, vanilla splash potions, vanilla lingering potions, no rockets!
     }
 
     private static void registerWeaponEffects(Item item) {
         registerEffectProvider(item, new Identifier("effect"));
         registerStrengthProvider(item, new Identifier("strength"));
+    }
+
+    private static void registerEssenceProviders(Item item) {
+        registerEffectProvider(item, new Identifier("effect"));
     }
 
     private static void registerShieldProviders(Item item) {

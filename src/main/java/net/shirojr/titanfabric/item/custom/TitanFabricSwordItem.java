@@ -39,7 +39,6 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         if (!isIn(group)) return;
-
         if (this.hasWeaponEffects) {
             EffectHelper.generateAllEffectVersionStacks(this, stacks);
         } else {
@@ -50,7 +49,7 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if (!EffectHelper.stackHasWeaponEffect(stack.getOrCreateNbt())) super.appendTooltip(stack, world, tooltip, context);
-        super.appendTooltip(stack, world, EffectHelper.appendToolTip(tooltip, stack), context);
+        super.appendTooltip(stack, world, EffectHelper.appendSwordToolTip(tooltip, stack), context);
     }
 
     @Override

@@ -108,16 +108,8 @@ public class TitanFabricItems {
     public static final Item PARACHUTE = registerItem("parachute",
             new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
-    public static final Item BLINDNESS_ESSENCE = registerItem("blindness_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.blindnessEssenceItem", WeaponEffects.BLIND));
-    public static final Item FIRE_ESSENCE = registerItem("fire_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.fireEssenceItem", WeaponEffects.FIRE));
-    public static final Item POISON_ESSENCE = registerItem("poison_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.poisonEssenceItem", WeaponEffects.POISON));
-    public static final Item WEAKNESS_ESSENCE = registerItem("weakness_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.weaknessEssenceItem", WeaponEffects.WEAK));
-    public static final Item WITHER_ESSENCE = registerItem("wither_essence",
-            new TitanFabricEssenceItem("tooltip.titanfabric.witherEssenceItem", WeaponEffects.WITHER));
+    public static final Item ESSENCE = registerItem("essence",
+            new TitanFabricEssenceItem(WeaponEffects.BLIND));
 
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));

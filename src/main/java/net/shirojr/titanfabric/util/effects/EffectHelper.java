@@ -12,7 +12,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -80,16 +80,15 @@ public final class EffectHelper {
     }
 
     /**
-     * Builds the ToolTip TranslationKey for the ItemStack which has a TitanFabric Weapon Effect
+     * Builds the ToolTip TranslationKey for the Sword ItemStack which has a TitanFabric Weapon Effect
      *
      * @param tooltip original tooltip of the ItemStack
      * @param stack   original ItemStack
      * @return ItemStack with description for current {@linkplain WeaponEffects TitanFabric WeaponEffect}
      */
-    public static List<Text> appendToolTip(List<Text> tooltip, ItemStack stack) {
+    public static List<Text> appendSwordToolTip(List<Text> tooltip, ItemStack stack) {
         WeaponEffects effect = WeaponEffects.getEffect(stack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
         if (effect == null) return tooltip;
-
         String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack);
         switch (effect) {
             case BLIND -> translation += "Blind";
@@ -98,12 +97,11 @@ public final class EffectHelper {
             case WEAK -> translation += "Weak";
             case WITHER -> translation += "Wither";
         }
-
         tooltip.add(new TranslatableText(translation));
         return tooltip;
     }
 
-    private static List<WeaponEffects> getSwordEffects() {
+    private static List<WeaponEffects> getWeaponEffects() {
         return Arrays.stream(WeaponEffects.values()).toList();
     }
 
@@ -121,14 +119,12 @@ public final class EffectHelper {
      *
      * @param baseItem original ItemStack
      * @param stacks   list of all registered ItemStacks.
-     * @return list of all ItemStacks with the newly generated {@linkplain WeaponEffects TitanFabric WeaponEffect} ItemStack variants
      */
-    public static DefaultedList<ItemStack> generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
-        List<WeaponEffects> possibleEffects = getSwordEffects();
+    public static void generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
+        List<WeaponEffects> possibleEffects = getWeaponEffects();
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
 
-
-        if (baseItem instanceof TitanFabricArrowItem) {
+        if (baseItem instanceof TitanFabricArrowItem || baseItem instanceof TitanFabricEssenceItem) {
             for (WeaponEffects entry : possibleEffects) {
                 ItemStack effectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), entry);
                 stacks.add(effectStack);
@@ -142,8 +138,6 @@ public final class EffectHelper {
                 stacks.add(setEffectStrength(secondEffectStack, 2));
             }
         }
-
-        return stacks;
     }
 
     public static void applyWeaponEffectOnTargetFromNBT(World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {

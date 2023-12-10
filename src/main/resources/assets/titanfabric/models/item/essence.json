@@ -1,0 +1,38 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "titanfabric:item/blindness_essence"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "effect": 0.1
+      },
+      "model": "titanfabric:item/blindness_essence"
+    },
+    {
+      "predicate": {
+        "effect": 0.2
+      },
+      "model": "titanfabric:item/fire_essence"
+    },
+    {
+      "predicate": {
+        "effect": 0.3
+      },
+      "model": "titanfabric:item/poison_essence"
+    },
+    {
+      "predicate": {
+        "effect": 0.4
+      },
+      "model": "titanfabric:item/weakness_essence"
+    },
+    {
+      "predicate": {
+        "effect": 0.5
+      },
+      "model": "titanfabric:item/wither_essence"
+    }
+  ]
+}
