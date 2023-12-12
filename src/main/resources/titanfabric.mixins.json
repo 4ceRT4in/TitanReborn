@@ -21,9 +21,9 @@
     "defaultRequire": 1
   },
   "client": [
-    "AbstractClientPlayerEntityMixin",
-    "AbstractInventoryScreenMixin",
-    "GameOptionsMixin",
-    "PlayerHeldItemFeatureRendererMixin"
+    "client.AbstractClientPlayerEntityMixin",
+    "client.AbstractInventoryScreenMixin",
+    "client.GameOptionsMixin",
+    "client.PlayerHeldItemFeatureRendererMixin"
   ]
 }
