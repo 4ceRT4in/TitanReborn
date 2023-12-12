@@ -1,4 +1,4 @@
-<p align="center"><img src="titan_fabric_thumb_wip.png" alt="Logo" width="800"></p>
+<p align="center"><img src="header.png" alt="Logo" width="800"></p>
 
 <h1 align="center">
   	<a href="https://github.com/4ceRT4in/TitanReborn/blob/master/LICENSE">
