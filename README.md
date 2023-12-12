@@ -38,11 +38,11 @@ To further customize your weapon of choice, each swordtype can be imbued with **
 **Long Range Combat**
 ---
 - **Multi Bow(s)**\
-=> Shoots up to 3 arrows  in quick sucession, at the cost of a short cooldown
+=> Shoots up to 3 arrows in quick sucession, at the cost of a short cooldown
 - **Titan Bow**\
 => Shoots potion effect arrows
 - **Titan Crossbow**\
-=> Loads and shoots spash & lingering potions 
+=> Loads and shoots splash & lingering potions 
 - **Potion Effect Arrows**\
 =>  Gives their target wither, weakness, poison and blindness effects
 
