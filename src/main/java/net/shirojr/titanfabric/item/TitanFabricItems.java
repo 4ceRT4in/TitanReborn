@@ -115,7 +115,7 @@ public class TitanFabricItems {
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
     public static final Item DIAMOND_APPLE = registerItem("diamond_apple",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)
-                    .food((new FoodComponent.Builder()).hunger(4).saturationModifier(1.125F).alwaysEdible()
+                    .food((new FoodComponent.Builder()).hunger(4).saturationModifier(1.2f).alwaysEdible()
                             .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F)
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
