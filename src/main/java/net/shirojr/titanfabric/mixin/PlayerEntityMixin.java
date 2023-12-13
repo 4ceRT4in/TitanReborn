@@ -60,7 +60,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         if (amount > 0.00001f && (this.timeUntilRegen <= 10 || amount > this.lastDamageTaken)) {
             PlayerEntity player = (PlayerEntity) (Object) this;
             List<Item> armorItems = ArmorHelper.getArmorItems(player);
-            if ((source == DamageSource.HOT_FLOOR || source == DamageSource.LAVA || source == DamageSource.IN_FIRE)) {
+            if ((source == DamageSource.HOT_FLOOR || source == DamageSource.LAVA || source.isFire())) {
                 int netherArmorCount = (int) armorItems.stream().filter(item -> item instanceof NetherArmorItem).count();
                 if (netherArmorCount > 0) {
 
