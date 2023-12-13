@@ -27,7 +27,7 @@ public class ArmorMaterialsMixin {
     @Inject(method = "getDurability", at = @At("HEAD"))
     private void titanfabric$getDurabilityMixin(EquipmentSlot slot, CallbackInfoReturnable<Integer> ci) {
         if (this.name.equals("netherite")) {
-            this.durabilityMultiplier *= 2;
+            this.durabilityMultiplier = 74;
         }
     }
 }

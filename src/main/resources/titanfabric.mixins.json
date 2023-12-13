@@ -16,7 +16,8 @@
     "StatusEffectMixin",
     "StatusEffectsMixin",
     "ArmorItemMixin",
-    "ArmorMaterialsMixin"
+    "ArmorMaterialsMixin",
+    "StatusEffectInstanceMixin"
   ],
   "injectors": {
     "defaultRequire": 1
