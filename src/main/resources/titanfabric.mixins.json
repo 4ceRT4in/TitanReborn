@@ -8,22 +8,23 @@
     "BrewingRecipeRegistryMixin",
     "CraftingScreenHandlerMixin",
     "HungerManagerMixin",
-    "ItemMixin",
     "ItemsMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
     "SmithingScreenHandlerMixin",
     "StatusEffectMixin",
-    "StatusEffectsMixin"
+    "StatusEffectsMixin",
+    "ArmorItemMixin",
+    "ArmorMaterialsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "AbstractClientPlayerEntityMixin",
-    "AbstractInventoryScreenMixin",
-    "GameOptionsMixin",
-    "PlayerHeldItemFeatureRendererMixin"
+    "client.AbstractClientPlayerEntityMixin",
+    "client.AbstractInventoryScreenMixin",
+    "client.GameOptionsMixin",
+    "client.PlayerHeldItemFeatureRendererMixin"
   ]
 }

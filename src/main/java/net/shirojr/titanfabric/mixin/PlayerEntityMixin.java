@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.mixin;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,31 +11,30 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
-import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
+import net.shirojr.titanfabric.item.custom.armor.*;
+import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.items.ArmorHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
@@ -45,40 +45,67 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     public abstract void setFireTicks(int fireTicks);
 
-    @Shadow public abstract void incrementStat(Stat<?> stat);
+    @Shadow
+    public abstract void incrementStat(Stat<?> stat);
 
-    @Shadow public abstract ItemCooldownManager getItemCooldownManager();
+    @Shadow
+    public abstract ItemCooldownManager getItemCooldownManager();
 
-    @Shadow @Final private PlayerInventory inventory;
+    @Shadow
+    @Final
+    private PlayerInventory inventory;
 
-    @ModifyArg(method = "setFireTicks", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setFireTicks(I)V"))
-    private int titanfabric$modifyFireTicks(int fireTicks) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
+    @Inject(method = "damage", at = @At(value = "TAIL", shift = Shift.BEFORE), cancellable = true)
+    private void titanfabric$damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (amount > 0.00001f && (this.timeUntilRegen <= 10 || amount > this.lastDamageTaken)) {
+            PlayerEntity player = (PlayerEntity) (Object) this;
+            List<Item> armorItems = ArmorHelper.getArmorItems(player);
+            if ((source == DamageSource.HOT_FLOOR || source == DamageSource.LAVA || source == DamageSource.IN_FIRE)) {
+                int netherArmorCount = (int) armorItems.stream().filter(item -> item instanceof NetherArmorItem).count();
+                if (netherArmorCount > 0) {
 
-        List<Item> armorSet = IntStream.rangeClosed(0, 3)
-                .mapToObj(player.getInventory()::getArmorStack)
-                .map(ItemStack::getItem).toList();
-
-        boolean allMatch = armorSet.stream().allMatch(item -> item instanceof NetherArmorItem);
-        if (allMatch) return 0;
-
-        if (player.getFireTicks() > fireTicks) return fireTicks;
-
-        int itemCounter = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof NetherArmorItem).count());
-
-        if (fireTicks > 1 && itemCounter > 0) {
-            float chance = (float) itemCounter / armorSet.size();
-            fireTicks = (int) (fireTicks - (fireTicks * chance));
+                    if (netherArmorCount == 4) {
+                        cir.setReturnValue(false);
+                    } else {
+                        if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), netherArmorCount)) {
+                            this.timeUntilRegen = 20;
+                            this.lastDamageTaken = amount;
+                            cir.setReturnValue(false);
+                        }
+                    }
+                }
+            } else if (source.equals(DamageSource.WITHER) || source.equals(DamageSource.MAGIC)) {
+                int citrinArmorCount = Math.min(4, (int) armorItems.stream().filter(item -> item instanceof CitrinArmorItem).count());
+                if (citrinArmorCount > 0) {
+                    if (citrinArmorCount == 4) {
+                        cir.setReturnValue(false);
+                    } else {
+                        if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), citrinArmorCount)) {
+                            this.timeUntilRegen = 20;
+                            this.lastDamageTaken = amount;
+                            cir.setReturnValue(false);
+                        }
+                    }
+                }
+            }
         }
+    }
 
-
-        return fireTicks;
+    @Override
+    public void setOnFireFor(int seconds) {
+        if (seconds > 0) {
+            int netherArmorCount = ArmorHelper.getNetherArmorCount((PlayerEntity) (Object) this);
+            if (netherArmorCount > 0) {
+                seconds = netherArmorCount == 4 ? 0 : (int) (seconds * (float) netherArmorCount * 0.25f);
+            }
+        }
+        super.setOnFireFor(seconds);
     }
 
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void titanfabric$damageNeMuelchShield(float amount, CallbackInfo info) {
         if (this.activeItemStack.getItem() instanceof TitanFabricShieldItem) {
-            if (!this.world.isClient) {
+            if (!this.world.isClient()) {
                 this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
             }
 
@@ -108,10 +135,12 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$arrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        PlayerEntity playerEntity = (PlayerEntity) (Object) this;
-        if (!(playerEntity instanceof ServerPlayerEntity serverPlayerEntity)) return;
-        if (serverPlayerEntity.getAbilities().creativeMode) return;
-        if (!(stack.getItem() instanceof SelectableArrows weaponWithSelectableArrows)) return;
+        if (!((Object) this instanceof ServerPlayerEntity serverPlayerEntity))
+            return;
+        if (serverPlayerEntity.getAbilities().creativeMode)
+            return;
+        if (!(stack.getItem() instanceof SelectableArrows weaponWithSelectableArrows))
+            return;
 
         Predicate<ItemStack> predicate = possibleArrowStack -> weaponWithSelectableArrows.supportedArrows().contains(possibleArrowStack.getItem());
         ItemStack itemStack = RangedWeaponItem.getHeldProjectile(serverPlayerEntity, predicate);

@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.screen.handler;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,6 +11,7 @@ import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.LiteralText;
+import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,6 +29,11 @@ public class AdvancedAnvilScreenHandler extends AnvilScreenHandler {
     public AdvancedAnvilScreenHandler(int syncId, PlayerInventory inventory, ScreenHandlerContext context) {
         super(syncId, inventory, context);
         this.addProperty(this.levelCost);
+    }
+
+    @Override
+    protected boolean canUse(BlockState state) {
+        return state.isOf(TitanFabricBlocks.NETHERITE_ANVIL);
     }
 
     @Override

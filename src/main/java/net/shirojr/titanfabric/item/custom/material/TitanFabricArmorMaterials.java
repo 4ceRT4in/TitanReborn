@@ -20,10 +20,7 @@ public enum TitanFabricArmorMaterials implements ArmorMaterial {
             () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
     LEGEND("legend", -1, new int[] { 3, 6, 8, 3 }, 25,
             SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f, 0.0f,
-            () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
-    NETHERITE("legend", 74, new int[] { 3, 6, 8, 3 }, 15,
-    SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 3.0f, 0.1f,
-            () -> Ingredient.ofItems(Items.NETHERITE_INGOT));
+            () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
 
     private static final int[] BASE_DURABILITY;
     private final String name;

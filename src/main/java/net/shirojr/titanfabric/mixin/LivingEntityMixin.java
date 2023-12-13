@@ -46,45 +46,6 @@ public abstract class LivingEntityMixin {
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
 
-    @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
-    private void titanfabric$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        List<DamageSource> handledDamageTypes = List.of(
-                DamageSource.MAGIC, // POISON & INSTANT DAMAGE
-                DamageSource.WITHER,
-                DamageSource.IN_FIRE,
-                DamageSource.ON_FIRE,
-                DamageSource.HOT_FLOOR);
-
-        if (!source.getName().equals("lava") && !handledDamageTypes.contains(source)) return;
-        if (!(((LivingEntity) (Object) this) instanceof PlayerEntity player)) return;
-
-        List<Item> armorSet = IntStream.rangeClosed(0, 3)
-                .mapToObj(player.getInventory()::getArmorStack)
-                .map(ItemStack::getItem).toList();
-
-        if (source == DamageSource.IN_FIRE || source == DamageSource.HOT_FLOOR || source.getName().equals("lava")) {
-            if (armorSet.stream().allMatch(armorItem -> armorItem instanceof NetherArmorItem)) {
-                player.extinguish();
-                cir.setReturnValue(false);
-                return;
-            }
-
-            int effectStrengthNether = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof NetherArmorItem).count());
-            if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthNether)) {
-                cir.setReturnValue(false);
-                return;
-            }
-        }
-
-        if (source.equals(DamageSource.WITHER) || source.equals(DamageSource.MAGIC)) {
-            int effectStrengthCitrin = Math.min(4, (int) armorSet.stream().filter(item -> item instanceof CitrinArmorItem).count());
-            if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), effectStrengthCitrin)) {
-                cir.setReturnValue(false);
-                return;
-            }
-        }
-    }
-
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z",
             cancellable = true, at = @At("HEAD"))
     private void titanfabric$addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
