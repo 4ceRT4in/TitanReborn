@@ -5,7 +5,9 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.PotionUtil;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
@@ -13,6 +15,8 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
+import net.shirojr.titanfabric.util.LoggerUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -62,12 +66,32 @@ public final class EffectHelper {
      * @return
      */
     public static ItemStack getStackWithEffect(ItemStack itemStack, WeaponEffects effect) {
+        if (effect == null) {
+            LoggerUtil.devLogger("WeaponEffect not valid. Applied no new WeaponEffect to ItemStack", true, null);
+            return itemStack;
+        }
         itemStack.getOrCreateNbt().putString(EFFECTS_NBT_KEY, effect.getId());
         return itemStack;
     }
 
+    @Nullable
+    public static WeaponEffects getWeaponEffectFromPotion(ItemStack stack) {
+        if (!stack.isOf(Items.POTION)) return null;
+        List<StatusEffectInstance> statusEffects = PotionUtil.getPotionEffects(stack);
+        if (statusEffects.size() > 1) {
+            LoggerUtil.devLogger("Potion had more then one StatusEffect", true, null);
+            return null;
+        }
+
+        for (var entry : WeaponEffects.values()) {
+            if (entry.getStatusEffect().equals(statusEffects.get(0).getEffectType())) return entry;
+        }
+        LoggerUtil.devLogger("Couldn't find matching potion effect to map to WeaponEffects");
+        return null;
+    }
+
     /**
-     * @param itemStack
+     * @param nbtCompound
      * @return True, if the ItemStack contains any {@linkplain WeaponEffects TitanFabric WeaponEffect}
      */
     public static boolean stackHasWeaponEffect(NbtCompound nbtCompound) {
