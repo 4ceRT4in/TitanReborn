@@ -17,6 +17,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.armor.*;
@@ -91,6 +92,21 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         }
     }
 
+    @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$getAttackCooldownProgressPerTickMixin(CallbackInfoReturnable<Float> cir) {
+        if (!this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.DO_HIT_COOLDOWN)) {
+            cir.setReturnValue(0.00001f);
+        }
+    }
+
+    // Can be used to show the indicator for entity in range
+    // @Inject(method = "getAttackCooldownProgress", at = @At("HEAD"), cancellable = true)
+    // private void titanfabric$getAttackCooldownProgressMixin(float baseTime,CallbackInfoReturnable<Float> cir) {
+    //     if (!this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.DO_HIT_COOLDOWN)) {
+    //          cir.setReturnValue(1.0f);
+    //     }
+    // }
+
     @Override
     public void setOnFireFor(int seconds) {
         if (seconds > 0) {
@@ -103,7 +119,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @Inject(method = "damageShield", at = @At("HEAD"))
-    private void titanfabric$damageNeMuelchShield(float amount, CallbackInfo info) {
+    private void titanfabric$damageNeMuelchShield(float amount, CallbackInfo ci) {
         if (this.activeItemStack.getItem() instanceof TitanFabricShieldItem) {
             if (!this.world.isClient()) {
                 this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
