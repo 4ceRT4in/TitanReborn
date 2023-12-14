@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ArmorItem;
@@ -26,10 +27,11 @@ public abstract class ArmorItemMixin extends Item {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-
-        if (!world.isClient() && world.getTime() % 20 == 0 && entity instanceof ServerPlayerEntity player) {
-            if (stack.getItem() == Items.NETHERITE_HELMET && stack.getItem() == Items.NETHERITE_CHESTPLATE && stack.getItem() == Items.NETHERITE_LEGGINGS & stack.getItem() == Items.NETHERITE_BOOTS) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 200, 0, false, false, true));
+        if (!world.isClient() && world.getTime() % 20 == 0 && entity instanceof ServerPlayerEntity player && stack.getItem() == Items.NETHERITE_CHESTPLATE
+                && ItemStack.areEqual(player.getEquippedStack(EquipmentSlot.CHEST), stack)) {
+            if (player.getEquippedStack(EquipmentSlot.HEAD).getItem() == Items.NETHERITE_HELMET && player.getEquippedStack(EquipmentSlot.CHEST).getItem() == Items.NETHERITE_CHESTPLATE
+                    && player.getEquippedStack(EquipmentSlot.LEGS).getItem() == Items.NETHERITE_LEGGINGS & player.getEquippedStack(EquipmentSlot.FEET).getItem() == Items.NETHERITE_BOOTS) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 209, 0, false, false, true));
             }
         }
     }
