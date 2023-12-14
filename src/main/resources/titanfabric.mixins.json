@@ -12,7 +12,6 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "SmithingScreenHandlerMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin",
     "ArmorItemMixin",
