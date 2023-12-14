@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.util.items;
 
+import net.minecraft.item.ItemStack;
 import net.shirojr.titanfabric.util.effects.WeaponEffects;
 
 public interface EssenceCrafting {
@@ -10,7 +11,7 @@ public interface EssenceCrafting {
      *
      * @return {@link WeaponEffects WeaponEffect} of the {@link ItemType#INGREDIENT INGREDIENT}
      */
-    default WeaponEffects ingredientEffect() {
+    default WeaponEffects ingredientEffect(ItemStack stack) {
         return null;
     }
 

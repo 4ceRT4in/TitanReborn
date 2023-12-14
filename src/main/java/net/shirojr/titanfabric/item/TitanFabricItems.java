@@ -108,8 +108,7 @@ public class TitanFabricItems {
     public static final Item PARACHUTE = registerItem("parachute",
             new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
-    public static final Item ESSENCE = registerItem("essence",
-            new TitanFabricEssenceItem(WeaponEffects.BLIND));
+    public static final Item ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
 
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));

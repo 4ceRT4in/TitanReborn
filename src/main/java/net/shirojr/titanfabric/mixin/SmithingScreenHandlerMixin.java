@@ -93,7 +93,7 @@ public abstract class SmithingScreenHandlerMixin extends ForgingScreenHandler {
         if (!(ingredientStack.getItem() instanceof EssenceCrafting essenceIngredient) ||
                 !essenceIngredient.isType().equals(EssenceCrafting.ItemType.INGREDIENT)) return false;
 
-        WeaponEffects ingredientEffect = ((EssenceCrafting) ingredientStack.getItem()).ingredientEffect();
+        WeaponEffects ingredientEffect = ((EssenceCrafting) ingredientStack.getItem()).ingredientEffect(ingredientStack);
         return ingredientEffect != null;
     }
 

@@ -10,7 +10,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
-import net.shirojr.titanfabric.recipe.custom.WeaponEffectRecipe;
+import net.shirojr.titanfabric.recipe.custom.EssenceRecipe;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,7 +31,7 @@ public abstract class CraftingScreenHandlerMixin {
                                                         CallbackInfo ci, ServerPlayerEntity serverPlayerEntity, ItemStack itemStack) {
         //LoggerUtil.devLogger("mixin for itemStack: " + itemStack.getName());
         if (!itemStack.isEmpty() || world.getServer() == null) return;
-        Optional<WeaponEffectRecipe> optionalRecipe = world.getServer().getRecipeManager().getFirstMatch(TitanFabricRecipes.WEAPON_EFFECT_RECIPE_TYPE, craftingInventory, world);
+        Optional<EssenceRecipe> optionalRecipe = world.getServer().getRecipeManager().getFirstMatch(TitanFabricRecipes.WEAPON_EFFECT_RECIPE_TYPE, craftingInventory, world);
         if (optionalRecipe.isEmpty()) return;
         CraftingRecipe craftingRecipe = optionalRecipe.get();
         if (!resultInventory.shouldCraftRecipe(world, serverPlayerEntity, craftingRecipe)) return;

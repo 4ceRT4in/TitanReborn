@@ -18,10 +18,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class TitanFabricEssenceItem extends Item implements EssenceCrafting {
-    private final WeaponEffects effect;
-    public TitanFabricEssenceItem(WeaponEffects effect) {
+    public TitanFabricEssenceItem() {
         super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64));
-        this.effect = effect;
     }
 
     @Override
@@ -61,8 +59,8 @@ public class TitanFabricEssenceItem extends Item implements EssenceCrafting {
     }
 
     @Override
-    public WeaponEffects ingredientEffect() {
-        return this.effect;
+    public WeaponEffects ingredientEffect(ItemStack stack) {
+        return WeaponEffects.getEffect(stack.getOrCreateNbt());
     }
 
     @Override
