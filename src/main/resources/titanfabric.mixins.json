@@ -26,6 +26,7 @@
     "client.AbstractClientPlayerEntityMixin",
     "client.AbstractInventoryScreenMixin",
     "client.GameOptionsMixin",
-    "client.PlayerHeldItemFeatureRendererMixin"
+    "client.PlayerHeldItemFeatureRendererMixin",
+    "client.InGameOverlayRendererMixin"
   ]
 }
