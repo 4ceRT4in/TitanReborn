@@ -46,10 +46,12 @@ public class TitanFabricBlocks {
                     .hardness(1.5f).strength(6.0f).luminance(15).requiresTool()), TitanFabricItemGroups.TITAN);
 
     public static final Block DIAMOND_FURNACE = registerBlock("diamond_furnace",
-            new DiamondFurnaceBlock(), TitanFabricItemGroups.TITAN);
+            new DiamondFurnaceBlock(FabricBlockSettings.of(Material.METAL).mapColor(DyeColor.CYAN)
+                    .requiresTool().strength(3.5f)), TitanFabricItemGroups.TITAN);
 
     public static final Block NETHERITE_ANVIL = registerBlock("netherite_anvil",
-            new AdvancedAnvilBlock(FabricBlockSettings.of(Material.METAL).nonOpaque()), TitanFabricItemGroups.TITAN);
+            new AdvancedAnvilBlock(FabricBlockSettings.of(Material.REPAIR_STATION).mapColor(DyeColor.BLACK).nonOpaque()
+                    .requiresTool().strength(5.0f, 1200.0f).sounds(BlockSoundGroup.ANVIL)), TitanFabricItemGroups.TITAN);
 
 
     private static Block registerBlock(String name, Block block, ItemGroup group) {

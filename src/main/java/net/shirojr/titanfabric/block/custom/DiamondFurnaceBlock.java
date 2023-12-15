@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 public class DiamondFurnaceBlock extends AbstractFurnaceBlock {
-    public DiamondFurnaceBlock() {
-        super(FabricBlockSettings.of(Material.METAL));
+    public DiamondFurnaceBlock(Settings settings) {
+        super(settings);
     }
 
     @Override

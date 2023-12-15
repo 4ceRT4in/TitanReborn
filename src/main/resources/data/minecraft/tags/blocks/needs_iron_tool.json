@@ -3,6 +3,8 @@
   "values": [
     "titanfabric:citrin_ore",
     "titanfabric:nether_ore",
-    "titanfabric:deepslate_legend_ore"
+    "titanfabric:deepslate_legend_ore",
+    "titanfabric:diamond_furnace",
+    "titanfabric:netherite_anvil"
   ]
 }
