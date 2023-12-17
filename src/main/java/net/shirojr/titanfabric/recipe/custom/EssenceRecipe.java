@@ -3,7 +3,6 @@ package net.shirojr.titanfabric.recipe.custom;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
@@ -13,13 +12,14 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
 public class EssenceRecipe extends SpecialCraftingRecipe {
     private final Ingredient effectModifier;
     private final Ingredient base;
-
-    private SlotArrangementType slotArrangementType;
+    private WeaponEffects weaponEffect;
 
     public EssenceRecipe(Identifier id, Ingredient effectModifier, Ingredient base) {
         super(id);
@@ -29,27 +29,28 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
 
     @Override
     public boolean matches(CraftingInventory inventory, World world) {
-        LoggerUtil.devLogger("testing for recipe");
         int width = inventory.getWidth(), height = inventory.getHeight();
         if (width != 3 || height != 3) return false;
-        for (SlotArrangementType slotArrangementType : SlotArrangementType.values()) {
-            if (!slotArrangementType.slotsHaveMatchingItems(inventory)) return false;
-            this.slotArrangementType = slotArrangementType;
-        }
-
-        if (!effectModifier.test(inventory.getStack(1))) return false;
-        return (base.test(inventory.getStack(2)));
+        SlotArrangementType slotArrangement = SlotArrangementType.ESSENCE;
+        boolean itemsMatch = slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
+        if (itemsMatch) this.weaponEffect = slotArrangement.getEffect(inventory);
+        return itemsMatch;
     }
 
     @Override
     public ItemStack craft(CraftingInventory inventory) {
-        SlotArrangementType.ESSENCE.getEffect(inventory);
-        return new ItemStack(Items.SEA_PICKLE);
+        this.weaponEffect = SlotArrangementType.ESSENCE.getEffect(inventory);
+        if (weaponEffect == null) {
+            LoggerUtil.devLogger("Couldn't find WeaponEffect from Inventory", true, null);
+            return null;
+        }
+        ItemStack stack = new ItemStack(SlotArrangementType.ESSENCE.getOutputItem());
+        return EffectHelper.getStackWithEffect(stack, weaponEffect);
     }
 
     @Override
     public ItemStack getOutput() {
-        return new ItemStack(Items.ACACIA_BOAT);
+        return EffectHelper.getStackWithEffect(new ItemStack(SlotArrangementType.ESSENCE.getOutputItem()), weaponEffect);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
     public static class Serializer implements RecipeSerializer<EssenceRecipe> {
         @Override
         public EssenceRecipe read(Identifier id, JsonObject json) {
-            Ingredient effectModifier = Ingredient.fromJson(JsonHelper.getObject(json, "effect_modifier"));
+            Ingredient effectModifier = Ingredient.fromJson(JsonHelper.getObject(json, "modifier"));
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
             return new EssenceRecipe(id, effectModifier, base);
         }

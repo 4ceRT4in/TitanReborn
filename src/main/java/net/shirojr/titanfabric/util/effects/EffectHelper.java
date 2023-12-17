@@ -84,8 +84,8 @@ public final class EffectHelper {
         }
 
         for (var entry : WeaponEffects.values()) {
-            if (entry.getStatusEffect() == null) continue;
-            if (entry.getStatusEffect().equals(statusEffects.get(0).getEffectType())) return entry;
+            if (entry.getIngredientEffect() == null) continue;
+            if (entry.getIngredientEffect().equals(statusEffects.get(0).getEffectType())) return entry;
         }
         LoggerUtil.devLogger("Couldn't find matching potion effect to map to WeaponEffects");
         return null;
@@ -178,12 +178,11 @@ public final class EffectHelper {
         if (world.isClient() || effect == null) return;
         if (world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
 
-        //TODO: change values for balancing as needed
         switch (effect) {
             case BLIND -> {
                 if (target.hasStatusEffect(StatusEffects.BLINDNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
             case FIRE -> {
@@ -193,19 +192,19 @@ public final class EffectHelper {
             case POISON -> {
                 if (target.hasStatusEffect(StatusEffects.POISON)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
             case WEAK -> {
                 if (target.hasStatusEffect(StatusEffects.WEAKNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
             case WITHER -> {
                 if (target.hasStatusEffect(StatusEffects.WITHER)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getStatusEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
                 );
             }
         }

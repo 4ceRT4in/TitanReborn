@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:weapon_effect",
+  "base": {
+    "item": "minecraft:blaze_powder",
+    "slots": [4]
+  },
+  "modifier": {
+    "item": "minecraft:potion",
+    "slots": [1, 3, 5, 7]
+  },
+  "output": {
+    "item": "titanfabric:essence",
+    "count": 1
+  }
+}
