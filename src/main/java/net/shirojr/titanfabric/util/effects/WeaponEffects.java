@@ -3,11 +3,10 @@ package net.shirojr.titanfabric.util.effects;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.stat.Stat;
 import org.jetbrains.annotations.Nullable;
 
 public enum WeaponEffects {
-    BLIND("weapon_blind", StatusEffects.BLINDNESS),
+    BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS),
     FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null),
     POISON("weapon_poison", StatusEffects.POISON),
     WEAK("weapon_weak", StatusEffects.WEAKNESS),

@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.recipe.custom;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
@@ -17,11 +18,11 @@ import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
 public class EssenceRecipe extends SpecialCraftingRecipe {
-    private final Ingredient effectModifier;
-    private final Ingredient base;
+    private final IngredientModule effectModifier;
+    private final IngredientModule base;
     private WeaponEffects weaponEffect;
 
-    public EssenceRecipe(Identifier id, Ingredient effectModifier, Ingredient base) {
+    public EssenceRecipe(Identifier id, IngredientModule effectModifier, IngredientModule base) {
         super(id);
         this.effectModifier = effectModifier;
         this.base = base;
@@ -33,13 +34,13 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
         if (width != 3 || height != 3) return false;
         SlotArrangementType slotArrangement = SlotArrangementType.ESSENCE;
         boolean itemsMatch = slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
-        if (itemsMatch) this.weaponEffect = slotArrangement.getEffect(inventory);
+        if (itemsMatch) this.weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
         return itemsMatch;
     }
 
     @Override
     public ItemStack craft(CraftingInventory inventory) {
-        this.weaponEffect = SlotArrangementType.ESSENCE.getEffect(inventory);
+        this.weaponEffect = SlotArrangementType.ESSENCE.getEffect(inventory, this.effectModifier);
         if (weaponEffect == null) {
             LoggerUtil.devLogger("Couldn't find WeaponEffect from Inventory", true, null);
             return null;
@@ -68,20 +69,48 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
         public EssenceRecipe read(Identifier id, JsonObject json) {
             Ingredient effectModifier = Ingredient.fromJson(JsonHelper.getObject(json, "modifier"));
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
-            return new EssenceRecipe(id, effectModifier, base);
+
+            IngredientModule baseModule = new IngredientModule(base,
+                    IngredientModule.slotsFromJsonObject(json, "base"));
+            IngredientModule effectModifierModule = new IngredientModule(effectModifier,
+                    IngredientModule.slotsFromJsonObject(json, "modifier"));
+
+            return new EssenceRecipe(id, effectModifierModule, baseModule);
         }
 
         @Override
         public EssenceRecipe read(Identifier id, PacketByteBuf buf) {
-            Ingredient effectModifier = Ingredient.fromPacket(buf);
-            Ingredient base = Ingredient.fromPacket(buf);
+            IngredientModule effectModifier = IngredientModule.readFromPacket(buf);
+            IngredientModule base = IngredientModule.readFromPacket(buf);
+
             return new EssenceRecipe(id, effectModifier, base);
         }
 
         @Override
         public void write(PacketByteBuf buf, EssenceRecipe recipe) {
-            recipe.effectModifier.write(buf);
-            recipe.base.write(buf);
+            recipe.effectModifier.ingredient.write(buf);
+            buf.writeIntArray(recipe.effectModifier.slots);
+            recipe.base.ingredient.write(buf);
+            buf.writeIntArray(recipe.base.slots);
+        }
+    }
+
+    public record IngredientModule(Ingredient ingredient, int[] slots) {
+        public static IngredientModule readFromPacket(PacketByteBuf buf) {
+            Ingredient packetIngredient = Ingredient.fromPacket(buf);
+            int[] packetSlots = buf.readIntArray();
+            return new IngredientModule(packetIngredient, packetSlots);
+        }
+
+        public static int[] slotsFromJsonObject(JsonObject json, String parentObjectKey) {
+            JsonObject indexObject = JsonHelper.getObject(json, parentObjectKey);
+            JsonArray indexArray = JsonHelper.getArray(indexObject, "slots");
+            int[] slotIndexList = new int[indexArray.size()];
+
+            for (int i = 0; i < slotIndexList.length; i++) {
+                slotIndexList[i] = indexArray.get(i).getAsInt();
+            }
+            return slotIndexList;
         }
     }
 }
