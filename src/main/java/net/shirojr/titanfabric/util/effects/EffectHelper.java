@@ -84,6 +84,7 @@ public final class EffectHelper {
         }
 
         for (var entry : WeaponEffects.values()) {
+            if (entry.getStatusEffect() == null) continue;
             if (entry.getStatusEffect().equals(statusEffects.get(0).getEffectType())) return entry;
         }
         LoggerUtil.devLogger("Couldn't find matching potion effect to map to WeaponEffects");
