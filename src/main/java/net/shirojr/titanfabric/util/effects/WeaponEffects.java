@@ -6,19 +6,24 @@ import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
 public enum WeaponEffects {
-    /*NONE("weapon_none", null),*/
-    BLIND("weapon_blind", StatusEffects.BLINDNESS),
-    FIRE("weapon_fire", null),
+    BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS),
+    FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null),
     POISON("weapon_poison", StatusEffects.POISON),
     WEAK("weapon_weak", StatusEffects.WEAKNESS),
-    WITHER("weapon_wither", StatusEffects.WITHER);
+    WITHER("weapon_wither", StatusEffects.INSTANT_DAMAGE, StatusEffects.WITHER);
 
     private final String id;
-    private final StatusEffect statusEffect;
+    private final StatusEffect ingredientEffect;
+    private final StatusEffect outputEffect;
 
-    WeaponEffects(String id, StatusEffect statusEffect) {
+    WeaponEffects(String id, StatusEffect ingredientEffect, StatusEffect outputEffect) {
         this.id = id;
-        this.statusEffect = statusEffect;
+        this.ingredientEffect = ingredientEffect;
+        this.outputEffect = outputEffect;
+    }
+
+    WeaponEffects(String id, StatusEffect effect) {
+        this(id, effect, effect);
     }
 
     /**
@@ -30,8 +35,14 @@ public enum WeaponEffects {
         return this.id;
     }
 
-    public StatusEffect getStatusEffect() {
-        return this.statusEffect;
+    @Nullable
+    public StatusEffect getIngredientEffect() {
+        return this.ingredientEffect;
+    }
+
+    @Nullable
+    public StatusEffect getOutputEffect() {
+        return this.outputEffect;
     }
 
     /**

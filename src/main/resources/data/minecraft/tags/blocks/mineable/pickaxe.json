@@ -7,6 +7,8 @@
     "titanfabric:nether_block",
     "titanfabric:deepslate_legend_ore",
     "titanfabric:legend_block",
-    "titanfabric:stone_light"
+    "titanfabric:stone_light",
+    "titanfabric:diamond_furnace",
+    "titanfabric:netherite_anvil"
   ]
 }

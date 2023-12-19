@@ -5,9 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AnvilScreenHandlerMixin",
+    "ArmorItemMixin",
+    "ArmorMaterialsMixin",
     "BrewingRecipeRegistryMixin",
     "CraftingScreenHandlerMixin",
     "HungerManagerMixin",
+    "ItemMixin",
     "ItemsMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
@@ -17,7 +20,11 @@
     "ArmorItemMixin",
     "ArmorMaterialsMixin",
     "StatusEffectInstanceMixin",
-    "AxeItemMixin"
+    "AxeItemMixin",
+    "SmithingScreenHandlerMixin",
+    "StatusEffectInstanceMixin",
+    "StatusEffectMixin",
+    "StatusEffectsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
