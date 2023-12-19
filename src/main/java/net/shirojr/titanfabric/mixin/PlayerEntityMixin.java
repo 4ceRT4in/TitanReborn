@@ -1,5 +1,7 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -102,9 +104,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     // Can be used to show the indicator for entity in range
     // @Inject(method = "getAttackCooldownProgress", at = @At("HEAD"), cancellable = true)
     // private void titanfabric$getAttackCooldownProgressMixin(float baseTime,CallbackInfoReturnable<Float> cir) {
-    //     if (!this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.DO_HIT_COOLDOWN)) {
-    //          cir.setReturnValue(1.0f);
-    //     }
+    // if (!this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.DO_HIT_COOLDOWN)) {
+    // cir.setReturnValue(1.0f);
+    // }
     // }
 
     @Override
@@ -168,5 +170,15 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         for (int i = 0; i < inventory.size(); i++) {
 
         }
+    }
+
+    // From AdventureZ
+    @Environment(EnvType.CLIENT)
+    @Override
+    public boolean doesRenderOnFire() {
+        boolean hasFullNetherArmor = this.getEquippedStack(EquipmentSlot.CHEST).isOf(TitanFabricItems.NETHER_CHESTPLATE)
+                && this.getEquippedStack(EquipmentSlot.HEAD).getItem() == TitanFabricItems.NETHER_HELMET
+                && this.getEquippedStack(EquipmentSlot.LEGS).getItem() == TitanFabricItems.NETHER_LEGGINGS & this.getEquippedStack(EquipmentSlot.FEET).getItem() == TitanFabricItems.NETHER_BOOTS;
+        return this.isOnFire() && !this.isSpectator() && !hasFullNetherArmor;
     }
 }

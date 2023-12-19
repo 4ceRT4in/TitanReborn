@@ -15,6 +15,12 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
+    "StatusEffectMixin",
+    "StatusEffectsMixin",
+    "ArmorItemMixin",
+    "ArmorMaterialsMixin",
+    "StatusEffectInstanceMixin",
+    "AxeItemMixin",
     "SmithingScreenHandlerMixin",
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
@@ -27,6 +33,7 @@
     "client.AbstractClientPlayerEntityMixin",
     "client.AbstractInventoryScreenMixin",
     "client.GameOptionsMixin",
-    "client.PlayerHeldItemFeatureRendererMixin"
+    "client.PlayerHeldItemFeatureRendererMixin",
+    "client.InGameOverlayRendererMixin"
   ]
 }
