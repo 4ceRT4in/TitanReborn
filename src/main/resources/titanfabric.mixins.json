@@ -21,7 +21,6 @@
     "ArmorMaterialsMixin",
     "StatusEffectInstanceMixin",
     "AxeItemMixin",
-    "SmithingScreenHandlerMixin",
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin"
