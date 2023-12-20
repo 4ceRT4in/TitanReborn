@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "titanfabric:citrin_block"
+        }
+    ],
+    "result": {
+        "item": "titanfabric:citrin_shard",
+        "count": 9
+    }
+}
