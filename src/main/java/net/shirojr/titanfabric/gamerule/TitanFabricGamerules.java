@@ -6,7 +6,7 @@ import net.minecraft.world.GameRules;
 
 public class TitanFabricGamerules {
 
-    public static final GameRules.Key<GameRules.BooleanRule> DO_HIT_COOLDOWN = registerBooleanGamerule("legacyCombat", GameRules.Category.PLAYER, false);
+    public static final GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("legacyCombat", GameRules.Category.PLAYER, true);
     public static final GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("legacyFoodRegeneration", GameRules.Category.PLAYER, true);
 
     private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(String name, GameRules.Category category, boolean defaultValue) {

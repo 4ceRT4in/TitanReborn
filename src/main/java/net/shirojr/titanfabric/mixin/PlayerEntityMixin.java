@@ -96,7 +96,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)
     private void titanfabric$getAttackCooldownProgressPerTickMixin(CallbackInfoReturnable<Float> cir) {
-        if (!this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.DO_HIT_COOLDOWN)) {
+        if (this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_COMBAT)) {
             cir.setReturnValue(0.00001f);
         }
     }
@@ -176,9 +176,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Environment(EnvType.CLIENT)
     @Override
     public boolean doesRenderOnFire() {
-        boolean hasFullNetherArmor = this.getEquippedStack(EquipmentSlot.CHEST).isOf(TitanFabricItems.NETHER_CHESTPLATE)
-                && this.getEquippedStack(EquipmentSlot.HEAD).getItem() == TitanFabricItems.NETHER_HELMET
-                && this.getEquippedStack(EquipmentSlot.LEGS).getItem() == TitanFabricItems.NETHER_LEGGINGS & this.getEquippedStack(EquipmentSlot.FEET).getItem() == TitanFabricItems.NETHER_BOOTS;
-        return this.isOnFire() && !this.isSpectator() && !hasFullNetherArmor;
+        return super.doesRenderOnFire() && (int) ArmorHelper.getArmorItems((PlayerEntity) (Object) this).stream().filter(item -> item instanceof NetherArmorItem).count() < 4;
     }
 }
