@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.item.custom.sword;
 
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
@@ -16,8 +17,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class CitrinSwordItem extends TitanFabricSwordItem {
-    public CitrinSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed) {
-        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, WeaponEffects.POISON);
+    public CitrinSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Item.Settings settings) {
+        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, WeaponEffects.POISON, settings);
     }
 
     @Override
