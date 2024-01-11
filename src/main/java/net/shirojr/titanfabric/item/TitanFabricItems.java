@@ -78,7 +78,7 @@ public class TitanFabricItems {
     public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, removeBaseDamage(10), -2.4f, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN).fireproof()));
 
-    public static final Item TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem());
+    public static final Item TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(-1)));
     public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
     public static final Item MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(1, 20, 500));
     public static final Item MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2, 40, 1000));
