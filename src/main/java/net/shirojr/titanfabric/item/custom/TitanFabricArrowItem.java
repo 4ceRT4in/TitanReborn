@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.item.custom;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
@@ -18,6 +17,7 @@ import net.shirojr.titanfabric.util.items.EssenceCrafting;
 
 public class TitanFabricArrowItem extends ArrowItem implements EssenceCrafting {
     private final ArrowSelectionHelper.ArrowType arrowType;
+
     public TitanFabricArrowItem(ArrowSelectionHelper.ArrowType arrowType) {
         super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
         this.arrowType = arrowType;
@@ -30,16 +30,17 @@ public class TitanFabricArrowItem extends ArrowItem implements EssenceCrafting {
 
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if (!isIn(group)) return;
+        if (!isIn(group))
+            return;
         EffectHelper.generateAllEffectVersionStacks(this, stacks);
     }
 
     @Override
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
-        //TODO: implement new arrow entity for hit effect handling
+        // TODO: implement new arrow entity for hit effect handling
         WeaponEffects effectId = WeaponEffects.getEffect(stack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
 
-        TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(EntityType.ARROW, shooter, world, effectId, stack);
+        TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(world, shooter, effectId, stack);
         arrowEntity.initFromStack(stack);
         return arrowEntity;
     }

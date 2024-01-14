@@ -5,6 +5,7 @@ import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.entity.TitanFabricEntities;
 import net.shirojr.titanfabric.event.CommandRegistrationEvent;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.TitanFabricItems;
@@ -30,6 +31,7 @@ public class TitanFabric implements ModInitializer {
         TitanFabricRecipes.registerModRecipes();
         TitanFabricBlocks.registerModBlocks();
         TitanFabricBlockEntities.registerBlockEntities();
+        TitanFabricEntities.register();
         TitanFabricScreenHandlers.register();
         TitanFabricStatusEffects.registerStatusEffects();
         TitanFabricPotions.register();

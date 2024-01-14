@@ -12,13 +12,17 @@ import net.shirojr.titanfabric.entity.client.ArrowItemRenderer;
 import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricEntities {
-    public static final EntityType<TitanFabricArrowEntity> ARROW_ITEM = Registry.register(Registry.ENTITY_TYPE,
-            new Identifier(TitanFabric.MODID, "slime_item"),
-            FabricEntityTypeBuilder.<TitanFabricArrowEntity>create(SpawnGroup.MISC, (type, world) ->
-                            new TitanFabricArrowEntity(type, null, world, null, null)) // FIXME: values in lambda are only placeholders!
-                    .dimensions(EntityDimensions.fixed(0.25f, 0.25f))
-                    .trackRangeBlocks(4).trackedUpdateRate(10)
-                    .build());
+    // public static final EntityType<TitanFabricArrowEntity> ARROW_ITEM = Registry.register(Registry.ENTITY_TYPE,
+    // new Identifier(TitanFabric.MODID, "slime_item"),
+    // FabricEntityTypeBuilder.<TitanFabricArrowEntity>create(SpawnGroup.MISC, (type, world) ->
+    // new TitanFabricArrowEntity(type, null, world, null, null)) // FIXME: values in lambda are only placeholders!
+    // .dimensions(EntityDimensions.fixed(0.5f, 0.5f))
+    // .trackRangeBlocks(4).trackedUpdateRate(20)
+    // .build());
+
+    public static final EntityType<TitanFabricArrowEntity> ARROW_ITEM = Registry.register(Registry.ENTITY_TYPE, new Identifier(TitanFabric.MODID, "slime_item"),
+            FabricEntityTypeBuilder.<TitanFabricArrowEntity>create(SpawnGroup.MISC, (type, world) -> new TitanFabricArrowEntity(type, world)).dimensions(EntityDimensions.fixed(0.5f, 0.5f))
+                    .trackRangeBlocks(4).trackedUpdateRate(20).build());
 
     public static void registerClient() {
         EntityRendererRegistry.register(TitanFabricEntities.ARROW_ITEM, ArrowItemRenderer::new);
