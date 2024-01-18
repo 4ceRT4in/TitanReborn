@@ -23,9 +23,8 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     }
 
     public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType, ItemStack backpackStack) {
-        super(backPackType == BackPackItem.Type.SMALL ? TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER :
-                backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER :
-                        TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
+        super(backPackType == BackPackItem.Type.SMALL ? TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER
+                : backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER : TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
         checkSize(inventory, backPackType.getSize());
 
         this.inventory = inventory;
@@ -36,11 +35,11 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
         Point location;
         switch (backPackType) {
-            case MEDIUM -> location = new Point(35, 22);
-            case BIG -> location = new Point(35, 18);
-            default -> location = new Point(35, 34);
+        case MEDIUM -> location = new Point(35, 22);
+        case BIG -> location = new Point(35, 18);
+        default -> location = new Point(35, 34);
         }
-        addStorageSlots(backPackType, location); //TODO: change pos depending on type
+        addStorageSlots(backPackType, location); // TODO: change pos depending on type
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
     }
@@ -78,6 +77,25 @@ public class BackPackItemScreenHandler extends ScreenHandler {
         }
     }
 
+    @Override
+    public ItemStack transferSlot(PlayerEntity player, int index) {
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = (Slot) this.slots.get(index);
+        if (slot != null && slot.hasStack()) {
+            ItemStack itemStack2 = slot.getStack();
+            itemStack = itemStack2.copy();
+            if (index < this.inventory.size() ? !this.insertItem(itemStack2, this.inventory.size(), this.slots.size(), true) : !this.insertItem(itemStack2, 0, this.inventory.size(), false)) {
+                return ItemStack.EMPTY;
+            }
+            if (itemStack2.isEmpty()) {
+                slot.setStack(ItemStack.EMPTY);
+            } else {
+                slot.markDirty();
+            }
+        }
+        return itemStack;
+    }
+
     private void addPlayerInventory(PlayerInventory playerInventory) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
@@ -94,7 +112,8 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
-        if (stack.getItem() instanceof BackPackItem) return false;
+        if (stack.getItem() instanceof BackPackItem)
+            return false;
         return super.canInsertIntoSlot(stack, slot);
     }
 
