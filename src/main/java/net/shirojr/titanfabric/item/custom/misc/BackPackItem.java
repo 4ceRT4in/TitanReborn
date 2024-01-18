@@ -41,7 +41,8 @@ public class BackPackItem extends Item {
 
     public static void openScreen(PlayerEntity user, ItemStack backpackItemStack) {
         World world = user.getWorld();
-        if (!(backpackItemStack.getItem() instanceof BackPackItem backPackItem)) return;
+        if (!(backpackItemStack.getItem() instanceof BackPackItem backPackItem))
+            return;
         if (!world.isClient()) {
             user.openHandledScreen(new ExtendedScreenHandlerFactory() {
                 @Override
@@ -78,12 +79,12 @@ public class BackPackItem extends Item {
     }
 
     public static void writeNbtFromInventory(ItemStack itemStack, Inventory inventory) {
-        //FIXME: implement proper inventory to itemstack's nbt handling
-        /*NbtCompound itemStackCompound = new NbtCompound();
+        NbtCompound nbtCompound = itemStack.getOrCreateNbt().getCompound(INVENTORY_NBT_KEY);
         for (int i = 0; i < inventory.size(); i++) {
-            itemStack.writeNbt(itemStackCompound);
+            NbtCompound itemStackNbtCompound = inventory.getStack(i).writeNbt(new NbtCompound());
+            nbtCompound.put(String.valueOf(i), itemStackNbtCompound);
         }
-        itemStack.getOrCreateNbt().put(INVENTORY_NBT_KEY, itemStackCompound);*/
+        itemStack.getOrCreateNbt().put(INVENTORY_NBT_KEY, nbtCompound);
     }
 
     @Override
@@ -92,9 +93,7 @@ public class BackPackItem extends Item {
     }
 
     public enum Type {
-        SMALL("small", 6, Rarity.UNCOMMON),
-        MEDIUM("medium", 12, Rarity.RARE),
-        BIG("big", 18, Rarity.EPIC);
+        SMALL("small", 6, Rarity.UNCOMMON), MEDIUM("medium", 12, Rarity.RARE), BIG("big", 18, Rarity.EPIC);
 
         private final String id;
         private final int size;
@@ -119,4 +118,3 @@ public class BackPackItem extends Item {
         }
     }
 }
-
