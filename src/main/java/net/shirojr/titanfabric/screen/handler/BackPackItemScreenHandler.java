@@ -39,7 +39,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
         case BIG -> location = new Point(35, 18);
         default -> location = new Point(35, 34);
         }
-        addStorageSlots(backPackType, location); // TODO: change pos depending on type
+        addStorageSlots(backPackType, location);
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
     }
@@ -70,7 +70,15 @@ public class BackPackItemScreenHandler extends ScreenHandler {
                 slotPos.y = pos.y + (slotSize * row);
                 slotPos.x = pos.x + (slotSize * column);
 
-                this.addSlot(new Slot(this.inventory, slotIndex, slotPos.x, slotPos.y));
+                this.addSlot(new Slot(this.inventory, slotIndex, slotPos.x, slotPos.y) {
+                    @Override
+                    public boolean canInsert(ItemStack stack) {
+                        if (stack.getItem() instanceof BackPackItem) {
+                            return false;
+                        }
+                        return super.canInsert(stack);
+                    }
+                });
                 slotIndex++;
             }
             slotPos.x = pos.x;
