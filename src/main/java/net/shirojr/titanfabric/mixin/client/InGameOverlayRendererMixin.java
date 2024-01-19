@@ -21,8 +21,10 @@ public abstract class InGameOverlayRendererMixin {
     @Inject(method = "renderOverlays", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isOnFire()Z"), cancellable = true)
     private static void fireOverlayMixin(MinecraftClient minecraftClient, MatrixStack matrixStack, CallbackInfo info) {
         if (minecraftClient.player == null) return;
+        int count = 0;
         for (Item entry : ArmorHelper.getArmorItems(minecraftClient.player)) {
-            if (!(entry instanceof NetherArmorItem)) info.cancel();
+            if (entry instanceof NetherArmorItem) count++;
         }
+        if (count >= 4) info.cancel();
     }
 }
