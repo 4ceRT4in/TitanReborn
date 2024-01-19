@@ -8,11 +8,12 @@ import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.TitanFabricTags;
+import net.shirojr.titanfabric.util.items.Anvilable;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class LegendBowItem extends TitanFabricBowItem  {
+public class LegendBowItem extends TitanFabricBowItem implements Anvilable {
     public static final Predicate<ItemStack> BOW_PROJECTILES = stack -> stack.isIn(TitanFabricTags.Items.ARROWS);
 
     public LegendBowItem() {
