@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 
@@ -20,18 +22,31 @@ public class TitanFabricParachuteItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
-        if (world.getTime() % 20 == 0 && entity instanceof PlayerEntity playerEntity && playerEntity.isOnGround() && stack.getNbt() != null && stack.getNbt().contains("Activated")
-                && stack.getNbt().getBoolean("Activated")) {
-            NbtCompound nbtCompound = stack.getOrCreateNbt();
-            nbtCompound.putBoolean("Activated", false);
-            stack.setNbt(nbtCompound);
+        if (entity instanceof PlayerEntity playerEntity && stack.getNbt() != null && stack.getNbt().contains("Activated") && stack.getNbt().getBoolean("Activated")) {
+            if (playerEntity.isOnGround()) {
+                NbtCompound nbtCompound = stack.getOrCreateNbt();
+                nbtCompound.putBoolean("Activated", false);
+                stack.setNbt(nbtCompound);
+            } else {
+                Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.02, 0, 0.02);
+                Vec3d newVec3d = playerEntity.getVelocity().add(rotationVec3d);
+                playerEntity.setVelocity(new Vec3d(MathHelper.clamp(newVec3d.getX(), -1.5D, 1.5D), newVec3d.getY(), MathHelper.clamp(newVec3d.getZ(), -1.5D, 1.5D)));
+            }
         }
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        NbtCompound nbtCompound = user.getStackInHand(hand).getOrCreateNbt();
         if (!user.isOnGround()) {
-            NbtCompound nbtCompound = user.getStackInHand(hand).getOrCreateNbt();
+            if (nbtCompound.contains("Activated") && nbtCompound.getBoolean("Activated()")) {
+                nbtCompound.putBoolean("Activated", false);
+                user.getItemCooldownManager().set(this, 40);
+                user.getStackInHand(hand).setNbt(nbtCompound);
+                return super.use(world, user, hand);
+            }
+            Vec3d velocity = new Vec3d(user.getVelocity().getX(), user.getVelocity().getY() * 0.05D, user.getVelocity().getZ());
+            user.setVelocity(velocity);
             nbtCompound.putBoolean("Activated", true);
             user.getStackInHand(hand).setNbt(nbtCompound);
         }

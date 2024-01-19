@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import org.jetbrains.annotations.Nullable;
@@ -99,8 +100,17 @@ public abstract class LivingEntityMixin {
     private double titanfabric$handleSafeLandingEffect(double original) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity.getVelocity().getY() < 0 && TitanFabricParachuteItem.isParachuteActivated(entity)) {
-            original = 0.01D;
+            original = 0.005D;
             entity.onLanding();
+        }
+        return original;
+    }
+
+    @ModifyVariable(method = "applyMovementInput", at = @At("HEAD"), ordinal = 0)
+    private Vec3d titanfabric$applyMovementInputMixin(Vec3d original) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity.getVelocity().getY() < 0 && TitanFabricParachuteItem.isParachuteActivated(entity)) {
+            return new Vec3d(original.getX(), original.getY(), 0.98D);
         }
         return original;
     }
