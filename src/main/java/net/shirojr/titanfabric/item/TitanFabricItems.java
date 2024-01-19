@@ -108,7 +108,7 @@ public class TitanFabricItems {
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
     public static final Item PARACHUTE = registerItem("parachute",
-            new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
+            new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
 
     public static final Item ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
 
