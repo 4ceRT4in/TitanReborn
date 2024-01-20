@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench by ShiroJR",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "minecraft:block/red_wool",
+		"0": "block/red_wool",
 		"2": "titanfabric:items/parachute_strings",
-		"particle": "minecraft:block/red_wool"
+		"particle": "block/red_wool"
 	},
 	"elements": [
 		{
@@ -76,6 +76,10 @@
 	"display": {
 		"ground": {
 			"scale": [4, 4, 4]
+		},
+		"gui": {
+			"rotation": [30, -30, 0],
+			"translation": [0, -1.75, 0]
 		}
 	},
 	"groups": [

@@ -49,16 +49,18 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
             if (player.getMainHandStack().isOf(TitanFabricItems.PARACHUTE) && TitanFabricParachuteItem.isParachuteActivated(player)) {
                 this.leftLeg.pitch = 0.0f;
                 this.rightLeg.pitch = 0.0f;
-                this.waveLegs += 0.1f;
-                this.rightLeg.roll = this.leftLeg.roll = MathHelper.cos(waveLegs) * 0.07f;
-                this.rightArm.pitch = 3.9f;
-                this.leftArm.pitch = 3.9f;
-                this.rightArm.roll = -0.7f;
-                this.leftArm.roll = 0.7f;
+
+                this.waveLegs += 0.01f;
+                this.leftLeg.roll = -0.2f + MathHelper.cos(waveLegs) * 0.02f;
+                this.rightLeg.roll = 0.2f + MathHelper.cos(waveLegs) * 0.02f;
+
+                this.rightArm.pitch = 3.14f;
+                this.leftArm.pitch = 3.14f;
+                // If arm spreading is wanted
+                // this.rightArm.roll = -0.7f;
+                // this.leftArm.roll = 0.7f;
             }
         }
     }
 
-    // protected void animateArms(T entity, float animationProgress) {
-    // }
 }
