@@ -31,7 +31,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
         }
         matrices.push();
         matrices.scale(4, 4, 4);
-        matrices.translate(0, -1.1, 0);
+        matrices.translate(0, -1.36, 0);
         parachuteModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(PARACHUTE_TEXTURE)), light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
         matrices.pop();
     }
