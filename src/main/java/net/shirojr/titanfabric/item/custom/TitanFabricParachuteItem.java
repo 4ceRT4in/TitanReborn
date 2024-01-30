@@ -28,7 +28,8 @@ public class TitanFabricParachuteItem extends Item {
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         if (entity instanceof PlayerEntity playerEntity && stack.getNbt() != null && stack.getNbt().contains("Activated") && stack.getNbt().getBoolean("Activated")) {
-            if (playerEntity.isOnGround() || playerEntity.getVelocity().getY() > 0 || playerEntity.isFallFlying()) {
+            if (playerEntity.isOnGround() || playerEntity.getVelocity().getY() > 0 || playerEntity.isFallFlying() ||
+                    playerEntity.isTouchingWater()) {
                 NbtCompound nbtCompound = stack.getOrCreateNbt();
                 nbtCompound.putBoolean("Activated", false);
                 stack.setNbt(nbtCompound);
