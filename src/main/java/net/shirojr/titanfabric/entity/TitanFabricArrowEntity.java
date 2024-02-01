@@ -10,27 +10,32 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
+import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECTS_COMPOUND_NBT_KEY;
+
 public class TitanFabricArrowEntity extends ArrowEntity {
-    @Nullable
-    private WeaponEffects effect;
-    @Nullable
-    private ItemStack itemStack;
+    @Nullable private WeaponEffectData effect;
+    @Nullable private ItemStack itemStack;
 
     public TitanFabricArrowEntity(EntityType<? extends ArrowEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public TitanFabricArrowEntity(World world, LivingEntity owner, @Nullable WeaponEffects effect, @Nullable ItemStack itemStack) {
+    public TitanFabricArrowEntity(World world, LivingEntity owner, @Nullable WeaponEffectData effectData, @Nullable ItemStack itemStack) {
         super(world, owner);
-        this.effect = effect;
+        this.effect = effectData;
         this.itemStack = itemStack;
     }
 
-    public @Nullable WeaponEffects getEffect() {
-        return effect;
+    public Optional<WeaponEffect> getEffect() {
+        if (effect == null) return Optional.empty();
+        return Optional.ofNullable(effect.weaponEffect());
     }
 
     public @Nullable ItemStack getItemStack() {
@@ -42,10 +47,8 @@ public class TitanFabricArrowEntity extends ArrowEntity {
 
     @Nullable
     public Identifier getTexture() {
-        if (this.effect == null) {
-            return null;
-        }
-        return switch (this.effect) {
+        if (this.effect == null) return null;
+        return switch (this.effect.weaponEffect()) {
         case BLIND -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/blindness_arrow.png");
         case POISON -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/poison_arrow.png");
         case WEAK -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/weakness_arrow.png");
@@ -65,7 +68,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     @Override
     protected void onHit(LivingEntity target) {
         if (this.getOwner() instanceof LivingEntity owner && this.itemStack != null) {
-            EffectHelper.applyWeaponEffectOnTarget(this.effect, EffectHelper.getEffectStrength(this.itemStack), target.getWorld(), this.itemStack, owner, target);
+            EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), this.itemStack, owner, target);
         }
         super.onHit(target);
     }
@@ -73,14 +76,15 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putString(EffectHelper.EFFECTS_NBT_KEY, this.effect.getId());
+        if (effect == null) return;
+        NbtCompound compound = effect.toNbt();
+        nbt.put(EFFECTS_COMPOUND_NBT_KEY, compound);
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        if (nbt.contains(EffectHelper.EFFECTS_NBT_KEY)) {
-            this.effect = WeaponEffects.getEffect(nbt.getString(EffectHelper.EFFECTS_NBT_KEY));
-        }
+        if (effect == null || !nbt.contains(EFFECTS_COMPOUND_NBT_KEY)) return;
+        WeaponEffectData.fromNbt(nbt, WeaponEffectType.INNATE_EFFECT).ifPresent(effectData -> this.effect = effectData);
     }
 }

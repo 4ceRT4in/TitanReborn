@@ -14,13 +14,15 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
 public class EssenceRecipe extends SpecialCraftingRecipe {
     private final IngredientModule effectModifier;
     private final IngredientModule base;
-    private WeaponEffects weaponEffect;
+    private WeaponEffectData weaponEffectData;
 
     public EssenceRecipe(Identifier id, IngredientModule effectModifier, IngredientModule base) {
         super(id);
@@ -34,24 +36,29 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
         if (width != 3 || height != 3) return false;
         SlotArrangementType slotArrangement = SlotArrangementType.ESSENCE;
         boolean itemsMatch = slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
-        if (itemsMatch) this.weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
+        if (itemsMatch) {
+            WeaponEffect weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
+            this.weaponEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
+        }
         return itemsMatch;
     }
 
     @Override
     public ItemStack craft(CraftingInventory inventory) {
-        this.weaponEffect = SlotArrangementType.ESSENCE.getEffect(inventory, this.effectModifier);
+        WeaponEffect weaponEffect = SlotArrangementType.ESSENCE.getEffect(inventory, this.effectModifier);
+        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
+        this.weaponEffectData = effectData;
         if (weaponEffect == null) {
             LoggerUtil.devLogger("Couldn't find WeaponEffect from Inventory", true, null);
             return null;
         }
         ItemStack stack = new ItemStack(SlotArrangementType.ESSENCE.getOutputItem());
-        return EffectHelper.getStackWithEffect(stack, weaponEffect);
+        return EffectHelper.getStackWithEffect(stack, effectData);
     }
 
     @Override
     public ItemStack getOutput() {
-        return EffectHelper.getStackWithEffect(new ItemStack(SlotArrangementType.ESSENCE.getOutputItem()), weaponEffect);
+        return EffectHelper.getStackWithEffect(new ItemStack(SlotArrangementType.ESSENCE.getOutputItem()), weaponEffectData);
     }
 
     @Override
@@ -61,7 +68,7 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TitanFabricRecipes.WEAPON_EFFECT_RECIPE_SERIALIZER;
+        return TitanFabricRecipes.ESSENCE_EFFECT_RECIPE_SERIALIZER;
     }
 
     public static class Serializer implements RecipeSerializer<EssenceRecipe> {

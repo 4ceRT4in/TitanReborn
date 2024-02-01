@@ -5,7 +5,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
-public enum WeaponEffects {
+import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
+
+public enum WeaponEffect {
     BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS),
     FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null),
     POISON("weapon_poison", StatusEffects.POISON),
@@ -16,13 +18,13 @@ public enum WeaponEffects {
     private final StatusEffect ingredientEffect;
     private final StatusEffect outputEffect;
 
-    WeaponEffects(String id, StatusEffect ingredientEffect, StatusEffect outputEffect) {
+    WeaponEffect(String id, StatusEffect ingredientEffect, StatusEffect outputEffect) {
         this.id = id;
         this.ingredientEffect = ingredientEffect;
         this.outputEffect = outputEffect;
     }
 
-    WeaponEffects(String id, StatusEffect effect) {
+    WeaponEffect(String id, StatusEffect effect) {
         this(id, effect, effect);
     }
 
@@ -52,8 +54,8 @@ public enum WeaponEffects {
      * @return Weapon Effect
      */
     @Nullable
-    public static WeaponEffects getEffect(String id) {
-        for (WeaponEffects entry : WeaponEffects.values()) {
+    public static WeaponEffect getEffect(String id) {
+        for (WeaponEffect entry : WeaponEffect.values()) {
             if (entry.id.equals(id)) return entry;
         }
         return null;
@@ -66,10 +68,10 @@ public enum WeaponEffects {
      * @return Weapon Effect
      */
     @Nullable
-    public static WeaponEffects getEffect(NbtCompound nbtCompound) {
-        if (!EffectHelper.stackHasWeaponEffect(nbtCompound)) return null;
-        String id = nbtCompound.getString(EffectHelper.EFFECTS_NBT_KEY);
-        for (WeaponEffects entry : WeaponEffects.values()) {
+    public static WeaponEffect getEffect(NbtCompound nbtCompound) {
+        if (EffectHelper.stackHasNoWeaponEffectData(nbtCompound)) return null;
+        String id = nbtCompound.getString(EFFECT_NBT_KEY);
+        for (WeaponEffect entry : WeaponEffect.values()) {
             if (entry.id.equals(id)) return entry;
         }
         return null;

@@ -20,10 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Optional;
 
-@Debug(export = true)
 @Mixin(CraftingScreenHandler.class)
 public abstract class CraftingScreenHandlerMixin {
-    @Unique private ItemStack recipeItemStack;
+/*    @Unique private ItemStack recipeItemStack;
 
     @Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/CraftingResultInventory;setStack(ILnet/minecraft/item/ItemStack;)V"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void titanfabric$injectCustomRecipes(ScreenHandler handler, World world, PlayerEntity player,
@@ -38,5 +37,5 @@ public abstract class CraftingScreenHandlerMixin {
 
         itemStack = craftingRecipe.craft(craftingInventory);
         //LoggerUtil.devLogger("mixin for itemStack: " + itemStack.getName());
-    }
+    }*/
 }

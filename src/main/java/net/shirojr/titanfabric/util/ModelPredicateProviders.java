@@ -4,11 +4,15 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
+
+import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
+import static net.shirojr.titanfabric.util.effects.WeaponEffectType.ADDITIONAL_EFFECT;
 
 @Environment(EnvType.CLIENT)
 public class ModelPredicateProviders {
@@ -21,7 +25,7 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 
-        registerEssenceProviders(TitanFabricItems.ESSENCE);
+        registerEssenceProviders();
 
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
@@ -33,7 +37,7 @@ public class ModelPredicateProviders {
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_2);
         registerBowProviders(TitanFabricItems.MULTI_BOW_3);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_3);
-        registerCrossBowProviders(TitanFabricItems.TITAN_CROSSBOW);
+        registerCrossBowProviders();
 
         // crossbow: vanilla arrows, spectral, vanilla splash potions, vanilla lingering potions, no rockets!
     }
@@ -43,8 +47,8 @@ public class ModelPredicateProviders {
         registerStrengthProvider(item, new Identifier("strength"));
     }
 
-    private static void registerEssenceProviders(Item item) {
-        registerEffectProvider(item, new Identifier("effect"));
+    private static void registerEssenceProviders() {
+        registerEffectProvider(TitanFabricItems.ESSENCE, new Identifier("effect"));
     }
 
     private static void registerShieldProviders(Item item) {
@@ -56,16 +60,19 @@ public class ModelPredicateProviders {
         registerBowPulling(item, new Identifier("pulling"));
     }
 
-    private static void registerCrossBowProviders(Item item) {
-        registerBowProviders(item);
+    private static void registerCrossBowProviders() {
+        registerBowProviders(TitanFabricItems.TITAN_CROSSBOW);
         //registerCrossBow(item);
     }
 
     private static void registerEffectProvider(Item item, Identifier identifier) {
         if (item == null) return;
         ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> {
-            WeaponEffects effect = WeaponEffects.getEffect(itemStack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
-            if (effect == null) return 0f;
+            if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(ADDITIONAL_EFFECT.getNbtKey()))
+                return 0.0f;
+            NbtCompound typeCompound = EffectHelper.getWeaponEffectDataCompound(itemStack).getCompound(ADDITIONAL_EFFECT.getNbtKey());
+            WeaponEffect effect = WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY));
+            if (effect == null) return 0.0f;
             return switch (effect) {
                 case BLIND -> 0.1f;
                 case FIRE -> 0.2f;
@@ -79,7 +86,8 @@ public class ModelPredicateProviders {
     private static void registerStrengthProvider(Item item, Identifier identifier) {
         if (item == null) return;
         ModelPredicateProviderRegistry.register(item, identifier,
-                (itemStack, clientWorld, livingEntity, seed) -> EffectHelper.getEffectStrength(itemStack) * 0.1f);
+                (itemStack, clientWorld, livingEntity, seed) ->
+                        EffectHelper.getEffectStrength(itemStack, ADDITIONAL_EFFECT) * 0.1f);
     }
 
     private static void registerBowPull(Item item, Identifier identifier) {

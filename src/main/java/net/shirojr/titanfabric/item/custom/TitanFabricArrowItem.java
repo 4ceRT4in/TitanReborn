@@ -6,14 +6,19 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.entity.TitanFabricArrowEntity;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.EssenceCrafting;
+
+import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECTS_COMPOUND_NBT_KEY;
 
 public class TitanFabricArrowItem extends ArrowItem implements EssenceCrafting {
     private final ArrowSelectionHelper.ArrowType arrowType;
@@ -37,10 +42,11 @@ public class TitanFabricArrowItem extends ArrowItem implements EssenceCrafting {
 
     @Override
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
-        // TODO: implement new arrow entity for hit effect handling
-        WeaponEffects effectId = WeaponEffects.getEffect(stack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
-
-        TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(world, shooter, effectId, stack);
+        NbtCompound compound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+        WeaponEffect weaponEffect = WeaponEffect.getEffect(compound.getString(WeaponEffectData.EFFECT_NBT_KEY));
+        int strength = compound.getInt(WeaponEffectData.EFFECTS_STRENGTH_NBT_KEY);
+        WeaponEffectData data = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, weaponEffect, strength);
+        TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(world, shooter, data, stack);
         arrowEntity.initFromStack(stack);
         return arrowEntity;
     }
