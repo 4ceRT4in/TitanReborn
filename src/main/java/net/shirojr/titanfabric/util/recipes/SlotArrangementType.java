@@ -9,9 +9,13 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.recipe.custom.EssenceRecipe;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.EssenceCrafting;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public enum SlotArrangementType {
     ESSENCE(TitanFabricItems.ESSENCE),
@@ -67,7 +71,9 @@ public enum SlotArrangementType {
         } else if (firstEffectStack.getItem() instanceof EssenceCrafting essenceIngredient) {
             effect = essenceIngredient.ingredientEffect(firstEffectStack);
         } else {
-            effect = WeaponEffect.getEffect(firstEffectStack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
+            Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(firstEffectStack.getOrCreateNbt(), WeaponEffectType.ADDITIONAL_EFFECT);
+            if (effectData.isEmpty()) return null;
+            effect = effectData.get().weaponEffect();
         }
 
         return effect;

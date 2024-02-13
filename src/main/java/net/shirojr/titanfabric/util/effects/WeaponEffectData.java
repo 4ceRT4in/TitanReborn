@@ -23,8 +23,8 @@ public record WeaponEffectData(WeaponEffectType type, WeaponEffect weaponEffect,
     }
 
     public static Optional<WeaponEffectData> fromNbt(NbtCompound compound, WeaponEffectType type) {
-        WeaponEffect effect = WeaponEffect.getEffect(compound.getString(EFFECT_NBT_KEY));
-        int strength = compound.getInt(EFFECTS_STRENGTH_NBT_KEY);
+        WeaponEffect effect = WeaponEffect.getEffect(compound.getCompound(type.getNbtKey()).getString(EFFECT_NBT_KEY));
+        int strength = compound.getCompound(type.getNbtKey()).getInt(EFFECTS_STRENGTH_NBT_KEY);
         if (effect == null) return Optional.empty();
         return Optional.of(new WeaponEffectData(type, effect, strength));
     }

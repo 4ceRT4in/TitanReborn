@@ -13,6 +13,7 @@ import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
 import static net.shirojr.titanfabric.util.effects.WeaponEffectType.ADDITIONAL_EFFECT;
+import static net.shirojr.titanfabric.util.effects.WeaponEffectType.INNATE_EFFECT;
 
 @Environment(EnvType.CLIENT)
 public class ModelPredicateProviders {
@@ -25,7 +26,7 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 
-        registerEssenceProviders();
+        registerEssenceProvider();
 
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
@@ -47,8 +48,23 @@ public class ModelPredicateProviders {
         registerStrengthProvider(item, new Identifier("strength"));
     }
 
-    private static void registerEssenceProviders() {
-        registerEffectProvider(TitanFabricItems.ESSENCE, new Identifier("effect"));
+    private static void registerEssenceProvider() {
+        // registerEffectProvider(TitanFabricItems.ESSENCE, new Identifier("effect"));
+        ModelPredicateProviderRegistry.register(TitanFabricItems.ESSENCE, new Identifier("effect"),
+                (itemStack, clientWorld, livingEntity, seed) -> {
+                    if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(INNATE_EFFECT.getNbtKey()))
+                        return 0.0f;
+                    NbtCompound typeCompound = EffectHelper.getWeaponEffectDataCompound(itemStack).getCompound(INNATE_EFFECT.getNbtKey());
+                    WeaponEffect effect = WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY));
+                    if (effect == null) return 0.0f;
+                    return switch (effect) {
+                        case BLIND -> 0.1f;
+                        case FIRE -> 0.2f;
+                        case POISON -> 0.3f;
+                        case WEAK -> 0.4f;
+                        case WITHER -> 0.5f;
+                    };
+                });
     }
 
     private static void registerShieldProviders(Item item) {

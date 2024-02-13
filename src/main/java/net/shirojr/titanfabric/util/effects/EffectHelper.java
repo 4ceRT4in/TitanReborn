@@ -182,25 +182,24 @@ public final class EffectHelper {
 
         // FIXME: might not need innate effects (only the additional ones) since they are bound to separate item types?
         // WeaponEffectType type = WeaponEffectType.ADDITIONAL_EFFECT;
-        for (WeaponEffectType type : WeaponEffectType.values()) {
-            if (baseItem instanceof TitanFabricArrowItem || baseItem instanceof TitanFabricEssenceItem) {
-                for (WeaponEffect entry : possibleEffects) {
-                    WeaponEffectData data = new WeaponEffectData(type, entry, 0);
-                    ItemStack effectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), data);
-                    stacks.add(effectStack);
-                }
-            } else {
-                stacks.add(new ItemStack(baseItem));
-                for (WeaponEffect entry : possibleEffects) {
-                    WeaponEffectData firstData = new WeaponEffectData(type, entry, 0);
-                    WeaponEffectData secondData = new WeaponEffectData(type, entry, 1);
-                    ItemStack firstEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), firstData);
-                    ItemStack secondEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), secondData);
-                    stacks.add(firstEffectStack);
-                    stacks.add(secondEffectStack);
-                }
+        if (baseItem instanceof TitanFabricArrowItem || baseItem instanceof TitanFabricEssenceItem) {
+            for (WeaponEffect entry : possibleEffects) {
+                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 0);
+                ItemStack effectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), data);
+                stacks.add(effectStack);
+            }
+        } else {
+            stacks.add(new ItemStack(baseItem));
+            for (WeaponEffect entry : possibleEffects) {
+                WeaponEffectData firstData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, 0);
+                WeaponEffectData secondData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, 1);
+                ItemStack firstEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), firstData);
+                ItemStack secondEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), secondData);
+                stacks.add(firstEffectStack);
+                stacks.add(secondEffectStack);
             }
         }
+
     }
 
     public static void applyWeaponEffectsOnTarget(World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
