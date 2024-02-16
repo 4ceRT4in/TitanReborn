@@ -17,10 +17,4 @@ public class CitrinSwordItem extends TitanFabricSwordItem {
     public CitrinSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Item.Settings settings) {
         super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, WeaponEffect.POISON, settings);
     }
-
-    @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.citrinSwordItem"));
-        super.appendTooltip(stack, world, tooltip, context);
-    }
 }

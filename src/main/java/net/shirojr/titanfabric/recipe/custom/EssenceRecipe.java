@@ -53,12 +53,12 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
             return null;
         }
         ItemStack stack = new ItemStack(SlotArrangementType.ESSENCE.getOutputItem());
-        return EffectHelper.getStackWithEffect(stack, effectData);
+        return EffectHelper.applyEffectToStack(stack, effectData);
     }
 
     @Override
     public ItemStack getOutput() {
-        return EffectHelper.getStackWithEffect(new ItemStack(SlotArrangementType.ESSENCE.getOutputItem()), weaponEffectData);
+        return EffectHelper.applyEffectToStack(new ItemStack(SlotArrangementType.ESSENCE.getOutputItem()), weaponEffectData);
     }
 
     @Override

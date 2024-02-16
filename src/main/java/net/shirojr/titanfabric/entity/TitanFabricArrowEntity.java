@@ -60,7 +60,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     @Override
     protected ItemStack asItemStack() {
         if (this.effect != null) {
-            return EffectHelper.getStackWithEffect(new ItemStack(TitanFabricItems.ARROW), this.effect);
+            return EffectHelper.applyEffectToStack(new ItemStack(TitanFabricItems.ARROW), this.effect);
         }
         return super.asItemStack();
     }

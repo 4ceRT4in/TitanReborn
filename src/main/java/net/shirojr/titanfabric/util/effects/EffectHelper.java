@@ -14,13 +14,11 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
@@ -44,8 +42,10 @@ public final class EffectHelper {
      */
     public static int getEffectStrength(ItemStack itemStack, WeaponEffectType type) {
         NbtCompound compound = getWeaponEffectDataCompound(itemStack);
+        WeaponEffectType weaponEffectType = WeaponEffectType.getType(type.getNbtKey());
         if (!compound.getKeys().contains(type.getNbtKey())) return -1;
-        Optional<WeaponEffectData> data = WeaponEffectData.fromNbt(compound, WeaponEffectType.getType(type.getNbtKey()));
+        if (weaponEffectType == null) return -1;
+        Optional<WeaponEffectData> data = WeaponEffectData.fromNbt(compound, weaponEffectType);
         return data.map(WeaponEffectData::strength).orElse(-1);
     }
 
@@ -89,7 +89,7 @@ public final class EffectHelper {
         return itemStack;
     }
 
-    public static ItemStack getStackWithEffect(ItemStack itemStack, WeaponEffectData effectData) {
+    public static ItemStack applyEffectToStack(ItemStack itemStack, WeaponEffectData effectData) {
         return getStackWithEffects(itemStack, List.of(effectData));
     }
 
@@ -137,14 +137,15 @@ public final class EffectHelper {
      * @param stack   original ItemStack
      * @return ItemStack with description for current {@linkplain WeaponEffect TitanFabric WeaponEffect}
      */
-    public static List<Text> appendSwordToolTip(List<Text> tooltip, ItemStack stack) {
-        for (WeaponEffectType entry : WeaponEffectType.values()) {
-            NbtCompound baseCompound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
-            String effectId = baseCompound.getCompound(entry.getNbtKey()).getString(EFFECT_NBT_KEY);
+    public static void appendSwordToolTip(List<Text> tooltip, ItemStack stack) {
+        NbtCompound baseCompound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+        Set<String> effectNbtKeys = baseCompound.getKeys();
+        for (String nbtKey : effectNbtKeys) {
+            String effectId = baseCompound.getCompound(nbtKey).getString(EFFECT_NBT_KEY);
             WeaponEffect effect = WeaponEffect.getEffect(effectId);
-            if (effect == null) continue;
-
-            String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack, entry);
+            WeaponEffectType effectType = WeaponEffectType.getType(nbtKey);
+            if (effect == null || effectType == null) continue;
+            String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack, effectType);
             switch (effect) {
                 case BLIND -> translation += "Blind";
                 case FIRE -> translation += "Fire";
@@ -154,7 +155,6 @@ public final class EffectHelper {
             }
             tooltip.add(new TranslatableText(translation));
         }
-        return tooltip;
     }
 
     private static List<WeaponEffect> getWeaponEffects() {
@@ -180,21 +180,38 @@ public final class EffectHelper {
         List<WeaponEffect> possibleEffects = getWeaponEffects();
         if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
 
-        // FIXME: might not need innate effects (only the additional ones) since they are bound to separate item types?
-        // WeaponEffectType type = WeaponEffectType.ADDITIONAL_EFFECT;
         if (baseItem instanceof TitanFabricArrowItem || baseItem instanceof TitanFabricEssenceItem) {
             for (WeaponEffect entry : possibleEffects) {
                 WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 0);
-                ItemStack effectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), data);
+                ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
                 stacks.add(effectStack);
+            }
+        }
+        else if (baseItem instanceof TitanFabricSwordItem swordItem) {
+            ItemStack onlyInnateItemStack = new ItemStack(baseItem);
+            if (swordItem.getBaseEffect() != null) {
+                WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, swordItem.getBaseEffect(), 1);
+                EffectHelper.applyEffectToStack(onlyInnateItemStack, innateEffectData);
+            }
+            stacks.add(onlyInnateItemStack);
+            for (WeaponEffect entry : possibleEffects) {
+                for (int effectStrengthVersion = 1; effectStrengthVersion < 3; effectStrengthVersion++) {
+                    WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, effectStrengthVersion);
+                    ItemStack effectItemStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), additionalEffectData);
+                    if (swordItem.getBaseEffect() != null) {
+                        WeaponEffectData innateData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, swordItem.getBaseEffect(), 1);
+                        EffectHelper.applyEffectToStack(effectItemStack, innateData);
+                    }
+                    stacks.add(effectItemStack);
+                }
             }
         } else {
             stacks.add(new ItemStack(baseItem));
             for (WeaponEffect entry : possibleEffects) {
                 WeaponEffectData firstData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, 0);
                 WeaponEffectData secondData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, 1);
-                ItemStack firstEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), firstData);
-                ItemStack secondEffectStack = EffectHelper.getStackWithEffect(new ItemStack(baseItem), secondData);
+                ItemStack firstEffectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), firstData);
+                ItemStack secondEffectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), secondData);
                 stacks.add(firstEffectStack);
                 stacks.add(secondEffectStack);
             }
@@ -258,7 +275,6 @@ public final class EffectHelper {
     /**
      * Translates from seconds to ticks
      *
-     * @param seconds
      * @return calculated ticks
      */
     public static int secondsToTicks(int seconds) {

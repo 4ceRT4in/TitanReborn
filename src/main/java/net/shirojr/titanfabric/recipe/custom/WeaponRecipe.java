@@ -16,7 +16,6 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
@@ -67,7 +66,7 @@ public class WeaponRecipe extends SmithingRecipe {
 
     @Override
     public ItemStack getOutput() {
-        return EffectHelper.getStackWithEffect(this.result, weaponEffectData); // FIXME: WeaponEffect is null when game start?
+        return EffectHelper.applyEffectToStack(this.result, weaponEffectData); // FIXME: WeaponEffect is null when game start?
     }
 
     // public WeaponEffect getTranslatedEffect(ItemStack baseStack, ItemStack additionStack) {

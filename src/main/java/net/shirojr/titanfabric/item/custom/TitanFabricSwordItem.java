@@ -2,11 +2,7 @@ package net.shirojr.titanfabric.item.custom;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
@@ -28,6 +24,10 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
         this.baseEffect = baseEffect;
     }
 
+    public WeaponEffect getBaseEffect() {
+        return this.baseEffect;
+    }
+
     @Override
     public ItemType isType() {
         return ItemType.PRODUCT;
@@ -46,9 +46,8 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if (EffectHelper.stackHasNoWeaponEffectData(stack.getOrCreateNbt()))
-            super.appendTooltip(stack, world, tooltip, context);
-        super.appendTooltip(stack, world, EffectHelper.appendSwordToolTip(tooltip, stack), context);
+        EffectHelper.appendSwordToolTip(tooltip, stack);
+        super.appendTooltip(stack, world, tooltip, context);
     }
 
     @Override
