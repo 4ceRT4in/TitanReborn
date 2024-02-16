@@ -8,8 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.PotionUtil;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
@@ -18,7 +16,10 @@ import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
@@ -72,7 +73,6 @@ public final class EffectHelper {
             NbtCompound newTypeCompound = new NbtCompound();
             newTypeCompound.putString(EFFECT_NBT_KEY, entry.weaponEffect().getId());
             newTypeCompound.putInt(EFFECTS_STRENGTH_NBT_KEY, entry.strength());
-
             if (!stackNbt.contains(EFFECTS_COMPOUND_NBT_KEY)) {
                 NbtCompound freshCompound = new NbtCompound();
                 freshCompound.put(entry.type().getNbtKey(), newTypeCompound);
@@ -97,7 +97,6 @@ public final class EffectHelper {
             LoggerUtil.devLogger("Potion had more then one StatusEffect", true, null);
             return null;
         }
-
         for (var entry : WeaponEffect.values()) {
             if (entry.getIngredientEffect() == null) continue;
             if (entry.getIngredientEffect().equals(statusEffects.get(0).getEffectType())) return entry;
@@ -124,32 +123,6 @@ public final class EffectHelper {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Builds the ToolTip TranslationKey for the Sword ItemStack which has a TitanFabric Weapon Effect
-     *
-     * @param tooltip original tooltip of the ItemStack
-     * @param stack   original ItemStack
-     */
-    public static void appendSwordToolTip(List<Text> tooltip, ItemStack stack) {
-        NbtCompound baseCompound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
-        Set<String> effectNbtKeys = baseCompound.getKeys();
-        for (String nbtKey : effectNbtKeys) {
-            String effectId = baseCompound.getCompound(nbtKey).getString(EFFECT_NBT_KEY);
-            WeaponEffect effect = WeaponEffect.getEffect(effectId);
-            WeaponEffectType effectType = WeaponEffectType.getType(nbtKey);
-            if (effect == null || effectType == null) continue;
-            String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack, effectType);
-            switch (effect) {
-                case BLIND -> translation += "Blind";
-                case FIRE -> translation += "Fire";
-                case POISON -> translation += "Poison";
-                case WEAK -> translation += "Weak";
-                case WITHER -> translation += "Wither";
-            }
-            tooltip.add(new TranslatableText(translation));
-        }
     }
 
     private static List<WeaponEffect> getWeaponEffects() {
@@ -210,7 +183,6 @@ public final class EffectHelper {
                 stacks.add(secondEffectStack);
             }
         }
-
     }
 
     public static void applyWeaponEffectsOnTarget(World world, ItemStack itemStack, LivingEntity target) {
@@ -230,12 +202,11 @@ public final class EffectHelper {
         WeaponEffect effect = data.weaponEffect();
         int effectStrength = data.strength();
         if (world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
-
         switch (effect) {
             case BLIND -> {
                 if (target.hasStatusEffect(StatusEffects.BLINDNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), 100, effectStrength - 1)
                 );
             }
             case FIRE -> {
@@ -245,30 +216,21 @@ public final class EffectHelper {
             case POISON -> {
                 if (target.hasStatusEffect(StatusEffects.POISON)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), 100, effectStrength - 1)
                 );
             }
             case WEAK -> {
                 if (target.hasStatusEffect(StatusEffects.WEAKNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), 100, effectStrength - 1)
                 );
             }
             case WITHER -> {
                 if (target.hasStatusEffect(StatusEffects.WITHER)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), secondsToTicks(5), effectStrength - 1)
+                        effect.getOutputEffect(), 100, effectStrength - 1)
                 );
             }
         }
-    }
-
-    /**
-     * Translates from seconds to ticks
-     *
-     * @return calculated ticks
-     */
-    public static int secondsToTicks(int seconds) {
-        return seconds * 20;
     }
 }

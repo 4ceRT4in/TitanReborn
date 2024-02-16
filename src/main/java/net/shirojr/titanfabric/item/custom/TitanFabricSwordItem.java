@@ -10,6 +10,7 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.EssenceCrafting;
+import net.shirojr.titanfabric.util.items.ToolTipHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        EffectHelper.appendSwordToolTip(tooltip, stack);
+        ToolTipHelper.appendSwordToolTip(tooltip, stack);
         super.appendTooltip(stack, world, tooltip, context);
     }
 
