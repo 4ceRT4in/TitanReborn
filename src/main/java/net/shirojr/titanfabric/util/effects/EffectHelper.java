@@ -26,12 +26,8 @@ import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
  * Helper class for TitanFabric {@linkplain WeaponEffect}
  */
 public final class EffectHelper {
-    // public static final String EFFECTS_COMPOUND_NBT_KEY = TitanFabric.MODID + ".WeaponEffect";
-    // public static final String EFFECTS_NBT_KEY = "effect";
-    // public static final String EFFECTS_STRENGTH_NBT_KEY = "EffectStrength";
-
     private EffectHelper() {
-        // private ctor to avoid instantiating this utility class
+        // private constructor to avoid instantiating this utility class
     }
 
     /**
@@ -135,7 +131,6 @@ public final class EffectHelper {
      *
      * @param tooltip original tooltip of the ItemStack
      * @param stack   original ItemStack
-     * @return ItemStack with description for current {@linkplain WeaponEffect TitanFabric WeaponEffect}
      */
     public static void appendSwordToolTip(List<Text> tooltip, ItemStack stack) {
         NbtCompound baseCompound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
@@ -186,8 +181,7 @@ public final class EffectHelper {
                 ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
                 stacks.add(effectStack);
             }
-        }
-        else if (baseItem instanceof TitanFabricSwordItem swordItem) {
+        } else if (baseItem instanceof TitanFabricSwordItem swordItem) {
             ItemStack onlyInnateItemStack = new ItemStack(baseItem);
             if (swordItem.getBaseEffect() != null) {
                 WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, swordItem.getBaseEffect(), 1);
@@ -219,9 +213,7 @@ public final class EffectHelper {
 
     }
 
-    public static void applyWeaponEffectsOnTarget(World world, ItemStack itemStack, LivingEntity user, LivingEntity target) {
-        //String currentEffect = itemStack.getOrCreateNbt().getString(EFFECTS_NBT_KEY);
-        //if (currentEffect == null) return;
+    public static void applyWeaponEffectsOnTarget(World world, ItemStack itemStack, LivingEntity target) {
         NbtCompound compound = itemStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         for (String nbtKey : compound.getKeys()) {
             WeaponEffectType type = WeaponEffectType.getType(nbtKey);
@@ -229,12 +221,11 @@ public final class EffectHelper {
             String currentEffect = compound.getCompound(nbtKey).getString(WeaponEffectData.EFFECT_NBT_KEY);
             int strength = EffectHelper.getEffectStrength(itemStack, type);
             WeaponEffectData data = new WeaponEffectData(type, WeaponEffect.getEffect(currentEffect), strength);
-            applyWeaponEffectOnTarget(data, world, itemStack, user, target);
+            applyWeaponEffectOnTarget(data, world, target);
         }
     }
 
-    private static void applyWeaponEffectOnTarget(WeaponEffectData data, World world,
-                                                  ItemStack itemStack, LivingEntity user, LivingEntity target) {
+    private static void applyWeaponEffectOnTarget(WeaponEffectData data, World world, LivingEntity target) {
         if (world.isClient() || data == null) return;
         WeaponEffect effect = data.weaponEffect();
         int effectStrength = data.strength();

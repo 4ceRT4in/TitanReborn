@@ -30,7 +30,7 @@ public class TitanFabricEssenceItem extends Item implements EssenceCrafting {
     @Override
     public Text getName(ItemStack stack) {
         Optional<WeaponEffectData> data = WeaponEffectData.fromNbt(stack.getOrCreateNbt()
-                        .getCompound(EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
+                .getCompound(EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
         if (data.isEmpty() || data.get().weaponEffect() == null) return super.getName(stack);
         return switch (data.get().weaponEffect()) {
             case BLIND -> new TranslatableText("item.titanfabric.blindness_essence");

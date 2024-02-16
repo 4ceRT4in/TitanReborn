@@ -28,6 +28,7 @@ public class WeaponRecipe extends SmithingRecipe {
     private final Ingredient addition;
     private WeaponEffectData weaponEffectData;
     private final ItemStack result;
+
     public WeaponRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
         super(id, base, addition, result);
         this.base = base;
@@ -57,8 +58,7 @@ public class WeaponRecipe extends SmithingRecipe {
         if (weaponEffectData.isEmpty()) {
             LoggerUtil.devLogger("Couldn't find WeaponEffect from Inventory", true, null);
             return null;
-        }
-        else {
+        } else {
             this.weaponEffectData = weaponEffectData.get();
         }
         return null;
@@ -70,8 +70,8 @@ public class WeaponRecipe extends SmithingRecipe {
     }
 
     // public WeaponEffect getTranslatedEffect(ItemStack baseStack, ItemStack additionStack) {
-        // no matching addition effect = new 25 %
-        // matching
+    // no matching addition effect = new 25 %
+    // matching
 
     // }
 

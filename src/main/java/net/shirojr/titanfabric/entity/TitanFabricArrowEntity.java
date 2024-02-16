@@ -68,7 +68,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     @Override
     protected void onHit(LivingEntity target) {
         if (this.getOwner() instanceof LivingEntity owner && this.itemStack != null) {
-            EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), this.itemStack, owner, target);
+            EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), this.itemStack, target);
         }
         super.onHit(target);
     }

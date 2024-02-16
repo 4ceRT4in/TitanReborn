@@ -49,7 +49,6 @@ public class ModelPredicateProviders {
     }
 
     private static void registerEssenceProvider() {
-        // registerEffectProvider(TitanFabricItems.ESSENCE, new Identifier("effect"));
         ModelPredicateProviderRegistry.register(TitanFabricItems.ESSENCE, new Identifier("effect"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(INNATE_EFFECT.getNbtKey()))
@@ -112,6 +111,7 @@ public class ModelPredicateProviders {
             if (stack == null || entity == null || entity.getActiveItem() != stack) return 0.0f;
             float maxUseTime = stack.getMaxUseTime();
             float leftUseTime = entity.getItemUseTimeLeft();
+            //TODO: usage animation
             return 0.65f;
         });
     }
