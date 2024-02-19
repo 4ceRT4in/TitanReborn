@@ -2,11 +2,11 @@
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
         {
-            "item": "titanfabric:nether_block"
+            "item": "titanfabric:ember_block"
         }
     ],
     "result": {
-        "item": "titanfabric:nether_ingot",
+        "item": "titanfabric:ember_ingot",
         "count": 9
     }
 }

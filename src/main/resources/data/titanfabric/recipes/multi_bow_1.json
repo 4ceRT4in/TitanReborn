@@ -13,7 +13,7 @@
             "item": "minecraft:string"
         },
         "t": {
-            "item": "titanfabric:nether_ingot"
+            "item": "titanfabric:ember_ingot"
         }
     },
     "result": {

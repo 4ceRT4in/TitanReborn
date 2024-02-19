@@ -16,8 +16,8 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.DIAMOND_GREATSWORD);
         registerWeaponEffects(TitanFabricItems.CITRIN_SWORD);
         registerWeaponEffects(TitanFabricItems.CITRIN_GREATSWORD);
-        registerWeaponEffects(TitanFabricItems.NETHER_SWORD);
-        registerWeaponEffects(TitanFabricItems.NETHER_GREATSWORD);
+        registerWeaponEffects(TitanFabricItems.EMBER_SWORD);
+        registerWeaponEffects(TitanFabricItems.EMBER_GREATSWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 

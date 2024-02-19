@@ -10,7 +10,7 @@ import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.*;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
-import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
+import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorBootsItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorChestplateItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorHelmetItem;
@@ -22,10 +22,9 @@ import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
+import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
-import net.shirojr.titanfabric.item.custom.sword.NetherSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 
 public class TitanFabricItems {
@@ -39,14 +38,14 @@ public class TitanFabricItems {
     public static final Item CITRIN_BOOTS = registerItem("citrin_boots",
             new CitrinArmorItem(EquipmentSlot.FEET));
 
-    public static final Item NETHER_HELMET = registerItem("nether_helmet",
-            new NetherArmorItem(EquipmentSlot.HEAD));
-    public static final Item NETHER_CHESTPLATE = registerItem("nether_chestplate",
-            new NetherArmorItem(EquipmentSlot.CHEST));
-    public static final Item NETHER_LEGGINGS = registerItem("nether_leggings",
-            new NetherArmorItem(EquipmentSlot.LEGS));
-    public static final Item NETHER_BOOTS = registerItem("nether_boots",
-            new NetherArmorItem(EquipmentSlot.FEET));
+    public static final Item EMBER_HELMET = registerItem("ember_helmet",
+            new EmberArmorItem(EquipmentSlot.HEAD));
+    public static final Item EMBER_CHESTPLATE = registerItem("ember_chestplate",
+            new EmberArmorItem(EquipmentSlot.CHEST));
+    public static final Item EMBER_LEGGINGS = registerItem("ember_leggings",
+            new EmberArmorItem(EquipmentSlot.LEGS));
+    public static final Item EMBER_BOOTS = registerItem("ember_boots",
+            new EmberArmorItem(EquipmentSlot.FEET));
 
     public static final Item LEGEND_HELMET = registerItem("legend_helmet",
             new LegendArmorHelmetItem(2.0f));
@@ -62,10 +61,10 @@ public class TitanFabricItems {
             new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final Item CITRIN_GREATSWORD = registerItem("citrin_greatsword",
             new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -2.4f, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item NETHER_SWORD = registerItem("nether_sword",
-            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER, removeBaseDamage(7), -2.4f, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item NETHER_GREATSWORD = registerItem("nether_greatsword",
-            new NetherSwordItem(true, TitanFabricToolMaterials.NETHER_GREAT, removeBaseDamage(8), -2.4f, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
+    public static final Item EMBER_SWORD = registerItem("ember_sword",
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
+    public static final Item EMBER_GREATSWORD = registerItem("ember_greatsword",
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final Item LEGEND_SWORD = registerItem("legend_sword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword",
@@ -96,13 +95,13 @@ public class TitanFabricItems {
 
     public static final Item CITRIN_SHARD = registerItem("citrin_shard",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
-    public static final Item NETHER_INGOT = registerItem("nether_ingot",
+    public static final Item EMBER_INGOT = registerItem("ember_ingot",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
     public static final Item LEGEND_INGOT = registerItem("legend_ingot",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
     public static final Item LEGEND_POWDER = registerItem("legend_powder",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
-    public static final Item NETHER_SHARD = registerItem("nether_shard",
+    public static final Item EMBER_SHARD = registerItem("ember_shard",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
     public static final Item LEGEND_CRYSTAL = registerItem("legend_crystal",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));

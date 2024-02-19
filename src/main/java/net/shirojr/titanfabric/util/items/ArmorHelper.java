@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
+import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 
 public class ArmorHelper {
 
@@ -15,7 +15,7 @@ public class ArmorHelper {
     }
 
     public static int getNetherArmorCount(PlayerEntity playerEntity) {
-        return (int) getArmorItems(playerEntity).stream().filter(item -> item instanceof NetherArmorItem).count();
+        return (int) getArmorItems(playerEntity).stream().filter(item -> item instanceof EmberArmorItem).count();
     }
 
 }

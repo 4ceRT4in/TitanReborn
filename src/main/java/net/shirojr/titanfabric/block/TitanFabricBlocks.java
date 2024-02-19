@@ -21,7 +21,7 @@ public class TitanFabricBlocks {
     public static final Block CITRIN_ORE = registerBlock("citrin_ore",
             new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(4.5f).strength(3.0f, 3.0f).requiresTool(), 3), TitanFabricItemGroups.TITAN);
-    public static final Block NETHER_ORE = registerBlock("nether_ore",
+    public static final Block EMBER_ORE = registerBlock("ember_ore",
             new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(4.5f).strength(3.5f, 3.0f).requiresTool(), 4), TitanFabricItemGroups.TITAN);
     public static final Block DEEPSTALE_LEGEND_ORE = registerBlock("deepslate_legend_ore",
@@ -31,19 +31,12 @@ public class TitanFabricBlocks {
     public static final Block CITRIN_BLOCK = registerBlock("citrin_block",
             new Block(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.METAL).mapColor(DyeColor.YELLOW)
                     .hardness(12.0f).strength(6.0f).requiresTool()), TitanFabricItemGroups.TITAN);
-    public static final Block NETHER_BLOCK = registerBlock("nether_block",
+    public static final Block EMBER_BLOCK = registerBlock("ember_block",
             new Block(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.METAL).mapColor(DyeColor.RED)
                     .hardness(12.0f).strength(6.0f).requiresTool()), TitanFabricItemGroups.TITAN);
     public static final Block LEGEND_BLOCK = registerBlock("legend_block",
             new Block(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.METAL).mapColor(DyeColor.PURPLE)
                     .hardness(12.0f).strength(6.0f).requiresTool()), TitanFabricItemGroups.TITAN);
-
-    public static final Block DIRT_LIGHT = registerBlock("dirt_light",
-            new Block(FabricBlockSettings.of(Material.SOIL).sounds(BlockSoundGroup.GRAVEL).mapColor(DyeColor.BROWN)
-                    .hardness(0.5f).strength(0.5f).luminance(15)), TitanFabricItemGroups.TITAN);
-    public static final Block STONE_LIGHT = registerBlock("stone_light",
-            new Block(FabricBlockSettings.of(Material.STONE).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
-                    .hardness(1.5f).strength(6.0f).luminance(15).requiresTool()), TitanFabricItemGroups.TITAN);
 
     public static final Block DIAMOND_FURNACE = registerBlock("diamond_furnace",
             new DiamondFurnaceBlock(FabricBlockSettings.of(Material.METAL).mapColor(DyeColor.CYAN)

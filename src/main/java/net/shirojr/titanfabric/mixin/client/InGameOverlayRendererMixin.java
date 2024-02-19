@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameOverlayRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
-import net.shirojr.titanfabric.item.custom.armor.NetherArmorItem;
+import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +23,7 @@ public abstract class InGameOverlayRendererMixin {
         if (minecraftClient.player == null) return;
         int count = 0;
         for (Item entry : ArmorHelper.getArmorItems(minecraftClient.player)) {
-            if (entry instanceof NetherArmorItem) count++;
+            if (entry instanceof EmberArmorItem) count++;
         }
         if (count >= 4) info.cancel();
     }

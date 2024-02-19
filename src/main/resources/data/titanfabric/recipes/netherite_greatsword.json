@@ -1,7 +1,7 @@
 {
     "type": "minecraft:smithing",
     "base": {
-        "item": "titanfabric:nether_greatsword"
+        "item": "titanfabric:ember_greatsword"
     },
     "addition": {
         "item": "minecraft:netherite_ingot"

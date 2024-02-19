@@ -6,11 +6,11 @@
     ],
     "key": {
         "t": {
-            "item": "titanfabric:nether_ingot"
+            "item": "titanfabric:ember_ingot"
         }
     },
     "result": {
-        "item": "titanfabric:nether_boots",
+        "item": "titanfabric:ember_boots",
         "count": 1
     }
 }

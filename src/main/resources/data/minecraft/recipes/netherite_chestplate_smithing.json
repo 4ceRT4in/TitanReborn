@@ -1,7 +1,7 @@
 {
     "type": "minecraft:smithing",
     "base": {
-        "item": "titanfabric:nether_chestplate"
+        "item": "titanfabric:ember_chestplate"
     },
     "addition": {
         "item": "minecraft:netherite_ingot"

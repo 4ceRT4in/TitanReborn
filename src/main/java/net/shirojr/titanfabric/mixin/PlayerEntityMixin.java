@@ -64,7 +64,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             PlayerEntity player = (PlayerEntity) (Object) this;
             List<Item> armorItems = ArmorHelper.getArmorItems(player);
             if ((source == DamageSource.HOT_FLOOR || source == DamageSource.LAVA || source.isFire())) {
-                int netherArmorCount = (int) armorItems.stream().filter(item -> item instanceof NetherArmorItem).count();
+                int netherArmorCount = (int) armorItems.stream().filter(item -> item instanceof EmberArmorItem).count();
                 if (netherArmorCount > 0) {
 
                     if (netherArmorCount == 4) {
@@ -176,6 +176,6 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Environment(EnvType.CLIENT)
     @Override
     public boolean doesRenderOnFire() {
-        return super.doesRenderOnFire() && (int) ArmorHelper.getArmorItems((PlayerEntity) (Object) this).stream().filter(item -> item instanceof NetherArmorItem).count() < 4;
+        return super.doesRenderOnFire() && (int) ArmorHelper.getArmorItems((PlayerEntity) (Object) this).stream().filter(item -> item instanceof EmberArmorItem).count() < 4;
     }
 }

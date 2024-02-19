@@ -25,7 +25,7 @@
                   }
                 }
               ],
-              "name": "titanfabric:nether_ore"
+              "name": "titanfabric:ember_ore"
             },
             {
               "type": "minecraft:item",
@@ -39,7 +39,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "titanfabric:nether_shard"
+              "name": "titanfabric:ember_shard"
             }
           ]
         }

@@ -1,7 +1,7 @@
 {
     "type": "minecraft:smithing",
     "base": {
-        "item": "titanfabric:nether_leggings"
+        "item": "titanfabric:ember_leggings"
     },
     "addition": {
         "item": "minecraft:netherite_ingot"

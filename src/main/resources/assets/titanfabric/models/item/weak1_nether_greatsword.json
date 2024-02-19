@@ -1,7 +1,0 @@
-{
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "titanfabric:items/weak1_nether_greatsword"
-  }
-
-}

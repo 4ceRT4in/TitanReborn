@@ -15,7 +15,7 @@ public class TitanFabricConfiguredFeatures {
     );
     public static final List<OreFeatureConfig.Target> NETHER_NETHER_ORES = List.of(
             OreFeatureConfig.createTarget(OreConfiguredFeatures.NETHERRACK,
-                    TitanFabricBlocks.NETHER_ORE.getDefaultState())
+                    TitanFabricBlocks.EMBER_ORE.getDefaultState())
     );
     public static final List<OreFeatureConfig.Target> OVERWORLD_LEGEND_ORES = List.of(
             OreFeatureConfig.createTarget(OreConfiguredFeatures.DEEPSLATE_ORE_REPLACEABLES,

@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "titanfabric:nether_block"
+          "name": "titanfabric:ember_block"
         }
       ],
       "conditions": [

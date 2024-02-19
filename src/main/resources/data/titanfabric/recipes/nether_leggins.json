@@ -7,11 +7,11 @@
     ],
     "key": {
         "t": {
-            "item": "titanfabric:nether_ingot"
+            "item": "titanfabric:ember_ingot"
         }
     },
     "result": {
-        "item": "titanfabric:nether_leggings",
+        "item": "titanfabric:ember_leggings",
         "count": 1
     }
 }

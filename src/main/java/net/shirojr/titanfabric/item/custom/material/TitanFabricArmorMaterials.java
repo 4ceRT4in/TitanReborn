@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.item.custom.material;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -17,7 +16,7 @@ public enum TitanFabricArmorMaterials implements ArmorMaterial {
             () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
     NETHER("nether", 30, new int[] { 3, 6, 8, 3 }, 10,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0f, 0.0f,
-            () -> Ingredient.ofItems(TitanFabricItems.NETHER_INGOT)),
+            () -> Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
     LEGEND("legend", -1, new int[] { 3, 6, 8, 3 }, 25,
             SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
