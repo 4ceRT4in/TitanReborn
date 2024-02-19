@@ -25,9 +25,6 @@
     ],
     "client": [
       "net.shirojr.titanfabric.TitanFabricClient"
-    ],
-    "fabric-datagen": [
-      "net.shirojr.titanfabric.TitanFabricDatagen"
     ]
   },
   "mixins": [
