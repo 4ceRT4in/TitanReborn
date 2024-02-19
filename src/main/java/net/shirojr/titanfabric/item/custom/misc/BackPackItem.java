@@ -25,7 +25,7 @@ public class BackPackItem extends Item {
     public static final String INVENTORY_NBT_KEY = TitanFabric.MODID + ".backpack.inventory";
 
     public BackPackItem(Settings settings, Type backPackType) {
-        super(settings.rarity(backPackType.getRarity()));
+        super(settings);
         this.backpackType = backPackType;
     }
 
