@@ -9,13 +9,13 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.items.Anvilable;
-import net.shirojr.titanfabric.util.items.EssenceCrafting;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import net.shirojr.titanfabric.util.items.ToolTipHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, Anvilable {
+public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
     private final boolean hasWeaponEffects;
     private final WeaponEffect baseEffect;
 

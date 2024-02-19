@@ -3,7 +3,7 @@ package net.shirojr.titanfabric.util.items;
 import net.minecraft.item.ItemStack;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 
-public interface EssenceCrafting {
+public interface WeaponEffectCrafting {
     ItemType isType();
 
     /**

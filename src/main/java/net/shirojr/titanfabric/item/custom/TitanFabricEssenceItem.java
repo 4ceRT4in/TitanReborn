@@ -14,7 +14,7 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
-import net.shirojr.titanfabric.util.items.EssenceCrafting;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECTS_COMPOUND_NBT_KEY;
 
-public class TitanFabricEssenceItem extends Item implements EssenceCrafting {
+public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting {
     public TitanFabricEssenceItem() {
         super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64));
     }

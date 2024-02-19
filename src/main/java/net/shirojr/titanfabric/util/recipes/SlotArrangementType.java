@@ -11,7 +11,7 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
-import net.shirojr.titanfabric.util.items.EssenceCrafting;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +68,7 @@ public enum SlotArrangementType {
         if (firstEffectStack == null) return null;
         if (firstEffectStack.isOf(Items.POTION)) {
             effect = EffectHelper.getWeaponEffectFromPotion(firstEffectStack);
-        } else if (firstEffectStack.getItem() instanceof EssenceCrafting essenceIngredient) {
+        } else if (firstEffectStack.getItem() instanceof WeaponEffectCrafting essenceIngredient) {
             effect = essenceIngredient.ingredientEffect(firstEffectStack);
         } else {
             Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(firstEffectStack.getOrCreateNbt(), WeaponEffectType.ADDITIONAL_EFFECT);

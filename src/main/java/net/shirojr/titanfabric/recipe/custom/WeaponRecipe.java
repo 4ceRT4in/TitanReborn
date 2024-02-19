@@ -13,21 +13,24 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 
 import java.util.Optional;
 
-import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECTS_COMPOUND_NBT_KEY;
+import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
 public class WeaponRecipe extends SmithingRecipe {
     private final Ingredient base;
     private final Ingredient addition;
     private WeaponEffectData weaponEffectData;
-    private final ItemStack result;
+    private ItemStack result;
 
     public WeaponRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
         super(id, base, addition, result);
@@ -38,14 +41,25 @@ public class WeaponRecipe extends SmithingRecipe {
 
     @Override
     public boolean matches(Inventory inventory, World world) {
-        boolean baseMatches = this.base.test(inventory.getStack(0));
-        boolean additionMatches = this.addition.test(inventory.getStack(1));
-        if (baseMatches && additionMatches) {
-/*            WeaponEffect weaponEffect = ;
-            WeaponEffectType weaponEffectType = ;
-            this.weaponEffectData = new WeaponEffectData();*/
-        }
+        ItemStack baseStack = inventory.getStack(0);
+        ItemStack additionStack = inventory.getStack(1);
+        if (!(baseStack.getItem() instanceof WeaponEffectCrafting validBaseItem)) return false;
+        if (!(additionStack.getItem() instanceof WeaponEffectCrafting validAdditionItem)) return false;
+        boolean baseMatches = this.base.test(baseStack);
+        boolean additionMatches = this.addition.test(additionStack);
 
+        if (!additionStack.getOrCreateNbt().contains(EFFECTS_COMPOUND_NBT_KEY)) return false;
+        NbtCompound compound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+        if (!compound.contains(WeaponEffectType.INNATE_EFFECT.getNbtKey())) return false;
+        NbtCompound typeCompound = compound.getCompound(WeaponEffectType.INNATE_EFFECT.getNbtKey());
+        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT,
+                WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY)),
+                typeCompound.getInt(EFFECTS_STRENGTH_NBT_KEY)); //FIXME: stays 0 (should be 1 or 2)
+
+        if (baseMatches && additionMatches) {
+            this.weaponEffectData = effectData;
+            this.result = getOutput();
+        }
         return baseMatches & additionMatches;
     }
 
@@ -61,19 +75,21 @@ public class WeaponRecipe extends SmithingRecipe {
         } else {
             this.weaponEffectData = weaponEffectData.get();
         }
-        return null;
+        ItemStack itemStack = this.result.copy();
+        itemStack.getOrCreateNbt().put(EFFECTS_COMPOUND_NBT_KEY, weaponEffectData.get().toNbt());
+        this.result = itemStack.copy();
+        return itemStack;
     }
 
     @Override
     public ItemStack getOutput() {
-        return EffectHelper.applyEffectToStack(this.result, weaponEffectData); // FIXME: WeaponEffect is null when game start?
+        WeaponEffectData data = this.weaponEffectData;
+        if (data == null) return this.result;
+        int strength = data.strength() + 1;
+        strength = Math.min(2, Math.max(1, strength));
+        WeaponEffectData newData = new WeaponEffectData(weaponEffectData.type(), weaponEffectData.weaponEffect(), strength);
+        return EffectHelper.applyEffectToStack(this.result, newData);
     }
-
-    // public WeaponEffect getTranslatedEffect(ItemStack baseStack, ItemStack additionStack) {
-    // no matching addition effect = new 25 %
-    // matching
-
-    // }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
@@ -91,7 +107,7 @@ public class WeaponRecipe extends SmithingRecipe {
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
             Ingredient addition = Ingredient.fromJson(JsonHelper.getObject(json, "modifier"));
             ItemStack result = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "result"));
-            return new WeaponRecipe(id, addition, base, result);
+            return new WeaponRecipe(id, base, addition, result);
         }
 
         @Override

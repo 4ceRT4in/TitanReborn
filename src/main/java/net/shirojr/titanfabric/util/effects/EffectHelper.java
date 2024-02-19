@@ -16,10 +16,7 @@ import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
