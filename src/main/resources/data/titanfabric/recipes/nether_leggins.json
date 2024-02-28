@@ -1,13 +1,16 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "ttt",
-        "t t",
-        "t t"
+        "eee",
+        "eFe",
+        "e e"
     ],
     "key": {
-        "t": {
+        "e": {
             "item": "titanfabric:ember_ingot"
+        },
+        "F": {
+            "item": "minecraft:fire_charge"
         }
     },
     "result": {
