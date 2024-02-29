@@ -40,5 +40,4 @@ public record WeaponEffectData(WeaponEffectType type, WeaponEffect weaponEffect,
         }
         return dataList;
     }
-
 }

@@ -147,7 +147,7 @@ public final class EffectHelper {
 
         if (baseItem instanceof TitanFabricArrowItem || baseItem instanceof TitanFabricEssenceItem) {
             for (WeaponEffect entry : possibleEffects) {
-                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 0);
+                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 1); //TODO: arrows level 2
                 ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
                 stacks.add(effectStack);
             }
