@@ -26,7 +26,8 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
 
-        registerEssenceProvider();
+        registerBasicInnateItemsProvider(TitanFabricItems.ESSENCE);
+        registerBasicInnateItemsProvider(TitanFabricItems.ARROW);
 
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
@@ -48,8 +49,8 @@ public class ModelPredicateProviders {
         registerStrengthProvider(item, new Identifier("strength"));
     }
 
-    private static void registerEssenceProvider() {
-        ModelPredicateProviderRegistry.register(TitanFabricItems.ESSENCE, new Identifier("effect"),
+    private static void registerBasicInnateItemsProvider(Item item) {
+        ModelPredicateProviderRegistry.register(item, new Identifier("effect"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(INNATE_EFFECT.getNbtKey()))
                         return 0.0f;

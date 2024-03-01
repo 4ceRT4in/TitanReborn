@@ -143,11 +143,17 @@ public final class EffectHelper {
      */
     public static void generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
         List<WeaponEffect> possibleEffects = getWeaponEffects();
-        if (baseItem instanceof TitanFabricArrowItem) possibleEffects = getArrowEffects();
-
-        if (baseItem instanceof TitanFabricArrowItem || baseItem instanceof TitanFabricEssenceItem) {
+        if (baseItem instanceof TitanFabricArrowItem) {
+            possibleEffects = getArrowEffects();
             for (WeaponEffect entry : possibleEffects) {
-                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 1); //TODO: arrows level 2
+                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 2);
+                ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
+                stacks.add(effectStack);
+            }
+        }
+        else if (baseItem instanceof TitanFabricEssenceItem) {
+            for (WeaponEffect entry : possibleEffects) {
+                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 1);
                 ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
                 stacks.add(effectStack);
             }

@@ -183,6 +183,11 @@
   "tooltip.titanfabric.weaknessEssenceItem": "Applies §7+25% Weakness Chance §ron Swords",
   "tooltip.titanfabric.witherEssenceItem": "Applies §8+25% Wither Chance §ron Swords",
 
+  "tooltip.titanfabric.blindnessArrowEffect": "Applies §1+50% Blindness Chance §ron Target",
+  "tooltip.titanfabric.poisonArrowEffect": "Applies §2+50% Poison Chance §ron Target",
+  "tooltip.titanfabric.weaknessArrowEffect": "Applies §7+50% Weakness Chance §ron Target",
+  "tooltip.titanfabric.witherArrowEffect": "Applies §8+50% Wither Chance §ron Target",
+
   "tooltip.titanfabric.blindnessArrowItem":"Applies §1Blindness §rfor 5 Seconds",
   "tooltip.titanfabric.poisonArrowItem":"Applies §2Poison §rfor 5 Seconds",
   "tooltip.titanfabric.weaknessArrowItem":"Applies §7Weakness §rfor 5 Seconds",
