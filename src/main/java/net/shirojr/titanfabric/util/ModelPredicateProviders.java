@@ -32,16 +32,14 @@ public class ModelPredicateProviders {
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
 
-        registerBowProviders(TitanFabricItems.LEGEND_BOW); // vanilla arrows, spectral, not tipped, modded effect arrows
-        registerBowProviders(TitanFabricItems.MULTI_BOW_1); // only vanilla arrows, spectral
+        registerBowProviders(TitanFabricItems.LEGEND_BOW);
+        registerBowProviders(TitanFabricItems.MULTI_BOW_1);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_1);
         registerBowProviders(TitanFabricItems.MULTI_BOW_2);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_2);
         registerBowProviders(TitanFabricItems.MULTI_BOW_3);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_3);
         registerCrossBowProviders();
-
-        // crossbow: vanilla arrows, spectral, vanilla splash potions, vanilla lingering potions, no rockets!
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -112,8 +110,8 @@ public class ModelPredicateProviders {
             if (stack == null || entity == null || entity.getActiveItem() != stack) return 0.0f;
             float maxUseTime = stack.getMaxUseTime();
             float leftUseTime = entity.getItemUseTimeLeft();
-            //TODO: usage animation
-            return 0.65f;
+            return (maxUseTime - leftUseTime) / 20.0f;
+            //return 0.65f;
         });
     }
 
