@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " ii",
+        "iii",
+        "/i "
+    ],
+    "key": {
+        "i": {
+            "item": "titanfabric:legend_ingot"
+        },
+        "/": {
+            "item": "titanfabric:sword_handle"
+        }
+    },
+    "result": {
+        "item": "titanfabric:legend_greatsword",
+        "count": 1
+    }
+}

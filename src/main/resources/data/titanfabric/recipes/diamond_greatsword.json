@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " ii",
+        "iii",
+        "/i "
+    ],
+    "key": {
+        "i": {
+            "item": "minecraft:diamond"
+        },
+        "/": {
+            "item": "titanfabric:sword_handle"
+        }
+    },
+    "result": {
+        "item": "titanfabric:diamond_greatsword",
+        "count": 1
+    }
+}
