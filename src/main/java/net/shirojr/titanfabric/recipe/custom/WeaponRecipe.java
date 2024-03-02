@@ -51,9 +51,14 @@ public class WeaponRecipe extends SmithingRecipe {
         if (!baseStack.getOrCreateNbt().contains(EFFECTS_COMPOUND_NBT_KEY)) return false;
         NbtCompound additionCompound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         NbtCompound baseCompound = baseStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+        Optional<WeaponEffectData> baseAdditionData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
+        Optional<WeaponEffectData> modifierInnateData = WeaponEffectData.fromNbt(additionCompound, WeaponEffectType.INNATE_EFFECT);
         if (!additionCompound.contains(WeaponEffectType.INNATE_EFFECT.getNbtKey())) return false;
-        if (WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT).isPresent()) {
-            int oldStrength = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT).get().strength();
+        if (baseAdditionData.isPresent() && modifierInnateData.isPresent()) {
+            if (!baseAdditionData.get().weaponEffect().equals(modifierInnateData.get().weaponEffect())) {
+                return false;
+            }
+            int oldStrength = baseAdditionData.get().strength();
             if (oldStrength > 1) return false;
         }
         NbtCompound typeCompound = additionCompound.getCompound(WeaponEffectType.INNATE_EFFECT.getNbtKey());

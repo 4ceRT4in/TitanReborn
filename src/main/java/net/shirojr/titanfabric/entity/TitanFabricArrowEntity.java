@@ -77,7 +77,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         if (effect == null) return;
-        NbtCompound compound = effect.toNbt();  // FIXME: NullPointerException ?
+        NbtCompound compound = effect.toNbt();  //FIXME: NullPointerException ?
         nbt.put(EFFECTS_COMPOUND_NBT_KEY, compound);
     }
 
