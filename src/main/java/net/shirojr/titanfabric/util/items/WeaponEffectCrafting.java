@@ -1,17 +1,17 @@
 package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.item.ItemStack;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
 
-public interface EssenceCrafting {
+public interface WeaponEffectCrafting {
     ItemType isType();
 
     /**
      * Only override if this item is an {@link ItemType#INGREDIENT INGREDIENT}
      *
-     * @return {@link WeaponEffects WeaponEffect} of the {@link ItemType#INGREDIENT INGREDIENT}
+     * @return {@link WeaponEffect WeaponEffect} of the {@link ItemType#INGREDIENT INGREDIENT}
      */
-    default WeaponEffects ingredientEffect(ItemStack stack) {
+    default WeaponEffect ingredientEffect(ItemStack stack) {
         return null;
     }
 

@@ -159,8 +159,6 @@
   "item.minecraft.tipped_arrow.effect.indestructibility_potion": "Arrow of Indestructibility",
   "item.minecraft.tipped_arrow.effect.long_indestructibility_potion": "Arrow of Indestructibility",
 
-  "tooltip.titanfabric.citrinSwordItem": "§225% Poison Chance",
-  "tooltip.titanfabric.netherSwordItem": "§625% Fire Chance",
   "tooltip.titanfabric.legendBootsItem": "§5+1 Max Health",
   "tooltip.titanfabric.legendChestplateItem": "§5+4 Max Health",
   "tooltip.titanfabric.legendLeggingsItem": "§5+3 Max Health",
@@ -184,6 +182,11 @@
   "tooltip.titanfabric.poisonEssenceItem": "Applies §2+25% Poison Chance §ron Swords",
   "tooltip.titanfabric.weaknessEssenceItem": "Applies §7+25% Weakness Chance §ron Swords",
   "tooltip.titanfabric.witherEssenceItem": "Applies §8+25% Wither Chance §ron Swords",
+
+  "tooltip.titanfabric.blindnessArrowEffect": "Applies §1+50% Blindness Chance §ron Target",
+  "tooltip.titanfabric.poisonArrowEffect": "Applies §2+50% Poison Chance §ron Target",
+  "tooltip.titanfabric.weaknessArrowEffect": "Applies §7+50% Weakness Chance §ron Target",
+  "tooltip.titanfabric.witherArrowEffect": "Applies §8+50% Wither Chance §ron Target",
 
   "tooltip.titanfabric.blindnessArrowItem":"Applies §1Blindness §rfor 5 Seconds",
   "tooltip.titanfabric.poisonArrowItem":"Applies §2Poison §rfor 5 Seconds",

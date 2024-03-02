@@ -8,15 +8,19 @@ import net.minecraft.item.Items;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.recipe.custom.EssenceRecipe;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
-import net.shirojr.titanfabric.util.items.EssenceCrafting;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public enum SlotArrangementType {
     ESSENCE(TitanFabricItems.ESSENCE),
-    ARROW(TitanFabricItems.ARROW),
-    CITRIN_SWORD(TitanFabricItems.CITRIN_SWORD);  // TODO: use in another recipe type?
+    ARROW(TitanFabricItems.ARROW);
+    // CITRIN_SWORD(TitanFabricItems.CITRIN_SWORD);
 
     private final Item outputItem;
 
@@ -33,9 +37,9 @@ public enum SlotArrangementType {
         boolean effectModifierMatchesItems = inventoryContainsValidItems(inventory, effectModifier);
         boolean baseMatchesItems = inventoryContainsValidItems(inventory, base);
 
-        WeaponEffects validEffect = null;
-        for (var entry : WeaponEffects.values()) {
-            WeaponEffects currentEffect = getEffect(inventory, effectModifier);
+        WeaponEffect validEffect = null;
+        for (var entry : WeaponEffect.values()) {
+            WeaponEffect currentEffect = getEffect(inventory, effectModifier);
             if (entry.equals(currentEffect)) validEffect = currentEffect;
         }
         if (validEffect == null) return false;
@@ -51,8 +55,8 @@ public enum SlotArrangementType {
     }
 
     @Nullable
-    public WeaponEffects getEffect(Inventory inventory, EssenceRecipe.IngredientModule effectModifierModule) {
-        WeaponEffects effect;
+    public WeaponEffect getEffect(Inventory inventory, EssenceRecipe.IngredientModule effectModifierModule) {
+        WeaponEffect effect;
         ItemStack firstEffectStack = null;
 
         for (int i = 0; i < inventory.size(); i++) {
@@ -64,10 +68,12 @@ public enum SlotArrangementType {
         if (firstEffectStack == null) return null;
         if (firstEffectStack.isOf(Items.POTION)) {
             effect = EffectHelper.getWeaponEffectFromPotion(firstEffectStack);
-        } else if (firstEffectStack.getItem() instanceof EssenceCrafting essenceIngredient) {
+        } else if (firstEffectStack.getItem() instanceof WeaponEffectCrafting essenceIngredient) {
             effect = essenceIngredient.ingredientEffect(firstEffectStack);
         } else {
-            effect = WeaponEffects.getEffect(firstEffectStack.getOrCreateNbt().getString(EffectHelper.EFFECTS_NBT_KEY));
+            Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(firstEffectStack.getOrCreateNbt(), WeaponEffectType.ADDITIONAL_EFFECT);
+            if (effectData.isEmpty()) return null;
+            effect = effectData.get().weaponEffect();
         }
 
         return effect;

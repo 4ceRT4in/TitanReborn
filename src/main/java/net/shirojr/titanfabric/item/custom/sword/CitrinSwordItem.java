@@ -1,29 +1,12 @@
 package net.shirojr.titanfabric.item.custom.sword;
 
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
-import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
 
 public class CitrinSwordItem extends TitanFabricSwordItem {
     public CitrinSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, Item.Settings settings) {
-        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, WeaponEffects.POISON, settings);
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.citrinSwordItem"));
-        super.appendTooltip(stack, world, tooltip, context);
+        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, WeaponEffect.POISON, settings);
     }
 }

@@ -1,24 +1,23 @@
 package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.util.Pair;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.item.TitanFabricItems;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class ArrowSelectionHelper {
     public static final String ARROW_TYPE_NBT_KEY = TitanFabric.MODID + ".arrowType";
+
     private ArrowSelectionHelper() {
-        // private ctor to avoid instantiation
+        // private constructor to avoid instantiation
     }
 
     @Nullable
@@ -71,7 +70,6 @@ public class ArrowSelectionHelper {
         }
         return new Pair<>(arrowType, potion);
     }*/
-
     public static void consumeArrowFromBowData(ItemStack bowStack, Inventory inventory, int amount) {
         ArrowType arrowType = ArrowType.get(bowStack.getOrCreateNbt().getString(ARROW_TYPE_NBT_KEY));
 
@@ -113,6 +111,7 @@ public class ArrowSelectionHelper {
         NONE(TitanFabric.MODID + ".noData");
 
         private final String nbtKey;
+
         EffectNbtKeys(String nbtKey) {
             this.nbtKey = nbtKey;
         }

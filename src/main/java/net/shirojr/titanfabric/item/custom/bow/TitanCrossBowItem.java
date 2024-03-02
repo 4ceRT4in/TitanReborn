@@ -61,6 +61,11 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows 
     }
 
     @Override
+    public List<Item> supportedArrows() {
+        return List.of(Items.ARROW, Items.SPECTRAL_ARROW, Items.LINGERING_POTION, Items.SPLASH_POTION);
+    }
+
+    @Override
     public Predicate<ItemStack> getHeldProjectiles() {
         return CROSSBOW_HELD_PROJECTILES;
     }
@@ -408,10 +413,5 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows 
     @Override
     public int getRange() {
         return 8;
-    }
-
-    @Override
-    public List<Item> supportedArrows() {
-        return List.of(Items.ARROW, Items.SPECTRAL_ARROW, Items.LINGERING_POTION, Items.SPLASH_POTION);
     }
 }

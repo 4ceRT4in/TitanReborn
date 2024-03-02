@@ -2,30 +2,31 @@ package net.shirojr.titanfabric.item.custom;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffects;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.items.Anvilable;
-import net.shirojr.titanfabric.util.items.EssenceCrafting;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
+import net.shirojr.titanfabric.util.items.ToolTipHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, Anvilable {
+public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
     private final boolean hasWeaponEffects;
-    private final WeaponEffects baseEffect;
+    private final WeaponEffect baseEffect;
 
-    public TitanFabricSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffects baseEffect, Item.Settings settings) {
+    public TitanFabricSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffect baseEffect, Item.Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.hasWeaponEffects = hasWeaponEffects;
         this.baseEffect = baseEffect;
+    }
+
+    public WeaponEffect getBaseEffect() {
+        return this.baseEffect;
     }
 
     @Override
@@ -35,8 +36,7 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
 
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if (!isIn(group))
-            return;
+        if (!isIn(group)) return;
         if (this.hasWeaponEffects) {
             EffectHelper.generateAllEffectVersionStacks(this, stacks);
         } else {
@@ -46,16 +46,15 @@ public class TitanFabricSwordItem extends SwordItem implements EssenceCrafting, 
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if (!EffectHelper.stackHasWeaponEffect(stack.getOrCreateNbt()))
-            super.appendTooltip(stack, world, tooltip, context);
-        super.appendTooltip(stack, world, EffectHelper.appendSwordToolTip(tooltip, stack), context);
+        ToolTipHelper.appendSwordToolTip(tooltip, stack);
+        super.appendTooltip(stack, world, tooltip, context);
     }
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        EffectHelper.applyWeaponEffectOnTargetFromNBT(target.getWorld(), stack, attacker, target);
+        EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), stack, target);
         if (this.baseEffect != null) {
-            EffectHelper.applyWeaponEffectOnTarget(this.baseEffect, 1, target.getWorld(), stack, attacker, target);
+            EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), stack, target);
         }
 
         return super.postHit(stack, target, attacker);

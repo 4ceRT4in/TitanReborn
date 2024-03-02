@@ -14,7 +14,6 @@ import net.shirojr.titanfabric.screen.screen.ArrowSelectionScreen;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -27,9 +26,8 @@ public abstract class TitanFabricBowItem extends BowItem implements SelectableAr
     @Override
     public Predicate<ItemStack> getProjectiles() {
         return stack -> {
-            Iterator<Item> iterator = supportedArrows().iterator();
-            while (iterator.hasNext()) {
-                if (stack.getItem().equals(iterator.next())) {
+            for (Item supportedArrowItem : supportedArrows()) {
+                if (stack.getItem().equals(supportedArrowItem)) {
                     return true;
                 }
             }
