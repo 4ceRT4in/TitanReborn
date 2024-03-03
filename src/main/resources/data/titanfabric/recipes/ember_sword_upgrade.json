@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:weapon_effect",
+  "base": {
+    "item": "titanfabric:ember_sword"
+  },
+  "modifier": {
+    "item": "titanfabric:essence"
+  },
+  "result": {
+    "item": "titanfabric:ember_sword"
+  }
+}

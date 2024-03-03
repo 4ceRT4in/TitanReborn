@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:weapon_effect",
+  "base": {
+    "item": "titanfabric:citrin_greatsword"
+  },
+  "modifier": {
+    "item": "titanfabric:essence"
+  },
+  "result": {
+    "item": "titanfabric:citrin_greatsword"
+  }
+}
