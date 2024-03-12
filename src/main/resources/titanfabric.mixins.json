@@ -7,6 +7,8 @@
     "AnvilScreenHandlerMixin",
     "ArmorItemMixin",
     "ArmorMaterialsMixin",
+    "AxeItemMixin",
+    "BowItemMixin",
     "BrewingRecipeRegistryMixin",
     "CraftingScreenHandlerMixin",
     "HungerManagerMixin",
@@ -15,12 +17,6 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
-    "StatusEffectMixin",
-    "StatusEffectsMixin",
-    "ArmorItemMixin",
-    "ArmorMaterialsMixin",
-    "StatusEffectInstanceMixin",
-    "AxeItemMixin",
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin"
@@ -31,9 +27,10 @@
   "client": [
     "client.AbstractClientPlayerEntityMixin",
     "client.AbstractInventoryScreenMixin",
+    "client.BipedEntityModelMixin",
     "client.GameOptionsMixin",
-    "client.PlayerHeldItemFeatureRendererMixin",
     "client.InGameOverlayRendererMixin",
-    "client.BipedEntityModelMixin"
+    "client.InventoryScreenMixin",
+    "client.PlayerHeldItemFeatureRendererMixin"
   ]
 }
