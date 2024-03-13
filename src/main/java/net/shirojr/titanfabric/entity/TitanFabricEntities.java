@@ -14,12 +14,15 @@ import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricEntities {
 
-    public static final EntityType<TitanFabricArrowEntity> ARROW_ITEM = Registry.register(Registry.ENTITY_TYPE, new Identifier(TitanFabric.MODID, "slime_item"),
-            FabricEntityTypeBuilder.<TitanFabricArrowEntity>create(SpawnGroup.MISC, (type, world) -> new TitanFabricArrowEntity(type, world)).dimensions(EntityDimensions.fixed(0.5f, 0.5f))
+    public static final EntityType<TitanFabricArrowEntity> ARROW_ITEM = Registry.register(Registry.ENTITY_TYPE,
+            new Identifier(TitanFabric.MODID, "arrow_item"),
+            FabricEntityTypeBuilder.<TitanFabricArrowEntity>create(SpawnGroup.MISC, (entityType, world) ->
+                            new TitanFabricArrowEntity(world)).dimensions(EntityDimensions.fixed(0.5f, 0.5f))
                     .trackRangeBlocks(4).trackedUpdateRate(20).build());
-
-    public static final EntityType<CitrinStarEntity> CITRIN_STAR = Registry.register(Registry.ENTITY_TYPE, new Identifier(TitanFabric.MODID, "citrin_star"),
-            FabricEntityTypeBuilder.<CitrinStarEntity>create(SpawnGroup.MISC, (type, world) -> new CitrinStarEntity(type, world)).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
+    public static final EntityType<CitrinStarEntity> CITRIN_STAR = Registry.register(Registry.ENTITY_TYPE,
+            new Identifier(TitanFabric.MODID, "citrin_star"),
+            FabricEntityTypeBuilder.<CitrinStarEntity>create(SpawnGroup.MISC, (entityType, world) ->
+                    new CitrinStarEntity(world)).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
 
     public static void registerClient() {
         EntityRendererRegistry.register(ARROW_ITEM, ArrowItemRenderer::new);

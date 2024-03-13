@@ -1,6 +1,5 @@
 package net.shirojr.titanfabric.entity;
 
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
@@ -20,11 +19,13 @@ import java.util.Optional;
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECTS_COMPOUND_NBT_KEY;
 
 public class TitanFabricArrowEntity extends ArrowEntity {
-    @Nullable private WeaponEffectData effect;
-    @Nullable private ItemStack itemStack;
+    @Nullable
+    private WeaponEffectData effect;
+    @Nullable
+    private ItemStack itemStack;
 
-    public TitanFabricArrowEntity(EntityType<? extends ArrowEntity> entityType, World world) {
-        super(entityType, world);
+    public TitanFabricArrowEntity(World world) {
+        super(TitanFabricEntities.ARROW_ITEM, world);
     }
 
     public TitanFabricArrowEntity(World world, LivingEntity owner, @Nullable WeaponEffectData effectData, @Nullable ItemStack itemStack) {
@@ -49,11 +50,11 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     public Identifier getTexture() {
         if (this.effect == null) return null;
         return switch (this.effect.weaponEffect()) {
-        case BLIND -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/blindness_arrow.png");
-        case POISON -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/poison_arrow.png");
-        case WEAK -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/weakness_arrow.png");
-        case WITHER -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/wither_arrow.png");
-        default -> new Identifier("textures/entity/projectiles/arrow.png");
+            case BLIND -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/blindness_arrow.png");
+            case POISON -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/poison_arrow.png");
+            case WEAK -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/weakness_arrow.png");
+            case WITHER -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/wither_arrow.png");
+            default -> new Identifier("textures/entity/projectiles/arrow.png");
         };
     }
 
@@ -77,7 +78,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         if (effect == null) return;
-        NbtCompound compound = effect.toNbt();  //FIXME: NullPointerException ?
+        NbtCompound compound = effect.toNbt();  //FIXME: NullPointerException ? But whyyyy
         nbt.put(EFFECTS_COMPOUND_NBT_KEY, compound);
     }
 

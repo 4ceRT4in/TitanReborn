@@ -11,6 +11,8 @@ import net.shirojr.titanfabric.entity.TitanFabricEntities;
 import net.shirojr.titanfabric.event.ArmorHandlingEvent;
 import net.shirojr.titanfabric.event.KeyBindEvents;
 import net.shirojr.titanfabric.event.ParachuteFeatureRendererEventHandler;
+import net.shirojr.titanfabric.network.C2SNetworking;
+import net.shirojr.titanfabric.network.S2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.screen.BackPackItemScreen;
 import net.shirojr.titanfabric.screen.screen.DiamondFurnaceScreen;
@@ -24,6 +26,7 @@ public class TitanFabricClient implements ClientModInitializer {
         KeyBindEvents.register();
         ArmorHandlingEvent.register();
         TitanFabricEntities.registerClient();
+        S2CNetworking.registerClientReceivers();
 
         HandledScreens.register(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER, DiamondFurnaceScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, BackPackItemScreen::new);

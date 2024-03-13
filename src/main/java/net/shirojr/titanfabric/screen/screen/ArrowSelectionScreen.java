@@ -11,7 +11,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.network.TitanFabricNetworking;
+import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 import net.shirojr.titanfabric.screen.element.ArrowButtonWidget;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class ArrowSelectionScreen extends Screen {
                     arrowButtonWidget -> {
                         PacketByteBuf buf = PacketByteBufs.create();
                         buf.writeItemStack(itemStack);
-                        ClientPlayNetworking.send(TitanFabricNetworking.BOW_SCREEN_CHANNEL, buf);
+                        ClientPlayNetworking.send(NetworkingIdentifiers.BOW_SCREEN_CHANNEL, buf);
                     }, itemRenderer));
         }
 

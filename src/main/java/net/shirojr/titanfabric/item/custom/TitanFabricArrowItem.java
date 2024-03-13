@@ -79,10 +79,11 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
 
     @Override
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
-        NbtCompound compound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
-        WeaponEffect weaponEffect = WeaponEffect.getEffect(compound.getString(WeaponEffectData.EFFECT_NBT_KEY));
-        int strength = compound.getInt(WeaponEffectData.EFFECTS_STRENGTH_NBT_KEY);
-        WeaponEffectData data = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, weaponEffect, strength);
+        NbtCompound innateCompound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY)
+                .getCompound(WeaponEffectType.INNATE_EFFECT.getNbtKey());
+        WeaponEffect weaponEffect = WeaponEffect.getEffect(innateCompound.getString(WeaponEffectData.EFFECT_NBT_KEY)); //FIXME: issue with NullPointerException!
+        int strength = innateCompound.getInt(WeaponEffectData.EFFECTS_STRENGTH_NBT_KEY);
+        WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, strength);
         TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(world, shooter, data, stack);
         arrowEntity.initFromStack(stack);
         return arrowEntity;

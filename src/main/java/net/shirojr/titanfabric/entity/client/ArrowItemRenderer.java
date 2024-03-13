@@ -6,6 +6,7 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.ProjectileEntityRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,14 +18,14 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.entity.TitanFabricArrowEntity;
 
-public class ArrowItemRenderer extends EntityRenderer<TitanFabricArrowEntity> {
+public class ArrowItemRenderer extends ProjectileEntityRenderer<TitanFabricArrowEntity> {
     public ArrowItemRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
     }
 
     @Override
-    public Identifier getTexture(TitanFabricArrowEntity entity) {
-        if (entity.getEffect() != null) return entity.getTexture();
+    public Identifier getTexture(TitanFabricArrowEntity arrowEntity) {
+        if (arrowEntity.getEffect().isPresent()) return arrowEntity.getTexture();
         else return new Identifier("textures/entity/projectiles/arrow.png");
     }
 

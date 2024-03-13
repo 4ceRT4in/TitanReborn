@@ -26,10 +26,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class CitrinStarEntity extends ThrownItemEntity {
 
-    private List<Integer> changedEffectIds = new ArrayList<Integer>();
+    private final List<Integer> changedEffectIds = new ArrayList<Integer>();
 
-    public CitrinStarEntity(EntityType<? extends CitrinStarEntity> entityType, World world) {
-        super(entityType, world);
+    public CitrinStarEntity(World world) {
+        super(TitanFabricEntities.CITRIN_STAR, world);
     }
 
     public CitrinStarEntity(World world, LivingEntity owner) {

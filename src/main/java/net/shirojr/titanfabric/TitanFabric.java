@@ -9,7 +9,9 @@ import net.shirojr.titanfabric.entity.TitanFabricEntities;
 import net.shirojr.titanfabric.event.CommandRegistrationEvent;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.network.TitanFabricNetworking;
+import net.shirojr.titanfabric.network.C2SNetworking;
+import net.shirojr.titanfabric.network.NetworkingIdentifiers;
+import net.shirojr.titanfabric.network.S2CNetworking;
 import net.shirojr.titanfabric.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
@@ -36,7 +38,7 @@ public class TitanFabric implements ModInitializer {
         TitanFabricStatusEffects.registerStatusEffects();
         TitanFabricPotions.register();
         TitanFabricWorldGen.generateWorldGen();
-        TitanFabricNetworking.registerServerReceivers();
+        C2SNetworking.registerServerReceivers();
         TitanFabricGamerules.register();
         TitanFabricStats.register();
 

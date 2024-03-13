@@ -14,7 +14,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
-import net.shirojr.titanfabric.network.TitanFabricNetworking;
+import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
@@ -81,7 +81,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         ItemStack arrowStack = MultiBowHelper.searchFirstValidArrowStack(player, this);
         buf.writeItemStack(arrowStack);
         buf.writeDouble(this.pullProgress);
-        ClientPlayNetworking.send(TitanFabricNetworking.MULTI_BOW_ARROWS_CHANNEL, buf);
+        ClientPlayNetworking.send(NetworkingIdentifiers.MULTI_BOW_ARROWS_CHANNEL, buf);
 
         handleAfterShotValues(stack, player);
     }

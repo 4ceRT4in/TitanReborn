@@ -15,18 +15,19 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
-public class TitanFabricNetworking {
-    public static final Identifier BOW_SCREEN_CHANNEL = new Identifier(TitanFabric.MODID, "bow_screen");
-    public static final Identifier MULTI_BOW_ARROWS_CHANNEL = new Identifier(TitanFabric.MODID, "shoot_multi_bow");
-    public static final Identifier ARMOR_HANDLING_CHANNEL = new Identifier(TitanFabric.MODID, "armor_handling");
+import static net.shirojr.titanfabric.network.NetworkingIdentifiers.*;
 
+public class C2SNetworking {
+    public static void registerServerReceivers() {
+        ServerPlayNetworking.registerGlobalReceiver(BOW_SCREEN_CHANNEL, C2SNetworking::handleBowScreenPacket);
+        ServerPlayNetworking.registerGlobalReceiver(MULTI_BOW_ARROWS_CHANNEL, C2SNetworking::handleMultiBowShotPacket);
+        ServerPlayNetworking.registerGlobalReceiver(ARMOR_HANDLING_CHANNEL, C2SNetworking::handleArmorLifeHandlingPacket);
+    }
 
     private static void handleBowScreenPacket(MinecraftServer server, ServerPlayerEntity player,
                                               ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
@@ -91,11 +92,5 @@ public class TitanFabricNetworking {
                 }
             }
         });
-    }
-
-    public static void registerServerReceivers() {
-        ServerPlayNetworking.registerGlobalReceiver(BOW_SCREEN_CHANNEL, TitanFabricNetworking::handleBowScreenPacket);
-        ServerPlayNetworking.registerGlobalReceiver(MULTI_BOW_ARROWS_CHANNEL, TitanFabricNetworking::handleMultiBowShotPacket);
-        ServerPlayNetworking.registerGlobalReceiver(ARMOR_HANDLING_CHANNEL, TitanFabricNetworking::handleArmorLifeHandlingPacket);
     }
 }

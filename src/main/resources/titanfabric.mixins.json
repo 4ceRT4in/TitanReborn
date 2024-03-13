@@ -27,6 +27,7 @@
   "client": [
     "client.AbstractClientPlayerEntityMixin",
     "client.AbstractInventoryScreenMixin",
+    "client.ArrowEntityRendererMixin",
     "client.BipedEntityModelMixin",
     "client.GameOptionsMixin",
     "client.InGameOverlayRendererMixin",

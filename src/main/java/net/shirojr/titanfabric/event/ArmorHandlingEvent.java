@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
-import net.shirojr.titanfabric.network.TitanFabricNetworking;
+import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -45,7 +45,7 @@ public class ArmorHandlingEvent {
             buf.writeItemStack(differenceOld.getDefaultStack());
             buf.writeItemStack(differenceNew.getDefaultStack());
 
-            ClientPlayNetworking.send(TitanFabricNetworking.ARMOR_HANDLING_CHANNEL, buf);
+            ClientPlayNetworking.send(NetworkingIdentifiers.ARMOR_HANDLING_CHANNEL, buf);
         });
     }
 
