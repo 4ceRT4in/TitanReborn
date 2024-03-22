@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.screen;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
@@ -9,6 +10,7 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 import net.shirojr.titanfabric.screen.handler.DiamondFurnaceScreenHandler;
+import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
 public class TitanFabricScreenHandlers {
     public static ScreenHandlerType<DiamondFurnaceScreenHandler> DIAMOND_FURNACE_SCREEN_HANDLER =
@@ -26,6 +28,9 @@ public class TitanFabricScreenHandlers {
             registerScreenHandler("backpack_item_big", new ExtendedScreenHandlerType<>(
                     (syncId, inventory, buf) -> new BackPackItemScreenHandler(syncId, inventory, BackPackItem.Type.BIG, buf))
             );
+    public static ScreenHandlerType<ExtendedInventoryScreenHandler> EXTENDED_INVENTORY_SCREEN_HANDLER =
+            registerScreenHandler("extended_inventory", new ExtendedScreenHandlerType<>(
+                    (syncId, inventory, buf) -> new ExtendedInventoryScreenHandler(syncId, inventory, new SimpleInventory(8))));
 
 
     private static <T extends ScreenHandler> ScreenHandlerType<T> registerScreenHandler(String name, ScreenHandlerType<T> screenHandlerType) {

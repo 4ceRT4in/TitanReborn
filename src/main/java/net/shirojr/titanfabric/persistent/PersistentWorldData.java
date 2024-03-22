@@ -26,14 +26,14 @@ public class PersistentWorldData extends PersistentState {
 
 
     @Nullable
-    public static PersistentPlayerData getPersistentPlayerData(LivingEntity player) {
-        if (player.getWorld().getServer() == null) {
-            LoggerUtil.devLogger("given player LivingEntity doesn't supply a server", true, null);
+    public static PersistentPlayerData getPersistentPlayerData(LivingEntity entity) {
+        if (entity.getWorld().getServer() == null) {
+            LoggerUtil.devLogger("given LivingEntity doesn't supply a server", true, null);
             return null;
         }
-        PersistentWorldData serverState = getServerState(player.getWorld().getServer());
+        PersistentWorldData serverState = getServerState(entity.getWorld().getServer());
 
-        return serverState.players.computeIfAbsent(player.getUuid(), uuid -> new PersistentPlayerData());
+        return serverState.players.computeIfAbsent(entity.getUuid(), uuid -> new PersistentPlayerData());
     }
 
     @Override

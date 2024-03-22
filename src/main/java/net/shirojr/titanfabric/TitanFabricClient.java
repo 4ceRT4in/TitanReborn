@@ -14,6 +14,7 @@ import net.shirojr.titanfabric.event.ParachuteFeatureRendererEventHandler;
 import net.shirojr.titanfabric.network.C2SNetworking;
 import net.shirojr.titanfabric.network.S2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
 import net.shirojr.titanfabric.screen.screen.BackPackItemScreen;
 import net.shirojr.titanfabric.screen.screen.DiamondFurnaceScreen;
 import net.shirojr.titanfabric.util.ModelPredicateProviders;
@@ -32,6 +33,7 @@ public class TitanFabricClient implements ClientModInitializer {
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, BackPackItemScreen::new);
+        HandledScreens.register(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, ExtendedInventoryScreen::new);
 
         ParachuteFeatureRendererEventHandler.register();
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());
