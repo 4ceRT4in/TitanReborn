@@ -1,6 +1,5 @@
 package net.shirojr.titanfabric.item.custom;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.item.custom.sound.ParachuteSoundInstance;
+import net.shirojr.titanfabric.sound.TitanFabricSoundHandler;
 
 public class TitanFabricParachuteItem extends Item {
 
@@ -57,7 +56,7 @@ public class TitanFabricParachuteItem extends Item {
             user.getStackInHand(hand).setNbt(nbtCompound);
             if (world.isClient()) {
                 user.playSound(SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                MinecraftClient.getInstance().getSoundManager().play(new ParachuteSoundInstance((ClientPlayerEntity) user));
+                TitanFabricSoundHandler.playParachuteSoundInstance((ClientPlayerEntity) user);
             }
         }
         return super.use(world, user, hand);

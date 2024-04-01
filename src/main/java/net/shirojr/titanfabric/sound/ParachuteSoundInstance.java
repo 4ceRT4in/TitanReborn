@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.item.custom.sound;
+package net.shirojr.titanfabric.sound;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
