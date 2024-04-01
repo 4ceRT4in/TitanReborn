@@ -1,20 +1,22 @@
 package net.shirojr.titanfabric.item.custom.bow;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
-import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
@@ -76,13 +78,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (projectileTick < 1) return;
         projectileTick--;
         if (!validTick(projectileTick + 1)) return;
-
-        PacketByteBuf buf = PacketByteBufs.create();
-        ItemStack arrowStack = MultiBowHelper.searchFirstValidArrowStack(player, this);
-        buf.writeItemStack(arrowStack);
-        buf.writeDouble(this.pullProgress);
-        ClientPlayNetworking.send(NetworkingIdentifiers.MULTI_BOW_ARROWS_CHANNEL, buf);
-
+        handleArrowShots(player, MultiBowHelper.searchFirstValidArrowStack(player, this), this.pullProgress);
         handleAfterShotValues(stack, player);
     }
 
@@ -97,5 +93,28 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
             else bowStack.removeSubNbt(MultiBowHelper.ARROWS_LEFT_NBT_KEY);
         }
         bowStack.damage(1, player, p -> p.sendToolBreakStatus(p.getActiveHand()));
+    }
+
+    private static void handleArrowShots(PlayerEntity player, ItemStack arrowStack, double pullProgress) {
+        if (!(player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof MultiBowItem)) return;
+
+        World world = player.getWorld();
+        ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
+        int powerEnchantLevel = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
+        int punchEnchantLevel = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
+        int flameEnchantLevel = EnchantmentHelper.getLevel(Enchantments.FLAME, stack);
+
+        if (!MultiBowHelper.handleArrowConsumption(player, stack, arrowStack)) return;
+
+        world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,
+                1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + (float) pullProgress * 0.5f);
+
+        PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, arrowStack,
+                player.getPitch(), player.getYaw(), pullProgress, powerEnchantLevel, punchEnchantLevel, flameEnchantLevel);
+
+        world.spawnEntity(projectile);
+
+        MultiBowHelper.setArrowsLeftNbt(stack, MultiBowHelper.getArrowsLeftNbt(stack) - 1);
     }
 }

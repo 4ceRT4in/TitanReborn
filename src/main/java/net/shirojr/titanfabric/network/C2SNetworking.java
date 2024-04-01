@@ -23,11 +23,13 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 import java.util.HashMap;
@@ -38,7 +40,6 @@ import static net.shirojr.titanfabric.network.NetworkingIdentifiers.*;
 public class C2SNetworking {
     public static void registerServerReceivers() {
         ServerPlayNetworking.registerGlobalReceiver(BOW_SCREEN_CHANNEL, C2SNetworking::handleBowScreenPacket);
-        ServerPlayNetworking.registerGlobalReceiver(MULTI_BOW_ARROWS_CHANNEL, C2SNetworking::handleMultiBowShotPacket);
         ServerPlayNetworking.registerGlobalReceiver(ARMOR_HANDLING_CHANNEL, C2SNetworking::handleArmorLifeHandlingPacket);
         ServerPlayNetworking.registerGlobalReceiver(EXTENDED_INVENTORY_OPEN, C2SNetworking::handleExtendedInventoryOpenPacket);
     }
@@ -50,35 +51,6 @@ public class C2SNetworking {
         server.execute(() -> {
             player.sendMessage(new LiteralText("Arrow Packet arrived on server side"), false);
             player.sendMessage(new LiteralText("Selected Arrow: " + selectedStack), false);
-        });
-    }
-
-    private static void handleMultiBowShotPacket(MinecraftServer server, ServerPlayerEntity player,
-                                                 ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
-        ItemStack arrowStack = buf.readItemStack();
-        double pullProgress = buf.readDouble();
-
-        server.execute(() -> {
-            if (!(player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof MultiBowItem)) return;
-
-            World world = player.getWorld();
-            ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
-            int powerEnchantLevel = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
-            int punchEnchantLevel = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
-            int flameEnchantLevel = EnchantmentHelper.getLevel(Enchantments.FLAME, stack);
-
-            if (!MultiBowHelper.handleArrowConsumption(player, stack, arrowStack)) return;
-
-            world.playSound(null, player.getX(), player.getY(), player.getZ(),
-                    SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,
-                    1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + (float) pullProgress * 0.5f);
-
-            PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, arrowStack,
-                    player.getPitch(), player.getYaw(), pullProgress, powerEnchantLevel, punchEnchantLevel, flameEnchantLevel);
-
-            world.spawnEntity(projectile);
-
-            MultiBowHelper.setArrowsLeftNbt(stack, MultiBowHelper.getArrowsLeftNbt(stack) - 1);
         });
     }
 
@@ -112,7 +84,8 @@ public class C2SNetworking {
                                                           ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
 
         server.execute(() -> {
-            player.openHandledScreen(new ExtendedScreenHandlerFactory() {
+            TitanFabric.LOGGER.warn("User tried to use an unsupported feature");
+            /*player.openHandledScreen(new ExtendedScreenHandlerFactory() {
                 @Override
                 public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
                     // buf.writeItemStack(backpackItemStack);
@@ -136,7 +109,7 @@ public class C2SNetworking {
                     return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory);
                     // return new BackPackItemScreenHandler(syncId, playerInventory, inventory, backPackType, backpackItemStack);
                 }
-            });
+            });*/
         });
     }
 }
