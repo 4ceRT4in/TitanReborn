@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.text.LiteralText;
 import net.shirojr.titanfabric.event.KeyBindEvents;
-import net.shirojr.titanfabric.screen.screen.ArrowSelectionScreen;
+import net.shirojr.titanfabric.screen.custom.ArrowSelectionScreen;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 

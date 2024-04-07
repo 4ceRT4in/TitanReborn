@@ -84,8 +84,8 @@ public class C2SNetworking {
                                                           ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
 
         server.execute(() -> {
-            TitanFabric.LOGGER.warn("User tried to use an unsupported feature");
-            /*player.openHandledScreen(new ExtendedScreenHandlerFactory() {
+            //TitanFabric.LOGGER.warn("User tried to use an unsupported feature");
+            player.openHandledScreen(new ExtendedScreenHandlerFactory() {
                 @Override
                 public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
                     // buf.writeItemStack(backpackItemStack);
@@ -107,9 +107,8 @@ public class C2SNetworking {
                     }
 
                     return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory);
-                    // return new BackPackItemScreenHandler(syncId, playerInventory, inventory, backPackType, backpackItemStack);
                 }
-            });*/
+            });
         });
     }
 }

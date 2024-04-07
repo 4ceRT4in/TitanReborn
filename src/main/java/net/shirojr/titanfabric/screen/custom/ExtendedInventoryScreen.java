@@ -7,24 +7,21 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
 public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScreenHandler> {
     private ButtonWidget buttonWidget;
-    private String buttonText;
+    private String buttonText = "X";
     private static final Identifier TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/extended_inventory.png");
 
     public ExtendedInventoryScreen(ExtendedInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
-        this.buttonText = buttonText;
     }
 
     @Override
@@ -35,11 +32,8 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
             return;
         }
         buttonWidget = new ButtonWidget(this.x, this.height / 2 - 104, 20, 20,
-                new LiteralText(buttonText).formatted(Formatting.BOLD), button -> {
-            if (buttonText.equals("O")) buttonText = "X";
-            else buttonText = "O";
-            buttonWidget.setMessage(new LiteralText(buttonText).formatted(Formatting.BOLD));
-            // this.client.setScreen(new ExtendedInventoryScreen(client.player, buttonText));
+                new LiteralText("X").formatted(Formatting.BOLD), button -> {
+            this.client.setScreen(new InventoryScreen(this.client.player));
         });
         this.addDrawableChild(buttonWidget);
     }

@@ -11,12 +11,11 @@ import net.shirojr.titanfabric.entity.TitanFabricEntities;
 import net.shirojr.titanfabric.event.ArmorHandlingEvent;
 import net.shirojr.titanfabric.event.KeyBindEvents;
 import net.shirojr.titanfabric.event.ParachuteFeatureRendererEventHandler;
-import net.shirojr.titanfabric.network.C2SNetworking;
 import net.shirojr.titanfabric.network.S2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
-import net.shirojr.titanfabric.screen.screen.BackPackItemScreen;
-import net.shirojr.titanfabric.screen.screen.DiamondFurnaceScreen;
+import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
+import net.shirojr.titanfabric.screen.custom.DiamondFurnaceScreen;
 import net.shirojr.titanfabric.util.ModelPredicateProviders;
 
 @Environment(EnvType.CLIENT)

@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.screen.screen;
+package net.shirojr.titanfabric.screen.custom;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
