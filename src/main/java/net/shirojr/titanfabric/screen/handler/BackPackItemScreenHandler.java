@@ -24,7 +24,8 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType, ItemStack backpackStack) {
         super(backPackType == BackPackItem.Type.SMALL ? TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER
-                : backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER : TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
+                : backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER
+                : TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
         checkSize(inventory, backPackType.getSize());
 
         this.inventory = inventory;

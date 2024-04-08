@@ -16,8 +16,6 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
 public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScreenHandler> {
-    private ButtonWidget buttonWidget;
-    private String buttonText = "X";
     private static final Identifier TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/extended_inventory.png");
 
     public ExtendedInventoryScreen(ExtendedInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -31,7 +29,7 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
             this.client.setScreen(new CreativeInventoryScreen(this.client.player));
             return;
         }
-        buttonWidget = new ButtonWidget(this.x, this.height / 2 - 104, 20, 20,
+        ButtonWidget buttonWidget = new ButtonWidget(this.x, this.height / 2 - 104, 20, 20,
                 new LiteralText("X").formatted(Formatting.BOLD), button -> {
             this.client.setScreen(new InventoryScreen(this.client.player));
         });
@@ -43,5 +41,13 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
+        drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+    }
+
+    @Override
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
+        drawMouseoverTooltip(matrices, mouseX, mouseY);
     }
 }

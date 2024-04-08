@@ -20,8 +20,10 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
     public static final Identifier EMPTY_LEGGINGS_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_leggings");
     public static final Identifier EMPTY_BOOTS_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_boots");
     static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{EMPTY_BOOTS_SLOT_TEXTURE, EMPTY_LEGGINGS_SLOT_TEXTURE, EMPTY_CHESTPLATE_SLOT_TEXTURE, EMPTY_HELMET_SLOT_TEXTURE};
-
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+
+    private final PlayerInventory baseInventory;
+    private final Inventory extendedInventory;
 
     public ExtendedInventoryScreenHandler(int syncId, PlayerInventory baseInventory, Inventory extendedInventory) {
         super(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, syncId);
@@ -29,6 +31,27 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         addHotbarSlots(baseInventory);
         addEquipmentSlots(baseInventory);
         addExtendedInventorySlots(extendedInventory);
+        this.baseInventory = baseInventory;
+        this.extendedInventory = extendedInventory;
+    }
+
+    @Override
+    public ItemStack transferSlot(PlayerEntity player, int index) {
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = (Slot) this.slots.get(index);
+        if (slot != null && slot.hasStack()) {
+            ItemStack itemStack2 = slot.getStack();
+            itemStack = itemStack2.copy();
+            if (index < baseInventory.size() ? !this.insertItem(itemStack2, baseInventory.size(), this.slots.size(), true) : !this.insertItem(itemStack2, 0, baseInventory.size(), false)) {
+                return ItemStack.EMPTY;
+            }
+            if (itemStack2.isEmpty()) {
+                slot.setStack(ItemStack.EMPTY);
+            } else {
+                slot.markDirty();
+            }
+        }
+        return itemStack;
     }
 
     private void addInventorySlots(PlayerInventory inventory) {
@@ -80,16 +103,17 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
     private void addExtendedInventorySlots(Inventory extendedInventory) {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
-                this.addSlot(new Slot(extendedInventory, (i + 1) * (j + 1) - 1, 8 + j * 18, 84 + i * 18));
+                int index = j + i * 4;
+                int x = 8 + j * 18;
+                int y = 84 + i * 18;
+                this.addSlot(new Slot(extendedInventory, index, x, y));
             }
         }
     }
-
 
     @Override
     public boolean canUse(PlayerEntity player) {
         return true;
     }
-
 
 }
