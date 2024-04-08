@@ -25,8 +25,8 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
     @Override
     protected void init() {
         super.init();
-        this.titleX = 91;
-        this.titleY = 10;
+        this.titleX = 86;
+        this.titleY = 8;
         this.playerInventoryTitleX = this.titleX;
 
         if (client == null || this.client.player == null || this.client.interactionManager == null) return;
@@ -34,7 +34,7 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
             this.client.setScreen(new CreativeInventoryScreen(this.client.player));
             return;
         }
-        ButtonWidget buttonWidget = new TexturedButtonWidget(this.x, this.height / 2 - 104,
+        ButtonWidget buttonWidget = new TexturedButtonWidget(this.x + 91, this.height / 2 - 22,
                 20, 19, 178, 0, 19, ExtendedInventoryScreen.TEXTURE, button ->
                 this.client.setScreen(new InventoryScreen(this.client.player)));
         this.addDrawableChild(buttonWidget);
@@ -46,14 +46,18 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+        if (this.client == null || this.client.player == null) return;
+        InventoryScreen.drawEntity(x + 51, y + 75, 30,
+                (float) (x + 51) - mouseX, (float) (y + 75 - 50) - mouseY,
+                this.client.player);
     }
 
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
         int color = 0x404040;
-        this.textRenderer.draw(matrices, this.title, (float) this.titleX, (float) this.titleY, color);
+        // this.textRenderer.draw(matrices, this.title, (float) this.titleX, (float) this.titleY, color);
         this.textRenderer.draw(matrices, new TranslatableText("screen.titanfabric.extended_inventory.title"),
-                (float) this.playerInventoryTitleX, (float) this.playerInventoryTitleY, 0x404040);
+                this.titleX, this.titleY, 0x404040);
     }
 
     @Override
