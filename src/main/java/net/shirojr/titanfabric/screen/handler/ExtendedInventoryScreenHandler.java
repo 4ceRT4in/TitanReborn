@@ -54,6 +54,12 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         return itemStack;
     }
 
+    @Override
+    public void close(PlayerEntity player) {
+        super.close(player);
+        //TODO: does not save item yet?
+    }
+
     private void addInventorySlots(PlayerInventory inventory) {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -104,9 +110,9 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 int index = j + i * 4;
-                int x = 8 + j * 18;
-                int y = 84 + i * 18;
-                this.addSlot(new Slot(extendedInventory, index, x, y));
+                int x = j * 18;
+                int y = i * 18;
+                this.addSlot(new Slot(extendedInventory, index, x + 91, y + 26));
             }
         }
     }

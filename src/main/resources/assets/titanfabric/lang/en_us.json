@@ -209,5 +209,7 @@
   "keys.titanfabric.misc": "Titan Reborn",
   "key.titanfabric.arrow.screen.open": "Open Arrow Selection Screen",
 
-  "overlay.titanfabric.netherite.resistance": "Active"
+  "overlay.titanfabric.netherite.resistance": "Active",
+
+  "screen.titanfabric.extended_inventory.title": "Extra Inventory"
 }
