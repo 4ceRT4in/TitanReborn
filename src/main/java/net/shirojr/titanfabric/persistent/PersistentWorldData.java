@@ -5,7 +5,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
@@ -15,7 +14,6 @@ import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.UUID;
 
 public class PersistentWorldData extends PersistentState {
@@ -32,18 +30,15 @@ public class PersistentWorldData extends PersistentState {
             return null;
         }
         PersistentWorldData serverState = getServerState(entity.getWorld().getServer());
-
         return serverState.players.computeIfAbsent(entity.getUuid(), uuid -> new PersistentPlayerData());
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
         addInventoryToNbt(worldInventory, nbt, WORLD_ITEMS_NBT_KEY);
-
         NbtCompound playersNbt = new NbtCompound();
-        players.forEach((uuid, persistentPlayerData) -> {
-            addInventoryToNbt(persistentPlayerData.extraInventory, playersNbt, uuid.toString());
-        });
+        players.forEach((uuid, persistentPlayerData) ->
+                addInventoryToNbt(persistentPlayerData.extraInventory, playersNbt, uuid.toString()));
         nbt.put(PLAYER_ITEMS_NBT_KEY, playersNbt);
         return nbt;
     }
@@ -67,7 +62,8 @@ public class PersistentWorldData extends PersistentState {
     @SuppressWarnings("DataFlowIssue")
     public static PersistentWorldData getServerState(MinecraftServer server) {
         PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-        PersistentWorldData state = persistentStateManager.getOrCreate(PersistentWorldData::createWorldDataFromNbt, PersistentWorldData::new, TitanFabric.MODID);
+        PersistentWorldData state = persistentStateManager.getOrCreate(PersistentWorldData::createWorldDataFromNbt,
+                PersistentWorldData::new, TitanFabric.MODID);
         state.markDirty();
         return state;
     }

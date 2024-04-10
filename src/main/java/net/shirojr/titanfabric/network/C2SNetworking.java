@@ -70,11 +70,9 @@ public class C2SNetworking {
                                                           ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
 
         server.execute(() -> {
-            //TitanFabric.LOGGER.warn("User tried to use an unsupported feature");
             player.openHandledScreen(new ExtendedScreenHandlerFactory() {
                 @Override
                 public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-                    // buf.writeItemStack(backpackItemStack);
                 }
 
                 @Override
@@ -84,14 +82,11 @@ public class C2SNetworking {
 
                 @Override
                 public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-                    //Inventory inventory = getInventoryFromNbt(backpackItemStack, backPackType); //TODO: get from persistent state
                     PersistentPlayerData persistentPlayerData = PersistentWorldData.getPersistentPlayerData(player);
-
                     Inventory extendedInventory = new SimpleInventory(8);
                     if (persistentPlayerData != null) {
                         extendedInventory = persistentPlayerData.extraInventory;
                     }
-
                     return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory);
                 }
             });

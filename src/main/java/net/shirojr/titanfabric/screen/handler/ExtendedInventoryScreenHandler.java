@@ -39,15 +39,6 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         this.extendedInventory = extendedInventory;
     }
 
-    private Inventory getInventoryFromPacket(PacketByteBuf buf) {
-        Inventory inventory = new SimpleInventory(8);
-        for(int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = buf.readItemStack();
-            inventory.setStack(i, stack);
-        }
-        return inventory;
-    }
-
     @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
