@@ -36,9 +36,9 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
         Point location;
         switch (backPackType) {
-        case MEDIUM -> location = new Point(35, 22);
-        case BIG -> location = new Point(35, 18);
-        default -> location = new Point(35, 34);
+            case MEDIUM -> location = new Point(35, 22);
+            case BIG -> location = new Point(35, 18);
+            default -> location = new Point(35, 34);
         }
         addStorageSlots(backPackType, location);
         addPlayerInventory(playerInventory);
@@ -61,7 +61,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     }
 
     private void addStorageSlots(BackPackItem.Type type, Point pos) {
-        int columns = 6, margin = 1, slotSize = 18;
+        int columns = 6, slotSize = 18;
         int rows = (int) (double) (type.getSize() / columns);
         Point slotPos = new Point(pos);
 

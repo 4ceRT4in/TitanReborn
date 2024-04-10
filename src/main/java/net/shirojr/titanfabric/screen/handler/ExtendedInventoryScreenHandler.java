@@ -7,10 +7,14 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
+import net.shirojr.titanfabric.persistent.PersistentPlayerData;
+import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 
 public class ExtendedInventoryScreenHandler extends ScreenHandler {
@@ -35,6 +39,15 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         this.extendedInventory = extendedInventory;
     }
 
+    private Inventory getInventoryFromPacket(PacketByteBuf buf) {
+        Inventory inventory = new SimpleInventory(8);
+        for(int i = 0; i < inventory.size(); i++) {
+            ItemStack stack = buf.readItemStack();
+            inventory.setStack(i, stack);
+        }
+        return inventory;
+    }
+
     @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
@@ -56,8 +69,13 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
 
     @Override
     public void close(PlayerEntity player) {
+        if (player.getServer() != null) {
+            PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(player);
+            if (playerData != null) {
+                playerData.extraInventory = this.extendedInventory;
+            }
+        }
         super.close(player);
-        //TODO: does not save item yet?
     }
 
     private void addInventorySlots(PlayerInventory inventory) {

@@ -15,11 +15,11 @@ import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 public class PersistentWorldData extends PersistentState {
-    private static final int INV_SIZE = 8;
-    private final Inventory worldInventory = new SimpleInventory(INV_SIZE);
+    private Inventory worldInventory = new SimpleInventory(PersistentPlayerData.INV_SIZE);
     public HashMap<UUID, PersistentPlayerData> players = new HashMap<>();
     public static final String WORLD_ITEMS_NBT_KEY = TitanFabric.MODID + ".worldInventory";
     public static final String PLAYER_ITEMS_NBT_KEY = TitanFabric.MODID + ".playerInventory";
@@ -42,35 +42,25 @@ public class PersistentWorldData extends PersistentState {
 
         NbtCompound playersNbt = new NbtCompound();
         players.forEach((uuid, persistentPlayerData) -> {
-            NbtCompound playerNbt = new NbtCompound();
-            addInventoryToNbt(persistentPlayerData.playerInventory, playerNbt, PLAYER_ITEMS_NBT_KEY);
-            playersNbt.put(uuid.toString(), playerNbt);
+            addInventoryToNbt(persistentPlayerData.extraInventory, playersNbt, uuid.toString());
         });
-        nbt.put("players", playersNbt);
-
+        nbt.put(PLAYER_ITEMS_NBT_KEY, playersNbt);
         return nbt;
     }
 
     public static PersistentWorldData createWorldDataFromNbt(NbtCompound nbt) {
         PersistentWorldData worldData = new PersistentWorldData();
-        NbtList itemsNbtList = nbt.getList(WORLD_ITEMS_NBT_KEY, 10);
 
-        for (int i = 0; i < itemsNbtList.size(); i++) {
-            ItemStack stack = ItemStack.fromNbt(itemsNbtList.getCompound(i));
-            worldData.worldInventory.setStack(i, stack);
-        }
+        NbtCompound worldInventoryCompound = nbt.getCompound(WORLD_ITEMS_NBT_KEY);
+        worldData.worldInventory = getInventoryFromNbt(worldInventoryCompound);
 
-        NbtCompound playersNbt = nbt.getCompound("players");
+        NbtCompound playersNbt = nbt.getCompound(PLAYER_ITEMS_NBT_KEY);
         for (String playerUuid : playersNbt.getKeys()) {
             PersistentPlayerData playerData = new PersistentPlayerData();
-            NbtList playerInventoryNbtList = playersNbt.getCompound(playerUuid).getList(PLAYER_ITEMS_NBT_KEY, 10); //TODO: check if problematic logic when testing
-            for (int i = 0; i < playerInventoryNbtList.size(); i++) {
-                ItemStack playerInventoryItemStack = ItemStack.fromNbt(playerInventoryNbtList.getCompound(i));
-                playerData.playerInventory.setStack(i, playerInventoryItemStack);
-            }
+            NbtCompound playerInventoryCompound = playersNbt.getCompound(playerUuid);
+            playerData.extraInventory = getInventoryFromNbt(playerInventoryCompound);
             worldData.players.put(UUID.fromString(playerUuid), playerData);
         }
-
         return worldData;
     }
 
@@ -83,13 +73,23 @@ public class PersistentWorldData extends PersistentState {
     }
 
     private static void addInventoryToNbt(Inventory inventory, NbtCompound nbt, String inventoryNbtKey) {
-        NbtList nbtList = nbt.getList(inventoryNbtKey, 10);
+        NbtCompound inventoryCompound = new NbtCompound();
         for (int i = 0; i < inventory.size(); i++) {
+            NbtCompound stackCompound = new NbtCompound();
             ItemStack stack = inventory.getStack(i).copy();
-            NbtCompound nbtCompound = new NbtCompound();
-
-            stack.writeNbt(nbtCompound);
-            nbtList.add(nbtCompound);
+            stack.writeNbt(stackCompound);
+            inventoryCompound.put("slot:" + i, stackCompound);
         }
+        nbt.put(inventoryNbtKey, inventoryCompound);
+    }
+
+    private static Inventory getInventoryFromNbt(NbtCompound nbt) {
+        Inventory inventory = new SimpleInventory(PersistentPlayerData.INV_SIZE);
+        for (int i = 0; i < inventory.size(); i++) {
+            NbtCompound stackCompound = nbt.getCompound("slot:" + i);
+            ItemStack stack = ItemStack.fromNbt(stackCompound);
+            inventory.setStack(i, stack);
+        }
+        return inventory;
     }
 }

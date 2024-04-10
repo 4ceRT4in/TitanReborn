@@ -3,11 +3,8 @@ package net.shirojr.titanfabric.network;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
@@ -17,23 +14,12 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
-import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
-import net.shirojr.titanfabric.util.LoggerUtil;
-import net.shirojr.titanfabric.util.items.MultiBowHelper;
-
-import java.util.HashMap;
-import java.util.UUID;
 
 import static net.shirojr.titanfabric.network.NetworkingIdentifiers.*;
 
@@ -103,7 +89,7 @@ public class C2SNetworking {
 
                     Inventory extendedInventory = new SimpleInventory(8);
                     if (persistentPlayerData != null) {
-                        extendedInventory = persistentPlayerData.playerInventory;
+                        extendedInventory = persistentPlayerData.extraInventory;
                     }
 
                     return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory);
