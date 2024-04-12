@@ -72,11 +72,11 @@ public abstract class LivingEntityMixin {
 
         // TODO: helper class
         switch (itemCounter) {
-        case 1 -> effectDuration = (int) (effect.getDuration() * 0.75);
-        case 2 -> effectDuration = (int) (effect.getDuration() * 0.5);
-        case 3 -> effectDuration = (int) (effect.getDuration() * 0.25);
-        case 4 -> effectDuration = 0;
-        default -> effectDuration = effect.getDuration();
+            case 1 -> effectDuration = (int) (effect.getDuration() * 0.75);
+            case 2 -> effectDuration = (int) (effect.getDuration() * 0.5);
+            case 3 -> effectDuration = (int) (effect.getDuration() * 0.25);
+            case 4 -> effectDuration = 0;
+            default -> effectDuration = effect.getDuration();
         }
 
         StatusEffectInstance statusEffectInstance = activeStatusEffects.get(effect.getEffectType());
@@ -106,7 +106,7 @@ public abstract class LivingEntityMixin {
         return original;
     }
 
-    @ModifyVariable(method = "applyMovementInput", at = @At("HEAD"), ordinal = 0)
+    @ModifyVariable(method = "applyMovementInput", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private Vec3d titanfabric$applyMovementInputMixin(Vec3d original) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity.getVelocity().getY() < 0 && TitanFabricParachuteItem.isParachuteActivated(entity)) {
@@ -114,5 +114,4 @@ public abstract class LivingEntityMixin {
         }
         return original;
     }
-
 }

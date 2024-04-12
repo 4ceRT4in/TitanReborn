@@ -17,6 +17,7 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "PlayerEntityMixin",
+    "ServerPlayerEntityMixin",
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin"

@@ -41,6 +41,7 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
 
     @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
+        //FIXME: last slot is not able to be filled with shift
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot.hasStack()) {
