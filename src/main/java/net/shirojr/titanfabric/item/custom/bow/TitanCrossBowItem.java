@@ -38,6 +38,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
 import java.util.ArrayList;
@@ -49,8 +50,8 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.Lists;
 
-public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows {
-    public static final String CHARGED_KEY = TitanFabric.MODID + ".charged";
+public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows, Anvilable {
+    public static final String CHARGED_KEY = "Charged";
     private static final String CHARGED_PROJECTILES_KEY = "ChargedProjectiles";
     public static final int RANGE = 8;
     private boolean charged = false;

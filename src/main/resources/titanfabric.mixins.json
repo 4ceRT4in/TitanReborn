@@ -33,6 +33,7 @@
     "client.GameOptionsMixin",
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",
+    "client.PlayerEntityRendererMixin",
     "client.PlayerHeldItemFeatureRendererMixin"
   ]
 }

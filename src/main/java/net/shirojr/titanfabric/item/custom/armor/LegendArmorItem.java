@@ -4,10 +4,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricArmorMaterials;
+import net.shirojr.titanfabric.util.items.Anvilable;
 
 import java.util.UUID;
 
-public class LegendArmorItem extends ArmorItem {
+public class LegendArmorItem extends ArmorItem implements Anvilable {
     private final float healthValue;
     protected static final UUID[] MODIFIERS = new UUID[]{
             UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"),
