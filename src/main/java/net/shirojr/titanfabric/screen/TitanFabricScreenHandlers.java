@@ -11,6 +11,7 @@ import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 import net.shirojr.titanfabric.screen.handler.DiamondFurnaceScreenHandler;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
+import net.shirojr.titanfabric.screen.handler.SmallExtendedInventoryScreenHandler;
 
 public class TitanFabricScreenHandlers {
     public static ScreenHandlerType<DiamondFurnaceScreenHandler> DIAMOND_FURNACE_SCREEN_HANDLER =
@@ -31,6 +32,9 @@ public class TitanFabricScreenHandlers {
     public static ScreenHandlerType<ExtendedInventoryScreenHandler> EXTENDED_INVENTORY_SCREEN_HANDLER =
             registerScreenHandler("extended_inventory", new ExtendedScreenHandlerType<>(
                     (syncId, inventory, buf) -> new ExtendedInventoryScreenHandler(syncId, inventory, new SimpleInventory(8))));
+    public static ScreenHandlerType<SmallExtendedInventoryScreenHandler> SMALL_EXTENDED_INVENTORY_SCREEN_HANDLER =
+            registerScreenHandler("small_extended_inventory", new ExtendedScreenHandlerType<>(
+                    (syncId, inventory, buf) -> new SmallExtendedInventoryScreenHandler(syncId, new SimpleInventory(8))));
 
 
     private static <T extends ScreenHandler> ScreenHandlerType<T> registerScreenHandler(String name, ScreenHandlerType<T> screenHandlerType) {
