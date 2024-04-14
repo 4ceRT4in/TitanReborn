@@ -1,8 +1,10 @@
 package net.shirojr.titanfabric.util.effects;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.ArrowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -58,6 +60,12 @@ public final class EffectHelper {
 
     public static NbtCompound getWeaponEffectDataCompound(ItemStack stack) {
         return stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+    }
+
+    public static int getColor(WeaponEffect weaponEffect) {
+        StatusEffect effect = weaponEffect.getOutputEffect();
+        if (effect == null) return -1;
+        return effect.getColor();
     }
 
     /**
@@ -196,15 +204,17 @@ public final class EffectHelper {
             String currentEffect = compound.getCompound(nbtKey).getString(WeaponEffectData.EFFECT_NBT_KEY);
             int strength = EffectHelper.getEffectStrength(itemStack, type);
             WeaponEffectData data = new WeaponEffectData(type, WeaponEffect.getEffect(currentEffect), strength);
-            applyWeaponEffectOnTarget(data, world, target);
+            applyWeaponEffectOnTarget(data, world, target, itemStack.getItem() instanceof ArrowItem);
         }
     }
 
-    private static void applyWeaponEffectOnTarget(WeaponEffectData data, World world, LivingEntity target) {
+    private static void applyWeaponEffectOnTarget(WeaponEffectData data, World world, LivingEntity target, boolean ignoreChance) {
         if (world.isClient() || data == null) return;
         WeaponEffect effect = data.weaponEffect();
         int effectStrength = data.strength();
-        if (world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
+        if (!ignoreChance) {
+            if (world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
+        }
         switch (effect) {
             case BLIND -> {
                 if (target.hasStatusEffect(StatusEffects.BLINDNESS)) return;

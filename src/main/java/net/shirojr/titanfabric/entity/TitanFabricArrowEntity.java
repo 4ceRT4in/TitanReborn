@@ -4,6 +4,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
@@ -32,6 +34,41 @@ public class TitanFabricArrowEntity extends ArrowEntity {
         super(world, owner);
         this.effect = effectData;
         this.itemStack = itemStack;
+    }
+
+    @Override
+    public void tick() {
+        // FIXME: doesn't execute on client side?
+        super.tick();
+        if (this.world.isClient) {
+            if (this.inGround) {
+                if (this.inGroundTime % 5 == 0) {
+                    this.spawnParticles(1);
+                }
+            } else {
+                this.spawnParticles(2);
+            }
+        }
+    }
+
+    @Override
+    public int getColor() {
+        if (this.effect == null) return super.getColor();
+        return EffectHelper.getColor(this.effect.weaponEffect());
+    }
+
+    private void spawnParticles(int amount) {
+        if (this.effect == null) return;
+        int i = EffectHelper.getColor(this.effect.weaponEffect());
+        if (i == -1 || amount <= 0) return;
+
+        double d = (double)(i >> 16 & 0xFF) / 255.0;
+        double e = (double)(i >> 8 & 0xFF) / 255.0;
+        double f = (double)(i & 0xFF) / 255.0;
+        for (int j = 0; j < amount; ++j) {
+            this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5),
+                    this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
+        }
     }
 
     public Optional<WeaponEffect> getEffect() {

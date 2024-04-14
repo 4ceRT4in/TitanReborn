@@ -14,6 +14,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.entity.TitanFabricArrowEntity;
 import net.shirojr.titanfabric.item.TitanFabricItemGroups;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
@@ -30,8 +31,8 @@ import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECTS_COMP
 public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCrafting {
     private final ArrowSelectionHelper.ArrowType arrowType;
 
-    public TitanFabricArrowItem(ArrowSelectionHelper.ArrowType arrowType) {
-        super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN));
+    public TitanFabricArrowItem(ArrowSelectionHelper.ArrowType arrowType, Settings settings) {
+        super(settings);
         this.arrowType = arrowType;
     }
 
@@ -50,7 +51,10 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
             case POISON -> new TranslatableText("item.titanfabric.poison_arrow");
             case WEAK -> new TranslatableText("item.titanfabric.weakness_arrow");
             case WITHER -> new TranslatableText("item.titanfabric.wither_arrow");
-            default -> new TranslatableText("item.titanfabric.arrow");
+            default -> {
+                LoggerUtil.devLogger("couldn't find weapon effect for arrow", true, null);
+                yield new TranslatableText("item.titanfabric.arrow");
+            }
         };
     }
 
@@ -81,7 +85,7 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter) {
         NbtCompound innateCompound = stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY)
                 .getCompound(WeaponEffectType.INNATE_EFFECT.getNbtKey());
-        WeaponEffect weaponEffect = WeaponEffect.getEffect(innateCompound.getString(WeaponEffectData.EFFECT_NBT_KEY)); //FIXME: issue with NullPointerException!
+        WeaponEffect weaponEffect = WeaponEffect.getEffect(innateCompound.getString(WeaponEffectData.EFFECT_NBT_KEY));
         int strength = innateCompound.getInt(WeaponEffectData.EFFECTS_STRENGTH_NBT_KEY);
         WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, strength);
         TitanFabricArrowEntity arrowEntity = new TitanFabricArrowEntity(world, shooter, data, stack);
