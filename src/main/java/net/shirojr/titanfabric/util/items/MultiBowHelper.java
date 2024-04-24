@@ -20,6 +20,7 @@ import java.util.function.Predicate;
 public final class MultiBowHelper {
     public static final String FULL_ARROW_COUNT_NBT_KEY = TitanFabric.MODID + ".concurrent_arrows";
     public static final String ARROWS_LEFT_NBT_KEY = TitanFabric.MODID + ".arrows_left";
+    public static final String PROJECTILE_TICK_NBT_KEY = TitanFabric.MODID + ".projectile_tick";
 
     private MultiBowHelper() {
         // private ctor to avoid instantiating this utility class

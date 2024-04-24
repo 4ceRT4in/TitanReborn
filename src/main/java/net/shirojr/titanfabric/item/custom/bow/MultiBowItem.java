@@ -23,7 +23,6 @@ import net.shirojr.titanfabric.util.items.SelectableArrows;
 import java.util.List;
 
 public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows {
-    private int projectileTick = 0;
     private final int coolDownTicks;
     private final int fullArrowCount;
     private float pullProgress;
@@ -64,7 +63,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (playerEntity.isCreative()) possibleArrowCount = MultiBowHelper.getFullArrowCount(stack);
 
         MultiBowHelper.setArrowsLeftNbt(stack, possibleArrowCount);
-        projectileTick = 10 * possibleArrowCount;
+        stack.getOrCreateNbt().putInt(MultiBowHelper.PROJECTILE_TICK_NBT_KEY, 10 * possibleArrowCount);
     }
 
     @Override
@@ -73,10 +72,13 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (world.isClient() || !(entity instanceof PlayerEntity player)) return;
         if (!stack.getOrCreateNbt().contains(MultiBowHelper.FULL_ARROW_COUNT_NBT_KEY))
             MultiBowHelper.setFullArrowCount(stack, this.fullArrowCount);
-        if (!selected) return;
 
+        boolean isInHand = player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof MultiBowItem ||
+                player.getStackInHand(Hand.OFF_HAND).getItem() instanceof MultiBowItem;
+        if (!isInHand) return;
+        int projectileTick = stack.getOrCreateNbt().getInt(MultiBowHelper.PROJECTILE_TICK_NBT_KEY);
         if (projectileTick < 1) return;
-        projectileTick--;
+        stack.getOrCreateNbt().putInt(MultiBowHelper.PROJECTILE_TICK_NBT_KEY, projectileTick - 1);
         if (!validTick(projectileTick + 1)) return;
         handleArrowShots(player, MultiBowHelper.searchFirstValidArrowStack(player, this), this.pullProgress);
         handleAfterShotValues(stack, player);
@@ -96,8 +98,6 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
     }
 
     private static void handleArrowShots(PlayerEntity player, ItemStack arrowStack, double pullProgress) {
-        if (!(player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof MultiBowItem)) return;
-
         World world = player.getWorld();
         ItemStack stack = player.getStackInHand(Hand.MAIN_HAND);
         int powerEnchantLevel = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
