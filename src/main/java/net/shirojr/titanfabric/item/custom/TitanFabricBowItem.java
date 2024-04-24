@@ -38,10 +38,8 @@ public abstract class TitanFabricBowItem extends BowItem implements SelectableAr
     @Environment(EnvType.CLIENT)
     public static void onClientTick(MinecraftClient client) {
         while (KeyBindEvents.BOW_SCREEN_KEY.wasPressed()) {
-            if (client.player == null)
-                return;
-            if (!(client.player.getMainHandStack().getItem() instanceof SelectableArrows bowStack))
-                return;
+            if (client.player == null) return;
+            if (!(client.player.getMainHandStack().getItem() instanceof SelectableArrows bowStack)) return;
 
             PlayerInventory inventory = client.player.getInventory();
             List<ItemStack> arrowStacks = inventory.main.stream().filter(itemStack -> bowStack.supportedArrows().contains(itemStack.getItem())).toList();

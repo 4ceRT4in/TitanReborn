@@ -44,7 +44,7 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         if (!isIn(group)) return;
-        EffectHelper.generateAllEffectVersionStacks(this, stacks);
+        EffectHelper.generateAllEffectVersionStacks(this, stacks, true);
     }
 
     @Override

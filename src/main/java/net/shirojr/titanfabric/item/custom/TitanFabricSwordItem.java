@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
-    private final boolean hasWeaponEffects;
+    protected final boolean hasWeaponEffects;
     private final WeaponEffect baseEffect;
 
     public TitanFabricSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffect baseEffect, Item.Settings settings) {
@@ -38,7 +38,7 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         if (!isIn(group)) return;
         if (this.hasWeaponEffects) {
-            EffectHelper.generateAllEffectVersionStacks(this, stacks);
+            EffectHelper.generateAllEffectVersionStacks(this, stacks, true);
         } else {
             stacks.add(new ItemStack(this));
         }

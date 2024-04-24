@@ -22,6 +22,7 @@ import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
+import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
@@ -72,6 +73,8 @@ public class TitanFabricItems {
     public static final SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f,
             new FabricItemSettings().maxDamage(2031).group(ItemGroup.COMBAT).fireproof());  // registered in ItemsMixin class
 
+    public static final Item DIAMOND_SWORD = registerItem("diamond_sword",
+            new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 3, -2.4f, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
             new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, removeBaseDamage(8), -2.4f, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword",

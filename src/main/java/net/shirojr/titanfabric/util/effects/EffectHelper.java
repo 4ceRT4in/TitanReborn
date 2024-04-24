@@ -149,7 +149,7 @@ public final class EffectHelper {
      * @param baseItem original ItemStack
      * @param stacks   list of all registered ItemStacks.
      */
-    public static void generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks) {
+    public static void generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks, boolean addBaseItem) {
         List<WeaponEffect> possibleEffects = getWeaponEffects();
         if (baseItem instanceof TitanFabricArrowItem) {
             possibleEffects = getArrowEffects();
@@ -165,13 +165,16 @@ public final class EffectHelper {
                 ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
                 stacks.add(effectStack);
             }
-        } else if (baseItem instanceof TitanFabricSwordItem swordItem) {
+        }
+        else if (baseItem instanceof TitanFabricSwordItem swordItem) {
             ItemStack onlyInnateItemStack = new ItemStack(baseItem);
-            if (swordItem.getBaseEffect() != null) {
-                WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, swordItem.getBaseEffect(), 1);
-                EffectHelper.applyEffectToStack(onlyInnateItemStack, innateEffectData);
+            if (addBaseItem) {
+                if (swordItem.getBaseEffect() != null) {
+                    WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, swordItem.getBaseEffect(), 1);
+                    EffectHelper.applyEffectToStack(onlyInnateItemStack, innateEffectData);
+                }
+                stacks.add(onlyInnateItemStack);
             }
-            stacks.add(onlyInnateItemStack);
             for (WeaponEffect entry : possibleEffects) {
                 for (int effectStrengthVersion = 1; effectStrengthVersion < 3; effectStrengthVersion++) {
                     WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, effectStrengthVersion);

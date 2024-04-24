@@ -25,6 +25,7 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.EMBER_GREATSWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_SWORD);
         registerWeaponEffects(TitanFabricItems.LEGEND_GREATSWORD);
+        registerWeaponEffects(TitanFabricItems.DIAMOND_SWORD);
 
         registerBasicInnateItemsProvider(TitanFabricItems.ESSENCE);
         registerBasicInnateItemsProvider(TitanFabricItems.ARROW);
