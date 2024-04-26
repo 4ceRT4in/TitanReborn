@@ -16,13 +16,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
-    protected final boolean hasWeaponEffects;
+    protected final boolean canHaveWeaponEffects;
     private final WeaponEffect baseEffect;
 
-    public TitanFabricSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffect baseEffect, Item.Settings settings) {
+    public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffect baseEffect, Item.Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
-        this.hasWeaponEffects = hasWeaponEffects;
+        this.canHaveWeaponEffects = canHaveWeaponEffects;
         this.baseEffect = baseEffect;
+    }
+
+    public boolean canHaveWeaponEffects() {
+        return this.canHaveWeaponEffects;
     }
 
     public WeaponEffect getBaseEffect() {
@@ -37,7 +41,7 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         if (!isIn(group)) return;
-        if (this.hasWeaponEffects) {
+        if (this.canHaveWeaponEffects) {
             EffectHelper.generateAllEffectVersionStacks(this, stacks, true);
         } else {
             stacks.add(new ItemStack(this));

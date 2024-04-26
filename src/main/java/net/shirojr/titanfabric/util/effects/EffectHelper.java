@@ -73,6 +73,9 @@ public final class EffectHelper {
      * Used to write custom NBT information to the ItemStack
      */
     public static ItemStack getStackWithEffects(ItemStack itemStack, List<WeaponEffectData> effectDataList) {
+        if (itemStack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
+            if (!titanFabricSwordItem.canHaveWeaponEffects()) return itemStack;
+        }
         NbtCompound stackNbt = itemStack.getOrCreateNbt();
         for (WeaponEffectData entry : effectDataList) {
             NbtCompound newTypeCompound = new NbtCompound();

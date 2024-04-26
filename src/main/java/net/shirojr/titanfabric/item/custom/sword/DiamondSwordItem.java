@@ -16,7 +16,7 @@ public class DiamondSwordItem extends TitanFabricSwordItem {
     @Override
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         if (!isIn(group)) return;
-        if (this.hasWeaponEffects) {
+        if (this.canHaveWeaponEffects) {
             EffectHelper.generateAllEffectVersionStacks(this, stacks, false);
         } else {
             stacks.add(new ItemStack(this));
