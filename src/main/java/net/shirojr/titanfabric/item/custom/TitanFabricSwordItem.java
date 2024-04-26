@@ -18,15 +18,22 @@ import java.util.List;
 public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
     protected final boolean canHaveWeaponEffects;
     private final WeaponEffect baseEffect;
+    private final float critMultiplier;
 
-    public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffect baseEffect, Item.Settings settings) {
+    public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage,
+                                float attackSpeed, float critMultiplier, WeaponEffect baseEffect, Item.Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.canHaveWeaponEffects = canHaveWeaponEffects;
+        this.critMultiplier = critMultiplier;
         this.baseEffect = baseEffect;
     }
 
     public boolean canHaveWeaponEffects() {
         return this.canHaveWeaponEffects;
+    }
+
+    public float getCritMultiplier() {
+        return this.critMultiplier;
     }
 
     public WeaponEffect getBaseEffect() {

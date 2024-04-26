@@ -9,9 +9,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.item.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
@@ -22,15 +20,16 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
-import net.shirojr.titanfabric.item.custom.armor.*;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
+import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -57,6 +56,10 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     @Final
     private PlayerInventory inventory;
+
+    @Shadow public abstract void remove(RemovalReason reason);
+
+    @Shadow public abstract void increaseStat(Stat<?> stat, int amount);
 
     @Inject(method = "damage", at = @At(value = "TAIL", shift = Shift.BEFORE), cancellable = true)
     private void titanfabric$damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -93,6 +96,25 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             }
         }
     }
+
+    @ModifyConstant(method = "attack",
+            constant = @Constant(floatValue = 1.5f),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getKnockback(Lnet/minecraft/entity/LivingEntity;)I"),
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getMovementSpeed()F")
+            )
+    )
+    private float titanfabric$critChanges(float constant) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        ItemStack stack = player.getMainHandStack();
+        if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
+            return titanFabricSwordItem.getCritMultiplier();
+        } else if (stack.getItem() instanceof SwordItem) {
+            return 1.2f;
+        }
+        return constant;
+    }
+
 
     @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)
     private void titanfabric$getAttackCooldownProgressPerTickMixin(CallbackInfoReturnable<Float> cir) {

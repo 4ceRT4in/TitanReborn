@@ -9,8 +9,9 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 
 public class DiamondSwordItem extends TitanFabricSwordItem {
-    public DiamondSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed, WeaponEffect baseEffect, Settings settings) {
-        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, baseEffect, settings);
+    public DiamondSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed,
+                            float critMultiplier, WeaponEffect baseEffect, Settings settings) {
+        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, critMultiplier, baseEffect, settings);
     }
 
     @Override
