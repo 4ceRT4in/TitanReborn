@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
@@ -87,12 +88,21 @@ public class WeaponRecipe extends SmithingRecipe {
         if (baseInnateEffectData.isPresent() && modifierInnateEffectData.isPresent()) {
             this.weaponEffectData = modifierInnateEffectData.get();
             ItemStack itemStack = this.result.copy();
+            if (itemStack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
+                if (!titanFabricSwordItem.canHaveWeaponEffects()) {
+                    //TODO: implement helper method to clean effects from itemstack
+                    ItemStack stack = new ItemStack(itemStack.getItem());
+                    stack.setDamage(itemStack.getDamage());
+                    stack.setRepairCost(itemStack.getRepairCost());
+                    this.result = stack.copy();
+                    return stack;
+                }
+            }
             int strength = 1;
             if (baseAdditionEffectData.isPresent()) {
                 strength = baseAdditionEffectData.get().strength() + modifierInnateEffectData.get().strength();
                 strength = Math.min(2, Math.max(1, strength));
             }
-
             NbtCompound finalBaseCompound = baseInnateEffectData.get().toNbt();
             NbtCompound finalAdditionCompound = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT,
                     modifierInnateEffectData.get().weaponEffect(), strength).toNbt();
