@@ -88,16 +88,6 @@ public class WeaponRecipe extends SmithingRecipe {
         if (baseInnateEffectData.isPresent() && modifierInnateEffectData.isPresent()) {
             this.weaponEffectData = modifierInnateEffectData.get();
             ItemStack itemStack = this.result.copy();
-            if (itemStack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
-                if (!titanFabricSwordItem.canHaveWeaponEffects()) {
-                    //TODO: implement helper method to clean effects from itemstack
-                    ItemStack stack = new ItemStack(itemStack.getItem());
-                    stack.setDamage(itemStack.getDamage());
-                    stack.setRepairCost(itemStack.getRepairCost());
-                    this.result = stack.copy();
-                    return stack;
-                }
-            }
             int strength = 1;
             if (baseAdditionEffectData.isPresent()) {
                 strength = baseAdditionEffectData.get().strength() + modifierInnateEffectData.get().strength();
