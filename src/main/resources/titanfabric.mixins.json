@@ -23,7 +23,8 @@
     "SmithingRecipeMixin",
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
-    "StatusEffectsMixin"
+    "StatusEffectsMixin",
+    "SwordItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

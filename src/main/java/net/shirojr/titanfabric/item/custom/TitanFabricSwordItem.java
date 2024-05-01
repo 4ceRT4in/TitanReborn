@@ -15,6 +15,7 @@ import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
     protected final boolean canHaveWeaponEffects;
@@ -46,8 +47,8 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     }
 
     @Override
-    public ItemType isType() {
-        return ItemType.PRODUCT;
+    public Optional<ItemType> titanfabric$getType() {
+        return Optional.of(ItemType.PRODUCT);
     }
 
     @Override

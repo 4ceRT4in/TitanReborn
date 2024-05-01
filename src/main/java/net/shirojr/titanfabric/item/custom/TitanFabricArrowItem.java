@@ -1,6 +1,5 @@
 package net.shirojr.titanfabric.item.custom;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -13,7 +12,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.entity.TitanFabricArrowEntity;
-import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -37,8 +35,8 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
     }
 
     @Override
-    public ItemType isType() {
-        return ItemType.PRODUCT;
+    public Optional<ItemType> titanfabric$getType() {
+        return Optional.of(ItemType.PRODUCT);
     }
 
     @Override

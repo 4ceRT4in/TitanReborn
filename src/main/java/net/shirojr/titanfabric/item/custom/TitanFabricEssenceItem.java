@@ -71,7 +71,7 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
     }
 
     @Override
-    public ItemType isType() {
-        return ItemType.INGREDIENT;
+    public Optional<ItemType> titanfabric$getType() {
+        return Optional.of(ItemType.INGREDIENT);
     }
 }
