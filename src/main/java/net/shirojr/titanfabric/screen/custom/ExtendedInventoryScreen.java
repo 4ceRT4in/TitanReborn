@@ -5,10 +5,10 @@ import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -20,13 +20,15 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
 
     public ExtendedInventoryScreen(ExtendedInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+        this.backgroundWidth = 176;
+        this.backgroundHeight = 166;
     }
 
     @Override
     protected void init() {
         super.init();
         this.titleX = 86;
-        this.titleY = 8;
+        this.titleY = 6;
         this.playerInventoryTitleX = this.titleX;
 
         if (client == null || this.client.player == null || this.client.interactionManager == null) return;
@@ -34,8 +36,8 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
             this.client.setScreen(new CreativeInventoryScreen(this.client.player));
             return;
         }
-        ButtonWidget buttonWidget = new TexturedButtonWidget(this.x + 91, this.height / 2 - 22,
-                20, 19, 178, 0, 19, ExtendedInventoryScreen.TEXTURE, button ->
+        ButtonWidget buttonWidget = new ButtonWidget(this.x + 2, this.backgroundHeight - 36,
+                20, 20, new LiteralText("<<"), button ->
                 this.client.setScreen(new InventoryScreen(this.client.player)));
         this.addDrawableChild(buttonWidget);
     }

@@ -58,9 +58,6 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:6.4.90") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-
-/*	// included minemenue refabricated for radial menu //TODO: make custom version
-	include implementation("curse.maven:minemenu_refrabricated-662722:3943063")*/
 }
 
 processResources {
