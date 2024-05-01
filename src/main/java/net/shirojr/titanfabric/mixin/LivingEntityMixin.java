@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -113,5 +114,14 @@ public abstract class LivingEntityMixin {
             return new Vec3d(original.getX(), original.getY(), 0.98D);
         }
         return original;
+    }
+
+    @Inject(method = "getHandSwingDuration", at = @At("RETURN"), cancellable = true)
+    private void titanfabric$matchHandSwingWithItemCooldown(CallbackInfoReturnable<Integer> cir) {
+        if (!((LivingEntity) (Object) this instanceof PlayerEntity player)) return;
+        ItemStack stack = player.getMainHandStack();
+        if (!(stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem)) return;
+        int defaultCooldown = cir.getReturnValue();
+        cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
     }
 }

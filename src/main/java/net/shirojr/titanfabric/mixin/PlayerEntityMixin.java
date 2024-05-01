@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -9,7 +10,10 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.item.SwordItem;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
@@ -57,9 +61,8 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Final
     private PlayerInventory inventory;
 
-    @Shadow public abstract void remove(RemovalReason reason);
-
-    @Shadow public abstract void increaseStat(Stat<?> stat, int amount);
+    @Shadow
+    public abstract void remove(RemovalReason reason);
 
     @Inject(method = "damage", at = @At(value = "TAIL", shift = Shift.BEFORE), cancellable = true)
     private void titanfabric$damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -115,6 +118,22 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         return constant;
     }
 
+    @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$coolDownChanges(Entity target, CallbackInfo ci) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        ItemStack stack = player.getMainHandStack();
+
+        int cooldown = 0;
+        if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
+            if (this.getItemCooldownManager().isCoolingDown(titanFabricSwordItem)) {
+                ci.cancel();
+                return;
+            }
+            cooldown = titanFabricSwordItem.getCooldownTicks();
+        }
+        if (cooldown <= 0) return;
+        this.getItemCooldownManager().set(stack.getItem(), cooldown);
+    }
 
     @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)
     private void titanfabric$getAttackCooldownProgressPerTickMixin(CallbackInfoReturnable<Float> cir) {
@@ -143,7 +162,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     }
 
     @Inject(method = "damageShield", at = @At("HEAD"))
-    private void titanfabric$damageNeMuelchShield(float amount, CallbackInfo ci) {
+    private void titanfabric$damageShield(float amount, CallbackInfo ci) {
         if (this.activeItemStack.getItem() instanceof TitanFabricShieldItem) {
             if (!this.world.isClient()) {
                 this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));

@@ -97,6 +97,12 @@ public final class EffectHelper {
         return getStackWithEffects(itemStack, List.of(effectData));
     }
 
+    public static ItemStack removeEffectsFromStack(ItemStack itemStack) {
+        ItemStack output = itemStack.copy();
+        output.getOrCreateNbt().remove(EFFECTS_COMPOUND_NBT_KEY);
+        return output;
+    }
+
     @Nullable
     public static WeaponEffect getWeaponEffectFromPotion(ItemStack stack) {
         if (!stack.isOf(Items.POTION)) return null;

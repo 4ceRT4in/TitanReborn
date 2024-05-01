@@ -6,11 +6,12 @@ import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.items.Anvilable;
-import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import net.shirojr.titanfabric.util.items.ToolTipHelper;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -18,14 +19,14 @@ import java.util.List;
 public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
     protected final boolean canHaveWeaponEffects;
     private final WeaponEffect baseEffect;
-    private final float critMultiplier;
+    private final SwordType swordType;
 
     public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage,
-                                float attackSpeed, float critMultiplier, WeaponEffect baseEffect, Item.Settings settings) {
+                                float attackSpeed, SwordType swordType, WeaponEffect baseEffect, Item.Settings settings) {
         super(toolMaterial, attackDamage, attackSpeed, settings);
         this.canHaveWeaponEffects = canHaveWeaponEffects;
-        this.critMultiplier = critMultiplier;
         this.baseEffect = baseEffect;
+        this.swordType = swordType;
     }
 
     public boolean canHaveWeaponEffects() {
@@ -33,7 +34,11 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     }
 
     public float getCritMultiplier() {
-        return this.critMultiplier;
+        return this.swordType.getCritMultiplier();
+    }
+
+    public int getCooldownTicks() {
+        return this.swordType.getCooldownTicks();
     }
 
     public WeaponEffect getBaseEffect() {

@@ -5,13 +5,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.util.collection.DefaultedList;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 
 public class DiamondSwordItem extends TitanFabricSwordItem {
     public DiamondSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed,
-                            float critMultiplier, WeaponEffect baseEffect, Settings settings) {
-        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, critMultiplier, baseEffect, settings);
+                            SwordType swordType, WeaponEffect baseEffect, Settings settings) {
+        super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, swordType, baseEffect, settings);
     }
 
     @Override
