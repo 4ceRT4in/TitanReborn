@@ -8,24 +8,24 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.entity.TitanFabricEntities;
-import net.shirojr.titanfabric.event.ArmorHandlingEvent;
-import net.shirojr.titanfabric.event.KeyBindEvents;
-import net.shirojr.titanfabric.event.ParachuteFeatureRendererEventHandler;
+import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.network.S2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
-import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
 import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
 import net.shirojr.titanfabric.screen.custom.DiamondFurnaceScreen;
+import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
 import net.shirojr.titanfabric.util.ModelPredicateProviders;
+import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
 
 @Environment(EnvType.CLIENT)
 public class TitanFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        ModelPredicateProviders.register();
-        KeyBindEvents.register();
-        ArmorHandlingEvent.register();
+        TitanFabricEvents.registerClientEvents();
+        TitanFabricKeyBinds.register();
         TitanFabricEntities.registerClient();
+
+        ModelPredicateProviders.register();
         S2CNetworking.registerClientReceivers();
 
         HandledScreens.register(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER, DiamondFurnaceScreen::new);
@@ -34,7 +34,6 @@ public class TitanFabricClient implements ClientModInitializer {
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, ExtendedInventoryScreen::new);
 
-        ParachuteFeatureRendererEventHandler.register();
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());
 
         TitanFabric.LOGGER.info("Initialized all " + TitanFabric.MODID + " client components");

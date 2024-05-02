@@ -6,12 +6,10 @@ import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.entity.TitanFabricEntities;
-import net.shirojr.titanfabric.event.CommandRegistrationEvent;
+import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.network.C2SNetworking;
-import net.shirojr.titanfabric.network.NetworkingIdentifiers;
-import net.shirojr.titanfabric.network.S2CNetworking;
 import net.shirojr.titanfabric.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
@@ -41,8 +39,7 @@ public class TitanFabric implements ModInitializer {
         C2SNetworking.registerServerReceivers();
         TitanFabricGamerules.register();
         TitanFabricStats.register();
-
-        CommandRegistrationEvent.register();
+        TitanFabricEvents.registerEvents();
 
         LOGGER.info("Initialized all " + MODID + " common components");
         LoggerUtil.devLogger("Initialized Instance in development environment!");

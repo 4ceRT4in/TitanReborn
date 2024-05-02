@@ -11,7 +11,6 @@
     "BowItemMixin",
     "BrewingRecipeRegistryInvoker",
     "BrewingRecipeRegistryMixin",
-    "CraftingScreenHandlerMixin",
     "HungerManagerMixin",
     "ItemMixin",
     "ItemsMixin",
@@ -31,7 +30,6 @@
   },
   "client": [
     "client.AbstractClientPlayerEntityMixin",
-    "client.AbstractInventoryScreenMixin",
     "client.ArrowEntityRendererMixin",
     "client.BipedEntityModelMixin",
     "client.GameOptionsMixin",

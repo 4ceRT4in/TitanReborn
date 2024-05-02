@@ -7,6 +7,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -28,22 +31,28 @@ import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@Debug(export = true)
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSelectionHandler {
+    @Unique
+    private static final TrackedData<ItemStack> SELECTED_ARROW = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.ITEM_STACK);
+
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -63,6 +72,39 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Shadow
     public abstract void remove(RemovalReason reason);
+
+    @Inject(method = "initDataTracker", at = @At("TAIL"))
+    private void titanfabric$appendSelectedArrowDataTracker(CallbackInfo ci) {
+        this.dataTracker.startTracking(SELECTED_ARROW, ItemStack.EMPTY);
+    }
+
+    @Override
+    public Optional<ItemStack> titanfabric$getSelectedArrow() {
+        ItemStack selectedArrowStack = this.dataTracker.get(SELECTED_ARROW);
+        if (selectedArrowStack.isEmpty()) return Optional.empty();
+        return Optional.of(selectedArrowStack);
+    }
+
+    @Override
+    public void titanfabric$setSelectedArrow(@Nullable ItemStack selectedArrowStack) {
+        ItemStack stack = null;
+        if (selectedArrowStack != null) stack = selectedArrowStack;
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if (!(player.getMainHandStack().getItem() instanceof SelectableArrows)) stack = null;
+        this.dataTracker.set(SELECTED_ARROW, Objects.requireNonNullElse(stack, ItemStack.EMPTY));
+    }
+
+    @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+        if (!(stack.getItem() instanceof SelectableArrows bowItem)) return;
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
+        arrowSelection.titanfabric$getSelectedArrow().ifPresent(selectedArrowStack -> {
+            // if (ArrowSelectionHelper.containsArrowStack(selectedArrowStack, player.getInventory(), bowItem)) {
+            cir.setReturnValue(selectedArrowStack);
+            // }
+        });
+    }
 
     @Inject(method = "damage", at = @At(value = "TAIL", shift = Shift.BEFORE), cancellable = true)
     private void titanfabric$damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {

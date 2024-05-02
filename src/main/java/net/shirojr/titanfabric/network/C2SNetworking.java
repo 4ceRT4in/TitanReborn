@@ -20,6 +20,12 @@ import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
+import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
+import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
+import net.shirojr.titanfabric.util.items.SelectableArrows;
+
+import java.util.List;
 
 import static net.shirojr.titanfabric.network.NetworkingIdentifiers.*;
 
@@ -28,6 +34,7 @@ public class C2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(BOW_SCREEN_CHANNEL, C2SNetworking::handleBowScreenPacket);
         ServerPlayNetworking.registerGlobalReceiver(ARMOR_HANDLING_CHANNEL, C2SNetworking::handleArmorLifeHandlingPacket);
         ServerPlayNetworking.registerGlobalReceiver(EXTENDED_INVENTORY_OPEN, C2SNetworking::handleExtendedInventoryOpenPacket);
+        ServerPlayNetworking.registerGlobalReceiver(ARROW_SELECTION, C2SNetworking::handleArrowSelectionPacket);
     }
 
     private static void handleBowScreenPacket(MinecraftServer server, ServerPlayerEntity player,
@@ -90,6 +97,35 @@ public class C2SNetworking {
                     return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory);
                 }
             });
+        });
+    }
+
+    private static void handleArrowSelectionPacket(MinecraftServer server, ServerPlayerEntity player,
+                                                   ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf buf,
+                                                   PacketSender sender) {
+        server.execute(() -> {
+            if (!(player.getMainHandStack().getItem() instanceof SelectableArrows bowItem)) return;
+            ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
+            PlayerInventory inventory = player.getInventory();
+            List<ItemStack> arrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(inventory, bowItem);
+            if (arrowStacks.size() == 0) return;
+            ItemStack newSelectedArrowStack;
+
+            if (arrowSelection.titanfabric$getSelectedArrow().isPresent()) {
+                ItemStack selectedArrowStack = arrowSelection.titanfabric$getSelectedArrow().get();
+                if (arrowStacks.contains(selectedArrowStack)) {
+                    int indexInArrowList = arrowStacks.indexOf(selectedArrowStack) + 1;
+                    if (indexInArrowList > arrowStacks.size() - 1) indexInArrowList = 0;
+                    newSelectedArrowStack = arrowStacks.get(indexInArrowList);
+                } else {
+                    newSelectedArrowStack = arrowStacks.get(0);
+                }
+            } else {
+                newSelectedArrowStack = arrowStacks.get(0);
+            }
+
+            arrowSelection.titanfabric$setSelectedArrow(newSelectedArrowStack);
+            LoggerUtil.devLogger("SelectedStack: " + newSelectedArrowStack.getName());
         });
     }
 }

@@ -17,7 +17,6 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
-import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,15 +26,13 @@ import java.util.Optional;
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECTS_COMPOUND_NBT_KEY;
 
 public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCrafting {
-    private final ArrowSelectionHelper.ArrowType arrowType;
 
-    public TitanFabricArrowItem(ArrowSelectionHelper.ArrowType arrowType, Settings settings) {
+    public TitanFabricArrowItem(Settings settings) {
         super(settings);
-        this.arrowType = arrowType;
     }
 
     @Override
-    public Optional<ItemType> titanfabric$getType() {
+    public Optional<ItemType> titanfabric$getCraftingType() {
         return Optional.of(ItemType.PRODUCT);
     }
 

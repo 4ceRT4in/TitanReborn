@@ -1,8 +1,7 @@
-package net.shirojr.titanfabric.event;
+package net.shirojr.titanfabric.event.custom;
 
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.shirojr.titanfabric.render.renderer.ParachuteFeatureRenderer;
 import org.jetbrains.annotations.NotNull;
@@ -32,10 +31,10 @@ public class ParachuteFeatureRendererEventHandler {
     //endregion
 
     public static void register() {
-    LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
-        if (entityRenderer instanceof PlayerEntityRenderer) {
-            registrationHelper.register(new ParachuteFeatureRenderer(entityRenderer, context.getModelLoader()));
-        }
-    });
+        LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper, context) -> {
+            if (entityRenderer instanceof PlayerEntityRenderer) {
+                registrationHelper.register(new ParachuteFeatureRenderer(entityRenderer, context.getModelLoader()));
+            }
+        });
     }
 }

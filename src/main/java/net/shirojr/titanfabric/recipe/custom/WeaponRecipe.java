@@ -43,9 +43,9 @@ public class WeaponRecipe extends SmithingRecipe {
         ItemStack baseStack = inventory.getStack(0);
         ItemStack additionStack = inventory.getStack(1);
         if (!(baseStack.getItem() instanceof WeaponEffectCrafting baseCraftingItem)) return false;
-        if (!baseCraftingItem.isType(WeaponEffectCrafting.ItemType.PRODUCT)) return false;
+        if (!baseCraftingItem.isCraftingType(WeaponEffectCrafting.ItemType.PRODUCT)) return false;
         if (!(additionStack.getItem() instanceof WeaponEffectCrafting additionCraftingItem)) return false;
-        if (!additionCraftingItem.isType(WeaponEffectCrafting.ItemType.INGREDIENT)) return false;
+        if (!additionCraftingItem.isCraftingType(WeaponEffectCrafting.ItemType.INGREDIENT)) return false;
         boolean baseMatches = this.base.test(baseStack);
         boolean additionMatches = this.addition.test(additionStack);
 

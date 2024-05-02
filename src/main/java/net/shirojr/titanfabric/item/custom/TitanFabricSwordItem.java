@@ -47,7 +47,7 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     }
 
     @Override
-    public Optional<ItemType> titanfabric$getType() {
+    public Optional<ItemType> titanfabric$getCraftingType() {
         return Optional.of(ItemType.PRODUCT);
     }
 

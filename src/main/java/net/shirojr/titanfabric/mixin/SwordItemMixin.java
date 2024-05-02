@@ -14,7 +14,7 @@ public class SwordItemMixin extends ToolItem implements Vanishable, WeaponEffect
     }
 
     @Override
-    public Optional<ItemType> titanfabric$getType() {
+    public Optional<ItemType> titanfabric$getCraftingType() {
         SwordItem swordItem = (SwordItem) (Object) this;
         if (swordItem.equals(Items.DIAMOND_SWORD)) return Optional.of(ItemType.PRODUCT);
         else return Optional.empty();

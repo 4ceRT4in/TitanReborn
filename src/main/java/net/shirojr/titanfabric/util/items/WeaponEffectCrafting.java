@@ -6,9 +6,9 @@ import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import java.util.Optional;
 
 public interface WeaponEffectCrafting {
-    Optional<ItemType> titanfabric$getType();
-    default boolean isType(ItemType type) {
-        return this.titanfabric$getType().isPresent() && this.titanfabric$getType().get().equals(type);
+    Optional<ItemType> titanfabric$getCraftingType();
+    default boolean isCraftingType(ItemType type) {
+        return this.titanfabric$getCraftingType().isPresent() && this.titanfabric$getCraftingType().get().equals(type);
     }
 
     /**
