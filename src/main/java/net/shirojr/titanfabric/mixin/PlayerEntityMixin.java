@@ -33,6 +33,7 @@ import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
+import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
@@ -99,10 +100,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         if (!(stack.getItem() instanceof SelectableArrows bowItem)) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
         ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
-        arrowSelection.titanfabric$getSelectedArrow().ifPresent(selectedArrowStack -> {
-            // if (ArrowSelectionHelper.containsArrowStack(selectedArrowStack, player.getInventory(), bowItem)) {
-            cir.setReturnValue(selectedArrowStack);
-            // }
+
+        arrowSelection.titanfabric$getSelectedArrow().ifPresentOrElse(cir::setReturnValue, () -> {
+            List<ItemStack> possibleArrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(player.getInventory(), bowItem);
+            ItemStack backupStack = ItemStack.EMPTY;
+            if (possibleArrowStacks.size() > 0) {
+                backupStack = possibleArrowStacks.get(0);
+                arrowSelection.titanfabric$setSelectedArrow(backupStack);
+            } else {
+                arrowSelection.titanfabric$setSelectedArrow(null);
+            }
+            cir.setReturnValue(backupStack);
         });
     }
 
