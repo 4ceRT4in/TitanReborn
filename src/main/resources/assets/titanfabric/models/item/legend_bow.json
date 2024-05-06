@@ -45,6 +45,136 @@
         "pull": 0.9
       },
       "model": "titanfabric:item/legend_bow_pulling_2"
+    },
+
+
+
+    {
+      "predicate": {
+        "handle": 0.1
+      },
+      "model": "titanfabric:item/legend_bow_blindness"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "handle": 0.1
+      },
+      "model": "titanfabric:item/legend_bow_pulling_0_blindness"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "handle": 0.1
+      },
+      "model": "titanfabric:item/legend_bow_pulling_1_blindness"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "handle": 0.1
+      },
+      "model": "titanfabric:item/legend_bow_pulling_2_blindness"
+    },
+
+
+
+
+    {
+      "predicate": {
+        "handle": 0.3
+      },
+      "model": "titanfabric:item/legend_bow_poison"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "handle": 0.3
+      },
+      "model": "titanfabric:item/legend_bow_pulling_0_poison"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "handle": 0.3
+      },
+      "model": "titanfabric:item/legend_bow_pulling_1_poison"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "handle": 0.3
+      },
+      "model": "titanfabric:item/legend_bow_pulling_2_poison"
+    },
+
+
+
+
+    {
+      "predicate": {
+        "handle": 0.4
+      },
+      "model": "titanfabric:item/legend_bow_weakness"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "handle": 0.4
+      },
+      "model": "titanfabric:item/legend_bow_pulling_0_weakness"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "handle": 0.4
+      },
+      "model": "titanfabric:item/legend_bow_pulling_1_weakness"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "handle": 0.4
+      },
+      "model": "titanfabric:item/legend_bow_pulling_2_weakness"
+    },
+
+
+
+    {
+      "predicate": {
+        "handle": 0.5
+      },
+      "model": "titanfabric:item/legend_bow_wither"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "handle": 0.5
+      },
+      "model": "titanfabric:item/legend_bow_pulling_0_wither"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "handle": 0.5
+      },
+      "model": "titanfabric:item/legend_bow_pulling_1_wither"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "handle": 0.5
+      },
+      "model": "titanfabric:item/legend_bow_pulling_2_wither"
     }
   ]
 }

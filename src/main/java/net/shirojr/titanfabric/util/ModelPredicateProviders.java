@@ -3,12 +3,16 @@ package net.shirojr.titanfabric.util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
@@ -33,7 +37,7 @@ public class ModelPredicateProviders {
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
 
-        registerBowProviders(TitanFabricItems.LEGEND_BOW);
+        registerLegendBowProviders();
         registerBowProviders(TitanFabricItems.MULTI_BOW_1);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_1);
         registerBowProviders(TitanFabricItems.MULTI_BOW_2);
@@ -73,6 +77,32 @@ public class ModelPredicateProviders {
     private static void registerBowProviders(Item item) {
         registerBowPull(item, new Identifier("pull"));
         registerBowPulling(item, new Identifier("pulling"));
+    }
+
+    private static void registerLegendBowProviders() {
+        registerBowProviders(TitanFabricItems.LEGEND_BOW);
+        registerLegendBowVersionProvider(new Identifier("handle"));
+    }
+
+    private static void registerLegendBowVersionProvider(Identifier identifier) {
+        ModelPredicateProviderRegistry.register(TitanFabricItems.LEGEND_BOW, identifier,
+                (itemStack, clientWorld, livingEntity, seed) -> {
+                    if (!(livingEntity instanceof ArrowSelectionHandler clientPlayer)) return 0.0f;
+                    if (clientPlayer.titanfabric$getSelectedArrow().isEmpty()) return 0.0f;
+                    ItemStack savedArrowItemStack = clientPlayer.titanfabric$getSelectedArrow().get();
+                    if (!(savedArrowItemStack.getItem() instanceof TitanFabricArrowItem)) return 0.0f;
+                    NbtCompound typeCompound = EffectHelper.getWeaponEffectDataCompound(savedArrowItemStack)
+                            .getCompound(INNATE_EFFECT.getNbtKey());
+                    WeaponEffect effect = WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY));
+                    if (effect == null) return 0.0f;
+                    return switch (effect) {
+                        case BLIND -> 0.1f;
+                        case POISON -> 0.3f;
+                        case WEAK -> 0.4f;
+                        case WITHER -> 0.5f;
+                        default -> 0.0f;
+                    };
+                });
     }
 
     private static void registerCrossBowProviders() {
