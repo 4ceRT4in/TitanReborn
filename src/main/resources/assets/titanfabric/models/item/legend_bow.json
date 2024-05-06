@@ -46,9 +46,6 @@
       },
       "model": "titanfabric:item/legend_bow_pulling_2"
     },
-
-
-
     {
       "predicate": {
         "handle": 0.1
@@ -78,10 +75,6 @@
       },
       "model": "titanfabric:item/legend_bow_pulling_2_blindness"
     },
-
-
-
-
     {
       "predicate": {
         "handle": 0.3
@@ -111,10 +104,6 @@
       },
       "model": "titanfabric:item/legend_bow_pulling_2_poison"
     },
-
-
-
-
     {
       "predicate": {
         "handle": 0.4
@@ -144,9 +133,6 @@
       },
       "model": "titanfabric:item/legend_bow_pulling_2_weakness"
     },
-
-
-
     {
       "predicate": {
         "handle": 0.5
