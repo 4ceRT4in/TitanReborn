@@ -39,6 +39,7 @@ public abstract class TitanFabricBowItem extends BowItem implements SelectableAr
         if (arrowSelection.titanfabric$getSelectedArrow().isEmpty())
             return super.use(world, user, hand);
         ItemStack selectedArrowStack = arrowSelection.titanfabric$getSelectedArrow().get();
+
         if (ArrowSelectionHelper.containsArrowStack(selectedArrowStack, user.getInventory(), this))
             return super.use(world, user, hand);
 
