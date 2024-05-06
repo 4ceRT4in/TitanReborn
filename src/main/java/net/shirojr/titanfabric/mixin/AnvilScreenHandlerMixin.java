@@ -1,10 +1,7 @@
 package net.shirojr.titanfabric.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -25,11 +22,12 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Mixin(AnvilScreenHandler.class)
 public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
-    @Shadow @Final private Property levelCost;
+    @Shadow
+    @Final
+    private Property levelCost;
 
     public AnvilScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(type, syncId, playerInventory, context);
@@ -42,7 +40,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
     @Inject(method = "canTakeOutput", at = @At("HEAD"), cancellable = true)
     private void titanfabric$canTakeOutput(PlayerEntity player, boolean present, CallbackInfoReturnable<Boolean> cir) {
-        AnvilScreenHandler screenHandler = (AnvilScreenHandler) (Object) this;
         boolean original = (player.isCreative() || player.experienceLevel >= levelCost.get());
         original = original && this.levelCost.get() > 0;
         cir.setReturnValue(original);
