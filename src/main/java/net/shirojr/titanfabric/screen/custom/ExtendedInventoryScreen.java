@@ -36,7 +36,7 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
             this.client.setScreen(new CreativeInventoryScreen(this.client.player));
             return;
         }
-        ButtonWidget buttonWidget = new ButtonWidget(this.x + 2, this.backgroundHeight - 36,
+        ButtonWidget buttonWidget = new ButtonWidget(this.x + 2, this.height / 2 - 106,
                 20, 20, new LiteralText("<<"), button ->
                 this.client.setScreen(new InventoryScreen(this.client.player)));
         this.addDrawableChild(buttonWidget);

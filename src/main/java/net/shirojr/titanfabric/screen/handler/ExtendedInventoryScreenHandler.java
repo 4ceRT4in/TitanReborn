@@ -122,7 +122,7 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
                 int index = j + i * 4;
                 int x = j * 18;
                 int y = i * 18;
-                this.addSlot(new Slot(extendedInventory, index, x + 91, y + 26));
+                this.addSlot(new Slot(extendedInventory, index, x + 90, y + 18));
             }
         }
     }
