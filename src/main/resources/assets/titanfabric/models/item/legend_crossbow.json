@@ -46,6 +46,20 @@
       },
       "model": "titanfabric:item/legend_crossbow_pulling_2"
     },
+
+
+    {
+      "predicate": {
+        "charged": 0.1
+      },
+      "model": "titanfabric:item/legend_crossbow_spectral_arrow"
+    },
+    {
+      "predicate": {
+        "charged": 0.2
+      },
+      "model": "titanfabric:item/legend_crossbow_potion"
+    },
     {
       "predicate": {
         "charged": 1

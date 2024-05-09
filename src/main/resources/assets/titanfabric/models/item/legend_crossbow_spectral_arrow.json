@@ -1,7 +1,7 @@
 {
   "parent": "item/crossbow",
   "textures": {
-    "layer0": "titanfabric:items/arrow",
+    "layer0": "titanfabric:items/spectral_arrow",
     "layer1": "titanfabric:items/legend_crossbow_arrow"
   }
 }

@@ -5,14 +5,19 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.PotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
+import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
+
+import java.util.List;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
 import static net.shirojr.titanfabric.util.effects.WeaponEffectType.ADDITIONAL_EFFECT;
@@ -106,7 +111,22 @@ public class ModelPredicateProviders {
 
     private static void registerCrossBowProviders() {
         registerBowProviders(TitanFabricItems.TITAN_CROSSBOW);
-        //registerCrossBow(item);
+        registerCrossBowCharge();
+    }
+
+    private static void registerCrossBowCharge() {
+        ModelPredicateProviderRegistry.register(TitanFabricItems.TITAN_CROSSBOW, new Identifier("charged"),
+                (itemStack, clientWorld, livingEntity, seed) -> {
+                    if (!itemStack.getOrCreateNbt().contains("Charged")) return 0;
+                    if (!itemStack.getOrCreateNbt().getBoolean("Charged")) return 0;
+                    if (!(itemStack.getItem() instanceof TitanCrossBowItem)) return 0;
+                    List<ItemStack> loadedProjectiles = TitanCrossBowItem.getProjectiles(itemStack);
+                    if (loadedProjectiles.size() < 1) return 0;
+                    ItemStack firstProjectileStack = loadedProjectiles.get(0);
+                    if (firstProjectileStack.isOf(Items.SPECTRAL_ARROW)) return 0.1f;
+                    if (firstProjectileStack.getItem() instanceof PotionItem) return 0.2f;
+                    return 1.0f;
+                });
     }
 
     private static void registerEffectProvider(Item item, Identifier identifier) {

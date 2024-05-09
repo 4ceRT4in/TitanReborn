@@ -1,0 +1,8 @@
+{
+  "parent": "item/crossbow",
+  "textures": {
+    "layer0": "titanfabric:items/potion_overlay_fill",
+    "layer1": "titanfabric:items/potion_overlay",
+    "layer2": "titanfabric:items/legend_crossbow_potion"
+  }
+}

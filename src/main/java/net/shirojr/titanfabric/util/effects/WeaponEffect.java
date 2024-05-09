@@ -3,29 +3,33 @@ package net.shirojr.titanfabric.util.effects;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.PotionUtil;
+import net.minecraft.potion.Potions;
 import org.jetbrains.annotations.Nullable;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
 
 public enum WeaponEffect {
-    BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS),
-    FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null),
-    POISON("weapon_poison", StatusEffects.POISON),
-    WEAK("weapon_weak", StatusEffects.WEAKNESS),
-    WITHER("weapon_wither", StatusEffects.INSTANT_DAMAGE, StatusEffects.WITHER);
+    BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS, 0x23307C),
+    FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null, -1),
+    POISON("weapon_poison", StatusEffects.POISON, PotionUtil.getColor(Potions.POISON)),
+    WEAK("weapon_weak", StatusEffects.WEAKNESS, PotionUtil.getColor(Potions.WEAKNESS)),
+    WITHER("weapon_wither", StatusEffects.INSTANT_DAMAGE, StatusEffects.WITHER, 0x0D0D0D);
 
     private final String id;
     private final StatusEffect ingredientEffect;
     private final StatusEffect outputEffect;
+    private final int color;
 
-    WeaponEffect(String id, StatusEffect ingredientEffect, StatusEffect outputEffect) {
+    WeaponEffect(String id, StatusEffect ingredientEffect, StatusEffect outputEffect, int color) {
         this.id = id;
         this.ingredientEffect = ingredientEffect;
         this.outputEffect = outputEffect;
+        this.color = color;
     }
 
-    WeaponEffect(String id, StatusEffect effect) {
-        this(id, effect, effect);
+    WeaponEffect(String id, StatusEffect effect, int color) {
+        this(id, effect, effect, color);
     }
 
     /**
@@ -45,6 +49,10 @@ public enum WeaponEffect {
     @Nullable
     public StatusEffect getOutputEffect() {
         return this.outputEffect;
+    }
+
+    public Integer getColor() {
+        return this.color;
     }
 
     /**

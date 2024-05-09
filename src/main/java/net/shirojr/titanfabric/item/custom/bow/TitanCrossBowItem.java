@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.item.custom.bow;
 
+import com.google.common.collect.Lists;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -13,12 +14,7 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.ThrowablePotionItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -32,27 +28,21 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
-
-import org.jetbrains.annotations.Nullable;
-
-import com.google.common.collect.Lists;
 
 public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows, Anvilable {
     public static final String CHARGED_KEY = "Charged";
-    private static final String CHARGED_PROJECTILES_KEY = "ChargedProjectiles";
+    public static final String CHARGED_PROJECTILES_KEY = "ChargedProjectiles";
     public static final int RANGE = 8;
     private boolean charged = false;
     private boolean loaded = false;
@@ -64,16 +54,6 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     @Override
     public List<Item> supportedArrows() {
         return List.of(Items.ARROW, Items.SPECTRAL_ARROW, Items.LINGERING_POTION, Items.SPLASH_POTION);
-    }
-
-    @Override
-    public Predicate<ItemStack> getHeldProjectiles() {
-        return CROSSBOW_HELD_PROJECTILES;
-    }
-
-    @Override
-    public Predicate<ItemStack> getProjectiles() {
-        return BOW_PROJECTILES;
     }
 
     @Override
@@ -179,7 +159,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
         nbtCompound.put(CHARGED_PROJECTILES_KEY, nbtList);
     }
 
-    private static List<ItemStack> getProjectiles(ItemStack crossbow) {
+    public static List<ItemStack> getProjectiles(ItemStack crossbow) {
         NbtList nbtList;
         ArrayList<ItemStack> list = Lists.newArrayList();
         NbtCompound nbtCompound = crossbow.getNbt();
@@ -206,7 +186,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     }
 
     private static void shoot(World world, LivingEntity shooter, Hand hand, ItemStack crossbow, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence,
-            float simulated) {
+                              float simulated) {
         ProjectileEntity projectileEntity;
         if (world.isClient()) {
             return;
@@ -285,7 +265,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
 
     private static float[] getSoundPitches(Random random) {
         boolean bl = random.nextBoolean();
-        return new float[] { 1.0f, getSoundPitch(bl, random), getSoundPitch(!bl, random) };
+        return new float[]{1.0f, getSoundPitch(bl, random), getSoundPitch(!bl, random)};
     }
 
     private static float getSoundPitch(boolean flag, Random random) {
@@ -294,8 +274,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     }
 
     private static void postShoot(World world, LivingEntity entity, ItemStack stack) {
-        if (entity instanceof ServerPlayerEntity) {
-            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) entity;
+        if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
             if (!world.isClient()) {
                 Criteria.SHOT_CROSSBOW.trigger(serverPlayerEntity, stack);
             }
@@ -336,11 +315,6 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
         return i == 0 ? 25 : 25 - 5 * i;
     }
 
-    @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.CROSSBOW;
-    }
-
     private static ItemStack getProjectileType(LivingEntity user, ItemStack crossbow) {
         if (!(crossbow.getItem() instanceof SelectableArrows selectableArrows)) {
             return ItemStack.EMPTY;
@@ -365,15 +339,15 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
 
     private SoundEvent getQuickChargeSound(int stage) {
         switch (stage) {
-        case 1: {
-            return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_1;
-        }
-        case 2: {
-            return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_2;
-        }
-        case 3: {
-            return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_3;
-        }
+            case 1 -> {
+                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_1;
+            }
+            case 2 -> {
+                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_2;
+            }
+            case 3 -> {
+                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_3;
+            }
         }
         return SoundEvents.ITEM_CROSSBOW_LOADING_START;
     }
@@ -389,30 +363,21 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         List<ItemStack> list = getProjectiles(stack);
-        if (!isCharged(stack) || list.isEmpty()) {
-            return;
-        }
+        if (!isCharged(stack) || list.isEmpty()) return;
         ItemStack itemStack = list.get(0);
         tooltip.add(new TranslatableText("item.minecraft.crossbow.projectile").append(" ").append(itemStack.toHoverableText()));
         if (context.isAdvanced() && itemStack.isOf(Items.FIREWORK_ROCKET)) {
             ArrayList<Text> list2 = Lists.newArrayList();
             Items.FIREWORK_ROCKET.appendTooltip(itemStack, world, list2, context);
             if (!list2.isEmpty()) {
-                for (int i = 0; i < list2.size(); ++i) {
-                    list2.set(i, new LiteralText("  ").append((Text) list2.get(i)).formatted(Formatting.GRAY));
-                }
+                list2.replaceAll(text -> new LiteralText("  ").append((Text) text).formatted(Formatting.GRAY));
                 tooltip.addAll(list2);
             }
         }
     }
 
     @Override
-    public boolean isUsedOnRelease(ItemStack stack) {
-        return stack.isOf(this);
-    }
-
-    @Override
     public int getRange() {
-        return 8;
+        return RANGE;
     }
 }

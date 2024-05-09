@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
+import net.shirojr.titanfabric.color.TitanFabricColorProviders;
 import net.shirojr.titanfabric.entity.TitanFabricEntities;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.network.S2CNetworking;
@@ -23,6 +24,7 @@ public class TitanFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         TitanFabricEvents.registerClientEvents();
         TitanFabricKeyBinds.register();
+        TitanFabricColorProviders.register();
         TitanFabricEntities.registerClient();
 
         ModelPredicateProviders.register();

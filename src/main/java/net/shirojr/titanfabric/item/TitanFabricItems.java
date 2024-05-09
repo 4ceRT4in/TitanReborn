@@ -21,13 +21,13 @@ import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
+import net.shirojr.titanfabric.item.custom.misc.CutPotion;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.SwordType;
-import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 
 public class TitanFabricItems {
     //region armor
@@ -113,6 +113,7 @@ public class TitanFabricItems {
             new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
 
     public static final Item ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
+    public static final Item CUT_POTION = registerItem("cut_potion", new CutPotion(new FabricItemSettings()));
 
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));

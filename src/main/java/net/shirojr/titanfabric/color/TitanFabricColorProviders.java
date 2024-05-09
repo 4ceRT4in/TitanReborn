@@ -1,13 +1,43 @@
 package net.shirojr.titanfabric.color;
 
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.PotionUtil;
+import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
+import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
 public class TitanFabricColorProviders {
+    static {
+        create(TitanFabricItems.CUT_POTION);
+        create(TitanFabricItems.TITAN_CROSSBOW);
+    }
 
+    public static void create(Item item) {
+        ColorProviderRegistry.ITEM.register((stack, textureLayer) -> {
+            NbtCompound stackNbt = stack.getOrCreateNbt();
 
+            if (!stackNbt.contains("Charged")) return -1;
+            if (!stackNbt.getBoolean("Charged")) return -1;
+            if (TitanCrossBowItem.getProjectiles(stack).size() < 1) return -1;
+            ItemStack firstProjectileStack = TitanCrossBowItem.getProjectiles(stack).get(0);
+            if (WeaponEffectData.fromNbt(firstProjectileStack.getOrCreateNbt(), WeaponEffectType.INNATE_EFFECT).isPresent()) {
+                WeaponEffectData weaponEffectData = WeaponEffectData.fromNbt(firstProjectileStack.getOrCreateNbt(), WeaponEffectType.INNATE_EFFECT).get();
+                if (weaponEffectData.weaponEffect().getColor() != -1) return weaponEffectData.weaponEffect().getColor();
+            }
+            if (firstProjectileStack.getItem() instanceof PotionItem) {
+                if (textureLayer == 0) return PotionUtil.getColor(firstProjectileStack);
+            }
+            return -1;
+        }, item);
+    }
 
-    public void register(int color, ItemStack itemStack) {
-        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> color, itemStack.getItem());
+    public static void register() {
+        LoggerUtil.devLogger("initialising color providers");
     }
 }
