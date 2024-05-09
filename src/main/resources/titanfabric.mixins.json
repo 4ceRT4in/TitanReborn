@@ -33,6 +33,7 @@
     "client.ArrowEntityRendererMixin",
     "client.BipedEntityModelMixin",
     "client.GameOptionsMixin",
+    "client.HeldItemRendererMixin",
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",
     "client.PlayerEntityRendererMixin",
