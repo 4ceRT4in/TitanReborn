@@ -31,70 +31,71 @@ import net.shirojr.titanfabric.util.SwordType;
 
 public class TitanFabricItems {
     //region armor
-    public static final Item CITRIN_HELMET = registerItem("citrin_helmet",
+
+    public static final CitrinArmorItem CITRIN_HELMET = registerItem("citrin_helmet",
             new CitrinArmorItem(EquipmentSlot.HEAD));
-    public static final Item CITRIN_CHESTPLATE = registerItem("citrin_chestplate",
+    public static final CitrinArmorItem CITRIN_CHESTPLATE = registerItem("citrin_chestplate",
             new CitrinArmorItem(EquipmentSlot.CHEST));
-    public static final Item CITRIN_LEGGINGS = registerItem("citrin_leggings",
+    public static final CitrinArmorItem CITRIN_LEGGINGS = registerItem("citrin_leggings",
             new CitrinArmorItem(EquipmentSlot.LEGS));
-    public static final Item CITRIN_BOOTS = registerItem("citrin_boots",
+    public static final CitrinArmorItem CITRIN_BOOTS = registerItem("citrin_boots",
             new CitrinArmorItem(EquipmentSlot.FEET));
 
-    public static final Item EMBER_HELMET = registerItem("ember_helmet",
+    public static final EmberArmorItem EMBER_HELMET = registerItem("ember_helmet",
             new EmberArmorItem(EquipmentSlot.HEAD));
-    public static final Item EMBER_CHESTPLATE = registerItem("ember_chestplate",
+    public static final EmberArmorItem EMBER_CHESTPLATE = registerItem("ember_chestplate",
             new EmberArmorItem(EquipmentSlot.CHEST));
-    public static final Item EMBER_LEGGINGS = registerItem("ember_leggings",
+    public static final EmberArmorItem EMBER_LEGGINGS = registerItem("ember_leggings",
             new EmberArmorItem(EquipmentSlot.LEGS));
-    public static final Item EMBER_BOOTS = registerItem("ember_boots",
+    public static final EmberArmorItem EMBER_BOOTS = registerItem("ember_boots",
             new EmberArmorItem(EquipmentSlot.FEET));
 
-    public static final Item LEGEND_HELMET = registerItem("legend_helmet",
+    public static final LegendArmorHelmetItem LEGEND_HELMET = registerItem("legend_helmet",
             new LegendArmorHelmetItem(2.0f));
-    public static final Item LEGEND_CHESTPLATE = registerItem("legend_chestplate",
+    public static final LegendArmorChestplateItem LEGEND_CHESTPLATE = registerItem("legend_chestplate",
             new LegendArmorChestplateItem(4.0f));
-    public static final Item LEGEND_LEGGINGS = registerItem("legend_leggings",
+    public static final LegendArmorLeggingsItem LEGEND_LEGGINGS = registerItem("legend_leggings",
             new LegendArmorLeggingsItem(3.0f));
-    public static final Item LEGEND_BOOTS = registerItem("legend_boots",
+    public static final LegendArmorBootsItem LEGEND_BOOTS = registerItem("legend_boots",
             new LegendArmorBootsItem(1.0f));
     //endregion
 
-    public static final Item CITRIN_SWORD = registerItem("citrin_sword",
+    public static final CitrinSwordItem CITRIN_SWORD = registerItem("citrin_sword",
             new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, SwordType.DEFAULT, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item CITRIN_GREATSWORD = registerItem("citrin_greatsword",
+    public static final CitrinSwordItem CITRIN_GREATSWORD = registerItem("citrin_greatsword",
             new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -2.4f, SwordType.GREAT_SWORD, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item EMBER_SWORD = registerItem("ember_sword",
+    public static final EmberSwordItem EMBER_SWORD = registerItem("ember_sword",
             new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item EMBER_GREATSWORD = registerItem("ember_greatsword",
+    public static final EmberSwordItem EMBER_GREATSWORD = registerItem("ember_greatsword",
             new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item LEGEND_SWORD = registerItem("legend_sword",
+    public static final LegendSwordItem LEGEND_SWORD = registerItem("legend_sword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item LEGEND_GREATSWORD = registerItem("legend_greatsword",
+    public static final LegendSwordItem LEGEND_GREATSWORD = registerItem("legend_greatsword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f, SwordType.GREAT_SWORD, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item DIAMOND_SWORD = registerItem("diamond_sword",
+    public static final DiamondSwordItem DIAMOND_SWORD = registerItem("diamond_sword",
             new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 6, -2.4f, SwordType.DEFAULT, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
-    public static final Item DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
+    public static final TitanFabricSwordItem DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
             new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f,
             new FabricItemSettings().maxDamage(2031).group(ItemGroup.COMBAT).fireproof());  // registered in ItemsMixin class
-    public static final Item NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
+    public static final TitanFabricSwordItem NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN).fireproof()));
 
-    public static final Item TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(-1)));
-    public static final Item LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
-    public static final Item MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(1, 10, 500));
-    public static final Item MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2, 20, 1000));
-    public static final Item MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3, 30, 1500));
+    public static final TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(-1)));
+    public static final LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
+    public static final MultiBowItem MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(1, 10, 500));
+    public static final MultiBowItem MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2, 20, 1000));
+    public static final MultiBowItem MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3, 30, 1500));
 
-    public static final Item ARROW = registerItem("effect_arrow",
+    public static final TitanFabricArrowItem ARROW = registerItem("effect_arrow",
             new TitanFabricArrowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
 
-    public static final Item DIAMOND_SHIELD = registerItem("diamond_shield",
+    public static final TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
             new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
-    public static final Item LEGEND_SHIELD = registerItem("legend_shield",
+    public static final TitanFabricShieldItem LEGEND_SHIELD = registerItem("legend_shield",
             new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
 
-    public static final Item CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
+    public static final CitrinStarItem CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
 
     public static final Item CITRIN_SHARD = registerItem("citrin_shard",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
@@ -109,11 +110,11 @@ public class TitanFabricItems {
     public static final Item LEGEND_CRYSTAL = registerItem("legend_crystal",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
-    public static final Item PARACHUTE = registerItem("parachute",
+    public static final TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
             new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
 
-    public static final Item ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
-    public static final Item CUT_POTION = registerItem("cut_potion", new CutPotion(new FabricItemSettings()));
+    public static final TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
+    public static final CutPotion CUT_POTION = registerItem("cut_potion", new CutPotion(new FabricItemSettings()));
 
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
@@ -124,16 +125,16 @@ public class TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
 
-    public static final Item BACKPACK_SMALL = registerItem("backpack_small",
+    public static final BackPackItem BACKPACK_SMALL = registerItem("backpack_small",
             new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.SMALL));
 
-    public static final Item BACKPACK_MEDIUM = registerItem("backpack_medium",
+    public static final BackPackItem BACKPACK_MEDIUM = registerItem("backpack_medium",
             new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.MEDIUM));
 
-    public static final Item BACKPACK_BIG = registerItem("backpack_big",
+    public static final BackPackItem BACKPACK_BIG = registerItem("backpack_big",
             new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.BIG));
 
-    private static Item registerItem(String name, Item item) {
+    private static <T extends Item> T registerItem(String name, T item) {
         return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MODID, name), item);
     }
 
