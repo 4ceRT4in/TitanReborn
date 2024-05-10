@@ -29,6 +29,7 @@ import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.SwordType;
 
+@SuppressWarnings("unused")
 public class TitanFabricItems {
     //region armor
 
