@@ -8,12 +8,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
-import net.shirojr.titanfabric.screen.handler.*;
+import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
+import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
 public class TitanFabricScreenHandlers {
-    public static ScreenHandlerType<DiamondFurnaceScreenHandler> DIAMOND_FURNACE_SCREEN_HANDLER =
-            registerScreenHandler("diamond_furnace", new ScreenHandlerType<>(DiamondFurnaceScreenHandler::new));
-
     public static ScreenHandlerType<BackPackItemScreenHandler> BACKPACK_ITEM_SMALL_SCREEN_HANDLER =
             registerScreenHandler("backpack_item_small", new ExtendedScreenHandlerType<>(
                     (syncId, inventory, buf) -> new BackPackItemScreenHandler(syncId, inventory, BackPackItem.Type.SMALL, buf))
@@ -28,10 +26,7 @@ public class TitanFabricScreenHandlers {
             );
     public static ScreenHandlerType<ExtendedInventoryScreenHandler> EXTENDED_INVENTORY_SCREEN_HANDLER =
             registerScreenHandler("extended_inventory", new ExtendedScreenHandlerType<>(
-                    (syncId, inventory, buf) -> new ExtendedInventoryScreenHandler(syncId, inventory, new SimpleInventory(8))));
-    public static ScreenHandlerType<SmallExtendedInventoryScreenHandler> SMALL_EXTENDED_INVENTORY_SCREEN_HANDLER =
-            registerScreenHandler("small_extended_inventory", new ExtendedScreenHandlerType<>(
-                    (syncId, inventory, buf) -> new SmallExtendedInventoryScreenHandler(syncId, new SimpleInventory(8))));
+                    (syncId, inventory, buf) -> new ExtendedInventoryScreenHandler(syncId, inventory, new SimpleInventory(8), buf)));
 
     private static <T extends ScreenHandler> ScreenHandlerType<T> registerScreenHandler(String name, ScreenHandlerType<T> screenHandlerType) {
         return Registry.register(Registry.SCREEN_HANDLER, new Identifier(TitanFabric.MODID, name), screenHandlerType);

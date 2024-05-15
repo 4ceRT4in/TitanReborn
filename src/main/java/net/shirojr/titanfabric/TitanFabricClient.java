@@ -13,7 +13,6 @@ import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.network.S2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
-import net.shirojr.titanfabric.screen.custom.DiamondFurnaceScreen;
 import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
 import net.shirojr.titanfabric.util.ModelPredicateProviders;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
@@ -30,7 +29,6 @@ public class TitanFabricClient implements ClientModInitializer {
         ModelPredicateProviders.register();
         S2CNetworking.registerClientReceivers();
 
-        HandledScreens.register(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER, DiamondFurnaceScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, BackPackItemScreen::new);

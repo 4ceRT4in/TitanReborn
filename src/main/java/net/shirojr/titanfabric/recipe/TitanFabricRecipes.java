@@ -6,15 +6,12 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.recipe.custom.DiamondFurnaceRecipe;
 import net.shirojr.titanfabric.recipe.custom.EssenceRecipe;
 import net.shirojr.titanfabric.recipe.custom.WeaponRecipe;
 import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricRecipes {
-    public static final RecipeType<DiamondFurnaceRecipe> DIAMOND_FURNACE_RECIPE_TYPE = registerRecipe("diamond_furnace");
     public static final RecipeType<EssenceRecipe> WEAPON_EFFECT_RECIPE_TYPE = RecipeType.register("weapon_effect");
-
     public static final RecipeSerializer<EssenceRecipe> ESSENCE_EFFECT_RECIPE_SERIALIZER =
             RecipeSerializer.register("essence_effect", new EssenceRecipe.Serializer());
     public static final RecipeSerializer<WeaponRecipe> WEAPON_EFFECT_RECIPE_SERIALIZER =
