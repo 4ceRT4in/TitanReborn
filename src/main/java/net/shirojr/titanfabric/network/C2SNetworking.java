@@ -77,9 +77,11 @@ public class C2SNetworking {
                                                           ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {
 
         server.execute(() -> {
+            List<String> description = List.of(player.getDisplayName().asString());
             player.openHandledScreen(new ExtendedScreenHandlerFactory() {
                 @Override
                 public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+                    buf.writeCollection(description, PacketByteBuf::writeString);
                 }
 
                 @Override
@@ -94,7 +96,7 @@ public class C2SNetworking {
                     if (persistentPlayerData != null) {
                         extendedInventory = persistentPlayerData.extraInventory;
                     }
-                    return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory);
+                    return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory, description);
                 }
             });
         });

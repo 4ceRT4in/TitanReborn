@@ -15,11 +15,14 @@ import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScreenHandler> {
     public static final Identifier TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/extended_inventory.png");
 
     public ExtendedInventoryScreen(ExtendedInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
+        super(handler, inventory, title == null ? Text.of("") : title);
         this.backgroundWidth = 176;
         this.backgroundHeight = 166;
     }
@@ -57,9 +60,13 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
         int color = 0x404040;
-        // this.textRenderer.draw(matrices, this.title, (float) this.titleX, (float) this.titleY, color);
-        this.textRenderer.draw(matrices, new TranslatableText("screen.titanfabric.extended_inventory.title"),
-                this.titleX, this.titleY, 0x404040);
+
+        this.textRenderer.draw(matrices, new TranslatableText("screen.titanfabric.extended_inventory.title"), this.titleX, this.titleY, color);
+        for (int line = 0; line < this.handler.getDescription().size(); line++) {
+            int yOffset = 52 + (line * 10);
+            Text lineText = new LiteralText(this.handler.getDescription().get(line));
+            this.textRenderer.draw(matrices, lineText, this.titleX, this.titleY + yOffset, color);
+        }
     }
 
     @Override

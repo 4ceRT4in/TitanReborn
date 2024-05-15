@@ -19,8 +19,11 @@ public class HudEvent {
             ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
             if (arrowSelection.titanfabric$getSelectedArrow().isEmpty()) return;
             ItemStack selectedArrowStack = arrowSelection.titanfabric$getSelectedArrow().get();
-            int x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - 120;
+            int x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - 118;
             int y = MinecraftClient.getInstance().getWindow().getScaledHeight() - 19;
+            if (!player.getOffHandStack().isEmpty()) {
+                y = y - 25;
+            }
 
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);

@@ -1,11 +1,13 @@
 package net.shirojr.titanfabric.persistent;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
@@ -31,6 +33,12 @@ public class PersistentWorldData extends PersistentState {
         }
         PersistentWorldData serverState = getServerState(entity.getWorld().getServer());
         return serverState.players.computeIfAbsent(entity.getUuid(), uuid -> new PersistentPlayerData());
+    }
+
+    @Nullable
+    public static PersistentPlayerData getPersistentPlayerData(ServerWorld world, UUID uuid) {
+        PersistentWorldData serverState = getServerState(world.getServer());
+        return serverState.players.getOrDefault(uuid, null);
     }
 
     @Override
@@ -59,9 +67,8 @@ public class PersistentWorldData extends PersistentState {
         return worldData;
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public static PersistentWorldData getServerState(MinecraftServer server) {
-        PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
+        PersistentStateManager persistentStateManager = server.getOverworld().getPersistentStateManager();
         PersistentWorldData state = persistentStateManager.getOrCreate(PersistentWorldData::createWorldDataFromNbt,
                 PersistentWorldData::new, TitanFabric.MODID);
         state.markDirty();

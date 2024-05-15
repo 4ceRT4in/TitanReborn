@@ -17,6 +17,8 @@ import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 
+import java.util.List;
+
 public class ExtendedInventoryScreenHandler extends ScreenHandler {
     public static final Identifier BLOCK_ATLAS_TEXTURE = new Identifier("textures/atlas/blocks.png");
     public static final Identifier EMPTY_HELMET_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_helmet");
@@ -28,8 +30,14 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
 
     private final PlayerInventory baseInventory;
     private final Inventory extendedInventory;
+    private final List<String> description;
 
-    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory baseInventory, Inventory extendedInventory) {
+    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory baseInventory, Inventory extendedInventory, PacketByteBuf buf) {
+        this(syncId, baseInventory, extendedInventory, buf.readList(PacketByteBuf::readString));
+    }
+
+    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory baseInventory, Inventory extendedInventory,
+                                          List<String> description) {
         super(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, syncId);
         addInventorySlots(baseInventory);
         addHotbarSlots(baseInventory);
@@ -37,6 +45,11 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         addExtendedInventorySlots(extendedInventory);
         this.baseInventory = baseInventory;
         this.extendedInventory = extendedInventory;
+        this.description = description;
+    }
+
+    public List<String> getDescription() {
+        return this.description;
     }
 
     @Override
