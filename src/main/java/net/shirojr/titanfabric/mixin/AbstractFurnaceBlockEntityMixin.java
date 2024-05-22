@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -37,8 +38,17 @@ public abstract class AbstractFurnaceBlockEntityMixin {
         return blockEntity instanceof DiamondFurnaceBlockEntity ? originalEvaluation / 2 : originalEvaluation;
     }
 
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;canAcceptRecipeOutput(Lnet/minecraft/recipe/Recipe;Lnet/minecraft/util/collection/DefaultedList;I)Z"))
+    private static boolean titanFabric$blockLowHeatSmelting(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots, int count, Operation<Boolean> original, @Local(argsOnly = true) AbstractFurnaceBlockEntity blockEntity) {
+        ItemStack smeltMaterialStack = slots.get(0);
+        if (smeltMaterialStack.isIn(TitanFabricTags.Items.HIGH_HEAT_SMELTING)) {
+            if (!blockEntity.getType().equals(BlockEntityType.BLAST_FURNACE)) return false;
+        }
+        return original.call(recipe, slots, count);
+    }
 
-    // this boolean method has the side effect of crafting instantly!
+
+    // this boolean target method has the side effect of crafting instantly!
     // only access the original call when actually necessary...
     @WrapOperation(method = "tick",
             at = @At(
@@ -53,7 +63,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
         ItemStack inputSlotStack = slots.get(0);
         ItemStack fuelSlotStack = slots.get(1);
         ItemStack outputSlotStack = slots.get(2);
-        int changeAmount = inputSlotStack.isIn(TitanFabricTags.Items.BETTER_SMELTING_ITEMS) ? 2 : 1;
+        int changeAmount = 1;
+        if (inputSlotStack.isIn(TitanFabricTags.Items.BETTER_SMELTING_ITEMS)) changeAmount = 2;
+        if (inputSlotStack.isIn(TitanFabricTags.Items.HIGH_HEAT_SMELTING)) changeAmount = 1;
         if (recipe == null || !hasValidOutput(recipe, slots, count, changeAmount)) return false;
         ItemStack recipeOutputStack = recipe.getOutput();
 
