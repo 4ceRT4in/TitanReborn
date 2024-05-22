@@ -17,14 +17,8 @@ public class TitanFabricRecipes {
     public static final RecipeSerializer<WeaponRecipe> WEAPON_EFFECT_RECIPE_SERIALIZER =
             RecipeSerializer.register("weapon_effect", new WeaponRecipe.Serializer());
 
-    private static <T extends Recipe<?>> RecipeType<T> registerRecipe(String id) {
-        return Registry.register(Registry.RECIPE_TYPE, new Identifier(TitanFabric.MODID, id),
-                new RecipeType<T>() {
-                    @Override
-                    public String toString() {
-                        return id;
-                    }
-                });
+    private static <T extends Recipe<?>> RecipeType<T> registerRecipeType(String id, RecipeType<T> recipeType) {
+        return Registry.register(Registry.RECIPE_TYPE, new Identifier(TitanFabric.MODID, id), recipeType);
     }
 
     public static void registerModRecipes() {

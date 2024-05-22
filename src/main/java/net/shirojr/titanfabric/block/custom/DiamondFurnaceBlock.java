@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.block.custom;
 
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -36,7 +37,7 @@ public class DiamondFurnaceBlock extends AbstractFurnaceBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, TitanFabricBlockEntities.DIAMOND_FURNACE, DiamondFurnaceBlockEntity::tick);
+        return checkType(type, TitanFabricBlockEntities.DIAMOND_FURNACE, AbstractFurnaceBlockEntity::tick);
     }
 
     @Nullable
