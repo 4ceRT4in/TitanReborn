@@ -6,14 +6,17 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.recipe.custom.EssenceRecipe;
+import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.recipe.custom.WeaponRecipe;
 import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
 public class TitanFabricRecipes {
-    public static final RecipeType<EssenceRecipe> WEAPON_EFFECT_RECIPE_TYPE = RecipeType.register("weapon_effect");
-    public static final RecipeSerializer<EssenceRecipe> ESSENCE_EFFECT_RECIPE_SERIALIZER =
-            RecipeSerializer.register("essence_effect", new EssenceRecipe.Serializer());
+    public static final RecipeType<EffectRecipe> WEAPON_EFFECT_RECIPE_TYPE = RecipeType.register("weapon_effect");
+    public static final RecipeSerializer<EffectRecipe> ESSENCE_EFFECT_RECIPE_SERIALIZER =
+            RecipeSerializer.register("essence_effect", new EffectRecipe.Serializer(SlotArrangementType.ESSENCE));
+    public static final RecipeSerializer<EffectRecipe> ARROW_EFFECT_RECIPE_SERIALIZER =
+            RecipeSerializer.register("arrow_effect", new EffectRecipe.Serializer(SlotArrangementType.ARROW));
     public static final RecipeSerializer<WeaponRecipe> WEAPON_EFFECT_RECIPE_SERIALIZER =
             RecipeSerializer.register("weapon_effect", new WeaponRecipe.Serializer());
 

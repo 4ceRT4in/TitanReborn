@@ -5,8 +5,10 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.RecipeSerializer;
 import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.recipe.custom.EssenceRecipe;
+import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
+import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
@@ -18,21 +20,27 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public enum SlotArrangementType {
-    ESSENCE(TitanFabricItems.ESSENCE),
-    ARROW(TitanFabricItems.ARROW);
+    ESSENCE(TitanFabricItems.ESSENCE, TitanFabricRecipes.ESSENCE_EFFECT_RECIPE_SERIALIZER),
+    ARROW(TitanFabricItems.ARROW, TitanFabricRecipes.ARROW_EFFECT_RECIPE_SERIALIZER);
 
     private final Item outputItem;
+    private final RecipeSerializer<?> serializer;
 
-    SlotArrangementType(Item outputItem) {
+    SlotArrangementType(Item outputItem, RecipeSerializer<?> serializer) {
         this.outputItem = outputItem;
+        this.serializer = serializer;
     }
 
     public Item getOutputItem() {
         return this.outputItem;
     }
 
-    public boolean slotsHaveMatchingItems(CraftingInventory inventory, EssenceRecipe.IngredientModule base,
-                                          EssenceRecipe.IngredientModule effectModifier) {
+    public RecipeSerializer<?> getSerializer() {
+        return serializer;
+    }
+
+    public boolean slotsHaveMatchingItems(CraftingInventory inventory, EffectRecipe.IngredientModule base,
+                                          EffectRecipe.IngredientModule effectModifier) {
         boolean effectModifierMatchesItems = inventoryContainsValidItems(inventory, effectModifier);
         boolean baseMatchesItems = inventoryContainsValidItems(inventory, base);
 
@@ -45,7 +53,7 @@ public enum SlotArrangementType {
         return effectModifierMatchesItems && baseMatchesItems;
     }
 
-    private static boolean inventoryContainsValidItems(CraftingInventory inventory, EssenceRecipe.IngredientModule ingredient) {
+    private static boolean inventoryContainsValidItems(CraftingInventory inventory, EffectRecipe.IngredientModule ingredient) {
         for (int validSlot : ingredient.slots()) {
             ItemStack entry = inventory.getStack(validSlot);
             if (!ingredient.ingredient().test(entry)) return false;
@@ -54,7 +62,7 @@ public enum SlotArrangementType {
     }
 
     @Nullable
-    public WeaponEffect getEffect(Inventory inventory, EssenceRecipe.IngredientModule effectModifierModule) {
+    public WeaponEffect getEffect(Inventory inventory, EffectRecipe.IngredientModule effectModifierModule) {
         WeaponEffect effect;
         ItemStack firstEffectStack = null;
 

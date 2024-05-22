@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:essence_effect",
+  "type": "minecraft:arrow_effect",
   "base": {
     "item": "minecraft:arrow",
     "slots": [1, 3, 5, 7]

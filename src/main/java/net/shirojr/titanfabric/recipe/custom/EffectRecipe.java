@@ -11,7 +11,6 @@ import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -19,23 +18,24 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
-public class EssenceRecipe extends SpecialCraftingRecipe {
+public class EffectRecipe extends SpecialCraftingRecipe {
     private final IngredientModule effectModifier;
     private final IngredientModule base;
+    private final SlotArrangementType slotArrangement;
     private WeaponEffectData weaponEffectData;
 
-    public EssenceRecipe(Identifier id, IngredientModule effectModifier, IngredientModule base) {
+    public EffectRecipe(Identifier id, IngredientModule effectModifier, IngredientModule base, SlotArrangementType slotArrangementType) {
         super(id);
         this.effectModifier = effectModifier;
         this.base = base;
+        this.slotArrangement = slotArrangementType;
     }
 
     @Override
     public boolean matches(CraftingInventory inventory, World world) {
         int width = inventory.getWidth(), height = inventory.getHeight();
         if (width != 3 || height != 3) return false;
-        SlotArrangementType slotArrangement = SlotArrangementType.ESSENCE;
-        boolean itemsMatch = slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
+        boolean itemsMatch = this.slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
         if (itemsMatch) {
             WeaponEffect weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
             this.weaponEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
@@ -45,20 +45,20 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
 
     @Override
     public ItemStack craft(CraftingInventory inventory) {
-        WeaponEffect weaponEffect = SlotArrangementType.ESSENCE.getEffect(inventory, this.effectModifier);
+        WeaponEffect weaponEffect = this.slotArrangement.getEffect(inventory, this.effectModifier);
         WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
         this.weaponEffectData = effectData;
         if (weaponEffect == null) {
             LoggerUtil.devLogger("Couldn't find WeaponEffect from Inventory", true, null);
             return null;
         }
-        ItemStack stack = new ItemStack(SlotArrangementType.ESSENCE.getOutputItem());
+        ItemStack stack = new ItemStack(this.slotArrangement.getOutputItem());
         return EffectHelper.applyEffectToStack(stack, effectData);
     }
 
     @Override
     public ItemStack getOutput() {
-        return EffectHelper.applyEffectToStack(new ItemStack(SlotArrangementType.ESSENCE.getOutputItem()), weaponEffectData);
+        return EffectHelper.applyEffectToStack(new ItemStack(this.slotArrangement.getOutputItem()), weaponEffectData);
     }
 
     @Override
@@ -68,12 +68,18 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TitanFabricRecipes.ESSENCE_EFFECT_RECIPE_SERIALIZER;
+        return this.slotArrangement.getSerializer();
     }
 
-    public static class Serializer implements RecipeSerializer<EssenceRecipe> {
+    public static class Serializer implements RecipeSerializer<EffectRecipe> {
+        private final SlotArrangementType slotArrangementType;
+
+        public Serializer(SlotArrangementType slotArrangementType) {
+            this.slotArrangementType = slotArrangementType;
+        }
+
         @Override
-        public EssenceRecipe read(Identifier id, JsonObject json) {
+        public EffectRecipe read(Identifier id, JsonObject json) {
             Ingredient effectModifier = Ingredient.fromJson(JsonHelper.getObject(json, "modifier"));
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
 
@@ -82,19 +88,19 @@ public class EssenceRecipe extends SpecialCraftingRecipe {
             IngredientModule effectModifierModule = new IngredientModule(effectModifier,
                     IngredientModule.slotsFromJsonObject(json, "modifier"));
 
-            return new EssenceRecipe(id, effectModifierModule, baseModule);
+            return new EffectRecipe(id, effectModifierModule, baseModule, this.slotArrangementType);
         }
 
         @Override
-        public EssenceRecipe read(Identifier id, PacketByteBuf buf) {
+        public EffectRecipe read(Identifier id, PacketByteBuf buf) {
             IngredientModule effectModifier = IngredientModule.readFromPacket(buf);
             IngredientModule base = IngredientModule.readFromPacket(buf);
 
-            return new EssenceRecipe(id, effectModifier, base);
+            return new EffectRecipe(id, effectModifier, base, this.slotArrangementType);
         }
 
         @Override
-        public void write(PacketByteBuf buf, EssenceRecipe recipe) {
+        public void write(PacketByteBuf buf, EffectRecipe recipe) {
             recipe.effectModifier.ingredient.write(buf);
             buf.writeIntArray(recipe.effectModifier.slots);
             recipe.base.ingredient.write(buf);
