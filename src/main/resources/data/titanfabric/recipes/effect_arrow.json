@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:essence_effect",
+  "base": {
+    "item": "minecraft:arrow",
+    "slots": [1, 3, 5, 7]
+  },
+  "modifier": {
+    "item": "minecraft:potion",
+    "slots": [4]
+  },
+  "output": {
+    "item": "titanfabric:effect_arrow",
+    "count": 4
+  }
+}

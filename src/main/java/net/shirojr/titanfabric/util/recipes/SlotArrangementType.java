@@ -20,7 +20,6 @@ import java.util.Optional;
 public enum SlotArrangementType {
     ESSENCE(TitanFabricItems.ESSENCE),
     ARROW(TitanFabricItems.ARROW);
-    // CITRIN_SWORD(TitanFabricItems.CITRIN_SWORD);
 
     private final Item outputItem;
 

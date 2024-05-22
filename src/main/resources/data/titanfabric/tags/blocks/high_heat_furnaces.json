@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:blast_furnace",
+    "titanfabric:diamond_furnace"
+  ]
+}

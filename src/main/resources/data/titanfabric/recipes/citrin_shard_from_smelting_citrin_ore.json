@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "titanfabric:citrin_ore"
+    },
+    "result": "titanfabric:citrin_shard",
+    "experience": 0.1,
+    "cookingtime": 100
+}
