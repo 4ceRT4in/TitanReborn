@@ -72,13 +72,13 @@ public enum SlotArrangementType {
                 break;
             }
         }
-        if (firstEffectStack == null) return null;
+        if (firstEffectStack == null || firstEffectStack.isEmpty()) return null;
         if (firstEffectStack.isOf(Items.POTION)) {
             effect = EffectHelper.getWeaponEffectFromPotion(firstEffectStack);
         } else if (firstEffectStack.getItem() instanceof WeaponEffectCrafting essenceIngredient) {
             effect = essenceIngredient.ingredientEffect(firstEffectStack);
         } else {
-            Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(firstEffectStack.getOrCreateNbt(), WeaponEffectType.ADDITIONAL_EFFECT);
+            Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(firstEffectStack.copy().getOrCreateNbt(), WeaponEffectType.ADDITIONAL_EFFECT);
             if (effectData.isEmpty()) return null;
             effect = effectData.get().weaponEffect();
         }

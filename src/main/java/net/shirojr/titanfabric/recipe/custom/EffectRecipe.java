@@ -36,8 +36,8 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         int width = inventory.getWidth(), height = inventory.getHeight();
         if (width != 3 || height != 3) return false;
         boolean itemsMatch = this.slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
-        if (itemsMatch) {
-            WeaponEffect weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
+        WeaponEffect weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
+        if (itemsMatch && weaponEffect != null) {
             this.weaponEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
         }
         return itemsMatch;
@@ -46,12 +46,12 @@ public class EffectRecipe extends SpecialCraftingRecipe {
     @Override
     public ItemStack craft(CraftingInventory inventory) {
         WeaponEffect weaponEffect = this.slotArrangement.getEffect(inventory, this.effectModifier);
-        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
-        this.weaponEffectData = effectData;
         if (weaponEffect == null) {
             LoggerUtil.devLogger("Couldn't find WeaponEffect from Inventory", true, null);
             return null;
         }
+        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
+        this.weaponEffectData = effectData;
         ItemStack stack = new ItemStack(this.slotArrangement.getOutputItem());
         return EffectHelper.applyEffectToStack(stack, effectData);
     }
