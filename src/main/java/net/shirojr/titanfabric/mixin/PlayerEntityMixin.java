@@ -213,27 +213,19 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
 
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void titanfabric$damageShield(float amount, CallbackInfo ci) {
-        if (this.activeItemStack.getItem() instanceof TitanFabricShieldItem) {
-            if (!this.world.isClient()) {
-                this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
-            }
+        if (!(this.activeItemStack.getItem() instanceof TitanFabricShieldItem)) return;
+        if (amount < 3.0f) return;
+        if (!this.world.isClient()) this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
+        int i = 1 + MathHelper.floor(amount);
+        Hand hand = this.getActiveHand();
+        this.activeItemStack.damage(i, this, (Consumer<LivingEntity>) ((playerEntity) -> playerEntity.sendToolBreakStatus(hand)));
+        if (!this.activeItemStack.isEmpty()) return;
 
-            if (amount >= 3.0F) {
-                int i = 1 + MathHelper.floor(amount);
-                Hand hand = this.getActiveHand();
-                this.activeItemStack.damage(i, this, (Consumer<LivingEntity>) ((playerEntity) -> playerEntity.sendToolBreakStatus(hand)));
-                if (this.activeItemStack.isEmpty()) {
-                    if (hand == Hand.MAIN_HAND) {
-                        this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-                    } else {
-                        this.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
-                    }
+        if (hand == Hand.MAIN_HAND) this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        else this.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+        this.activeItemStack = ItemStack.EMPTY;
+        this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
 
-                    this.activeItemStack = ItemStack.EMPTY;
-                    this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.random.nextFloat() * 0.4F);
-                }
-            }
-        }
     }
 
     @Inject(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
