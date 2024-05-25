@@ -23,14 +23,17 @@ import java.util.stream.IntStream;
 public class EffectRecipe extends SpecialCraftingRecipe {
     private final IngredientModule effectModifier;
     private final IngredientModule base;
+    private final OutputModule output;
     private final SlotArrangementType slotArrangement;
     private WeaponEffectData weaponEffectData;
 
-    public EffectRecipe(Identifier id, IngredientModule effectModifier, IngredientModule base, SlotArrangementType slotArrangementType) {
+    public EffectRecipe(Identifier id, IngredientModule base, IngredientModule effectModifier, OutputModule output,
+                        SlotArrangementType slotArrangementType) {
         super(id);
         this.effectModifier = effectModifier;
         this.base = base;
         this.slotArrangement = slotArrangementType;
+        this.output = output;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         if (width != 3 || height != 3) return false;
         boolean itemsMatch = this.slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
         itemsMatch = itemsMatch && unusedSlotsAreEmpty(this.base.slots(), this.effectModifier.slots(), inventory);
+        itemsMatch = itemsMatch && this.output.ingredient.test(this.slotArrangement.getOutputItem().getDefaultStack());
         WeaponEffect weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
 
         if (itemsMatch && weaponEffect != null) {
@@ -57,6 +61,7 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
         this.weaponEffectData = effectData;
         ItemStack stack = new ItemStack(this.slotArrangement.getOutputItem());
+        stack.setCount(this.output.count());
         return EffectHelper.applyEffectToStack(stack, effectData);
     }
 
@@ -72,7 +77,9 @@ public class EffectRecipe extends SpecialCraftingRecipe {
 
     @Override
     public ItemStack getOutput() {
-        return EffectHelper.applyEffectToStack(new ItemStack(this.slotArrangement.getOutputItem()), weaponEffectData);
+        ItemStack output = new ItemStack(this.slotArrangement.getOutputItem());
+        output.setCount(this.output.count());
+        return EffectHelper.applyEffectToStack(output, this.weaponEffectData);
     }
 
     @Override
@@ -102,15 +109,20 @@ public class EffectRecipe extends SpecialCraftingRecipe {
             IngredientModule effectModifierModule = new IngredientModule(effectModifier,
                     IngredientModule.slotsFromJsonObject(json, "modifier"));
 
-            return new EffectRecipe(id, effectModifierModule, baseModule, this.slotArrangementType);
+            Ingredient output = Ingredient.fromJson(JsonHelper.getObject(json, "output"));
+            OutputModule outputModule = new OutputModule(output,
+                    OutputModule.countFromJsonObject(json, "output"));
+
+            return new EffectRecipe(id, baseModule, effectModifierModule, outputModule, this.slotArrangementType);
         }
 
         @Override
         public EffectRecipe read(Identifier id, PacketByteBuf buf) {
             IngredientModule effectModifier = IngredientModule.readFromPacket(buf);
             IngredientModule base = IngredientModule.readFromPacket(buf);
+            OutputModule output = OutputModule.readFromPacket(buf);
 
-            return new EffectRecipe(id, effectModifier, base, this.slotArrangementType);
+            return new EffectRecipe(id, base, effectModifier, output, this.slotArrangementType);
         }
 
         @Override
@@ -119,6 +131,8 @@ public class EffectRecipe extends SpecialCraftingRecipe {
             buf.writeIntArray(recipe.effectModifier.slots);
             recipe.base.ingredient.write(buf);
             buf.writeIntArray(recipe.base.slots);
+            recipe.output.ingredient.write(buf);
+            buf.writeVarInt(recipe.output.count);
         }
     }
 
@@ -138,6 +152,19 @@ public class EffectRecipe extends SpecialCraftingRecipe {
                 slotIndexList[i] = indexArray.get(i).getAsInt();
             }
             return slotIndexList;
+        }
+    }
+
+    public record OutputModule(Ingredient ingredient, int count) {
+        public static OutputModule readFromPacket(PacketByteBuf buf) {
+            Ingredient packetIngredient = Ingredient.fromPacket(buf);
+            int count = buf.readVarInt();
+            return new OutputModule(packetIngredient, count);
+        }
+
+        public static int countFromJsonObject(JsonObject json, String parentObjectKey) {
+            JsonObject indexObject = JsonHelper.getObject(json, parentObjectKey);
+            return JsonHelper.getInt(indexObject, "count");
         }
     }
 }
