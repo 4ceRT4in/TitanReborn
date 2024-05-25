@@ -16,6 +16,7 @@ import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -139,14 +140,6 @@ public final class EffectHelper {
         return false;
     }
 
-    private static List<WeaponEffect> getWeaponEffects() {
-        return Arrays.stream(WeaponEffect.values()).toList();
-    }
-
-    private static List<WeaponEffect> getArrowEffects() {
-        return Arrays.stream(WeaponEffect.values()).filter(effect -> effect != WeaponEffect.FIRE).toList();
-    }
-
     public static boolean shouldEffectApply(Random random, int strength) {
         return random.nextInt(100) <= (25 * strength);
     }
@@ -159,9 +152,9 @@ public final class EffectHelper {
      * @param stacks   list of all registered ItemStacks.
      */
     public static void generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks, boolean addBaseItem) {
-        List<WeaponEffect> possibleEffects = getWeaponEffects();
+        if (!(baseItem instanceof WeaponEffectCrafting baseItemEffects)) return;
+        List<WeaponEffect> possibleEffects = baseItemEffects.supportedEffects();
         if (baseItem instanceof TitanFabricArrowItem) {
-            possibleEffects = getArrowEffects();
             for (WeaponEffect entry : possibleEffects) {
                 WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 2);
                 ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);

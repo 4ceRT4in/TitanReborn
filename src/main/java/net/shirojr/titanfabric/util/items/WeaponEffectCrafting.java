@@ -3,12 +3,18 @@ package net.shirojr.titanfabric.util.items;
 import net.minecraft.item.ItemStack;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface WeaponEffectCrafting {
     Optional<ItemType> titanfabric$getCraftingType();
-    default boolean isCraftingType(ItemType type) {
-        return this.titanfabric$getCraftingType().isPresent() && this.titanfabric$getCraftingType().get().equals(type);
+
+    default List<WeaponEffect> supportedEffects() {
+        return List.of(WeaponEffect.values());
+    }
+
+    default boolean isNotCraftingType(ItemType type) {
+        return this.titanfabric$getCraftingType().isEmpty() || !this.titanfabric$getCraftingType().get().equals(type);
     }
 
     /**

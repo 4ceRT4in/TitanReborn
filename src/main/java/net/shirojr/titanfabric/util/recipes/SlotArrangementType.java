@@ -39,6 +39,11 @@ public enum SlotArrangementType {
         return serializer;
     }
 
+    public boolean supportsEffect(WeaponEffect weaponEffect) {
+        if (!(getOutputItem() instanceof WeaponEffectCrafting outputEffectHandler)) return false;
+        return outputEffectHandler.supportedEffects().contains(weaponEffect);
+    }
+
     public boolean slotsHaveMatchingItems(CraftingInventory inventory, EffectRecipe.IngredientModule base,
                                           EffectRecipe.IngredientModule effectModifier) {
         boolean effectModifierMatchesItems = inventoryContainsValidItems(inventory, effectModifier);

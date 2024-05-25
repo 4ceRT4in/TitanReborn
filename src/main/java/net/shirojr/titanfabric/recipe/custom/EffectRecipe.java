@@ -21,8 +21,8 @@ import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 import java.util.stream.IntStream;
 
 public class EffectRecipe extends SpecialCraftingRecipe {
-    private final IngredientModule effectModifier;
     private final IngredientModule base;
+    private final IngredientModule effectModifier;
     private final OutputModule output;
     private final SlotArrangementType slotArrangement;
     private WeaponEffectData weaponEffectData;
@@ -30,20 +30,22 @@ public class EffectRecipe extends SpecialCraftingRecipe {
     public EffectRecipe(Identifier id, IngredientModule base, IngredientModule effectModifier, OutputModule output,
                         SlotArrangementType slotArrangementType) {
         super(id);
-        this.effectModifier = effectModifier;
         this.base = base;
-        this.slotArrangement = slotArrangementType;
+        this.effectModifier = effectModifier;
         this.output = output;
+        this.slotArrangement = slotArrangementType;
     }
 
     @Override
     public boolean matches(CraftingInventory inventory, World world) {
         int width = inventory.getWidth(), height = inventory.getHeight();
         if (width != 3 || height != 3) return false;
+        WeaponEffect weaponEffect = this.slotArrangement.getEffect(inventory, this.effectModifier);
+
         boolean itemsMatch = this.slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
         itemsMatch = itemsMatch && unusedSlotsAreEmpty(this.base.slots(), this.effectModifier.slots(), inventory);
         itemsMatch = itemsMatch && this.output.ingredient.test(this.slotArrangement.getOutputItem().getDefaultStack());
-        WeaponEffect weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
+        itemsMatch = itemsMatch && this.slotArrangement.supportsEffect(weaponEffect);
 
         if (itemsMatch && weaponEffect != null) {
             this.weaponEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);

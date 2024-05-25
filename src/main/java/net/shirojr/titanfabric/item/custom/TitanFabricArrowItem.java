@@ -20,6 +20,7 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,11 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
     @Override
     public Optional<ItemType> titanfabric$getCraftingType() {
         return Optional.of(ItemType.PRODUCT);
+    }
+
+    @Override
+    public List<WeaponEffect> supportedEffects() {
+        return Arrays.stream(WeaponEffect.values()).filter(weaponEffect -> !weaponEffect.equals(WeaponEffect.FIRE)).toList();
     }
 
     @Override
