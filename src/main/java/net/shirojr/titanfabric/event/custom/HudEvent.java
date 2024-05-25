@@ -15,7 +15,9 @@ public class HudEvent {
         HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
             if (player == null) return;
-            if (!(player.getMainHandStack().getItem() instanceof SelectableArrows)) return;
+            boolean isNotInMainHand = !(player.getMainHandStack().getItem() instanceof SelectableArrows);
+            boolean isNotInOffHand = !(player.getOffHandStack().getItem() instanceof SelectableArrows);
+            if (isNotInMainHand && isNotInOffHand) return;
             ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
             if (arrowSelection.titanfabric$getSelectedArrow().isEmpty()) return;
             ItemStack selectedArrowStack = arrowSelection.titanfabric$getSelectedArrow().get();

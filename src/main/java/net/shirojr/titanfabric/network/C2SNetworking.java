@@ -106,7 +106,11 @@ public class C2SNetworking {
                                                    ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf buf,
                                                    PacketSender sender) {
         server.execute(() -> {
-            if (!(player.getMainHandStack().getItem() instanceof SelectableArrows bowItem)) return;
+            SelectableArrows bowItem = null;
+            if (player.getOffHandStack().getItem() instanceof SelectableArrows selectableArrows) bowItem = selectableArrows;
+            if (player.getMainHandStack().getItem() instanceof SelectableArrows selectableArrows) bowItem = selectableArrows;
+            if (bowItem == null) return;
+
             ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
             PlayerInventory inventory = player.getInventory();
             List<ItemStack> arrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(inventory, bowItem);

@@ -91,7 +91,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         ItemStack stack = null;
         if (selectedArrowStack != null) stack = selectedArrowStack;
         PlayerEntity player = (PlayerEntity) (Object) this;
-        if (!(player.getMainHandStack().getItem() instanceof SelectableArrows)) stack = null;
+        boolean isInMainHand = player.getMainHandStack().getItem() instanceof SelectableArrows;
+        boolean isInOffHand = player.getOffHandStack().getItem() instanceof SelectableArrows;
+        if (!isInMainHand && !isInOffHand) stack = null;
         this.dataTracker.set(SELECTED_ARROW, Objects.requireNonNullElse(stack, ItemStack.EMPTY));
     }
 

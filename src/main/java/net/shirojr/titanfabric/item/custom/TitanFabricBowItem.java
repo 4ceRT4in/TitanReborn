@@ -36,7 +36,7 @@ public abstract class TitanFabricBowItem extends BowItem implements SelectableAr
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) user;
-        if (arrowSelection.titanfabric$getSelectedArrow().isEmpty())
+        if (world.isClient() || arrowSelection.titanfabric$getSelectedArrow().isEmpty())
             return super.use(world, user, hand);
         ItemStack selectedArrowStack = arrowSelection.titanfabric$getSelectedArrow().get();
 
