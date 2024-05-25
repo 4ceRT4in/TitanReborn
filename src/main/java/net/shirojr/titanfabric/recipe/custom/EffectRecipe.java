@@ -18,6 +18,8 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
+import java.util.stream.IntStream;
+
 public class EffectRecipe extends SpecialCraftingRecipe {
     private final IngredientModule effectModifier;
     private final IngredientModule base;
@@ -36,7 +38,9 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         int width = inventory.getWidth(), height = inventory.getHeight();
         if (width != 3 || height != 3) return false;
         boolean itemsMatch = this.slotArrangement.slotsHaveMatchingItems(inventory, this.base, this.effectModifier);
+        itemsMatch = itemsMatch && unusedSlotsAreEmpty(this.base.slots(), this.effectModifier.slots(), inventory);
         WeaponEffect weaponEffect = slotArrangement.getEffect(inventory, this.effectModifier);
+
         if (itemsMatch && weaponEffect != null) {
             this.weaponEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
         }
@@ -54,6 +58,16 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         this.weaponEffectData = effectData;
         ItemStack stack = new ItemStack(this.slotArrangement.getOutputItem());
         return EffectHelper.applyEffectToStack(stack, effectData);
+    }
+
+    private static boolean unusedSlotsAreEmpty(int[] baseSlots, int[] effectModifierSlots, CraftingInventory inventory) {
+        for (int i = 0; i < inventory.size(); i++) {
+            int currentSlot = i;
+            if (IntStream.of(baseSlots).anyMatch(value -> value == currentSlot)) continue;
+            if (IntStream.of(effectModifierSlots).anyMatch(value -> value == currentSlot)) continue;
+            if (!inventory.getStack(i).isEmpty()) return false;
+        }
+        return true;
     }
 
     @Override
@@ -80,11 +94,11 @@ public class EffectRecipe extends SpecialCraftingRecipe {
 
         @Override
         public EffectRecipe read(Identifier id, JsonObject json) {
-            Ingredient effectModifier = Ingredient.fromJson(JsonHelper.getObject(json, "modifier"));
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
-
             IngredientModule baseModule = new IngredientModule(base,
                     IngredientModule.slotsFromJsonObject(json, "base"));
+
+            Ingredient effectModifier = Ingredient.fromJson(JsonHelper.getObject(json, "modifier"));
             IngredientModule effectModifierModule = new IngredientModule(effectModifier,
                     IngredientModule.slotsFromJsonObject(json, "modifier"));
 
