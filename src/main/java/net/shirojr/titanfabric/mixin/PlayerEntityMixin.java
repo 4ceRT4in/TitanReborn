@@ -236,12 +236,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
 
     @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$arrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        if (!((Object) this instanceof ServerPlayerEntity serverPlayerEntity))
-            return;
-        if (serverPlayerEntity.getAbilities().creativeMode)
-            return;
-        if (!(stack.getItem() instanceof SelectableArrows weaponWithSelectableArrows))
-            return;
+        if (!((PlayerEntity)(Object) this instanceof ServerPlayerEntity serverPlayerEntity)) return;
+        if (serverPlayerEntity.getAbilities().creativeMode) return;
+        if (!(stack.getItem() instanceof SelectableArrows weaponWithSelectableArrows)) return;
 
         Predicate<ItemStack> predicate = possibleArrowStack -> weaponWithSelectableArrows.supportedArrows().contains(possibleArrowStack.getItem());
         ItemStack itemStack = RangedWeaponItem.getHeldProjectile(serverPlayerEntity, predicate);
