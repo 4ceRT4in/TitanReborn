@@ -75,7 +75,7 @@
 	],
 	"display": {
 		"ground": {
-			"scale": [4, 4, 4]
+			"scale": [0.5, 0.5, 0.5]
 		},
 		"gui": {
 			"rotation": [30, -30, 0],
