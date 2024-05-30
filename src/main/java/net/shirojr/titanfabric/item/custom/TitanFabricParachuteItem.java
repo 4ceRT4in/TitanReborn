@@ -33,7 +33,7 @@ public class TitanFabricParachuteItem extends Item {
                 nbtCompound.putBoolean("Activated", false);
                 stack.setNbt(nbtCompound);
             } else {
-                Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.02, 0, 0.02);
+                Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);
                 Vec3d newVec3d = playerEntity.getVelocity().add(rotationVec3d);
                 playerEntity.setVelocity(new Vec3d(MathHelper.clamp(newVec3d.getX(), -1.5D, 1.5D), newVec3d.getY(), MathHelper.clamp(newVec3d.getZ(), -1.5D, 1.5D)));
             }
