@@ -17,7 +17,6 @@ import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
-import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 
 @Environment(EnvType.CLIENT)
@@ -46,7 +45,7 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
     @Inject(method = "setAngles", at = @At("TAIL"))
     private void setAnglesMixin(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo info) {
         if (livingEntity instanceof PlayerEntity player) {
-            if (player.getMainHandStack().isOf(TitanFabricItems.PARACHUTE) && TitanFabricParachuteItem.isParachuteActivated(player)) {
+            if (TitanFabricParachuteItem.isParachuteActivated(player)) {
                 this.leftLeg.pitch = 0.0f;
                 this.rightLeg.pitch = 0.0f;
 
