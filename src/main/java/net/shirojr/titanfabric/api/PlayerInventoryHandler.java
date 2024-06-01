@@ -17,6 +17,7 @@ import java.util.Optional;
  * If the inventories are needed on the client side,
  * custom C2S networking and maybe even caching may be necessary.</I>
  */
+@SuppressWarnings("unused")
 public class PlayerInventoryHandler {
     private PlayerInventoryHandler() {
     }
