@@ -14,8 +14,11 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
@@ -35,6 +38,7 @@ public class C2SNetworking {
         ServerPlayNetworking.registerGlobalReceiver(ARMOR_HANDLING_CHANNEL, C2SNetworking::handleArmorLifeHandlingPacket);
         ServerPlayNetworking.registerGlobalReceiver(EXTENDED_INVENTORY_OPEN, C2SNetworking::handleExtendedInventoryOpenPacket);
         ServerPlayNetworking.registerGlobalReceiver(ARROW_SELECTION, C2SNetworking::handleArrowSelectionPacket);
+        ServerPlayNetworking.registerGlobalReceiver(NETHERITE_ANVIL_USE, C2SNetworking::netheriteAnvilUsePacket);
     }
 
     private static void handleBowScreenPacket(MinecraftServer server, ServerPlayerEntity player,
@@ -107,8 +111,10 @@ public class C2SNetworking {
                                                    PacketSender sender) {
         server.execute(() -> {
             SelectableArrows bowItem = null;
-            if (player.getOffHandStack().getItem() instanceof SelectableArrows selectableArrows) bowItem = selectableArrows;
-            if (player.getMainHandStack().getItem() instanceof SelectableArrows selectableArrows) bowItem = selectableArrows;
+            if (player.getOffHandStack().getItem() instanceof SelectableArrows selectableArrows)
+                bowItem = selectableArrows;
+            if (player.getMainHandStack().getItem() instanceof SelectableArrows selectableArrows)
+                bowItem = selectableArrows;
             if (bowItem == null) return;
 
             ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
@@ -133,5 +139,14 @@ public class C2SNetworking {
             arrowSelection.titanfabric$setSelectedArrow(newSelectedArrowStack);
             LoggerUtil.devLogger("SelectedStack: " + newSelectedArrowStack.getName());
         });
+    }
+
+    private static void netheriteAnvilUsePacket(MinecraftServer server, ServerPlayerEntity player,
+                                                ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf buf,
+                                                PacketSender sender) {
+        BlockPos pos = buf.readBlockPos();
+        server.execute(() ->
+                player.getWorld().playSound(null, pos, SoundEvents.ITEM_TRIDENT_RETURN, SoundCategory.BLOCKS, 1f, 1f)
+        );
     }
 }
