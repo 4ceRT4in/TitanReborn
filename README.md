@@ -18,7 +18,7 @@
     </a>
 </h1>
 
-<h1 align="center">Made by ShiroJr, Globox_Z and 4ceRT4in<br></h1>
+<h1 align="center">Prepare to battle! - Titan Reborn brings unique materials with special perks, essence infusing, and much more to player-versus-player combat!<br></h1>
 
 ![Features](https://cdn-raw.modrinth.com/data/9K53v0ys/images/cb7337a3f4a243e3186132bb504b2d118a01cd72.png)
 
@@ -108,4 +108,5 @@ Additionally, the mod also makes some changes to vanilla content, including:
 - Other QOL improvements
   
 ---
-[Titan Combat](https://www.curseforge.com/minecraft/mc-mods/titan-combat 'Titan Combat') was the inspiration for this mod, which was commissioned by Zinus & ViceVice, created by ateRstones and published by TheNodop.
+***Made by ShiroJR and 4cerT4in, with contributions by Globox_Z and FabCode.  
+[Titan Combat](https://www.curseforge.com/minecraft/mc-mods/titan-combat 'Titan Combat') was the inspiration for this mod, which was commissioned by Zinus & ViceVice, created by ateRstones and published by TheNodop.***
