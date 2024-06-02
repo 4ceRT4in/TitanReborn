@@ -22,6 +22,17 @@
 
 ![Features](https://cdn-raw.modrinth.com/data/9K53v0ys/images/cb7337a3f4a243e3186132bb504b2d118a01cd72.png)
 
+**New Materials**
+---
+
+Titan Reborn introduces 3 unique materials to both the Overworld and the Nether, each granting distinct buffs upon the player. These materials encourage strategic decision-making as players choose the material their weapons and armor parts are made off, to prioritize certain buffs, adding depth and variety to their gameplay experience.
+
+🧪 **Citrin**: As a common and slightly stronger material than iron in durability and protection, this material protects the player from any form of bad potion effects, reducing effect time and chance for damage ticks when being affected. 
+
+🔥 **Ember**: A hellish material from the realms of the nether. This material stops lava, fire and magma damage, reducing burn time and chance for damage ticks when on fire. Its upgraded form, netherite armor, has been reworked to feature infinite resistance when wearing a full set.
+
+💜 **Titan**: As the strongest material, Titan can only scarcily be found in the depths of the deepslate layer. Each armor piece grants the player extra health, resulting in up to 5 hearts when wearing a full set. It is also unbreakable and highly enchantable.
+
 **Close Range Combat**
 ---
 - **Swords**\
@@ -32,7 +43,6 @@
 - **Essences**\
 => Imbue swords with Wither, Weakness, Poison, Blindness, or Fire essences (a essence adds +25% chance, max chance of 50%)
 
----
 **Long Range Combat**
 ---
 - **Multi Bow(s)**\
@@ -44,7 +54,6 @@
 - **Potion Effect Arrows**\
 => Inflicts level 2 wither, weakness, poison, and blindness effects 
 
----
 **Armor & Shields**
 ---
 - **Citrin Armor**\
@@ -58,7 +67,7 @@
 - **Titan Shield**\
 => Unbreakable
 
----
+
 **Secondary Gadgets**
 ---
 - **Citrin Star**\
@@ -68,7 +77,7 @@
 - **Potion of Indestructibility**\
 => Prevents durability loss on all items for duration
 
----
+
 **Miscellaneous Items**
 ---
 - **Parachute**\
@@ -80,7 +89,7 @@
 - **Backpacks**\
 => Stores all your loot in 3 tier sizes
 
----
+
 **QOL**
 ---
 - **Save Inventory**\
@@ -88,8 +97,8 @@
 - **Quick Select Sstem**\
 => Easy to use keybing-system (default:g) for choosing arrows or potions when using variants of bows or crossbows
 
----
 Additionally, the mod also makes some changes to vanilla content, including:
+---
 - Netherite armor and sword rebalancing
 - Potion effect rebalancing
 - Food Saturation healing
@@ -97,5 +106,6 @@ Additionally, the mod also makes some changes to vanilla content, including:
 - New crafting method for lingering potions 
 - Craftable elytra
 - Other QOL improvements
+  
 ---
 [Titan Combat](https://www.curseforge.com/minecraft/mc-mods/titan-combat 'Titan Combat') was the inspiration for this mod, which was commissioned by Zinus & ViceVice, created by ateRstones and published by TheNodop.
