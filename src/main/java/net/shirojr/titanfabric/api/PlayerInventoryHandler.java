@@ -15,7 +15,7 @@ import java.util.Optional;
  * Utility class to interact with the extended Inventory of TitanFabric. <br><br>
  * <I>Keep in mind that the data is only available on the logical server side.
  * If the inventories are needed on the client side,
- * custom C2S networking and maybe even caching may be necessary.</I>
+ * custom S2C networking and maybe even caching may be necessary.</I>
  */
 @SuppressWarnings("unused")
 public class PlayerInventoryHandler {
@@ -24,7 +24,6 @@ public class PlayerInventoryHandler {
 
     /**
      * Get an extended Inventory of a player.<br>
-     * <I>The inventory is only available on the logical server side.</I>
      *
      * @param world  World instance
      * @param player Player instance for the Inventory which should be dropped
@@ -43,7 +42,7 @@ public class PlayerInventoryHandler {
      * Sets the extended Inventory of a specific player. The inventory needs to be of the same size as specified in
      * {@link PersistentPlayerData}. Otherwise, the inventory will be filled up with empty ItemStacks or will be reduced
      * to the size of the extended inventory space where left over items will be ignored. <br><br>
-     * If the player doesn't have an extended inventory entry in the files yet, it will create a new inventory for that.
+     * If the player doesn't have an extended inventory in the files yet, it will create a new inventory entry for that.
      *
      * @param serverPlayer target player for changing the inventory
      * @param inventory    inventory which the player will get.
@@ -64,10 +63,12 @@ public class PlayerInventoryHandler {
     }
 
     /**
-     * Drops the extended inventory items of a player.
+     * Drops the extended inventory items of a player.<br>
+     * Items are spawned as entities and the inventory is cleaned up.
      *
-     * @param serverPlayer player which should drop its extended Inventory
-     * @return true, if items have been dropped successfully. Can be ignored if this information is not needed.
+     * @param serverPlayer player which should drop their extended Inventory
+     * @return True, if items have been dropped successfully and the inventory wasn't empty to begin with.<br>
+     * The return value can be ignored if this information is not needed.
      */
     public static boolean dropExtendedInventory(ServerPlayerEntity serverPlayer) {
         Optional<Inventory> inventory = getExtendedInventory(serverPlayer.getWorld(), serverPlayer);
