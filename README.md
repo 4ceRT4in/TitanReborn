@@ -18,67 +18,65 @@
     </a>
 </h1>
 
-<h1 align="center">Made by ShiroJr, FabCode and 4ceRT4in<br></h1>
+<h1 align="center">Made by ShiroJr, Globox_Z and 4ceRT4in<br></h1>
 
-# TitanReborn
+![Features](https://cdn-raw.modrinth.com/data/9K53v0ys/images/cb7337a3f4a243e3186132bb504b2d118a01cd72.png)
 
-**Titan Reborn** is vanilla-styled combat-oriented expansion that introduces distinct materials, weapons and armor sets, aswell as some unique additions to dominate your opponent in intense PVP battles!
-
----
 **Close Range Combat**
 ---
 - **Swords**\
-=> lower attack damage, with the benefit of no cooldown, easier crafting & better enchantibility
+=> Lower damage, no cooldown, 1.2x crit modifier, easier crafting, better enchantability
 - **Greatswords**\
-=> higher attack damage, at the expanse of custom hit delay, harder crafting & worse enchantibility
+=> Higher damage, custom cooldown, 1.5x crit modifier, harder crafting, worse enchantability
 
-To further customize your weapon of choice, each swordtype can be imbued with **Wither, Weakness, Poison, Blindness or Fire essences for 25% and 50% effect strenghts**
+- **Essences**\
+=> Imbue swords with Wither, Weakness, Poison, Blindness, or Fire essences (a essence adds +25% chance, max chance of 50%)
 
 ---
 **Long Range Combat**
 ---
 - **Multi Bow(s)**\
-=> Shoots up to 3 arrows in quick sucession, at the cost of a short cooldown
+=> Shoots up to 3 arrows consecutively 
 - **Titan Bow**\
 => Shoots potion effect arrows
 - **Titan Crossbow**\
-=> Loads and shoots splash & lingering potions 
+=> Shoots splash & lingering potions
 - **Potion Effect Arrows**\
-=>  Gives their target wither, weakness, poison and blindness effects
+=> Inflicts level 2 wither, weakness, poison, and blindness effects 
 
 ---
 **Armor & Shields**
 ---
 - **Citrin Armor**\
-=> Avoids all bad effects with a 25/50/75/100 chance depending on the amount of armor parts worn
+=> Immune to all bad effects by chance (25/50/75/100% chance depending on worn armor parts)
 - **Nether Armor**\
-=> Avoids all fire, magma & lava damage with a 25/50/75/100 chance depending on the amount of armor parts worn
+=> Immune to fire, magma, and lava damage by chance (25/50/75/100% chance depending on worn armor parts)
 - **Titan Armor**\
-=> Gives the player an unbreakable armor that also adds up to 5 extra when wearing a full set
+=> Adds up to 5 extra hearts with full set, higher enchantibility, unbrekable
 - **Diamond Shield**\
-=> Blocks damage with a higher durability than the vanilla shield
+=> Higher durability than vanilla shield
 - **Titan Shield**\
-=> Blocks damage and is also unbreakable
+=> Unbreakable
 
 ---
 **Secondary Gadgets**
 ---
 - **Citrin Star**\
-=> Reverts certain potion effects from negative to positive and vice versa for a short time
+=> Reverts certain potion effects from negative to positive and vice versa for a limited time.
 - **Diamond Apple**\
 => Grants 4 extra hearts and 5 seconds of regeneration 3
 - **Potion of Indestructibility**\
-=> Prevents all durability loss while active
+=> Prevents durability loss on all items for duration
 
 ---
 **Miscellaneous Items**
 ---
 - **Parachute**\
-=> Lets the player slowly glide to the ground without taking damage
+=> Slowly glide to the ground without taking damage
 - **Diamond Furnace**\
-=> Doubles smelted ores with twice the speed of the vanilla furnace
+=> Doubles ore output and smelting speed
 - **Netherite Anvil**\
-=> Combines items at only half the cost of the vanilla anvil
+=> Combines items at only half the cost
 - **Backpacks**\
 => Stores all your loot in 3 tier sizes
 
@@ -86,15 +84,17 @@ To further customize your weapon of choice, each swordtype can be imbued with **
 **QOL**
 ---
 - **Save Inventory**\
-=>Player inventory built-in way to store your loot (even after death!)
-- **Quick Select Screen**\
-=> Easy and quick radial screen for choosing an arrow or potion when using a bow variant
+=>Player built-in GUI extension to store your loot
+- **Quick Select Sstem**\
+=> Easy to use keybing-system (default:g) for choosing arrows or potions when using variants of bows or crossbows
 
 ---
-Additionally, the mod also makes some changes to vanilla content including:
-- Netherite Armor rebalancing
+Additionally, the mod also makes some changes to vanilla content, including:
+- Netherite armor and sword rebalancing
 - Potion effect rebalancing
-- New way of crafting lingering potions 
+- Food Saturation healing
+- Attack Cooldowns
+- New crafting method for lingering potions 
 - Craftable elytra
 - Other QOL improvements
 ---
