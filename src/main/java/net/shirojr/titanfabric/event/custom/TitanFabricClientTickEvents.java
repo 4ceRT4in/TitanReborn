@@ -13,7 +13,6 @@ import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 import net.shirojr.titanfabric.registry.KeyBindRegistry;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
-import net.shirojr.titanfabric.util.LoggerUtil;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -37,7 +36,6 @@ public class TitanFabricClientTickEvents {
             if (!keyBinds.wasPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY)) {
                 ClientPlayNetworking.send(NetworkingIdentifiers.ARROW_SELECTION, PacketByteBufs.create());
                 keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, true);
-                LoggerUtil.devLogger("Executed Arrow Selection On Client Side");
             }
         } else {
             keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, false);
