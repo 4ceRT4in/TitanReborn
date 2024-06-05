@@ -19,7 +19,9 @@ import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
@@ -160,15 +162,13 @@ public final class EffectHelper {
                 ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
                 stacks.add(effectStack);
             }
-        }
-        else if (baseItem instanceof TitanFabricEssenceItem) {
+        } else if (baseItem instanceof TitanFabricEssenceItem) {
             for (WeaponEffect entry : possibleEffects) {
                 WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 1);
                 ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
                 stacks.add(effectStack);
             }
-        }
-        else if (baseItem instanceof TitanFabricSwordItem swordItem) {
+        } else if (baseItem instanceof TitanFabricSwordItem swordItem) {
             ItemStack onlyInnateItemStack = new ItemStack(baseItem);
             if (addBaseItem) {
                 if (swordItem.getBaseEffect() != null) {
@@ -250,5 +250,10 @@ public final class EffectHelper {
                 );
             }
         }
+    }
+
+    public static boolean haveSameEffects(ItemStack stack1, ItemStack stack2) {
+        if (!stackHasWeaponEffect(stack1) || !stackHasWeaponEffect(stack2)) return false;
+        return getWeaponEffectDataCompound(stack1).equals(getWeaponEffectDataCompound(stack2));
     }
 }

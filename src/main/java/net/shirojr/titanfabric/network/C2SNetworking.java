@@ -18,6 +18,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
@@ -126,16 +127,17 @@ public class C2SNetworking {
             if (arrowSelection.titanfabric$getSelectedArrowIndex().isPresent()) {
                 ItemStack selectedArrowStack = player.getInventory().getStack(arrowSelection.titanfabric$getSelectedArrowIndex().get());
                 if (arrowStacks.contains(selectedArrowStack)) {
-                    int indexInArrowList = arrowStacks.indexOf(selectedArrowStack) + 1;
-                    if (indexInArrowList > arrowStacks.size() - 1) indexInArrowList = 0;
-                    newSelectedArrowStack = arrowStacks.get(indexInArrowList);
+                    int newIndexInArrowList = arrowStacks.indexOf(selectedArrowStack) + 1;
+                    if (newIndexInArrowList > arrowStacks.size() - 1) newIndexInArrowList = 0;
+                    newSelectedArrowStack = arrowStacks.get(newIndexInArrowList);
                 } else {
                     newSelectedArrowStack = arrowStacks.get(0);
                 }
             } else {
                 newSelectedArrowStack = arrowStacks.get(0);
             }
-
+            Text arrowStackName = newSelectedArrowStack.getItem().getName(newSelectedArrowStack);
+            player.sendMessage(new TranslatableText("actionbar.titanfabric.arrow_selection").append(arrowStackName), true);
             arrowSelection.titanfabric$setSelectedArrowIndex(newSelectedArrowStack);
             LoggerUtil.devLogger("SelectedStack: " + newSelectedArrowStack.getName());
         });

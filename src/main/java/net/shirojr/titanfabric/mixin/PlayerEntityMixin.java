@@ -13,6 +13,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
@@ -95,7 +96,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         boolean isInMainHand = player.getMainHandStack().getItem() instanceof SelectableArrows;
         boolean isInOffHand = player.getOffHandStack().getItem() instanceof SelectableArrows;
         if (!isInMainHand && !isInOffHand) stack = ItemStack.EMPTY;
-        this.dataTracker.set(SELECTED_ARROW, player.getInventory().indexOf(stack));
+        int newArrowStackIndex = getIndexOfArrowStack(player.getInventory(), stack);
+        this.dataTracker.set(SELECTED_ARROW, newArrowStackIndex);
         LoggerUtil.devLogger("setter: " + stack.hashCode());
     }
 
@@ -117,6 +119,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
             }
             cir.setReturnValue(backupStack);
         });
+    }
+
+    @Unique
+    private static int getIndexOfArrowStack(Inventory inventory, ItemStack stack) {
+        for (int i = 0; i < inventory.size(); i++) {
+            ItemStack stackInList = inventory.getStack(i);
+            if (!stackInList.getItem().equals(stack.getItem())) continue;
+            if (stackInList.getCount() != stack.getCount()) continue;
+            if (stack.hasCustomName()) continue;
+            if (stack.hasEnchantments()) continue;
+            if (stack.isDamaged()) continue;
+            if (!EffectHelper.haveSameEffects(stackInList, stack)) continue;
+            return i;
+        }
+        return -1;
     }
 
     @Inject(method = "damage", at = @At(value = "TAIL", shift = Shift.BEFORE), cancellable = true)

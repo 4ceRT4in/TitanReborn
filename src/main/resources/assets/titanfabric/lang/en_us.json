@@ -202,5 +202,7 @@
 
   "overlay.titanfabric.netherite.resistance": "Active",
 
-  "screen.titanfabric.extended_inventory.title": "Save Inventory"
+  "screen.titanfabric.extended_inventory.title": "Save Inventory",
+
+  "actionbar.titanfabric.arrow_selection": "Projectile: "
 }
