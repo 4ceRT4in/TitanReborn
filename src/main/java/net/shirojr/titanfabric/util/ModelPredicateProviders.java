@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -91,9 +92,10 @@ public class ModelPredicateProviders {
     private static void registerLegendBowVersionProvider(Identifier identifier) {
         ModelPredicateProviderRegistry.register(TitanFabricItems.LEGEND_BOW, identifier,
                 (itemStack, clientWorld, livingEntity, seed) -> {
-                    if (!(livingEntity instanceof ArrowSelectionHandler clientPlayer)) return 0.0f;
-                    if (clientPlayer.titanfabric$getSelectedArrow().isEmpty()) return 0.0f;
-                    ItemStack savedArrowItemStack = clientPlayer.titanfabric$getSelectedArrow().get();
+                    if (!(livingEntity instanceof PlayerEntity player)) return 0.0f;
+                    if (!(player instanceof ArrowSelectionHandler clientPlayer)) return 0.0f;
+                    if (clientPlayer.titanfabric$getSelectedArrowIndex().isEmpty()) return 0.0f;
+                    ItemStack savedArrowItemStack = player.getInventory().getStack(clientPlayer.titanfabric$getSelectedArrowIndex().get());
                     if (!(savedArrowItemStack.getItem() instanceof TitanFabricArrowItem)) return 0.0f;
                     NbtCompound typeCompound = EffectHelper.getWeaponEffectDataCompound(savedArrowItemStack)
                             .getCompound(INNATE_EFFECT.getNbtKey());

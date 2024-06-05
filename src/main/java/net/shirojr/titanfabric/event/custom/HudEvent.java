@@ -14,13 +14,13 @@ public class HudEvent {
     public static void register() {
         HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> {
             ClientPlayerEntity player = MinecraftClient.getInstance().player;
-            if (player == null) return;
+            if (player == null || player.isSpectator()) return;
             boolean isNotInMainHand = !(player.getMainHandStack().getItem() instanceof SelectableArrows);
             boolean isNotInOffHand = !(player.getOffHandStack().getItem() instanceof SelectableArrows);
             if (isNotInMainHand && isNotInOffHand) return;
             ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
-            if (arrowSelection.titanfabric$getSelectedArrow().isEmpty()) return;
-            ItemStack selectedArrowStack = arrowSelection.titanfabric$getSelectedArrow().get();
+            if (arrowSelection.titanfabric$getSelectedArrowIndex().isEmpty()) return;
+            ItemStack selectedArrowStack = player.getInventory().getStack(arrowSelection.titanfabric$getSelectedArrowIndex().get());
             int x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - 118;
             int y = MinecraftClient.getInstance().getWindow().getScaledHeight() - 19;
             if (!player.getOffHandStack().isEmpty()) {

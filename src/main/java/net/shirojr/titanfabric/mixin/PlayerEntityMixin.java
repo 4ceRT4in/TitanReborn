@@ -52,7 +52,8 @@ import java.util.function.Predicate;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSelectionHandler {
     @Unique
-    private static final TrackedData<ItemStack> SELECTED_ARROW = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.ITEM_STACK);
+    private static final TrackedData<Integer> SELECTED_ARROW = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
+
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -76,26 +77,25 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void titanfabric$appendSelectedArrowDataTracker(CallbackInfo ci) {
-        this.dataTracker.startTracking(SELECTED_ARROW, ItemStack.EMPTY);
+        this.dataTracker.startTracking(SELECTED_ARROW, -1);
     }
 
     @Override
-    public Optional<ItemStack> titanfabric$getSelectedArrow() {
-        ItemStack selectedArrowStack = this.dataTracker.get(SELECTED_ARROW);
-        if (selectedArrowStack.isEmpty()) return Optional.empty();
-        LoggerUtil.devLogger("getter: " + selectedArrowStack.hashCode());
-        return Optional.of(selectedArrowStack);
+    public Optional<Integer> titanfabric$getSelectedArrowIndex() {
+        int selectedArrowStackIndex = this.dataTracker.get(SELECTED_ARROW);
+        if (selectedArrowStackIndex == -1) return Optional.empty();
+        return Optional.of(selectedArrowStackIndex);
     }
 
     @Override
-    public void titanfabric$setSelectedArrow(@Nullable ItemStack selectedArrowStack) {
+    public void titanfabric$setSelectedArrowIndex(@Nullable ItemStack selectedArrowStack) {
         PlayerEntity player = (PlayerEntity) (Object) this;
         ItemStack stack = ItemStack.EMPTY;
         if (selectedArrowStack != null) stack = selectedArrowStack;
         boolean isInMainHand = player.getMainHandStack().getItem() instanceof SelectableArrows;
         boolean isInOffHand = player.getOffHandStack().getItem() instanceof SelectableArrows;
         if (!isInMainHand && !isInOffHand) stack = ItemStack.EMPTY;
-        this.dataTracker.set(SELECTED_ARROW, stack);
+        this.dataTracker.set(SELECTED_ARROW, player.getInventory().indexOf(stack));
         LoggerUtil.devLogger("setter: " + stack.hashCode());
     }
 
@@ -105,14 +105,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         PlayerEntity player = (PlayerEntity) (Object) this;
         ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
 
-        arrowSelection.titanfabric$getSelectedArrow().ifPresentOrElse(cir::setReturnValue, () -> {
+        arrowSelection.titanfabric$getSelectedArrowIndex().ifPresentOrElse(itemStackIndex ->
+                cir.setReturnValue(player.getInventory().getStack(itemStackIndex)), () -> {
             List<ItemStack> possibleArrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(player.getInventory(), bowItem);
             ItemStack backupStack = ItemStack.EMPTY;
             if (possibleArrowStacks.size() > 0) {
                 backupStack = possibleArrowStacks.get(0);
-                arrowSelection.titanfabric$setSelectedArrow(backupStack);
+                arrowSelection.titanfabric$setSelectedArrowIndex(backupStack);
             } else {
-                arrowSelection.titanfabric$setSelectedArrow(null);
+                arrowSelection.titanfabric$setSelectedArrowIndex(null);
             }
             cir.setReturnValue(backupStack);
         });

@@ -123,8 +123,8 @@ public class C2SNetworking {
             if (arrowStacks.size() == 0) return;
             ItemStack newSelectedArrowStack;
 
-            if (arrowSelection.titanfabric$getSelectedArrow().isPresent()) {
-                ItemStack selectedArrowStack = arrowSelection.titanfabric$getSelectedArrow().get();
+            if (arrowSelection.titanfabric$getSelectedArrowIndex().isPresent()) {
+                ItemStack selectedArrowStack = player.getInventory().getStack(arrowSelection.titanfabric$getSelectedArrowIndex().get());
                 if (arrowStacks.contains(selectedArrowStack)) {
                     int indexInArrowList = arrowStacks.indexOf(selectedArrowStack) + 1;
                     if (indexInArrowList > arrowStacks.size() - 1) indexInArrowList = 0;
@@ -136,7 +136,7 @@ public class C2SNetworking {
                 newSelectedArrowStack = arrowStacks.get(0);
             }
 
-            arrowSelection.titanfabric$setSelectedArrow(newSelectedArrowStack);
+            arrowSelection.titanfabric$setSelectedArrowIndex(newSelectedArrowStack);
             LoggerUtil.devLogger("SelectedStack: " + newSelectedArrowStack.getName());
         });
     }

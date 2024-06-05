@@ -6,6 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public interface ArrowSelectionHandler {
-    Optional<ItemStack> titanfabric$getSelectedArrow();
-    void titanfabric$setSelectedArrow(@Nullable ItemStack selectedArrowStack);
+    Optional<Integer> titanfabric$getSelectedArrowIndex();
+    void titanfabric$setSelectedArrowIndex(@Nullable ItemStack selectedArrowStack);
 }
