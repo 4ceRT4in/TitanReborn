@@ -204,5 +204,6 @@
 
   "screen.titanfabric.extended_inventory.title": "Save Inventory",
 
-  "actionbar.titanfabric.arrow_selection": "Projectile: "
+  "actionbar.titanfabric.arrow_selection": "Projectile: ",
+  "actionbar.titanfabric.not_compatible": "§6[Warning]§r Projectile was not compatible"
 }

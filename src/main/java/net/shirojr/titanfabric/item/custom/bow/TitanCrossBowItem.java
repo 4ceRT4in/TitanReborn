@@ -33,6 +33,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.items.Anvilable;
+import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,6 +59,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        ArrowSelectionHelper.cleanUpProjectileSelection(user, this);
         ItemStack itemStack = user.getStackInHand(hand);
         if (isCharged(itemStack)) {
             shootAll(world, user, hand, itemStack, getSpeed(itemStack), 1.0f);

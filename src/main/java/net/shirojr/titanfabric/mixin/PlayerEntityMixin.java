@@ -31,7 +31,6 @@ import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
-import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
@@ -91,14 +90,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     @Override
     public void titanfabric$setSelectedArrowIndex(@Nullable ItemStack selectedArrowStack) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        ItemStack stack = ItemStack.EMPTY;
+        ItemStack stack = null;
         if (selectedArrowStack != null) stack = selectedArrowStack;
         boolean isInMainHand = player.getMainHandStack().getItem() instanceof SelectableArrows;
         boolean isInOffHand = player.getOffHandStack().getItem() instanceof SelectableArrows;
-        if (!isInMainHand && !isInOffHand) stack = ItemStack.EMPTY;
+        if (!isInMainHand && !isInOffHand) stack = null;
         int newArrowStackIndex = getIndexOfArrowStack(player.getInventory(), stack);
         this.dataTracker.set(SELECTED_ARROW, newArrowStackIndex);
-        LoggerUtil.devLogger("setter: " + stack.hashCode());
     }
 
     @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
@@ -123,6 +121,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
 
     @Unique
     private static int getIndexOfArrowStack(Inventory inventory, ItemStack stack) {
+        if (stack == null) return -1;
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack stackInList = inventory.getStack(i);
             if (!stackInList.getItem().equals(stack.getItem())) continue;
@@ -130,7 +129,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
             if (stack.hasCustomName()) continue;
             if (stack.hasEnchantments()) continue;
             if (stack.isDamaged()) continue;
-            if (!EffectHelper.haveSameEffects(stackInList, stack)) continue;
+            if (EffectHelper.stackHasWeaponEffect(stack)) {
+                if (!EffectHelper.haveSameEffects(stackInList, stack)) continue;
+            }
             return i;
         }
         return -1;

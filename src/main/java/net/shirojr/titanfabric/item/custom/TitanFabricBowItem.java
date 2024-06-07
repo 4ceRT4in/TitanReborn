@@ -8,11 +8,9 @@ import net.minecraft.tag.ItemTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class TitanFabricBowItem extends BowItem implements SelectableArrows {
@@ -35,19 +33,7 @@ public abstract class TitanFabricBowItem extends BowItem implements SelectableAr
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) user;
-        if (world.isClient() || arrowSelection.titanfabric$getSelectedArrowIndex().isEmpty())
-            return super.use(world, user, hand);
-        ItemStack selectedArrowStack = user.getInventory().getStack(arrowSelection.titanfabric$getSelectedArrowIndex().get());
-
-        if (ArrowSelectionHelper.containsArrowStack(selectedArrowStack, user.getInventory(), this))
-            return super.use(world, user, hand);
-
-        List<ItemStack> selectableArrows = ArrowSelectionHelper.findAllSupportedArrowStacks(user.getInventory(), this);
-        ItemStack newSelectedStack = null;
-        if (selectableArrows.size() > 0) newSelectedStack = selectableArrows.get(0);
-        arrowSelection.titanfabric$setSelectedArrowIndex(newSelectedStack);
-
-        return TypedActionResult.success(user.getStackInHand(hand), false);
+        if (!world.isClient()) ArrowSelectionHelper.cleanUpProjectileSelection(user, this);
+        return super.use(world, user, hand);
     }
 }
