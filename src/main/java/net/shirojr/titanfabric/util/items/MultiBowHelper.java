@@ -32,12 +32,10 @@ public final class MultiBowHelper {
      *
      * @param bowStack for editing the NBT information
      * @param arrows   count of concurrent arrows
-     * @return ItemStack with the new NBT information
      */
-    public static ItemStack setFullArrowCount(ItemStack bowStack, int arrows) {
+    public static void setFullArrowCount(ItemStack bowStack, int arrows) {
         bowStack.getOrCreateNbt().putInt(FULL_ARROW_COUNT_NBT_KEY, arrows);
         if (arrows < 1) bowStack.removeSubNbt(FULL_ARROW_COUNT_NBT_KEY);
-        return bowStack;
     }
 
     /**
@@ -58,14 +56,13 @@ public final class MultiBowHelper {
 
     /**
      * Set the currently loaded arrow ammount in the NBT values of the ItemStack
+     *
      * @param bowStack original Bow ItemStack
-     * @param arrows new value of arrows
-     * @return new Bow ItemStack
+     * @param arrows   new value of arrows
      */
-    public static ItemStack setArrowsLeftNbt(ItemStack bowStack, int arrows) {
+    public static void setArrowsLeftNbt(ItemStack bowStack, int arrows) {
         bowStack.getOrCreateNbt().putInt(ARROWS_LEFT_NBT_KEY, arrows);
         if (arrows < 1) bowStack.removeSubNbt(ARROWS_LEFT_NBT_KEY);
-        return bowStack;
     }
 
     /**

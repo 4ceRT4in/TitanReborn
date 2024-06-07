@@ -45,7 +45,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
     @Override
     public ItemStack getDefaultStack() {
         ItemStack itemStack = new ItemStack(this);
-        MultiBowHelper.setFullArrowCount(itemStack, 1);
+        MultiBowHelper.setFullArrowCount(itemStack, this.fullArrowCount);
         return itemStack;
     }
 
@@ -70,9 +70,9 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         if (world.isClient() || !(entity instanceof PlayerEntity player)) return;
-        if (!stack.getOrCreateNbt().contains(MultiBowHelper.FULL_ARROW_COUNT_NBT_KEY))
+        if (!stack.getOrCreateNbt().contains(MultiBowHelper.FULL_ARROW_COUNT_NBT_KEY)) {
             MultiBowHelper.setFullArrowCount(stack, this.fullArrowCount);
-
+        }
         boolean isInHand = player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof MultiBowItem ||
                 player.getStackInHand(Hand.OFF_HAND).getItem() instanceof MultiBowItem;
         if (!isInHand) return;
