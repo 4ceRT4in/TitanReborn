@@ -21,14 +21,14 @@ public class ArrowSelectionHelper {
 
     public static List<ItemStack> findAllSupportedArrowStacks(PlayerInventory inventory, SelectableArrows bowItem) {
         return inventory.main.stream().filter(itemStack ->
-                bowItem.supportedArrows().contains(itemStack.getItem())).toList();
+                bowItem.titanFabric$supportedArrows().contains(itemStack.getItem())).toList();
     }
 
     public static void cleanUpProjectileSelection(PlayerEntity user, SelectableArrows bowItem) {
         ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) user;
         if (arrowSelection.titanfabric$getSelectedArrowIndex().isEmpty()) return;
         ItemStack selectedArrowStack = user.getInventory().getStack(arrowSelection.titanfabric$getSelectedArrowIndex().get());
-        boolean isArrowSupported = bowItem.supportedArrows().contains(selectedArrowStack.getItem());
+        boolean isArrowSupported = bowItem.titanFabric$supportedArrows().contains(selectedArrowStack.getItem());
         boolean inventoryContainsSelectedStack = ArrowSelectionHelper.containsArrowStack(selectedArrowStack, user.getInventory(), bowItem);
         if (isArrowSupported && inventoryContainsSelectedStack) return;
 

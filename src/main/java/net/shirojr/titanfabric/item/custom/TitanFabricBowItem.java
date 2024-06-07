@@ -22,7 +22,7 @@ public abstract class TitanFabricBowItem extends BowItem implements SelectableAr
     @Override
     public Predicate<ItemStack> getProjectiles() {
         return stack -> {
-            for (Item supportedArrowItem : this.supportedArrows()) {
+            for (Item supportedArrowItem : this.titanFabric$supportedArrows()) {
                 if (stack.getItem().equals(supportedArrowItem)) {
                     return true;
                 }

@@ -21,7 +21,7 @@ public class LegendBowItem extends TitanFabricBowItem implements Anvilable {
     }
 
     @Override
-    public List<Item> supportedArrows() {
+    public List<Item> titanFabric$supportedArrows() {
         return List.of(Items.ARROW, Items.SPECTRAL_ARROW, TitanFabricItems.ARROW);
     }
 }

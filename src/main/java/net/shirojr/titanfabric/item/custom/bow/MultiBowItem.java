@@ -38,7 +38,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
     }
 
     @Override
-    public List<Item> supportedArrows() {
+    public List<Item> titanFabric$supportedArrows() {
         return List.of(Items.ARROW, Items.SPECTRAL_ARROW);
     }
 

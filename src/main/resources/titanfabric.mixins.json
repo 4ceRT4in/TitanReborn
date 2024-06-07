@@ -12,6 +12,7 @@
     "BowItemMixin",
     "BrewingRecipeRegistryInvoker",
     "BrewingRecipeRegistryMixin",
+    "CrossbowItemMixin",
     "HungerManagerMixin",
     "ItemMixin",
     "ItemsMixin",

@@ -53,7 +53,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     }
 
     @Override
-    public List<Item> supportedArrows() {
+    public List<Item> titanFabric$supportedArrows() {
         return List.of(Items.ARROW, Items.SPECTRAL_ARROW, Items.LINGERING_POTION, Items.SPLASH_POTION);
     }
 
@@ -104,7 +104,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
             return false;
         }
         ItemStack itemStack;
-        boolean bl = creative && selectableArrows.supportedArrows().contains(projectile.getItem());
+        boolean bl = creative && selectableArrows.titanFabric$supportedArrows().contains(projectile.getItem());
         if (!(bl || creative || simulated)) {
             itemStack = projectile.split(1);
             if (projectile.isEmpty() && shooter instanceof PlayerEntity) {
@@ -330,7 +330,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
         if (inventory != null) {
             for (int i = 0; i < inventory.size(); ++i) {
                 ItemStack itemStack = inventory.getStack(i);
-                if (!selectableArrows.supportedArrows().contains(itemStack.getItem())) {
+                if (!selectableArrows.titanFabric$supportedArrows().contains(itemStack.getItem())) {
                     continue;
                 }
                 return itemStack;

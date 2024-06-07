@@ -96,7 +96,7 @@ public final class MultiBowHelper {
      * @return returns either an Empty ItemStack or the first possible Arrow ItemStack
      */
     public static ItemStack searchValidArrowStack(PlayerEntity player, SelectableArrows selectableArrows) {
-        Predicate<ItemStack> isSelectableArrow = itemStack -> selectableArrows.supportedArrows().contains(itemStack.getItem());
+        Predicate<ItemStack> isSelectableArrow = itemStack -> selectableArrows.titanFabric$supportedArrows().contains(itemStack.getItem());
         ArrowSelectionHelper.cleanUpProjectileSelection(player, selectableArrows);
         ArrowSelectionHandler handler = (ArrowSelectionHandler) player;
 

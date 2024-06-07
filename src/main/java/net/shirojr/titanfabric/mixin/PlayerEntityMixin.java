@@ -263,7 +263,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         if (serverPlayerEntity.getAbilities().creativeMode) return;
         if (!(stack.getItem() instanceof SelectableArrows weaponWithSelectableArrows)) return;
 
-        Predicate<ItemStack> predicate = possibleArrowStack -> weaponWithSelectableArrows.supportedArrows().contains(possibleArrowStack.getItem());
+        Predicate<ItemStack> predicate = possibleArrowStack -> weaponWithSelectableArrows.titanFabric$supportedArrows().contains(possibleArrowStack.getItem());
         ItemStack itemStack = RangedWeaponItem.getHeldProjectile(serverPlayerEntity, predicate);
         if (!itemStack.isEmpty()) {
             cir.setReturnValue(itemStack);
