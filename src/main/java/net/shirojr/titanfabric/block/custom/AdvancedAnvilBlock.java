@@ -32,7 +32,7 @@ import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import org.jetbrains.annotations.Nullable;
 
 public class AdvancedAnvilBlock extends FallingBlock {
-    private static final Text TITLE = new TranslatableText("block.titanfabric.advanced_anvil");
+    private static final Text TITLE = new TranslatableText("block.titanfabric.netherite_anvil");
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
     public AdvancedAnvilBlock(Settings settings) {
