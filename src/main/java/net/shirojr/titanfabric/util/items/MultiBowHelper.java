@@ -11,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.util.TitanFabricTags;
+import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 
 import java.util.function.Predicate;
 
@@ -94,13 +95,23 @@ public final class MultiBowHelper {
      * @param player used to get access to the inventory
      * @return returns either an Empty ItemStack or the first possible Arrow ItemStack
      */
-    public static ItemStack searchFirstValidArrowStack(PlayerEntity player, SelectableArrows selectableArrows) {
-        Predicate<ItemStack> isArrow = itemStack -> selectableArrows.supportedArrows().contains(itemStack.getItem());
+    public static ItemStack searchValidArrowStack(PlayerEntity player, SelectableArrows selectableArrows) {
+        Predicate<ItemStack> isSelectableArrow = itemStack -> selectableArrows.supportedArrows().contains(itemStack.getItem());
+        ArrowSelectionHelper.cleanUpProjectileSelection(player, selectableArrows);
+        ArrowSelectionHandler handler = (ArrowSelectionHandler) player;
 
-        for (ItemStack stack : player.getInventory().main) {
-            if (isArrow.test(stack)) return stack;
+        ItemStack outputStack = ItemStack.EMPTY;
+        if (handler.titanfabric$getSelectedArrowIndex().isPresent()) {
+            ItemStack stack = player.getInventory().getStack(handler.titanfabric$getSelectedArrowIndex().get());
+            if (isSelectableArrow.test(stack)) outputStack = stack;
         }
-        return player.getAbilities().creativeMode ? new ItemStack(Items.ARROW) : ItemStack.EMPTY;
+        if (outputStack.isEmpty()) {
+            for (ItemStack stack : player.getInventory().main) {
+                if (isSelectableArrow.test(stack)) return stack;
+            }
+        }
+        if (player.isCreative()) new ItemStack(Items.ARROW);
+        return outputStack;
     }
 
     public static PersistentProjectileEntity prepareArrow(World world, PlayerEntity player, ItemStack arrowStack,

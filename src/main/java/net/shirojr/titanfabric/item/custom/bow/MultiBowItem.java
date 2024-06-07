@@ -59,7 +59,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (pullProgress < 0.2f) return;
 
         playerEntity.getItemCooldownManager().set(stack.getItem(), this.coolDownTicks);
-        int possibleArrowCount = Math.min(MultiBowHelper.searchFirstValidArrowStack(playerEntity, this).getCount(), MultiBowHelper.getFullArrowCount(stack));
+        int possibleArrowCount = Math.min(MultiBowHelper.searchValidArrowStack(playerEntity, this).getCount(), MultiBowHelper.getFullArrowCount(stack));
         if (playerEntity.isCreative()) possibleArrowCount = MultiBowHelper.getFullArrowCount(stack);
 
         MultiBowHelper.setArrowsLeftNbt(stack, possibleArrowCount);
@@ -80,7 +80,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (projectileTick < 1) return;
         stack.getOrCreateNbt().putInt(MultiBowHelper.PROJECTILE_TICK_NBT_KEY, projectileTick - 1);
         if (!validTick(projectileTick + 1)) return;
-        handleArrowShots(player, MultiBowHelper.searchFirstValidArrowStack(player, this), this.pullProgress);
+        handleArrowShots(player, MultiBowHelper.searchValidArrowStack(player, this), this.pullProgress);
         handleAfterShotValues(stack, player);
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class LegendBowItem extends TitanFabricBowItem implements Anvilable {
-    public static final Predicate<ItemStack> BOW_PROJECTILES = stack -> stack.isIn(TitanFabricTags.Items.ARROWS);
+    public static final Predicate<ItemStack> BOW_PROJECTILES = stack -> stack.isIn(TitanFabricTags.Items.DEFAULT_ARROWS);
 
     public LegendBowItem() {
         super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(-1));

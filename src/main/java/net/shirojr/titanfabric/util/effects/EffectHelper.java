@@ -129,9 +129,11 @@ public final class EffectHelper {
         return !nbtCompound.contains(EFFECTS_COMPOUND_NBT_KEY);
     }
 
-    @SuppressWarnings("unused")
     public static boolean stackHasWeaponEffect(ItemStack itemStack) {
-        NbtCompound compound = itemStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+        if (!itemStack.hasNbt()) return false;
+        NbtCompound nbt = itemStack.getNbt();
+        if (nbt == null || !nbt.contains(EFFECTS_COMPOUND_NBT_KEY)) return false;
+        NbtCompound compound = nbt.getCompound(EFFECTS_COMPOUND_NBT_KEY);
         for (String nbtKey : compound.getKeys()) {
             WeaponEffectType type = WeaponEffectType.getType(nbtKey);
             if (type == null) continue;
