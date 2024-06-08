@@ -11,9 +11,6 @@ base {
 }
 
 repositories {
-	// LlamaLad7's MixinExtras
-	maven { url 'https://jitpack.io' }
-
 	// Cloth config api for custom config
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
@@ -50,9 +47,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	// LlamaLad7's MixinExtras
-	include(annotationProcessor(implementation("com.github.LlamaLad7:MixinExtras:0.2.2")))
 
 	// Cloth config api for custom configs
 	modApi("me.shedaniel.cloth:cloth-config-fabric:6.4.90") {
