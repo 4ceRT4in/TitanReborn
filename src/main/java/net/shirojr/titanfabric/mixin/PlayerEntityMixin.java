@@ -124,14 +124,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         if (stack == null) return -1;
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack stackInList = inventory.getStack(i);
-            if (!stackInList.getItem().equals(stack.getItem())) continue;
-            if (stackInList.getCount() != stack.getCount()) continue;
-            if (stack.hasCustomName()) continue;
-            if (stack.hasEnchantments()) continue;
-            if (stack.isDamaged()) continue;
-            if (EffectHelper.stackHasWeaponEffect(stack)) {
-                if (!EffectHelper.haveSameEffects(stackInList, stack)) continue;
-            }
+            if (!stackInList.equals(stack)) continue;
             return i;
         }
         return -1;
