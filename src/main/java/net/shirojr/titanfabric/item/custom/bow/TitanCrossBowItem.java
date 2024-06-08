@@ -118,15 +118,15 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     }
 
     private static boolean loadProjectiles(LivingEntity shooter, ItemStack crossbow) {
-        int i = EnchantmentHelper.getLevel(Enchantments.MULTISHOT, crossbow);
-        int j = i == 0 ? 1 : 3;
+        int multiShotLevel = EnchantmentHelper.getLevel(Enchantments.MULTISHOT, crossbow);
+        int projectileCount = multiShotLevel == 0 ? 1 : 3;
         boolean bl = shooter instanceof PlayerEntity && ((PlayerEntity) shooter).getAbilities().creativeMode;
         ItemStack itemStack = shooter.getArrowType(crossbow);
         if (itemStack.isEmpty()) {
             itemStack = getProjectileType(shooter, crossbow);
         }
         ItemStack itemStack2 = itemStack.copy();
-        for (int k = 0; k < j; ++k) {
+        for (int k = 0; k < projectileCount; ++k) {
             if (k > 0) {
                 itemStack = itemStack2.copy();
             }
@@ -197,14 +197,16 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
         if (bl) {
             projectileEntity = new FireworkRocketEntity(world, projectile, shooter, shooter.getX(), shooter.getEyeY() - (double) 0.15f, shooter.getZ(), true);
         } else {
-            if (projectile.getItem() instanceof ThrowablePotionItem throwablePotionItem) {
+            if (projectile.getItem() instanceof ThrowablePotionItem) {
                 projectileEntity = new PotionEntity(world, shooter);
                 ((PotionEntity) projectileEntity).setItem(projectile);
             } else {
                 projectileEntity = createArrow(world, shooter, crossbow, projectile);
             }
-            if (projectileEntity instanceof PersistentProjectileEntity && creative || simulated != 0.0f) {
-                ((PersistentProjectileEntity) projectileEntity).pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+            if (creative || simulated != 0.0f) {
+                if (projectileEntity instanceof PersistentProjectileEntity persistentProjectileEntity) {
+                    persistentProjectileEntity.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+                }
             }
         }
         if (shooter instanceof CrossbowUser crossbowUser) {
