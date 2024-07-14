@@ -62,11 +62,11 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
         int color = 0x404040;
 
         this.textRenderer.draw(matrices, new TranslatableText("screen.titanfabric.extended_inventory.title"), this.titleX, this.titleY, color);
-        for (int line = 0; line < this.handler.getDescription().size(); line++) {
+/*        for (int line = 0; line < this.handler.getDescription().size(); line++) {
             int yOffset = 52 + (line * 10);
             Text lineText = new LiteralText(this.handler.getDescription().get(line));
             this.textRenderer.draw(matrices, lineText, this.titleX, this.titleY + yOffset, color);
-        }
+        }*/
     }
 
     @Override
