@@ -185,6 +185,9 @@
   "tooltip.titanfabric.witherArrowItem":"Applies §8Wither II §rfor 5 Seconds",
   "tooltip.titanfabric.netherite_effect": "§dFull Set: Resistance I",
 
+  "tooltip.titanfabric.parachute_line1": "Use item in air to enable",
+  "tooltip.titanfabric.parachute_line2": "Sneak and use item while gliding to disable",
+
   "block.titanfabric.citrin_ore": "§eCitrin Ore",
   "block.titanfabric.citrin_block": "§eCitrin Block",
   "block.titanfabric.deepslate_legend_ore": "§e§kl §r§3Titan Deepslate Ore §e§kl",
