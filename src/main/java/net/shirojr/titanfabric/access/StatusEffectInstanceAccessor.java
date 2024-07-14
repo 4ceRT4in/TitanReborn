@@ -6,11 +6,11 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 
 public interface StatusEffectInstanceAccessor {
 
-    public void setPreviousStatusEffect(@Nullable StatusEffectInstance statusEffectInstance);
+    void titanfabric$setPreviousStatusEffect(@Nullable StatusEffectInstance statusEffectInstance);
 
     @Nullable
-    public StatusEffectInstance getPreviousStatusEffect();
+    StatusEffectInstance titanfabric$getPreviousStatusEffect();
 
-    public void setDuration(int duration);
+    void titanfabric$setDuration(int duration);
 
 }

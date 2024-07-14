@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -62,7 +61,9 @@ public class CitrinStarEntity extends ThrownItemEntity {
             livingEntity.removeStatusEffect(statusEffect);
             livingEntity.addStatusEffect(newEffectInstance);
 
-            ((StatusEffectInstanceAccessor) livingEntity.getStatusEffect(newEffectInstance.getEffectType())).setPreviousStatusEffect(new StatusEffectInstance(oldEffectInstance));
+            if (livingEntity.getStatusEffect(newEffectInstance.getEffectType()) instanceof StatusEffectInstanceAccessor accessor) {
+                accessor.titanfabric$setPreviousStatusEffect(new StatusEffectInstance(oldEffectInstance));
+            }
 
             this.changedEffectIds.add(StatusEffect.getRawId(getEffectOpposites().get(statusEffect)));
         }

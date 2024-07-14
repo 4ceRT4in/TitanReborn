@@ -47,7 +47,7 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
     @Inject(method = "update", at = @At("RETURN"))
     private void updateMixin(LivingEntity entity, Runnable overwriteCallback, CallbackInfoReturnable<Boolean> info) {
         if (this.previousStatusEffectInstance != null && !info.getReturnValue() && !this.appliedPreviousStatusEffectInstance && this.previousStatusEffectInstance.getDuration() > 200) {
-            ((StatusEffectInstanceAccessor) this.previousStatusEffectInstance).setDuration(this.previousStatusEffectInstance.getDuration() - 200);
+            ((StatusEffectInstanceAccessor) this.previousStatusEffectInstance).titanfabric$setDuration(this.previousStatusEffectInstance.getDuration() - 200);
             entity.setStatusEffect(this.previousStatusEffectInstance, null);
             this.appliedPreviousStatusEffectInstance = true;
         }
@@ -62,26 +62,26 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
         }
     }
 
-    @Inject(method = "fromNbt", at = @At("RETURN"))
+    @Inject(method = "fromNbt*", at = @At("RETURN"))
     private static void fromNbtMixin(NbtCompound nbt, CallbackInfoReturnable<StatusEffectInstance> info) {
         if (info.getReturnValue() != null && nbt.contains("PreviousStatusEffect")) {
-            ((StatusEffectInstanceAccessor) info.getReturnValue()).setPreviousStatusEffect(
+            ((StatusEffectInstanceAccessor) info.getReturnValue()).titanfabric$setPreviousStatusEffect(
                     new StatusEffectInstance(StatusEffect.byRawId(nbt.getInt("PreviousStatusEffect")), nbt.getInt("PreviousStatusEffectDuration"), nbt.getInt("PreviousStatusEffectAmplifier")));
         }
     }
 
     @Override
-    public void setPreviousStatusEffect(@Nullable StatusEffectInstance statusEffectInstance) {
+    public void titanfabric$setPreviousStatusEffect(@Nullable StatusEffectInstance statusEffectInstance) {
         this.previousStatusEffectInstance = statusEffectInstance;
     }
 
     @Override
-    public @Nullable StatusEffectInstance getPreviousStatusEffect() {
+    public @Nullable StatusEffectInstance titanfabric$getPreviousStatusEffect() {
         return this.previousStatusEffectInstance;
     }
 
     @Override
-    public void setDuration(int duration) {
+    public void titanfabric$setDuration(int duration) {
         this.duration = duration;
     }
 
