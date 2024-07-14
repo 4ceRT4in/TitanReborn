@@ -118,9 +118,9 @@ public class TitanFabricItems {
     public static final CutPotion CUT_POTION = registerItem("cut_potion", new CutPotion(new FabricItemSettings()));
 
     public static final Item SWORD_HANDLE = registerItem("sword_handle",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
     public static final Item DIAMOND_APPLE = registerItem("diamond_apple",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)
                     .food((new FoodComponent.Builder()).hunger(4).saturationModifier(1.2f).alwaysEdible()
                             .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F)
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
