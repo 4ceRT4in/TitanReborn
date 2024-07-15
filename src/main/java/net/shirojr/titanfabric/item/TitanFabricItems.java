@@ -96,7 +96,8 @@ public class TitanFabricItems {
     public static final TitanFabricShieldItem LEGEND_SHIELD = registerItem("legend_shield",
             new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
 
-    public static final CitrinStarItem CITRIN_STAR = registerItem("citrin_star", new CitrinStarItem());
+    public static final CitrinStarItem CITRIN_STAR = registerItem("citrin_star",
+            new CitrinStarItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(4)));
 
     public static final Item CITRIN_SHARD = registerItem("citrin_shard",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));

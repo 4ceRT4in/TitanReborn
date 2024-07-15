@@ -1,6 +1,5 @@
 package net.shirojr.titanfabric.item.custom.misc;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,12 +10,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.entity.CitrinStarEntity;
-import net.shirojr.titanfabric.item.TitanFabricItemGroups;
 
 public class CitrinStarItem extends Item {
 
-    public CitrinStarItem() {
-        super(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16));
+    public CitrinStarItem(Settings settings) {
+        super(settings);
     }
 
     @Override
