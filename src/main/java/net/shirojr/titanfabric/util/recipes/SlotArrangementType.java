@@ -5,9 +5,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.RecipeSerializer;
 import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -20,23 +18,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public enum SlotArrangementType {
-    ESSENCE(TitanFabricItems.ESSENCE, TitanFabricRecipes.ESSENCE_EFFECT_RECIPE_SERIALIZER),
-    ARROW(TitanFabricItems.ARROW, TitanFabricRecipes.ARROW_EFFECT_RECIPE_SERIALIZER);
+    ESSENCE(TitanFabricItems.ESSENCE),
+    ARROW(TitanFabricItems.ARROW);
 
     private final Item outputItem;
-    private final RecipeSerializer<?> serializer;   // FIXME: is null?
 
-    SlotArrangementType(Item outputItem, RecipeSerializer<?> serializer) {
+    SlotArrangementType(Item outputItem) {
         this.outputItem = outputItem;
-        this.serializer = serializer;
     }
 
     public Item getOutputItem() {
         return this.outputItem;
-    }
-
-    public RecipeSerializer<?> getSerializer() {
-        return serializer;
     }
 
     public boolean supportsEffect(WeaponEffect weaponEffect) {
