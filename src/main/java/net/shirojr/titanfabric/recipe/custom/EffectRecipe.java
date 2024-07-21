@@ -11,6 +11,7 @@ import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -91,7 +92,10 @@ public class EffectRecipe extends SpecialCraftingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return this.slotArrangement.getSerializer();
+        return switch (this.slotArrangement) {
+            case ARROW -> TitanFabricRecipes.ARROW_EFFECT_RECIPE_SERIALIZER;
+            case ESSENCE -> TitanFabricRecipes.ESSENCE_EFFECT_RECIPE_SERIALIZER;
+        };
     }
 
     public static class Serializer implements RecipeSerializer<EffectRecipe> {
@@ -102,7 +106,7 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         }
 
         @Override
-        public EffectRecipe read(Identifier id, JsonObject json) {
+        public EffectRecipe read(Identifier readId, JsonObject json) {
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
             IngredientModule baseModule = new IngredientModule(base,
                     IngredientModule.slotsFromJsonObject(json, "base"));
@@ -115,16 +119,16 @@ public class EffectRecipe extends SpecialCraftingRecipe {
             OutputModule outputModule = new OutputModule(output,
                     OutputModule.countFromJsonObject(json, "output"));
 
-            return new EffectRecipe(id, baseModule, effectModifierModule, outputModule, this.slotArrangementType);
+            return new EffectRecipe(readId, baseModule, effectModifierModule, outputModule, this.slotArrangementType);
         }
 
         @Override
-        public EffectRecipe read(Identifier id, PacketByteBuf buf) {
+        public EffectRecipe read(Identifier readId, PacketByteBuf buf) {
             IngredientModule effectModifier = IngredientModule.readFromPacket(buf);
             IngredientModule base = IngredientModule.readFromPacket(buf);
             OutputModule output = OutputModule.readFromPacket(buf);
 
-            return new EffectRecipe(id, base, effectModifier, output, this.slotArrangementType);
+            return new EffectRecipe(readId, base, effectModifier, output, this.slotArrangementType);
         }
 
         @Override

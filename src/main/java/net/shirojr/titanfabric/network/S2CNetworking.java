@@ -7,12 +7,11 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.shirojr.titanfabric.entity.TitanFabricArrowEntity;
 
 
 public class S2CNetworking {
     public static void registerClientReceivers() {
-        ClientPlayNetworking.registerGlobalReceiver(NetworkingIdentifiers.ARROW_ENTITY_ITEM_SYNC, S2CNetworking::syncArrowEntityItem);
+        //ClientPlayNetworking.registerGlobalReceiver(NetworkingIdentifiers.ARROW_ENTITY_ITEM_SYNC, S2CNetworking::syncArrowEntityItem);
     }
 
     private static void syncArrowEntityItem(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender) {

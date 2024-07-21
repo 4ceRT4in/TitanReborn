@@ -24,7 +24,7 @@ public enum SlotArrangementType {
     ARROW(TitanFabricItems.ARROW, TitanFabricRecipes.ARROW_EFFECT_RECIPE_SERIALIZER);
 
     private final Item outputItem;
-    private final RecipeSerializer<?> serializer;
+    private final RecipeSerializer<?> serializer;   // FIXME: is null?
 
     SlotArrangementType(Item outputItem, RecipeSerializer<?> serializer) {
         this.outputItem = outputItem;
