@@ -1,15 +1,18 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "###",
-        "S S",
-        "S S"
+        "www",
+        "l l",
+        "s s"
     ],
     "key": {
-        "#": {
+        "w": {
+            "tag": "minecraft:wool"
+        },
+        "l": {
             "item": "minecraft:leather"
         },
-        "S": {
+        "s": {
             "item": "minecraft:string"
         }
     },
