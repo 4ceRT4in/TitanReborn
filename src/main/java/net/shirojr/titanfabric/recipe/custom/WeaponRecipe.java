@@ -1,9 +1,11 @@
 package net.shirojr.titanfabric.recipe.custom;
 
 import com.google.gson.JsonObject;
+
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
@@ -42,25 +44,34 @@ public class WeaponRecipe extends SmithingRecipe {
     public boolean matches(Inventory inventory, World world) {
         ItemStack baseStack = inventory.getStack(0);
         ItemStack additionStack = inventory.getStack(1);
-        if (!(baseStack.getItem() instanceof WeaponEffectCrafting baseCraftingItem)) return false;
-        if (baseCraftingItem.isNotCraftingType(WeaponEffectCrafting.ItemType.PRODUCT)) return false;
-        if (!(additionStack.getItem() instanceof WeaponEffectCrafting additionCraftingItem)) return false;
-        if (additionCraftingItem.isNotCraftingType(WeaponEffectCrafting.ItemType.INGREDIENT)) return false;
+        if (!(baseStack.getItem() instanceof WeaponEffectCrafting baseCraftingItem))
+            return false;
+        if (baseCraftingItem.isNotCraftingType(WeaponEffectCrafting.ItemType.PRODUCT))
+            return false;
+        if (!(additionStack.getItem() instanceof WeaponEffectCrafting additionCraftingItem))
+            return false;
+        if (additionCraftingItem.isNotCraftingType(WeaponEffectCrafting.ItemType.INGREDIENT))
+            return false;
         boolean baseMatches = this.base.test(baseStack);
         boolean additionMatches = this.addition.test(additionStack);
 
-        if (!additionStack.getOrCreateNbt().contains(EFFECTS_COMPOUND_NBT_KEY)) return false;
+        if (!additionStack.getOrCreateNbt().contains(EFFECTS_COMPOUND_NBT_KEY))
+            return false;
         NbtCompound additionCompound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         NbtCompound baseCompound = baseStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         Optional<WeaponEffectData> baseAdditionData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
         Optional<WeaponEffectData> modifierInnateData = WeaponEffectData.fromNbt(additionCompound, WeaponEffectType.INNATE_EFFECT);
-        if (modifierInnateData.isEmpty()) return false;
+        if (modifierInnateData.isEmpty())
+            return false;
         if (baseAdditionData.isPresent()) {
-            if (baseAdditionData.get().strength() >= 2) return false;
-            if (!baseAdditionData.get().weaponEffect().equals(modifierInnateData.get().weaponEffect())) return false;
+            if (baseAdditionData.get().strength() >= 2)
+                return false;
+            if (!baseAdditionData.get().weaponEffect().equals(modifierInnateData.get().weaponEffect()))
+                return false;
         }
         NbtCompound typeCompound = additionCompound.getCompound(WeaponEffectType.INNATE_EFFECT.getNbtKey());
-        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY)), typeCompound.getInt(EFFECTS_STRENGTH_NBT_KEY));
+        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY)),
+                typeCompound.getInt(EFFECTS_STRENGTH_NBT_KEY));
 
         if (baseMatches && additionMatches) {
             EffectHelper.removeEffectsFromStack(this.result);
@@ -93,12 +104,26 @@ public class WeaponRecipe extends SmithingRecipe {
                 NbtCompound finalBaseCompound = baseInnateEffectData.get().toNbt();
                 itemStack.getOrCreateNbt().put(EFFECTS_COMPOUND_NBT_KEY, finalBaseCompound);
             }
-            NbtCompound finalAdditionCompound = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT,
-                    modifierInnateEffectData.get().weaponEffect(), strength).toNbt();
+            NbtCompound finalAdditionCompound = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, modifierInnateEffectData.get().weaponEffect(), strength).toNbt();
 
-            itemStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY)
-                    .put(WeaponEffectType.ADDITIONAL_EFFECT.getNbtKey(),
-                            finalAdditionCompound.getCompound(WeaponEffectType.ADDITIONAL_EFFECT.getNbtKey()));
+            itemStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY).put(WeaponEffectType.ADDITIONAL_EFFECT.getNbtKey(),
+                    finalAdditionCompound.getCompound(WeaponEffectType.ADDITIONAL_EFFECT.getNbtKey()));
+
+            // hot fix
+            if (baseStack.hasEnchantments()) {
+                NbtCompound nbtCompound = itemStack.getNbt();
+
+                if (!nbtCompound.contains(ItemStack.ENCHANTMENTS_KEY, 9)) {
+
+                    NbtList nbtList = new NbtList();
+                    baseStack.getEnchantments().forEach(nbtElement -> {
+                        nbtList.add(nbtElement);
+                    });
+                    nbtCompound.put(ItemStack.ENCHANTMENTS_KEY, nbtList);
+                    itemStack.setNbt(nbtCompound);
+                }
+            }
+
             this.result = itemStack.copy();
             return itemStack;
         }
@@ -110,7 +135,8 @@ public class WeaponRecipe extends SmithingRecipe {
     @Override
     public ItemStack getOutput() {
         WeaponEffectData data = this.weaponEffectData;
-        if (data == null) return this.result;
+        if (data == null)
+            return this.result;
         int strength = data.strength() + 1;
         strength = Math.min(2, Math.max(1, strength));
         WeaponEffectData newData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, weaponEffectData.weaponEffect(), strength);
