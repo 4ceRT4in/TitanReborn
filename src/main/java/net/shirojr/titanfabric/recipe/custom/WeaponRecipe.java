@@ -1,11 +1,9 @@
 package net.shirojr.titanfabric.recipe.custom;
 
 import com.google.gson.JsonObject;
-
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
@@ -85,6 +83,7 @@ public class WeaponRecipe extends SmithingRecipe {
     public ItemStack craft(Inventory inventory) {
         ItemStack baseStack = inventory.getStack(0);
         ItemStack additionStack = inventory.getStack(1);
+        ItemStack outputStack = this.result.copy();
         NbtCompound baseCompound = baseStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         NbtCompound additionCompound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
 
@@ -94,38 +93,24 @@ public class WeaponRecipe extends SmithingRecipe {
 
         if (modifierInnateEffectData.isPresent()) {
             this.weaponEffectData = modifierInnateEffectData.get();
-            ItemStack itemStack = this.result.copy();
             int strength = 1;
+
             if (baseAdditionEffectData.isPresent()) {
                 strength = baseAdditionEffectData.get().strength() + modifierInnateEffectData.get().strength();
                 strength = Math.min(2, Math.max(1, strength));
             }
             if (baseInnateEffectData.isPresent()) {
                 NbtCompound finalBaseCompound = baseInnateEffectData.get().toNbt();
-                itemStack.getOrCreateNbt().put(EFFECTS_COMPOUND_NBT_KEY, finalBaseCompound);
-            }
-            NbtCompound finalAdditionCompound = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, modifierInnateEffectData.get().weaponEffect(), strength).toNbt();
-
-            itemStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY).put(WeaponEffectType.ADDITIONAL_EFFECT.getNbtKey(),
-                    finalAdditionCompound.getCompound(WeaponEffectType.ADDITIONAL_EFFECT.getNbtKey()));
-
-            // hot fix
-            if (baseStack.hasEnchantments()) {
-                NbtCompound nbtCompound = itemStack.getNbt();
-
-                if (!nbtCompound.contains(ItemStack.ENCHANTMENTS_KEY, 9)) {
-
-                    NbtList nbtList = new NbtList();
-                    baseStack.getEnchantments().forEach(nbtElement -> {
-                        nbtList.add(nbtElement);
-                    });
-                    nbtCompound.put(ItemStack.ENCHANTMENTS_KEY, nbtList);
-                    itemStack.setNbt(nbtCompound);
-                }
+                outputStack.getOrCreateNbt().put(EFFECTS_COMPOUND_NBT_KEY, finalBaseCompound);
             }
 
-            this.result = itemStack.copy();
-            return itemStack;
+            NbtCompound originalCompound = baseStack.getOrCreateNbt().copy();
+            outputStack.setNbt(originalCompound);
+            WeaponEffectData additionData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, modifierInnateEffectData.get().weaponEffect(), strength);
+            EffectHelper.applyEffectToStack(outputStack, additionData);
+
+            this.result = outputStack.copy();
+            return outputStack;
         }
 
         LoggerUtil.devLogger("Couldn't find WeaponEffect of modifier stack", true, null);
