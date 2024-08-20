@@ -17,16 +17,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ServerPlayerEntityMixin {
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void titanfabric$dropExtendedInventory(DamageSource source, CallbackInfo ci) {
-        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-        if (player.isCreative() || player.isSpectator()) return;
-        if (player.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) return;
-        LoggerUtil.devLogger("player condition met");
-        PersistentPlayerData persistentPlayerData = PersistentWorldData.getPersistentPlayerData(player);
-        if (persistentPlayerData == null) return;
-        Inventory extendedInventory = persistentPlayerData.extraInventory;
-        LoggerUtil.devLogger("found inv");
-        if (extendedInventory.isEmpty()) return;
-        LoggerUtil.devLogger("spawning inventory");
-        ItemScatterer.spawn(player.getWorld(), player.getBlockPos(), extendedInventory);
     }
 }
