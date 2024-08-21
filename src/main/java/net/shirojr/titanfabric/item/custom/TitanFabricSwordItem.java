@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.item.custom;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
@@ -9,6 +10,8 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.ToolTipHelper;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
@@ -75,5 +78,12 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
         }
 
         return super.postHit(stack, target, attacker);
+    }
+
+    @Override
+    public void onCraft(ItemStack stack, World world, PlayerEntity player) {
+        super.onCraft(stack, world, player);
+        WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, this.getBaseEffect(), 1);
+        EffectHelper.applyEffectToStack(stack, innateEffectData);
     }
 }
