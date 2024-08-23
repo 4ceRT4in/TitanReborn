@@ -83,7 +83,11 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     @Override
     public void onCraft(ItemStack stack, World world, PlayerEntity player) {
         super.onCraft(stack, world, player);
-        WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, this.getBaseEffect(), 1);
-        EffectHelper.applyEffectToStack(stack, innateEffectData);
+        WeaponEffect baseEffect = this.getBaseEffect();
+        if(baseEffect != null) {
+            WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, baseEffect, 1);
+            EffectHelper.applyEffectToStack(stack, innateEffectData);
+        }
+
     }
 }
