@@ -89,11 +89,12 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public void onSlotClick(int slotId, int button, SlotActionType actionType, PlayerEntity player) {
-        Slot slot = this.getSlot(slotId);
-
-        // Prevent moving the backpack item itself
-        if (slot != null && slot.getStack() == this.backpackStack) {
-            return; // Cancel the action if the backpack is clicked
+        if(slotId >= 0){
+            Slot slot = this.getSlot(slotId);
+            // Prevent moving the backpack item itself
+            if (slot != null && slot.getStack() == this.backpackStack) {
+                return; // Cancel the action if the backpack is clicked
+            }
         }
 
         super.onSlotClick(slotId, button, actionType, player);
