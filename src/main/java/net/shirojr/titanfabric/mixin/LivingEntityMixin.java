@@ -124,4 +124,9 @@ public abstract class LivingEntityMixin {
         int defaultCooldown = cir.getReturnValue();
         cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
     }
+
+    @ModifyVariable(method = "applyEnchantmentsToDamage", at = @At("STORE"), ordinal = 2)
+    private float adjustResistance(float value) {
+        return value * 0.5f;
+    }
 }
