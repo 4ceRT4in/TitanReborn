@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 
@@ -84,6 +85,19 @@ public class BackPackItemScreenHandler extends ScreenHandler {
             }
             slotPos.x = pos.x;
         }
+    }
+
+    @Override
+    public void onSlotClick(int slotId, int button, SlotActionType actionType, PlayerEntity player) {
+        if(slotId >= 0){
+            Slot slot = this.getSlot(slotId);
+            // Prevent moving the backpack item itself
+            if (slot != null && slot.getStack() == this.backpackStack) {
+                return; // Cancel the action if the backpack is clicked
+            }
+        }
+
+        super.onSlotClick(slotId, button, actionType, player);
     }
 
     @Override
