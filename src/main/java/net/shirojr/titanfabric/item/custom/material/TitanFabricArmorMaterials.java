@@ -14,7 +14,7 @@ public enum TitanFabricArmorMaterials implements ArmorMaterial {
     CITRIN("citrin", 15, new int[] { 2, 6, 7, 2 }, 9,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
-    NETHER("nether", 30, new int[] { 2, 7, 8, 3 }, 10,
+    NETHER("nether", 30, new int[] { 3, 6, 8, 3 }, 10,
             SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0f, 0.0f,
             () -> Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
     LEGEND("legend", -1, new int[] { 3, 6, 8, 3 }, 25,

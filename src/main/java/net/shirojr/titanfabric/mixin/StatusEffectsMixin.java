@@ -10,11 +10,9 @@ public abstract class StatusEffectsMixin {
 
     @ModifyConstant(method = "<clinit>", constant = @Constant(doubleValue = -4.0))
     private static double titanfabric$weaknessBalancingArgsMod(double original) {
-        return -2.0;
+        return -1.5;
     }
 
     @ModifyConstant(method = "<clinit>", constant = @Constant(doubleValue = 3.0))
-    private static double titanfabric$strengthBalancingArgsMod(double original) {
-        return 1.5;
-    }
+    private static double titanfabric$strengthBalancingArgsMod(double original) { return 1.0; }
 }
