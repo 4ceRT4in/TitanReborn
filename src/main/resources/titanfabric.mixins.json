@@ -21,6 +21,7 @@
     "PlayerEntityMixin",
     "PotionItemMixin",
     "ServerPlayerEntityMixin",
+    "ShapedRecipeMixin",
     "SmithingRecipeMixin",
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",

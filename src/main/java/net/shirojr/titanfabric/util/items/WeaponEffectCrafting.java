@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.item.ItemStack;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,11 @@ public interface WeaponEffectCrafting {
 
     default boolean isNotCraftingType(ItemType type) {
         return this.titanfabric$getCraftingType().isEmpty() || !this.titanfabric$getCraftingType().get().equals(type);
+    }
+
+    @Nullable
+    default WeaponEffect getBaseEffect() {
+        return null;
     }
 
     /**

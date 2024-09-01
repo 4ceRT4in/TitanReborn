@@ -88,6 +88,5 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
             WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, baseEffect, 1);
             EffectHelper.applyEffectToStack(stack, innateEffectData);
         }
-
     }
 }
