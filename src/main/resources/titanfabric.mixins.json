@@ -34,6 +34,7 @@
     "client.AbstractClientPlayerEntityMixin",
     "client.ArrowEntityRendererMixin",
     "client.BipedEntityModelMixin",
+    "client.ClientPlayerEntityMixin",
     "client.GameOptionsMixin",
     "client.HeldItemRendererMixin",
     "client.InGameOverlayRendererMixin",

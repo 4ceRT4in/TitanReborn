@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.util.items;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,10 +9,12 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.util.TitanFabricTags;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
+import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
 
 import java.util.function.Predicate;
 
@@ -63,6 +66,11 @@ public final class MultiBowHelper {
     public static void setArrowsLeftNbt(ItemStack bowStack, int arrows) {
         bowStack.getOrCreateNbt().putInt(ARROWS_LEFT_NBT_KEY, arrows);
         if (arrows < 1) bowStack.removeSubNbt(ARROWS_LEFT_NBT_KEY);
+    }
+
+    public static boolean hasArrowsLeft(ItemStack bowStack) {
+        NbtCompound nbt = bowStack.getNbt();
+        return nbt != null && nbt.contains(ARROWS_LEFT_NBT_KEY);
     }
 
     /**

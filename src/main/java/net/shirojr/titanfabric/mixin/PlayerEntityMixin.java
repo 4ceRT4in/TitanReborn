@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
@@ -33,6 +34,7 @@ import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
+import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
@@ -50,9 +52,11 @@ import java.util.function.Predicate;
 
 @Debug(export = true)
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSelectionHandler {
+public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSelectionHandler, ArrowShootingHandler {
     @Unique
     private static final TrackedData<Integer> SELECTED_ARROW = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
+    @Unique
+    private static final TrackedData<Boolean> SHOOTING_ARROWS = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BOOLEAN);
 
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -78,6 +82,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void titanfabric$appendSelectedArrowDataTracker(CallbackInfo ci) {
         this.dataTracker.startTracking(SELECTED_ARROW, -1);
+        this.dataTracker.startTracking(SHOOTING_ARROWS, false);
+    }
+
+    @Inject(method = "readCustomDataFromNbt", at = @At(value = "TAIL"))
+    private void titanfabric$readNbt(NbtCompound nbt, CallbackInfo ci) {
+        titanfabric$shootsArrows(nbt.getBoolean("shoots_arrows"));
+    }
+
+    @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
+    private void titanfabric$writeNbt(NbtCompound nbt, CallbackInfo ci) {
+        nbt.putBoolean("shoots_arrows", titanfabric$isShootingArrows());
     }
 
     @Override
@@ -99,6 +114,16 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         this.dataTracker.set(SELECTED_ARROW, newArrowStackIndex);
     }
 
+    @Override
+    public boolean titanfabric$isShootingArrows() {
+        return this.dataTracker.get(SHOOTING_ARROWS);
+    }
+
+    @Override
+    public void titanfabric$shootsArrows(boolean shootsArrows) {
+        this.dataTracker.set(SHOOTING_ARROWS, shootsArrows);
+    }
+
     @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (!(stack.getItem() instanceof SelectableArrows bowItem)) return;
@@ -109,7 +134,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
                 cir.setReturnValue(player.getInventory().getStack(itemStackIndex)), () -> {
             List<ItemStack> possibleArrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(player.getInventory(), bowItem);
             ItemStack backupStack = ItemStack.EMPTY;
-            if (possibleArrowStacks.size() > 0) {
+            if (!possibleArrowStacks.isEmpty()) {
                 backupStack = possibleArrowStacks.get(0);
                 arrowSelection.titanfabric$setSelectedArrowIndex(backupStack);
             } else {
