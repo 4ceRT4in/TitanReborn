@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:essence_effect",
+  "type": "titanfabric:essence_effect",
   "base": {
     "item": "minecraft:blaze_powder",
     "slots": [4]

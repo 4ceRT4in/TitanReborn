@@ -22,6 +22,9 @@
     ],
     "client": [
       "net.shirojr.titanfabric.TitanFabricClient"
+    ],
+    "emi": [
+      "net.shirojr.titanfabric.emi.TitanRebornEmiPlugin"
     ]
   },
   "mixins": [

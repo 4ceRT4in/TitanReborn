@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:weapon_effect",
+  "type": "titanfabric:weapon_effect",
   "base": {
     "item": "titanfabric:ember_sword"
   },

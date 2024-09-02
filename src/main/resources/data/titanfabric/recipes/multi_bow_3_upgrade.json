@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:multi_bow_upgrade",
+  "type": "titanfabric:multi_bow_upgrade",
   "base": {
     "item": "titanfabric:multi_bow_2"
   },

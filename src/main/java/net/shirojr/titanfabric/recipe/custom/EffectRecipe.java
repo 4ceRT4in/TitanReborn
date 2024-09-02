@@ -22,11 +22,11 @@ import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 import java.util.stream.IntStream;
 
 public class EffectRecipe extends SpecialCraftingRecipe {
-    private final IngredientModule base;
-    private final IngredientModule effectModifier;
-    private final OutputModule output;
-    private final SlotArrangementType slotArrangement;
-    private WeaponEffectData weaponEffectData;
+    public final IngredientModule base;
+    public final IngredientModule effectModifier;
+    public final OutputModule output;
+    public final SlotArrangementType slotArrangement;
+    public WeaponEffectData weaponEffectData;
 
     public EffectRecipe(Identifier id, IngredientModule base, IngredientModule effectModifier, OutputModule output,
                         SlotArrangementType slotArrangementType) {
