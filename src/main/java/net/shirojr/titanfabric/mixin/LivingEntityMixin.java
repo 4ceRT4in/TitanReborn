@@ -1,13 +1,18 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
@@ -125,8 +130,36 @@ public abstract class LivingEntityMixin {
         cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
     }
 
-    @ModifyVariable(method = "applyEnchantmentsToDamage", at = @At("STORE"), ordinal = 2)
-    private float adjustResistance(float value) {
-        return value * 0.5f;
+    @Inject(method = "applyEnchantmentsToDamage", at = @At("HEAD"), cancellable = true)
+    protected void applyEnchantmentsToDamage(DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
+
+        if (source.isUnblockable()) {
+        } else {
+            if (((LivingEntity) (Object) this).hasStatusEffect(StatusEffects.RESISTANCE) && source != DamageSource.OUT_OF_WORLD) {
+                float i = (((LivingEntity) (Object) this).getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 2.5F;//5
+                float j = 25 - i; //20 | 10 | 30 || 22.5
+                float f = amount * 22.5F; //2.11 * 20 = 42,2 | 2.11 * 10 = 21.1 | 2.11 * 30 = 63,3 | 2.11 * 22.5 =
+                float g = amount; //2.11
+                amount = Math.max(f / 25.0F, 0.0F); //1,68 | 0,844
+                float h = (g - amount); //2.11 - 1,68 =
+
+                if (h > 0.0F && h < 3.4028235E37F) {
+                    if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity) {
+                        (((ServerPlayerEntity) (Object) this)).increaseStat(Stats.DAMAGE_RESISTED, Math.round(h * 10.0F));
+                    } else if (source.getAttacker() instanceof ServerPlayerEntity) {
+                        ((ServerPlayerEntity)source.getAttacker()).increaseStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(h * 10.0F));
+                    }
+                }
+            }
+            if (amount <= 0.0F) {
+                cir.setReturnValue(0.0F);
+            } else {
+                int i = EnchantmentHelper.getProtectionAmount(((LivingEntity) (Object) this).getArmorItems(), source);
+                if (i > 0) {
+                    amount = DamageUtil.getInflictedDamage(amount, (float)i);
+                }
+                cir.setReturnValue(amount);
+            }
+        }
     }
 }

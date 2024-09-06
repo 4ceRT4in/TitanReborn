@@ -26,7 +26,8 @@
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin",
-    "SwordItemMixin"
+    "SwordItemMixin",
+    "BackgroundRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
