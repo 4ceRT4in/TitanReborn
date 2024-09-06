@@ -208,5 +208,10 @@
   "screen.titanfabric.extended_inventory.title": "Save Inventory",
 
   "actionbar.titanfabric.arrow_selection": "Projectile: ",
-  "actionbar.titanfabric.not_compatible": "§6[Warning]§r Projectile is not compatible"
+  "actionbar.titanfabric.not_compatible": "§6[Warning]§r Projectile is not compatible",
+
+  "tag.item.titanfabric.default_selectable_arrows": "Selectable Bow Arrows",
+  "tag.item.titanfabric.default_selectable_crossbow_arrows": "Selectable Crossbow Arrows",
+  "tag.item.titanfabric.improved_diamond_furnace_smelting_items": "Double Output Items in High Heat Furnaces",
+  "tag.item.titanfabric.high_heat_smelting_only_items": "Only smeltable in High Heat Furnaces"
 }

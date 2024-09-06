@@ -7,11 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -92,13 +92,13 @@ public class EffectRecipe extends SpecialCraftingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return switch (this.slotArrangement) {
-            case ARROW -> TitanFabricRecipes.ARROW_EFFECT_RECIPE_SERIALIZER;
-            case ESSENCE -> TitanFabricRecipes.ESSENCE_EFFECT_RECIPE_SERIALIZER;
-        };
+        return new EffectRecipe.Serializer(this.slotArrangement);
     }
 
     public static class Serializer implements RecipeSerializer<EffectRecipe> {
+        public static final EffectRecipe.Serializer ARROW_EFFECT_INSTANCE = new EffectRecipe.Serializer(SlotArrangementType.ARROW);
+        public static final EffectRecipe.Serializer ESSENCE_EFFECT_INSTANCE = new EffectRecipe.Serializer(SlotArrangementType.ESSENCE);
+
         private final SlotArrangementType slotArrangementType;
 
         public Serializer(SlotArrangementType slotArrangementType) {
@@ -142,6 +142,25 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         }
     }
 
+    public static class Type implements RecipeType<EffectRecipe> {
+        public static final EffectRecipe.Type ARROW_EFFECT_INSTANCE = new EffectRecipe.Type(SlotArrangementType.ARROW);
+        public static final EffectRecipe.Type ESSENCE_EFFECT_INSTANCE = new EffectRecipe.Type(SlotArrangementType.ESSENCE);
+        public static final String ID = "effect_recipe";
+
+        private final SlotArrangementType slotArrangementType;
+
+        private Type(SlotArrangementType slotArrangementType) {
+            this.slotArrangementType = slotArrangementType;
+        }
+    }
+
+    /**
+     * IngredientModules specify one specific Ingredient and all slots, in which specifically such an
+     * Ingredient needs to be present to get a successful recipe output.
+     *
+     * @param ingredient item, item tag, ...
+     * @param slots      index of all necessary slots
+     */
     public record IngredientModule(Ingredient ingredient, int[] slots) {
         public static IngredientModule readFromPacket(PacketByteBuf buf) {
             Ingredient packetIngredient = Ingredient.fromPacket(buf);

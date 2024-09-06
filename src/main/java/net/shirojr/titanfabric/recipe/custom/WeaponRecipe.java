@@ -5,15 +5,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -130,7 +126,7 @@ public class WeaponRecipe extends SmithingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TitanFabricRecipes.WEAPON_EFFECT_RECIPE_SERIALIZER;
+        return Serializer.INSTANCE;
     }
 
     @Override
@@ -139,6 +135,8 @@ public class WeaponRecipe extends SmithingRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<WeaponRecipe> {
+        public static final WeaponRecipe.Serializer INSTANCE = new WeaponRecipe.Serializer();
+
         @Override
         public WeaponRecipe read(Identifier id, JsonObject json) {
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
@@ -161,5 +159,13 @@ public class WeaponRecipe extends SmithingRecipe {
             recipe.addition.write(buf);
             buf.writeItemStack(recipe.result);
         }
+    }
+
+    public static class Type implements RecipeType<WeaponRecipe> {
+        private Type() {
+        }
+
+        public static final WeaponRecipe.Type INSTANCE = new WeaponRecipe.Type();
+        public static final String ID = "weapon_recipe";
     }
 }

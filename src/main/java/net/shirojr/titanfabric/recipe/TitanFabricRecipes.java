@@ -9,29 +9,36 @@ import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.recipe.custom.MultiBowRecipe;
 import net.shirojr.titanfabric.recipe.custom.WeaponRecipe;
 import net.shirojr.titanfabric.util.LoggerUtil;
-import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
+@SuppressWarnings("unused")
 public class TitanFabricRecipes {
-    public static final RecipeType<EffectRecipe> WEAPON_EFFECT_RECIPE_TYPE =
-            RecipeType.register(new Identifier(TitanFabric.MODID, "weapon_effect").toString());
 
-    public static final RecipeSerializer<EffectRecipe> ESSENCE_EFFECT_RECIPE_SERIALIZER =
-            RecipeSerializer.register(new Identifier(TitanFabric.MODID, "essence_effect").toString(),
-                    new EffectRecipe.Serializer(SlotArrangementType.ESSENCE));
+    public static final RecipeData MULTI_BOW_UPGRADE_SMITHING = new RecipeData("multi_bow_upgrade",
+            MultiBowRecipe.Serializer.INSTANCE, MultiBowRecipe.Type.INSTANCE);
 
-    public static final RecipeSerializer<EffectRecipe> ARROW_EFFECT_RECIPE_SERIALIZER =
-            RecipeSerializer.register(new Identifier(TitanFabric.MODID, "arrow_effect").toString(),
-                    new EffectRecipe.Serializer(SlotArrangementType.ARROW));
+    public static final RecipeData WEAPON_EFFECT_SMITHING = new RecipeData("weapon_effect",
+            WeaponRecipe.Serializer.INSTANCE, WeaponRecipe.Type.INSTANCE);
 
-    public static final RecipeSerializer<WeaponRecipe> WEAPON_EFFECT_RECIPE_SERIALIZER =
-            RecipeSerializer.register(new Identifier(TitanFabric.MODID, "weapon_effect").toString(),
-                    new WeaponRecipe.Serializer());
+    public static final RecipeData ESSENCE_EFFECT_CRAFTING = new RecipeData("essence_effect",
+            EffectRecipe.Serializer.ESSENCE_EFFECT_INSTANCE, EffectRecipe.Type.ESSENCE_EFFECT_INSTANCE);
 
-    public static final RecipeSerializer<MultiBowRecipe> MULTI_BOW_RECIPE_SERIALIZER =
-            RecipeSerializer.register(new Identifier(TitanFabric.MODID, "multi_bow_upgrade").toString(),
-                    new MultiBowRecipe.Serializer());
+    public static final RecipeData ARROW_EFFECT_CRAFTING = new RecipeData("arrow_effect",
+            EffectRecipe.Serializer.ARROW_EFFECT_INSTANCE, EffectRecipe.Type.ARROW_EFFECT_INSTANCE);
+
+
+    public record RecipeData(Identifier identifier, RecipeSerializer<?> serializer, RecipeType<?> type) {
+        public RecipeData(String name, RecipeSerializer<?> serializer, RecipeType<?> type) {
+            this(new Identifier(TitanFabric.MODID, name), serializer, type);
+            register();
+        }
+
+        public void register() {
+            Registry.register(Registry.RECIPE_SERIALIZER, this.identifier, this.serializer);
+            Registry.register(Registry.RECIPE_TYPE, this.identifier, this.type);
+        }
+    }
 
     public static void registerModRecipes() {
-        LoggerUtil.devLogger("Registering " + TitanFabric.MODID + " Mod recipes");
+        LoggerUtil.devLogger("Registering %s Mod recipes".formatted(TitanFabric.MODID));
     }
 }

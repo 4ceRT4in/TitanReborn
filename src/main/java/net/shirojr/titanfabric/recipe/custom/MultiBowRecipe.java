@@ -4,30 +4,14 @@ import com.google.gson.JsonObject;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
-import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
-import net.shirojr.titanfabric.util.LoggerUtil;
-import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffect;
-import net.shirojr.titanfabric.util.effects.WeaponEffectData;
-import net.shirojr.titanfabric.util.effects.WeaponEffectType;
-import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
-import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
-
-import java.util.Optional;
-
-import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
 public class MultiBowRecipe extends SmithingRecipe {
     private final Ingredient base;
@@ -87,7 +71,7 @@ public class MultiBowRecipe extends SmithingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TitanFabricRecipes.MULTI_BOW_RECIPE_SERIALIZER;
+        return Serializer.INSTANCE;
     }
 
     @Override
@@ -96,6 +80,8 @@ public class MultiBowRecipe extends SmithingRecipe {
     }
 
     public static class Serializer implements RecipeSerializer<MultiBowRecipe> {
+        public static final Serializer INSTANCE = new Serializer();
+
         @Override
         public MultiBowRecipe read(Identifier id, JsonObject json) {
             Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
@@ -118,5 +104,13 @@ public class MultiBowRecipe extends SmithingRecipe {
             recipe.addition.write(buf);
             buf.writeItemStack(recipe.result);
         }
+    }
+
+    public static class Type implements RecipeType<MultiBowRecipe> {
+        private Type() {
+        }
+
+        public static final Type INSTANCE = new Type();
+        public static final String ID = "multi_bow_upgrade";
     }
 }
