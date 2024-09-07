@@ -51,13 +51,13 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         RecipeManager recipeManager = registry.getRecipeManager();
         TitanFabric.LOGGER.info("Registering TitanReborn custom EMI recipes");
 
-        List<EffectRecipe> effectRecipes = recipeManager.listAllOfType(TitanFabricRecipes.WEAPON_EFFECT_RECIPE_TYPE);
-        TitanFabric.LOGGER.info("Found " + effectRecipes.size() + " Effect Recipes.");
+        //List<EffectRecipe> effectRecipes = recipeManager.listAllOfType(TitanFabricRecipes.WEAPON_EFFECT_RECIPE_TYPE);
+        //TitanFabric.LOGGER.info("Found " + effectRecipes.size() + " Effect Recipes.");
         //0 found?????
-        for (EffectRecipe recipe : effectRecipes) {
+        /*for (EffectRecipe recipe : effectRecipes) {
             registry.addRecipe(new EffectEmiRecipe(recipe, EFFECT_CATEGORY));
             TitanFabric.LOGGER.info("Registered EMI recipe: " + recipe.getId());
-        }
+        }*/
 
         TitanFabric.LOGGER.info("Done registering TitanReborn custom EMI recipes");
     }
