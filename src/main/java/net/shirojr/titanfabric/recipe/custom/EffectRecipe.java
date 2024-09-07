@@ -100,7 +100,10 @@ public class EffectRecipe extends SpecialCraftingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return new EffectRecipe.Serializer(this.slotArrangement);
+        return switch (this.slotArrangement) {
+            case ARROW -> Serializer.ARROW_EFFECT_INSTANCE;
+            case ESSENCE -> EffectRecipe.Serializer.ESSENCE_EFFECT_INSTANCE;
+        };
     }
 
     public static class Serializer implements RecipeSerializer<EffectRecipe> {
@@ -160,6 +163,8 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         private Type(SlotArrangementType slotArrangementType) {
             this.slotArrangementType = slotArrangementType;
         }
+
+
     }
 
     /**
