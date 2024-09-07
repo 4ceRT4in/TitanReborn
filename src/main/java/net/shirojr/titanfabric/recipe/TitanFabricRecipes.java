@@ -30,19 +30,17 @@ public class TitanFabricRecipes {
 
         public RecipeData(String name, RecipeSerializer<?> serializer, RecipeType<?> type) {
             this(new Identifier(TitanFabric.MODID, name), serializer, type);
+            register();
         }
 
         public void register() {
             Registry.register(Registry.RECIPE_SERIALIZER, this.identifier, this.serializer);
             Registry.register(Registry.RECIPE_TYPE, this.identifier, this.type);
+
         }
     }
 
     public static void registerModRecipes() {
         LoggerUtil.devLogger("Registering %s Mod recipes".formatted(TitanFabric.MODID));
-        TitanFabricRecipes.ESSENCE_EFFECT_CRAFTING.register();
-        TitanFabricRecipes.ARROW_EFFECT_CRAFTING.register();
-        TitanFabricRecipes.MULTI_BOW_UPGRADE_SMITHING.register();
-        TitanFabricRecipes.WEAPON_EFFECT_SMITHING.register();
     }
 }

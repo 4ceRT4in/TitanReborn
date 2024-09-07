@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.mixin;
+package net.shirojr.titanfabric.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.network.ClientPlayerEntity;

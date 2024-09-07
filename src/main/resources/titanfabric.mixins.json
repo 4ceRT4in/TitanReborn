@@ -26,8 +26,7 @@
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin",
-    "SwordItemMixin",
-    "BackgroundRendererMixin"
+    "SwordItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -42,6 +41,7 @@
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",
     "client.PlayerEntityRendererMixin",
-    "client.PlayerHeldItemFeatureRendererMixin"
+    "client.PlayerHeldItemFeatureRendererMixin",
+    "client.BackgroundRendererMixin"
   ]
 }
