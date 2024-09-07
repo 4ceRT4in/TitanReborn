@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.PotionUtil;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
@@ -121,6 +122,45 @@ public final class EffectHelper {
         LoggerUtil.devLogger("Couldn't find matching potion effect to map to WeaponEffect");
         return null;
     }
+
+    public static ItemStack getPotionFromWeaponEffect(WeaponEffect weaponEffect) {
+        // Check if the weaponEffect has a valid ingredient effect
+        if (weaponEffect.getIngredientEffect() == null) {
+            LoggerUtil.devLogger("WeaponEffect has no associated IngredientEffect", true, null);
+            return ItemStack.EMPTY;
+        }
+
+        // Create a potion item stack
+        ItemStack potionStack = new ItemStack(Items.POTION);
+
+        // Set a base potion type using a switch-like structure
+        if (weaponEffect.getIngredientEffect() == StatusEffects.NIGHT_VISION || weaponEffect.getIngredientEffect() == StatusEffects.BLINDNESS) {
+            // BLIND effect
+            PotionUtil.setPotion(potionStack, Potions.NIGHT_VISION); // Assuming NIGHT_VISION for BLIND effect
+
+        } else if (weaponEffect.getIngredientEffect() == StatusEffects.FIRE_RESISTANCE) {
+            // FIRE effect
+            PotionUtil.setPotion(potionStack, Potions.FIRE_RESISTANCE);
+        } else if (weaponEffect.getIngredientEffect() == StatusEffects.POISON) {
+            // POISON effect
+            PotionUtil.setPotion(potionStack, Potions.POISON);
+        } else if (weaponEffect.getIngredientEffect() == StatusEffects.WEAKNESS) {
+            // WEAK effect
+            PotionUtil.setPotion(potionStack, Potions.WEAKNESS);
+        } else if (weaponEffect.getIngredientEffect() == StatusEffects.INSTANT_DAMAGE || weaponEffect.getIngredientEffect() == StatusEffects.WITHER) {
+            // WITHER effect
+            PotionUtil.setPotion(potionStack, Potions.HARMING); // Assuming INSTANT_DAMAGE for WITHER
+        } else {
+            LoggerUtil.devLogger("No matching StatusEffect for WeaponEffect: " + weaponEffect.name());
+            return ItemStack.EMPTY;
+        }
+
+        // Log if needed
+        LoggerUtil.devLogger("Potion created for WeaponEffect: " + weaponEffect.name());
+
+        return potionStack;
+    }
+
 
     /**
      * @return True, if the ItemStack contains any {@linkplain WeaponEffect TitanFabric WeaponEffect}
@@ -257,5 +297,11 @@ public final class EffectHelper {
     public static boolean haveSameEffects(ItemStack stack1, ItemStack stack2) {
         if (!stackHasWeaponEffect(stack1) || !stackHasWeaponEffect(stack2)) return false;
         return getWeaponEffectDataCompound(stack1).equals(getWeaponEffectDataCompound(stack2));
+    }
+
+    public static List<WeaponEffect> getAllPossibleEffects(Item baseItem) {
+        if (!(baseItem instanceof WeaponEffectCrafting baseItemEffects)) return null;
+        List<WeaponEffect> possibleEffects = baseItemEffects.supportedEffects();
+        return possibleEffects;
     }
 }

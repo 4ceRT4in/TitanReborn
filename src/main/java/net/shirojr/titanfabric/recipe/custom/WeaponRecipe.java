@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.recipe.custom;
 
 import com.google.gson.JsonObject;
+import dev.emi.emi.api.stack.EmiIngredient;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -10,6 +11,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -17,15 +19,17 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
 public class WeaponRecipe extends SmithingRecipe {
-    private final Ingredient base;
-    private final Ingredient addition;
+    public final Ingredient base;
+    public final Ingredient addition;
     private WeaponEffectData weaponEffectData;
-    private ItemStack result;
+    public ItemStack result;
 
     public WeaponRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
         super(id, base, addition, result);
@@ -124,6 +128,53 @@ public class WeaponRecipe extends SmithingRecipe {
         return EffectHelper.applyEffectToStack(this.result, newData);
     }
 
+    public ItemStack getFakedOutput(ItemStack additionStack) {
+        return getFakedOutput(Arrays.stream(this.base.getMatchingStacks()).findAny().get(), additionStack);
+    }
+
+    public ItemStack getFakedOutput(ItemStack baseStack, ItemStack additionStack) {
+        if(baseStack.getItem() instanceof TitanFabricSwordItem) {
+            TitanFabricSwordItem item = (TitanFabricSwordItem) baseStack.getItem();
+            WeaponEffect baseEffect = item.getBaseEffect();
+            if(baseEffect != null) {
+                WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, baseEffect, 1);
+                EffectHelper.applyEffectToStack(baseStack, innateEffectData);
+            }
+        }
+        ItemStack outputStack = this.result.copy();
+        NbtCompound baseCompound = baseStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+        NbtCompound additionCompound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+
+        Optional<WeaponEffectData> baseInnateEffectData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.INNATE_EFFECT);
+        Optional<WeaponEffectData> baseAdditionEffectData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
+        Optional<WeaponEffectData> modifierInnateEffectData = WeaponEffectData.fromNbt(additionCompound, WeaponEffectType.INNATE_EFFECT);
+
+        if (modifierInnateEffectData.isPresent()) {
+            this.weaponEffectData = modifierInnateEffectData.get();
+            int strength = 1;
+
+            if (baseAdditionEffectData.isPresent()) {
+                strength = baseAdditionEffectData.get().strength() + modifierInnateEffectData.get().strength();
+                strength = Math.min(2, Math.max(1, strength));
+            }
+            if (baseInnateEffectData.isPresent()) {
+                NbtCompound finalBaseCompound = baseInnateEffectData.get().toNbt();
+                outputStack.getOrCreateNbt().put(EFFECTS_COMPOUND_NBT_KEY, finalBaseCompound);
+            }
+
+            NbtCompound originalCompound = baseStack.getOrCreateNbt().copy();
+            outputStack.setNbt(originalCompound);
+            WeaponEffectData additionData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, modifierInnateEffectData.get().weaponEffect(), strength);
+            EffectHelper.applyEffectToStack(outputStack, additionData);
+
+            this.result = outputStack.copy();
+            return outputStack;
+        }
+
+        LoggerUtil.devLogger("Couldn't find WeaponEffect of modifier stack", true, null);
+        return null;
+    }
+
     @Override
     public RecipeSerializer<?> getSerializer() {
         return Serializer.INSTANCE;
@@ -133,6 +184,8 @@ public class WeaponRecipe extends SmithingRecipe {
     public ItemStack createIcon() {
         return new ItemStack(TitanFabricItems.LEGEND_INGOT);
     }
+
+
 
     public static class Serializer implements RecipeSerializer<WeaponRecipe> {
         public static final WeaponRecipe.Serializer INSTANCE = new WeaponRecipe.Serializer();

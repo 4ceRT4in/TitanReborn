@@ -78,6 +78,14 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         return true;
     }
 
+    public ItemStack getFakedOutput(WeaponEffect weaponEffect) {
+        ItemStack output = new ItemStack(this.slotArrangement.getOutputItem());
+        output.setCount(this.output.count());
+        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
+        this.weaponEffectData = effectData;
+        return EffectHelper.applyEffectToStack(output, this.weaponEffectData);
+    }
+
     @Override
     public ItemStack getOutput() {
         ItemStack output = new ItemStack(this.slotArrangement.getOutputItem());
