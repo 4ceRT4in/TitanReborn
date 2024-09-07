@@ -138,7 +138,7 @@ public abstract class LivingEntityMixin {
             if (((LivingEntity) (Object) this).hasStatusEffect(StatusEffects.RESISTANCE) && source != DamageSource.OUT_OF_WORLD) {
                 float i = (((LivingEntity) (Object) this).getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 2.5F;//5
                 float j = 25 - i; //20 | 10 | 30 || 22.5
-                float f = amount * 22.5F; //2.11 * 20 = 42,2 | 2.11 * 10 = 21.1 | 2.11 * 30 = 63,3 | 2.11 * 22.5 =
+                float f = amount * j; //2.11 * 20 = 42,2 | 2.11 * 10 = 21.1 | 2.11 * 30 = 63,3 | 2.11 * 22.5 =
                 float g = amount; //2.11
                 amount = Math.max(f / 25.0F, 0.0F); //1,68 | 0,844
                 float h = (g - amount); //2.11 - 1,68 =
