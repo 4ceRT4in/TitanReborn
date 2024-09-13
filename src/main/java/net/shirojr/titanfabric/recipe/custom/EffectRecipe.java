@@ -61,7 +61,7 @@ public class EffectRecipe extends SpecialCraftingRecipe {
             LoggerUtil.devLogger("Couldn't find WeaponEffect from Inventory", true, null);
             return null;
         }
-        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
+        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 1);
         this.weaponEffectData = effectData;
         ItemStack stack = new ItemStack(this.slotArrangement.getOutputItem());
         stack.setCount(this.output.count());
@@ -81,8 +81,7 @@ public class EffectRecipe extends SpecialCraftingRecipe {
     public ItemStack getFakedOutput(WeaponEffect weaponEffect) {
         ItemStack output = new ItemStack(this.slotArrangement.getOutputItem());
         output.setCount(this.output.count());
-        WeaponEffectData effectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 0);
-        this.weaponEffectData = effectData;
+        this.weaponEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 1);
         return EffectHelper.applyEffectToStack(output, this.weaponEffectData);
     }
 

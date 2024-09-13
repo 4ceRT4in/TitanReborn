@@ -11,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Supplier;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
@@ -300,8 +302,7 @@ public final class EffectHelper {
     }
 
     public static List<WeaponEffect> getAllPossibleEffects(Item baseItem) {
-        if (!(baseItem instanceof WeaponEffectCrafting baseItemEffects)) return null;
-        List<WeaponEffect> possibleEffects = baseItemEffects.supportedEffects();
-        return possibleEffects;
+        if (!(baseItem instanceof WeaponEffectCrafting baseItemEffects)) return List.of();
+        return baseItemEffects.supportedEffects();
     }
 }
