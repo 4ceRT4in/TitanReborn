@@ -253,22 +253,24 @@ public final class EffectHelper {
             String currentEffect = compound.getCompound(nbtKey).getString(WeaponEffectData.EFFECT_NBT_KEY);
             int strength = EffectHelper.getEffectStrength(itemStack, type);
             WeaponEffectData data = new WeaponEffectData(type, WeaponEffect.getEffect(currentEffect), strength);
-            applyWeaponEffectOnTarget(data, world, target, itemStack.getItem() instanceof ArrowItem);
+            applyWeaponEffectOnTarget(data, world, target, itemStack.getItem() instanceof ArrowItem, itemStack.getItem() instanceof ArrowItem);
         }
     }
 
-    private static void applyWeaponEffectOnTarget(WeaponEffectData data, World world, LivingEntity target, boolean ignoreChance) {
+    private static void applyWeaponEffectOnTarget(WeaponEffectData data, World world, LivingEntity target, boolean ignoreChance, boolean isFromArrow) {
         if (world.isClient() || data == null) return;
         WeaponEffect effect = data.weaponEffect();
         int effectStrength = data.strength();
         if (!ignoreChance) {
             if (world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
         }
+        //maximum effect strength of swords is 0, and of arrows is 1
+        final int potionEffectStrength = Math.max(effectStrength - 1, isFromArrow ? 1 : 0);
         switch (effect) {
             case BLIND -> {
                 if (target.hasStatusEffect(StatusEffects.BLINDNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), 100, effectStrength - 1)
+                        effect.getOutputEffect(), 100, potionEffectStrength)
                 );
             }
             case FIRE -> {
@@ -278,19 +280,19 @@ public final class EffectHelper {
             case POISON -> {
                 if (target.hasStatusEffect(StatusEffects.POISON)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), 100, effectStrength - 1)
+                        effect.getOutputEffect(), 100, potionEffectStrength)
                 );
             }
             case WEAK -> {
                 if (target.hasStatusEffect(StatusEffects.WEAKNESS)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), 100, effectStrength - 1)
+                        effect.getOutputEffect(), 100, potionEffectStrength)
                 );
             }
             case WITHER -> {
                 if (target.hasStatusEffect(StatusEffects.WITHER)) return;
                 target.addStatusEffect(new StatusEffectInstance(
-                        effect.getOutputEffect(), 100, effectStrength - 1)
+                        effect.getOutputEffect(), 100, potionEffectStrength)
                 );
             }
         }

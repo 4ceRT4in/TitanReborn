@@ -78,11 +78,15 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         }
         boolean isInHand = player.getStackInHand(Hand.MAIN_HAND).getItem() instanceof MultiBowItem ||
                 player.getStackInHand(Hand.OFF_HAND).getItem() instanceof MultiBowItem;
-        if (!isInHand) return;
+        if (!isInHand){
+            ((ArrowShootingHandler)player).titanfabric$shootsArrows(false);
+            return;
+        }
         int projectileTick = stack.getOrCreateNbt().getInt(MultiBowHelper.PROJECTILE_TICK_NBT_KEY);
         if (projectileTick < 1) return;
         stack.getOrCreateNbt().putInt(MultiBowHelper.PROJECTILE_TICK_NBT_KEY, projectileTick - 1);
         if (!validTick(projectileTick + 1)) return;
+        ((ArrowShootingHandler)player).titanfabric$shootsArrows(true);
         handleArrowShots(player, MultiBowHelper.searchValidArrowStack(player, this), this.pullProgress);
         handleAfterShotValues(stack, player);
     }

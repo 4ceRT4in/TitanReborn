@@ -48,7 +48,7 @@ public class TitanFabricParachuteItem extends Item {
                     if (playerEntity.isOnGround() ||
                             playerEntity.getVelocity().getY() > 0 ||
                             playerEntity.isFallFlying() ||
-                            playerEntity.isTouchingWater()) {
+                            playerEntity.isTouchingWater() || playerEntity.isInLava()) {
                         NbtCompound nbtCompound = stack.getOrCreateNbt();
                         nbtCompound.putBoolean("Activated", false);
                         stack.setNbt(nbtCompound);

@@ -76,11 +76,11 @@ public class TitanFabricItems {
     public static final DiamondSwordItem DIAMOND_SWORD = registerItem("diamond_sword",
             new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 6, -2.4f, SwordType.DEFAULT, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final TitanFabricSwordItem DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
-            new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
+            new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN)));
     public static final SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f,
             new FabricItemSettings().maxDamage(2031).group(ItemGroup.COMBAT).fireproof());  // registered in ItemsMixin class
     public static final TitanFabricSwordItem NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
-            new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN).fireproof()));
+            new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new FabricItemSettings().group(TitanFabricItemGroups.TITAN).fireproof()));
 
     public static final TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(-1)));
     public static final LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
