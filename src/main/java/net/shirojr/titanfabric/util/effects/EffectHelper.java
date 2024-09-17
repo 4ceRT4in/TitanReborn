@@ -265,7 +265,7 @@ public final class EffectHelper {
             if (world.getRandom().nextInt(100) >= (25 * effectStrength)) return;
         }
         //maximum effect strength of swords is 0, and of arrows is 1
-        final int potionEffectStrength = Math.max(effectStrength - 1, isFromArrow ? 1 : 0);
+        final int potionEffectStrength = isFromArrow ? 1 : 0;
         switch (effect) {
             case BLIND -> {
                 if (target.hasStatusEffect(StatusEffects.BLINDNESS)) return;
