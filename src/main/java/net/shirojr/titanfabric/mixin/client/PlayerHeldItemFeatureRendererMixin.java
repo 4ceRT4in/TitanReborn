@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 
+import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +24,9 @@ public class PlayerHeldItemFeatureRendererMixin {
     private void titanfabric$avoidParachuteItemRenderer(LivingEntity entity, ItemStack stack, ModelTransformation.Mode transformationMode, Arm arm, MatrixStack matrices,
             VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (stack.isOf(TitanFabricItems.PARACHUTE)) {
-            ci.cancel();
+            if(TitanFabricParachuteItem.isParachuteActivated(entity)) {
+                ci.cancel();
+            }
         }
     }
 }
