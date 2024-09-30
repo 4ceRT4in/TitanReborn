@@ -130,7 +130,7 @@ public abstract class LivingEntityMixin {
         cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
     }
 
-    @Inject(method = "applyEnchantmentsToDamage", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "applyEnchantmentsToDamage", at = @At("HEAD"), cancellable = true)
     protected void applyEnchantmentsToDamage(DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
 
         if (source.isUnblockable()) {
@@ -161,5 +161,5 @@ public abstract class LivingEntityMixin {
                 cir.setReturnValue(amount);
             }
         }
-    }
+    }*/
 }
