@@ -26,7 +26,11 @@
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin",
-    "SwordItemMixin"
+    "SwordItemMixin",
+    "SplashPotionItemMixin",
+    "ThrownPotionEntityMixin",
+    "AreaEffectCloudEntityMixin",
+    "ParticleManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
