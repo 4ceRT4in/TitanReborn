@@ -1,7 +1,5 @@
 package net.shirojr.titanfabric.mixin;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -11,8 +9,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
@@ -133,8 +130,8 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
     private void isPushable(CallbackInfoReturnable<Boolean> cir) {
-        if(((LivingEntity) (Object) this) instanceof PlayerEntity) {
-                cir.setReturnValue(false);
+        if (((LivingEntity) (Object) this) instanceof PlayerEntity) {
+            cir.setReturnValue(false);
         }
     }
 
@@ -142,6 +139,34 @@ public abstract class LivingEntityMixin {
     private void pushAwayFrom(Entity entity, CallbackInfo ci) {
         if (entity instanceof PlayerEntity) {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "blockedByShield", at = @At("HEAD"), cancellable = true)
+    private void blockedByShield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        if (source.getAttacker() instanceof PlayerEntity attacker) {
+            if (((LivingEntity) (Object) this) instanceof PlayerEntity target) {
+                // If the target is blocking and holding a shield
+                boolean isCrit = attacker.fallDistance > 0.0F
+                        && !attacker.isOnGround()
+                        && !attacker.isClimbing()
+                        && !attacker.isTouchingWater()
+                        && !attacker.hasStatusEffect(StatusEffects.BLINDNESS)
+                        && !attacker.hasVehicle()
+                        && !attacker.isSprinting();
+                if (isCrit) {
+                    if (target.isBlocking()) {
+                        float f = 0.25F;
+                        if (target.getRandom().nextFloat() < f) {
+                            target.getItemCooldownManager().set(target.getActiveItem().getItem(), 100);
+                            target.clearActiveItem();
+                            target.world.sendEntityStatus(target, (byte) 30);
+                        }
+                    }
+                }
+
+            }
+
         }
     }
 
