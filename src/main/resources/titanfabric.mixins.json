@@ -28,7 +28,6 @@
     "StatusEffectsMixin",
     "SwordItemMixin",
     "SplashPotionItemMixin",
-    "ThrownPotionEntityMixin",
     "AreaEffectCloudEntityMixin",
     "ParticleManagerMixin"
   ],

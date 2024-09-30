@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -104,7 +105,7 @@ public abstract class LivingEntityMixin {
 
     @ModifyVariable(method = "travel", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/effect/StatusEffects;SLOW_FALLING:Lnet/minecraft/entity/effect/StatusEffect;", shift = At.Shift.BEFORE, by = 1), ordinal = 0)
     private double titanfabric$handleSafeLandingEffect(double original) {
-        LivingEntity entity = (LivingEntity) (Object) this;
+        LivingEntity entity = ((LivingEntity) (Object) this);
         if (entity.getVelocity().getY() < 0 && TitanFabricParachuteItem.isParachuteActivated(entity)) {
             original = 0.005D;
             entity.onLanding();
@@ -128,6 +129,20 @@ public abstract class LivingEntityMixin {
         if (!(stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem)) return;
         int defaultCooldown = cir.getReturnValue();
         cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
+    }
+
+    @Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
+    private void isPushable(CallbackInfoReturnable<Boolean> cir) {
+        if(((LivingEntity) (Object) this) instanceof PlayerEntity) {
+                cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "pushAwayFrom", at = @At("HEAD"), cancellable = true)
+    private void pushAwayFrom(Entity entity, CallbackInfo ci) {
+        if (entity instanceof PlayerEntity) {
+            ci.cancel();
+        }
     }
 
     /*@Inject(method = "applyEnchantmentsToDamage", at = @At("HEAD"), cancellable = true)

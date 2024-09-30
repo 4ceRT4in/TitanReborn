@@ -227,6 +227,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     }
 
 
+
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
     private void titanfabric$coolDownChanges(Entity target, CallbackInfo ci) {
         this.titanfabric$attackTarget = target;
