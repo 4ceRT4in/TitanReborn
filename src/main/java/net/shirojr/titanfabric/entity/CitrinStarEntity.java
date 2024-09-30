@@ -58,7 +58,8 @@ public class CitrinStarEntity extends ThrownItemEntity {
             StatusEffectInstance oldEffectInstance = livingEntity.getStatusEffect(statusEffect);
             StatusEffectInstance newEffectInstance = new StatusEffectInstance(getEffectOpposites().get(statusEffect), 200, oldEffectInstance.getAmplifier());
 
-            if (livingEntity.getStatusEffect(newEffectInstance.getEffectType()) instanceof StatusEffectInstanceAccessor accessor) {
+            StatusEffectInstanceAccessor accessor = (StatusEffectInstanceAccessor) newEffectInstance;
+            if(accessor != null) {
                 accessor.titanfabric$setPreviousStatusEffect(new StatusEffectInstance(oldEffectInstance));
             }
 

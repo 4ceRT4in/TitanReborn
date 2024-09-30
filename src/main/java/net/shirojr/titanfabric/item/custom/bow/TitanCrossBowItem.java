@@ -218,11 +218,11 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
             Vec3f vec3f = new Vec3f(vec3d2);
             vec3f.rotate(quaternion);
 
-            if (projectileEntity instanceof PotionEntity) {
-                projectileEntity.setVelocity(vec3f.getX(), vec3f.getY(), vec3f.getZ(), speed * 0.4f, divergence);
-            } else {
+            //if (projectileEntity instanceof PotionEntity) {
+            //    projectileEntity.setVelocity(vec3f.getX(), vec3f.getY(), vec3f.getZ(), speed * 0.4f, divergence);
+            //} else {
                 projectileEntity.setVelocity(vec3f.getX(), vec3f.getY(), vec3f.getZ(), speed, divergence);
-            }
+            //}
         }
         crossbow.damage(bl ? 3 : 1, shooter, e -> e.sendToolBreakStatus(hand));
         world.spawnEntity(projectileEntity);

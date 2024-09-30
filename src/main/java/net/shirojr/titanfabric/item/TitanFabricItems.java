@@ -89,7 +89,7 @@ public class TitanFabricItems {
     public static final MultiBowItem MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3, 30, 1500));
 
     public static final TitanFabricArrowItem ARROW = registerItem("effect_arrow",
-            new TitanFabricArrowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+            new TitanFabricArrowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(32)));
 
     public static final TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
             new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));

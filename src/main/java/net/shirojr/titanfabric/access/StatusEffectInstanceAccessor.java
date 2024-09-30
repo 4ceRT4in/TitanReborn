@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.access;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.entity.effect.StatusEffectInstance;
+import org.spongepowered.asm.mixin.Mixin;
 
 public interface StatusEffectInstanceAccessor {
 
