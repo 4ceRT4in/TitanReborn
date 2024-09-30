@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -14,10 +15,7 @@ import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
@@ -191,6 +189,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         }
     }
 
+    // Field to store the target entity
+    private Entity titanfabric$attackTarget;
+
     @ModifyConstant(method = "attack",
             constant = @Constant(floatValue = 1.5f),
             slice = @Slice(
@@ -206,11 +207,29 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         } else if (stack.getItem() instanceof SwordItem) {
             return 1.2f;
         }
+
+        if(this.titanfabric$attackTarget != null) {
+            if(this.titanfabric$attackTarget instanceof PlayerEntity) {
+                PlayerEntity target = (PlayerEntity) this.titanfabric$attackTarget;
+                // If the target is blocking and holding a shield
+                if (target.isBlocking()) {
+                    float f = 0.25F;
+                    if (this.random.nextFloat() < f) {
+                        this.getItemCooldownManager().set(Items.SHIELD, 100);
+                        this.clearActiveItem();
+                        this.world.sendEntityStatus(this, (byte)30);
+                    }
+                }
+            }
+        }
+
         return constant;
     }
 
+
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
     private void titanfabric$coolDownChanges(Entity target, CallbackInfo ci) {
+        this.titanfabric$attackTarget = target;
         PlayerEntity player = (PlayerEntity) (Object) this;
         ItemStack stack = player.getMainHandStack();
 
