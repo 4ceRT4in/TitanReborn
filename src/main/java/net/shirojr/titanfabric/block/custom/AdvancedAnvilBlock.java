@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.block.custom;
 
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.damage.DamageSource;
@@ -16,7 +17,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Formatting;
@@ -32,7 +32,7 @@ import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import org.jetbrains.annotations.Nullable;
 
 public class AdvancedAnvilBlock extends FallingBlock {
-    private static final Text TITLE = new TranslatableText("block.titanfabric.netherite_anvil");
+    private static final Text TITLE = Text.translatable("block.titanfabric.netherite_anvil");
     public static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
     public AdvancedAnvilBlock(Settings settings) {
@@ -43,7 +43,7 @@ public class AdvancedAnvilBlock extends FallingBlock {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, ctx.getPlayerFacing().rotateYClockwise());
+        return this.getDefaultState().with(FACING, ctx.getPlayerLookDirection().rotateYClockwise());
     }
 
     @Override
@@ -56,10 +56,6 @@ public class AdvancedAnvilBlock extends FallingBlock {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 
-    @Override
-    public DamageSource getDamageSource() {
-        return DamageSource.ANVIL;
-    }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {

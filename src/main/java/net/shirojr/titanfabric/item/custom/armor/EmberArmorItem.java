@@ -20,7 +20,7 @@ public class EmberArmorItem extends ArmorItem {
     }
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        tooltip.add(new TranslatableText("tooltip.titanfabric.netherArmor"));
+        tooltip.add(Text.translatable("tooltip.titanfabric.netherArmor"));
         super.appendTooltip(stack, world, tooltip, context);
     }
 }

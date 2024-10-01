@@ -11,9 +11,9 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 
 public class BackPackItemScreen extends HandledScreen<BackPackItemScreenHandler> {
-    private static final Identifier TEXTURE_SMALL = new Identifier(TitanFabric.MODID, "textures/gui/backpack_small.png");
-    private static final Identifier TEXTURE_MEDIUM = new Identifier(TitanFabric.MODID, "textures/gui/backpack_medium.png");
-    private static final Identifier TEXTURE_BIG = new Identifier(TitanFabric.MODID, "textures/gui/backpack_big.png");
+    private static final Identifier TEXTURE_SMALL = Identifier.of(TitanFabric.MODID, "textures/gui/backpack_small.png");
+    private static final Identifier TEXTURE_MEDIUM = Identifier.of(TitanFabric.MODID, "textures/gui/backpack_medium.png");
+    private static final Identifier TEXTURE_BIG = Identifier.of(TitanFabric.MODID, "textures/gui/backpack_big.png");
     public BackPackItemScreen(BackPackItemScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
     }

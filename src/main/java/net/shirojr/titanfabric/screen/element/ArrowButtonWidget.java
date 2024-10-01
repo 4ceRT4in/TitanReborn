@@ -24,11 +24,11 @@ public class ArrowButtonWidget extends PressableWidget {
     private final int index;
     private final PressAction onPress;
     private final ItemRenderer itemRenderer;
-    public static final Identifier WIDGETS_TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/button_sprite_small.png");
+    public static final Identifier WIDGETS_TEXTURE = Identifier.of(TitanFabric.MODID, "textures/gui/button_sprite_small.png");
 
     public ArrowButtonWidget(int index, int x, int y, int width, int height,
                              @Nullable Text message, PressAction onPress, ItemRenderer itemRenderer) {
-        super(x, y, width, height, message == null ? new LiteralText("") : message);
+        super(x, y, width, height, message == null ? Text.literal("") : message);
         this.index = index;
         this.onPress = onPress;
         this.itemRenderer = itemRenderer;

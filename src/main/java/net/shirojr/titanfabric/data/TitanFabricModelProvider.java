@@ -8,7 +8,8 @@ import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
 import net.minecraft.item.Item;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
 
@@ -21,7 +22,7 @@ public class TitanFabricModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-        List<Block> blocks = Registry.BLOCK.streamEntries()
+        List<Block> blocks = Registries.BLOCK.streamEntries()
                 .filter(blockReference -> blockReference.registryKey().getValue().getNamespace().equals(TitanFabric.MODID))
                 .map(RegistryEntry.Reference::value).toList();
         for (Block entry : blocks) {
@@ -31,7 +32,7 @@ public class TitanFabricModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        List<Item> items = Registry.ITEM.streamEntries()
+        List<Item> items = Registries.ITEM.streamEntries()
                 .filter(itemReference -> itemReference.registryKey().getValue().getNamespace().equals(TitanFabric.MODID))
                 .map(RegistryEntry.Reference::value).toList();
         for (Item entry : items) {

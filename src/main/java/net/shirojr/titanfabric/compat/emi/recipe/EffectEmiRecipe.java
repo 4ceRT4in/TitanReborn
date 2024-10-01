@@ -23,7 +23,7 @@ public class EffectEmiRecipe implements EmiRecipe {
     public EffectEmiRecipe(EffectRecipe recipe, EmiRecipeCategory category, WeaponEffect effect, String additionalPath) {
         this.recipe = recipe;
         this.category = category;
-        this.id = new Identifier(recipe.getId().getNamespace(), recipe.getId().getPath() + additionalPath);
+        this.id = Identifier.of(recipe.getId().getNamespace(), recipe.getId().getPath() + additionalPath);
 
         this.inputs = List.of(
                 EmiIngredient.of(recipe.base.ingredient()),

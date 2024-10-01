@@ -53,12 +53,12 @@ public class ModelPredicateProviders {
     }
 
     private static void registerWeaponEffects(Item item) {
-        registerEffectProvider(item, new Identifier("effect"));
-        registerStrengthProvider(item, new Identifier("strength"));
+        registerEffectProvider(item, Identifier.of("effect"));
+        registerStrengthProvider(item, Identifier.of("strength"));
     }
 
     private static void registerBasicInnateItemsProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, new Identifier("effect"),
+        ModelPredicateProviderRegistry.register(item, Identifier.of("effect"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(INNATE_EFFECT.getNbtKey()))
                         return 0.0f;
@@ -80,13 +80,13 @@ public class ModelPredicateProviders {
     }
 
     private static void registerBowProviders(Item item) {
-        registerBowPull(item, new Identifier("pull"));
-        registerBowPulling(item, new Identifier("pulling"));
+        registerBowPull(item, Identifier.of("pull"));
+        registerBowPulling(item, Identifier.of("pulling"));
     }
 
     private static void registerLegendBowProviders() {
         registerBowProviders(TitanFabricItems.LEGEND_BOW);
-        registerLegendBowVersionProvider(new Identifier("handle"));
+        registerLegendBowVersionProvider(Identifier.of("handle"));
     }
 
     private static void registerLegendBowVersionProvider(Identifier identifier) {
@@ -117,7 +117,7 @@ public class ModelPredicateProviders {
     }
 
     private static void registerCrossBowCharge() {
-        ModelPredicateProviderRegistry.register(TitanFabricItems.TITAN_CROSSBOW, new Identifier("charged"),
+        ModelPredicateProviderRegistry.register(TitanFabricItems.TITAN_CROSSBOW, Identifier.of("charged"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!itemStack.getOrCreateNbt().contains("Charged")) return 0;
                     if (!itemStack.getOrCreateNbt().getBoolean("Charged")) return 0;
@@ -179,14 +179,14 @@ public class ModelPredicateProviders {
 
     private static void registerBowArrowCount(Item item) {
         if (item == null) return;
-        ModelPredicateProviderRegistry.register(item, new Identifier("arrows"), (stack, world, entity, seed) -> {
+        ModelPredicateProviderRegistry.register(item, Identifier.of("arrows"), (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
             return MultiBowHelper.getFullArrowCount(stack) * 0.1f;
         });
     }
 
     private static void registerShieldBlockingProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, new Identifier("blocking"), (stack, world, entity, seed) -> {
+        ModelPredicateProviderRegistry.register(item, Identifier.of("blocking"), (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
             return entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f;
         });

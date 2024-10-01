@@ -47,6 +47,6 @@ public class ToolTipHelper {
             case WEAK -> translation += "Weak";
             case WITHER -> translation += "Wither";
         }
-        tooltip.add(new TranslatableText(translation));
+        tooltip.add(Text.translatable(translation));
     }
 }

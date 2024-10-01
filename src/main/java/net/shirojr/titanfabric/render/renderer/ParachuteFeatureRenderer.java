@@ -15,7 +15,7 @@ import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.render.model.ParachuteFeatureModel;
 
 public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
-    private static final Identifier PARACHUTE_TEXTURE = new Identifier(TitanFabric.MODID, "textures/entity/parachute/parachute.png");
+    private static final Identifier PARACHUTE_TEXTURE = Identifier.of(TitanFabric.MODID, "textures/entity/parachute/parachute.png");
     public static ParachuteFeatureModel parachuteModel;
 
     public ParachuteFeatureRenderer(FeatureRendererContext<T, M> context, EntityModelLoader loader) {

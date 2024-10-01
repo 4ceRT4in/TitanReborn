@@ -4,7 +4,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.DefaultParticleType;
 
 public class GasParticleFactory implements ParticleFactory<GasParticleEffect> {
     private final SpriteProvider spriteProvider;

@@ -114,7 +114,7 @@ public class TitanFabricParachuteItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
-        tooltip.add(new TranslatableText("tooltip.titanfabric.parachute_line1"));
-        tooltip.add(new TranslatableText("tooltip.titanfabric.parachute_line2"));
+        tooltip.add(Text.translatable("tooltip.titanfabric.parachute_line1"));
+        tooltip.add(Text.translatable("tooltip.titanfabric.parachute_line2"));
     }
 }

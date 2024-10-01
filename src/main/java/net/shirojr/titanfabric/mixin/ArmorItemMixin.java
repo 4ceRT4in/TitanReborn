@@ -42,7 +42,7 @@ public abstract class ArmorItemMixin extends Item {
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
         if (stack.getItem() == Items.NETHERITE_HELMET || stack.getItem() == Items.NETHERITE_CHESTPLATE || stack.getItem() == Items.NETHERITE_LEGGINGS || stack.getItem() == Items.NETHERITE_BOOTS) {
-            tooltip.add(new TranslatableText("tooltip.titanfabric.netherite_effect"));
+            tooltip.add(Text.translatable("tooltip.titanfabric.netherite_effect"));
         }
     }
 

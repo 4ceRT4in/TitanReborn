@@ -43,9 +43,9 @@ public class CitrinStarEntity extends ThrownItemEntity {
     @Override
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (this.world.isClient()) {
+        if (this.getWorld().isClient()) {
             for (int i = 0; i < 32; ++i) {
-                this.world.addParticle(ParticleTypes.END_ROD, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.3D, this.random.nextGaussian() * 0.3D,
+                this.getWorld().addParticle(ParticleTypes.END_ROD, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.3D, this.random.nextGaussian() * 0.3D,
                         this.random.nextGaussian() * 0.3D);
             }
         } else if (!this.isRemoved()) {

@@ -43,8 +43,8 @@ public class C2SNetworking {
         ItemStack selectedStack = buf.readItemStack();
 
         server.execute(() -> {
-            player.sendMessage(new LiteralText("Arrow Packet arrived on server side"), false);
-            player.sendMessage(new LiteralText("Selected Arrow: " + selectedStack), false);
+            player.sendMessage(Text.literal("Arrow Packet arrived on server side"), false);
+            player.sendMessage(Text.literal("Selected Arrow: " + selectedStack), false);
         });
     }
 
@@ -133,7 +133,7 @@ public class C2SNetworking {
                 newSelectedArrowStack = arrowStacks.get(0);
             }
             Text arrowStackName = newSelectedArrowStack.getItem().getName(newSelectedArrowStack);
-            player.sendMessage(new TranslatableText("actionbar.titanfabric.arrow_selection").append(arrowStackName), true);
+            player.sendMessage(Text.translatable("actionbar.titanfabric.arrow_selection").append(arrowStackName), true);
             arrowSelection.titanfabric$setSelectedArrowIndex(newSelectedArrowStack);
             LoggerUtil.devLogger("SelectedStack: " + newSelectedArrowStack.getName());
         });

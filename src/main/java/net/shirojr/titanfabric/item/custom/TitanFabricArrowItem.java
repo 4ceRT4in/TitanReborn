@@ -48,13 +48,13 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
                 .getCompound(EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
         if (data.isEmpty() || data.get().weaponEffect() == null) return super.getName(stack);
         return switch (data.get().weaponEffect()) {
-            case BLIND -> new TranslatableText("item.titanfabric.blindness_arrow");
-            case POISON -> new TranslatableText("item.titanfabric.poison_arrow");
-            case WEAK -> new TranslatableText("item.titanfabric.weakness_arrow");
-            case WITHER -> new TranslatableText("item.titanfabric.wither_arrow");
+            case BLIND -> Text.translatable("item.titanfabric.blindness_arrow");
+            case POISON -> Text.translatable("item.titanfabric.poison_arrow");
+            case WEAK -> Text.translatable("item.titanfabric.weakness_arrow");
+            case WITHER -> Text.translatable("item.titanfabric.wither_arrow");
             default -> {
                 LoggerUtil.devLogger("couldn't find weapon effect for arrow", true, null);
-                yield new TranslatableText("item.titanfabric.arrow");
+                yield Text.translatable("item.titanfabric.arrow");
             }
         };
     }
@@ -77,7 +77,7 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
                 case WEAK -> tooltipPrefix = tooltipPrefix + "weaknessArrowEffect";
                 case WITHER -> tooltipPrefix = tooltipPrefix + "witherArrowEffect";
             }
-            tooltip.add(new TranslatableText(tooltipPrefix));
+            tooltip.add(Text.translatable(tooltipPrefix));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

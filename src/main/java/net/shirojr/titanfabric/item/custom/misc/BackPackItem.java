@@ -52,7 +52,7 @@ public class BackPackItem extends Item {
 
                 @Override
                 public Text getDisplayName() {
-                    return new TranslatableText(backpackItemStack.getItem().getTranslationKey());
+                    return Text.translateable(backpackItemStack.getItem().getTranslationKey());
                 }
 
                 @Override

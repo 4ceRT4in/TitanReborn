@@ -24,14 +24,14 @@ public class WeaponSmithingEmiRecipe implements EmiRecipe {
 
     public WeaponSmithingEmiRecipe(WeaponRecipe recipe, ItemStack baseStack, ItemStack baseEssence, String additionalPath) {
         this.recipe = recipe;
-        this.id = new Identifier(recipe.getId().getNamespace(), recipe.getId().getPath() + additionalPath);
+        this.id = Identifier.of(recipe.getId().getNamespace(), recipe.getId().getPath() + additionalPath);
         this.inputs = List.of(EmiStack.of(baseStack), EmiStack.of(baseEssence));
         this.outputs = List.of(EmiStack.of(recipe.getFakedOutput(baseStack, baseEssence)));
     }
 
     public WeaponSmithingEmiRecipe(WeaponRecipe recipe, ItemStack baseEssence, String additionalPath) {
         this.recipe = recipe;
-        this.id = new Identifier(recipe.getId().getNamespace(), recipe.getId().getPath() + additionalPath);
+        this.id = Identifier.of(recipe.getId().getNamespace(), recipe.getId().getPath() + additionalPath);
         this.inputs = List.of(EmiIngredient.of(recipe.base), EmiStack.of(baseEssence));
         this.outputs = List.of(EmiStack.of(recipe.getFakedOutput(baseEssence)));
     }

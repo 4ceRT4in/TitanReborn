@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import java.util.Optional;
 
 @Mixin(SwordItem.class)
-public class SwordItemMixin extends ToolItem implements Vanishable, WeaponEffectCrafting {
+public class SwordItemMixin extends ToolItem implements WeaponEffectCrafting {
 
     public SwordItemMixin(ToolMaterial material, Settings settings) {
         super(material, settings);

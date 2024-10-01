@@ -33,7 +33,7 @@ public class ArrowSelectionHelper {
         if (isArrowSupported && inventoryContainsSelectedStack) return;
 
         if (user instanceof ServerPlayerEntity serverPlayer)
-            serverPlayer.sendMessage(new TranslatableText("actionbar.titanfabric.not_compatible"), true);
+            serverPlayer.sendMessage(Text.translatable("actionbar.titanfabric.not_compatible"), true);
         List<ItemStack> selectableArrows = findAllSupportedArrowStacks(user.getInventory(), bowItem);
         ItemStack newSelectedStack = null;
         if (selectableArrows.size() > 0) newSelectedStack = selectableArrows.get(0);

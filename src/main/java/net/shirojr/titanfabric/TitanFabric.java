@@ -4,8 +4,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
@@ -31,8 +32,8 @@ public class TitanFabric implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
     public static final ParticleType<GasParticleEffect> GAS_PARTICLE = Registry.register(
-            Registry.PARTICLE_TYPE,
-            new Identifier(MODID, "gas_particle"),
+            Registries.PARTICLE_TYPE,
+            Identifier.of(MODID, "gas_particle"),
             FabricParticleTypes.complex(GasParticleEffect.PARAMETERS_FACTORY)
     );
 
@@ -51,7 +52,6 @@ public class TitanFabric implements ModInitializer {
         C2SNetworking.registerServerReceivers();
         TitanFabricGamerules.register();
         TitanFabricStats.register();
-        TitanFabricEvents.registerEvents();
 
         LOGGER.info("Initialized all " + MODID + " common components");
         LoggerUtil.devLogger("Initialized Instance in development environment!");

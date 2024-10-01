@@ -25,7 +25,7 @@ public class DiamondFurnaceEmiRecipe implements EmiRecipe {
     private final boolean infiniBurn;
 
     public DiamondFurnaceEmiRecipe(AbstractCookingRecipe recipe, EmiRecipeCategory category, int fuelMultiplier, boolean infiniBurn) {
-        this.id = new Identifier(recipe.getId().getNamespace(), recipe.getId().getPath() + "/diamondfurnacerecipe");
+        this.id = Identifier.of(recipe.getId().getNamespace(), recipe.getId().getPath() + "/diamondfurnacerecipe");
         this.category = category;
         input = EmiIngredient.of(recipe.getIngredients().get(0));
         boolean isBetterSmeltingItem = Arrays.stream(recipe.getIngredients().get(0).getMatchingStacks())

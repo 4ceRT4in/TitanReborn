@@ -20,12 +20,12 @@ import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import java.util.List;
 
 public class ExtendedInventoryScreenHandler extends ScreenHandler {
-    public static final Identifier BLOCK_ATLAS_TEXTURE = new Identifier("textures/atlas/blocks.png");
-    public static final Identifier EMPTY_HELMET_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_helmet");
-    public static final Identifier EMPTY_CHESTPLATE_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_chestplate");
-    public static final Identifier EMPTY_LEGGINGS_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_leggings");
-    public static final Identifier EMPTY_BOOTS_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_boots");
-    static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{EMPTY_BOOTS_SLOT_TEXTURE, EMPTY_LEGGINGS_SLOT_TEXTURE, EMPTY_CHESTPLATE_SLOT_TEXTURE, EMPTY_HELMET_SLOT_TEXTURE};
+    public static final Identifier BLOCK_ATLAS_TEXTURE = Identifier.of("textures/atlas/blocks.png");
+    public static final Identifier EMPTY_HELMET_SLOT_TEXTURE = Identifier.of("item/empty_armor_slot_helmet");
+    public static final Identifier EMPTY_CHESTPLATE_SLOT_TEXTURE = Identifier.of("item/empty_armor_slot_chestplate");
+    public static final Identifier EMPTY_LEGGINGS_SLOT_TEXTURE = Identifier.of("item/empty_armor_slot_leggings");
+    public static final Identifier EMPTY_BOOTS_SLOT_TEXTURE = Identifier.of("item/empty_armor_slot_boots");
+    static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = Identifier.of[]{EMPTY_BOOTS_SLOT_TEXTURE, EMPTY_LEGGINGS_SLOT_TEXTURE, EMPTY_CHESTPLATE_SLOT_TEXTURE, EMPTY_HELMET_SLOT_TEXTURE};
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     private final PlayerInventory baseInventory;

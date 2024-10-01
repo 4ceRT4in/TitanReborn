@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScreenHandler> {
-    public static final Identifier TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/extended_inventory.png");
+    public static final Identifier TEXTURE = Identifier.of(TitanFabric.MODID, "textures/gui/extended_inventory.png");
 
     public ExtendedInventoryScreen(ExtendedInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title == null ? Text.of("") : title);
@@ -40,7 +40,7 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
             return;
         }
         ButtonWidget buttonWidget = new ButtonWidget(this.x + 2, this.height / 2 - 106,
-                20, 20, new LiteralText("<<"), button ->
+                20, 20, Text.literal("<<"), button ->
                 this.client.setScreen(new InventoryScreen(this.client.player)));
         this.addDrawableChild(buttonWidget);
     }
@@ -61,10 +61,10 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
         int color = 0x404040;
 
-        this.textRenderer.draw(matrices, new TranslatableText("screen.titanfabric.extended_inventory.title"), this.titleX, this.titleY, color);
+        this.textRenderer.draw(matrices, Text.translatable("screen.titanfabric.extended_inventory.title"), this.titleX, this.titleY, color);
 /*        for (int line = 0; line < this.handler.getDescription().size(); line++) {
             int yOffset = 52 + (line * 10);
-            Text lineText = new LiteralText(this.handler.getDescription().get(line));
+            Text lineText = Text.literal(this.handler.getDescription().get(line));
             this.textRenderer.draw(matrices, lineText, this.titleX, this.titleY + yOffset, color);
         }*/
     }

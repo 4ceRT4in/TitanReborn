@@ -46,7 +46,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         if (this.client == null) return;
         int buttonX = recipeBook.findLeftEdge(this.width, this.backgroundWidth);
         this.buttonWidget = new ButtonWidget(buttonX + 2, this.height / 2 - 106,
-                20, 20, new LiteralText(">>"), button -> {
+                20, 20, Text.literal(">>"), button -> {
             PacketByteBuf buf = PacketByteBufs.create();
             ClientPlayNetworking.send(NetworkingIdentifiers.EXTENDED_INVENTORY_OPEN, buf);
         });

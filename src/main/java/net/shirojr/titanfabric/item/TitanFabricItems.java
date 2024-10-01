@@ -6,7 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.*;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -137,7 +137,7 @@ public class TitanFabricItems {
             new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.BIG));
 
     private static <T extends Item> T registerItem(String name, T item) {
-        return Registry.register(Registry.ITEM, new Identifier(TitanFabric.MODID, name), item);
+        return Registry.register(Registry.ITEM, Identifier.of(TitanFabric.MODID, name), item);
     }
 
     public static void registerModItems() {

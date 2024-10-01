@@ -5,18 +5,18 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.shirojr.titanfabric.TitanFabric;
 
 @SuppressWarnings("ALL")
 public class TitanFabricTags {
     private static <T> TagKey<T> createTag(String name, RegistryKey<? extends Registry<T>> registryKey) {
-        return TagKey.of(registryKey, new Identifier(TitanFabric.MODID, name));
+        return TagKey.of(registryKey, Identifier.of(TitanFabric.MODID, name));
     }
 
     private static <T> TagKey<T> createCommonTag(String name, RegistryKey<? extends Registry<T>> registryKey) {
-        return TagKey.of(registryKey, new Identifier("c", name));
+        return TagKey.of(registryKey, Identifier.of("c", name));
     }
 
     public static class Items {

@@ -12,7 +12,7 @@ import net.shirojr.titanfabric.TitanFabricClient;
 
 public class GasTextureSheet {
 
-    public static final Identifier GAS_FOG_TEXTURE = new Identifier(TitanFabric.MODID, "textures/particle/gas_particle.png");
+    public static final Identifier GAS_FOG_TEXTURE = Identifier.of(TitanFabric.MODID, "textures/particle/gas_particle.png");
 
 
     public static ParticleTextureSheet Gas = new ParticleTextureSheet() {

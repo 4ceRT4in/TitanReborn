@@ -369,12 +369,12 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
         List<ItemStack> list = getProjectiles(stack);
         if (!isCharged(stack) || list.isEmpty()) return;
         ItemStack itemStack = list.get(0);
-        tooltip.add(new TranslatableText("item.minecraft.crossbow.projectile").append(" ").append(itemStack.toHoverableText()));
+        tooltip.add(Text.translatable("item.minecraft.crossbow.projectile").append(" ").append(itemStack.toHoverableText()));
         if (context.isAdvanced() && itemStack.isOf(Items.FIREWORK_ROCKET)) {
             ArrayList<Text> list2 = Lists.newArrayList();
             Items.FIREWORK_ROCKET.appendTooltip(itemStack, world, list2, context);
             if (!list2.isEmpty()) {
-                list2.replaceAll(text -> new LiteralText("  ").append((Text) text).formatted(Formatting.GRAY));
+                list2.replaceAll(text -> Text.literal("  ").append((Text) text).formatted(Formatting.GRAY));
                 tooltip.addAll(list2);
             }
         }

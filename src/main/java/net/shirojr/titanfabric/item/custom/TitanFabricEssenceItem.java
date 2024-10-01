@@ -33,11 +33,11 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
                 .getCompound(EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
         if (data.isEmpty() || data.get().weaponEffect() == null) return super.getName(stack);
         return switch (data.get().weaponEffect()) {
-            case BLIND -> new TranslatableText("item.titanfabric.blindness_essence");
-            case FIRE -> new TranslatableText("item.titanfabric.fire_essence");
-            case POISON -> new TranslatableText("item.titanfabric.poison_essence");
-            case WEAK -> new TranslatableText("item.titanfabric.weakness_essence");
-            case WITHER -> new TranslatableText("item.titanfabric.wither_essence");
+            case BLIND -> Text.translatable("item.titanfabric.blindness_essence");
+            case FIRE -> Text.translatable("item.titanfabric.fire_essence");
+            case POISON -> Text.translatable("item.titanfabric.poison_essence");
+            case WEAK -> Text.translatable("item.titanfabric.weakness_essence");
+            case WITHER -> Text.translatable("item.titanfabric.wither_essence");
         };
     }
 
@@ -60,7 +60,7 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
                 case WEAK -> tooltipPrefix = tooltipPrefix + "weaknessEssenceItem";
                 case WITHER -> tooltipPrefix = tooltipPrefix + "witherEssenceItem";
             }
-            tooltip.add(new TranslatableText(tooltipPrefix));
+            tooltip.add(Text.translatable(tooltipPrefix));
         }
         super.appendTooltip(stack, world, tooltip, context);
     }

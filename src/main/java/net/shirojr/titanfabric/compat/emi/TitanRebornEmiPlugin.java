@@ -27,19 +27,19 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
 public class TitanRebornEmiPlugin implements EmiPlugin {
-    public static final Identifier TEXTURE = new Identifier("titanfabric", "textures/gui/emi_recipes.png");
+    public static final Identifier TEXTURE = Identifier.of("titanfabric", "textures/gui/emi_recipes.png");
 
     public static final EmiStack DIAMOND_FURNACE_WORKSTATION = EmiStack.of(TitanFabricBlocks.DIAMOND_FURNACE);
     public static final EmiStack NETHERITE_ANVIL_WORKSTATION = EmiStack.of(TitanFabricBlocks.NETHERITE_ANVIL);
 
     public static final EmiRecipeCategory DIAMOND_FURNACE_CATEGORY = new EmiRecipeCategory(
-            new Identifier("titanfabric", "diamond_furnace_recipes"),
+            Identifier.of("titanfabric", "diamond_furnace_recipes"),
             DIAMOND_FURNACE_WORKSTATION,
             new EmiTexture(TEXTURE, 0, 0, 16, 16)
     );
 
     public static final EmiRecipeCategory NETHERITE_ANVIL_CATEGORY = new EmiRecipeCategory(
-            new Identifier("titanfabric", "netherite_anvil_recipes"),
+            Identifier.of("titanfabric", "netherite_anvil_recipes"),
             NETHERITE_ANVIL_WORKSTATION,
             new EmiTexture(TEXTURE, 0, 0, 16, 16)
     );

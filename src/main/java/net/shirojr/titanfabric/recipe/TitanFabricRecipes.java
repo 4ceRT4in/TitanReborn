@@ -3,7 +3,7 @@ package net.shirojr.titanfabric.recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.recipe.custom.MultiBowRecipe;
@@ -37,7 +37,7 @@ public enum TitanFabricRecipes {
 
     public record RecipeData(Identifier identifier, RecipeSerializer<?> serializer, RecipeType<?> type) {
         public RecipeData(String name, RecipeSerializer<?> serializer, RecipeType<?> type) {
-            this(new Identifier(TitanFabric.MODID, name), serializer, type);
+            this(Identifier.of(TitanFabric.MODID, name), serializer, type);
             register();
         }
 

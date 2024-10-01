@@ -7,6 +7,6 @@ import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 
 public class TitanFabricItemGroups {
-    public static final ItemGroup TITAN = FabricItemGroupBuilder.build(new Identifier(TitanFabric.MODID,"titan"),
+    public static final ItemGroup TITAN = FabricItemGroupBuilder.build(Identifier.of(TitanFabric.MODID,"titan"),
             () -> new ItemStack(TitanFabricItems.LEGEND_CRYSTAL));
 }

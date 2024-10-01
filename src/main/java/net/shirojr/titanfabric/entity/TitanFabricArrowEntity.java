@@ -40,7 +40,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     public void tick() {
         // FIXME: doesn't execute on client side?
         super.tick();
-        if (this.world.isClient) {
+        if (this.getWorld().isClient) {
             if (this.inGround) {
                 if (this.inGroundTime % 5 == 0) {
                     this.spawnParticles(1);
@@ -66,7 +66,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
         double e = (double)(i >> 8 & 0xFF) / 255.0;
         double f = (double)(i & 0xFF) / 255.0;
         for (int j = 0; j < amount; ++j) {
-            this.world.addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5),
+            this.getWorld().addParticle(ParticleTypes.ENTITY_EFFECT, this.getParticleX(0.5),
                     this.getRandomBodyY(), this.getParticleZ(0.5), d, e, f);
         }
     }
@@ -87,11 +87,11 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     public Identifier getTexture() {
         if (this.effect == null) return null;
         return switch (this.effect.weaponEffect()) {
-            case BLIND -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/blindness_arrow.png");
-            case POISON -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/poison_arrow.png");
-            case WEAK -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/weakness_arrow.png");
-            case WITHER -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/wither_arrow.png");
-            default -> new Identifier("textures/entity/projectiles/arrow.png");
+            case BLIND -> Identifier.of(TitanFabric.MODID, "textures/items/projectiles/blindness_arrow.png");
+            case POISON -> Identifier.of(TitanFabric.MODID, "textures/items/projectiles/poison_arrow.png");
+            case WEAK -> Identifier.of(TitanFabric.MODID, "textures/items/projectiles/weakness_arrow.png");
+            case WITHER -> Identifier.of(TitanFabric.MODID, "textures/items/projectiles/wither_arrow.png");
+            default -> Identifier.of("textures/entity/projectiles/arrow.png");
         };
     }
 

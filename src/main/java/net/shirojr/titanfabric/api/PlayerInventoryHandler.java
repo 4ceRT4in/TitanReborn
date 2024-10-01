@@ -73,7 +73,7 @@ public class PlayerInventoryHandler {
      * The return value can be ignored if this information is not needed.
      */
     public static boolean dropExtendedInventory(ServerPlayerEntity serverPlayer) {
-        Optional<Inventory> inventory = getExtendedInventory(serverPlayer.getWorld(), serverPlayer);
+        Optional<Inventory> inventory = getExtendedInventory(serverPlayer.getServerWorld(), serverPlayer);
         if (inventory.isEmpty()) return false;
         ItemScatterer.spawn(serverPlayer.getWorld(), serverPlayer.getBlockPos(), inventory.get());
         setExtendedInventory(serverPlayer, new SimpleInventory(PersistentPlayerData.INV_SIZE));
