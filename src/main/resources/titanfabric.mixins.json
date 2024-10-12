@@ -29,7 +29,8 @@
     "SwordItemMixin",
     "SplashPotionItemMixin",
     "AreaEffectCloudEntityMixin",
-    "ParticleManagerMixin"
+    "ParticleManagerMixin",
+    "LingeringPotionItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
