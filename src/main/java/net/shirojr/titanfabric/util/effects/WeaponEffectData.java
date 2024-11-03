@@ -29,7 +29,6 @@ public record WeaponEffectData(WeaponEffectType type, WeaponEffect weaponEffect,
         return Optional.of(new WeaponEffectData(type, effect, strength));
     }
 
-    @SuppressWarnings("unused")
     public static List<WeaponEffectData> allDataFromNbt(NbtCompound compound) {
         List<WeaponEffectData> dataList = new ArrayList<>();
         for (String typeNbtKey : compound.getKeys()) {

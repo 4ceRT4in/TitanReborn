@@ -8,10 +8,13 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.particle.DustColorTransitionParticleEffect;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.item.TitanFabricItems;
@@ -43,13 +46,10 @@ public class CitrinStarEntity extends ThrownItemEntity {
     @Override
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (this.world.isClient()) {
-            for (int i = 0; i < 32; ++i) {
-                this.world.addParticle(ParticleTypes.END_ROD, this.getX(), this.getY(), this.getZ(), this.random.nextGaussian() * 0.3D, this.random.nextGaussian() * 0.3D,
-                        this.random.nextGaussian() * 0.3D);
+        if (!this.world.isClient()) {
+            if (!this.isRemoved()) {
+                this.discard();
             }
-        } else if (!this.isRemoved()) {
-            this.discard();
         }
     }
 
@@ -116,6 +116,19 @@ public class CitrinStarEntity extends ThrownItemEntity {
                 livingEntity.removeStatusEffect(StatusEffects.FIRE_RESISTANCE);
                 livingEntity.setOnFireFor(10);
             }
+            for (int i = 0; i < 32; ++i) {
+                ((ServerWorld) livingEntity.getWorld()).spawnParticles(
+                        ParticleTypes.END_ROD,
+                        livingEntity.getX(),
+                        this.getY(),
+                        livingEntity.getZ(),
+                        1,            // count
+                        this.random.nextGaussian() * 0.3D, this.random.nextGaussian() * 0.3D,
+                        this.random.nextGaussian() * 0.3D,          // offsetZ
+                        0.0D           // speed
+                );
+            }
+
             this.changedEffectIds.clear();
         }
     }

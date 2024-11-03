@@ -1,9 +1,18 @@
 package net.shirojr.titanfabric.entity;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.Identifier;
@@ -26,13 +35,30 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     @Nullable
     private ItemStack itemStack;
 
+    private static final TrackedData<NbtCompound> EFFECT_TYPE = DataTracker.registerData(TitanFabricArrowEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+
+    public TitanFabricArrowEntity(EntityType<? extends TitanFabricArrowEntity> entityType, World world) {
+        super(entityType, world);
+    }
     public TitanFabricArrowEntity(World world) {
         super(TitanFabricEntities.ARROW_ITEM, world);
     }
 
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(EFFECT_TYPE, new NbtCompound()); // Default value, e.g., -1 for no effect
+    }
+
     public TitanFabricArrowEntity(World world, LivingEntity owner, @Nullable WeaponEffectData effectData, @Nullable ItemStack itemStack) {
-        super(world, owner);
+        super(TitanFabricEntities.ARROW_ITEM, world);
+        this.setPosition(owner.getX(), owner.getEyeY() - 0.1F, owner.getZ());
+        this.setOwner(owner);
+        if (owner instanceof PlayerEntity) {
+            this.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
+        }
         this.effect = effectData;
+        this.dataTracker.set(EFFECT_TYPE, effectData.toNbt());
         this.itemStack = itemStack;
     }
 
@@ -71,9 +97,14 @@ public class TitanFabricArrowEntity extends ArrowEntity {
         }
     }
 
-    public Optional<WeaponEffect> getEffect() {
-        if (effect == null) return Optional.empty();
-        return Optional.ofNullable(effect.weaponEffect());
+    public Optional<WeaponEffectData> getEffect() {
+        if (this.effect == null && this.world.isClient) {
+            NbtCompound effectId = this.dataTracker.get(EFFECT_TYPE);
+            if (effectId != null) {
+                this.effect = WeaponEffectData.fromNbt(effectId, WeaponEffectType.INNATE_EFFECT).orElse(null);
+            }
+        }
+        return Optional.ofNullable(this.effect);
     }
 
     public @Nullable ItemStack getItemStack() {
@@ -122,7 +153,11 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        if (effect == null || !nbt.contains(EFFECTS_COMPOUND_NBT_KEY)) return;
-        WeaponEffectData.fromNbt(nbt, WeaponEffectType.INNATE_EFFECT).ifPresent(effectData -> this.effect = effectData);
+        if (!nbt.contains(EFFECTS_COMPOUND_NBT_KEY)) return;
+        Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(nbt.getCompound(EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
+        if(effectData.isPresent()) {
+            this.effect = effectData.get();
+            this.dataTracker.set(EFFECT_TYPE, this.effect.toNbt());
+        }
     }
 }

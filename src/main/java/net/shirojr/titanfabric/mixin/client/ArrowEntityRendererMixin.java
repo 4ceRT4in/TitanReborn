@@ -12,8 +12,13 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class ArrowEntityRendererMixin {
     @ModifyReturnValue(method = "getTexture(Lnet/minecraft/entity/projectile/ArrowEntity;)Lnet/minecraft/util/Identifier;", at = @At("RETURN"))
     private Identifier titanfabric$ChangeArrowEntitySprites(Identifier original, ArrowEntity arrowEntity) {
-        if (!(arrowEntity instanceof TitanFabricArrowEntity titanFabricArrowEntity)) return original;
-        if (titanFabricArrowEntity.getEffect().isEmpty()) return original;
-        return titanFabricArrowEntity.getTexture();
+        if (!(arrowEntity instanceof TitanFabricArrowEntity titanFabricArrowEntity)) {
+            return original;
+        }
+
+        // Proceed with the texture if TitanFabricArrowEntity has a valid effect and texture
+        return titanFabricArrowEntity.getEffect().isPresent() ? titanFabricArrowEntity.getTexture() : original;
     }
 }
+
+
