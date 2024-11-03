@@ -54,19 +54,46 @@ public class CitrinStarEntity extends ThrownItemEntity {
     }
 
     private void updateStatusEffects(LivingEntity livingEntity, StatusEffect statusEffect) {
-        if (livingEntity.hasStatusEffect(statusEffect) && !this.changedEffectIds.contains(StatusEffect.getRawId(statusEffect))) {
-            StatusEffectInstance oldEffectInstance = livingEntity.getStatusEffect(statusEffect);
-            StatusEffectInstance newEffectInstance = new StatusEffectInstance(getEffectOpposites().get(statusEffect), 200, oldEffectInstance.getAmplifier());
+        if(!world.isClient) {
+            if (livingEntity.hasStatusEffect(statusEffect) && !this.changedEffectIds.contains(StatusEffect.getRawId(statusEffect))) {
+                StatusEffectInstance oldEffectInstance = livingEntity.getStatusEffect(statusEffect);
+                StatusEffectInstanceAccessor oldAccessor = (StatusEffectInstanceAccessor) oldEffectInstance;
+                if(oldAccessor != null) {
+                    StatusEffectInstance previousEffect = oldAccessor.titanfabric$getPreviousStatusEffect();
+                    if (previousEffect != null) {
+                        return;
+                    }
+                }
 
-            StatusEffectInstanceAccessor accessor = (StatusEffectInstanceAccessor) newEffectInstance;
-            if(accessor != null) {
-                accessor.titanfabric$setPreviousStatusEffect(new StatusEffectInstance(oldEffectInstance));
+
+                int oldDuration = oldEffectInstance.getDuration();
+                int newDuration = Math.min(oldDuration, 200); // Use 200 ticks or the old duration if it's less
+
+                StatusEffectInstance newEffectInstance = new StatusEffectInstance(
+                        getEffectOpposites().get(statusEffect),
+                        newDuration,
+                        oldEffectInstance.getAmplifier()
+                );
+
+                livingEntity.removeStatusEffect(statusEffect);
+
+                // Only set the previous status effect if the old duration is 10 seconds or more
+                if (oldDuration >= 200) {
+                    StatusEffectInstanceAccessor accessor = (StatusEffectInstanceAccessor) newEffectInstance;
+                    if (accessor != null) {
+                        accessor.titanfabric$setPreviousStatusEffect(new StatusEffectInstance(oldEffectInstance));
+                        livingEntity.addStatusEffect((StatusEffectInstance) accessor);
+                    } else {
+                        livingEntity.addStatusEffect(newEffectInstance);
+                    }
+                } else {
+                    // No need to set the previous status effect; it cancels out
+                    livingEntity.addStatusEffect(newEffectInstance);
+                }
+
+                this.changedEffectIds.add(StatusEffect.getRawId(getEffectOpposites().get(statusEffect)));
             }
 
-            livingEntity.removeStatusEffect(statusEffect);
-            livingEntity.addStatusEffect(newEffectInstance);
-
-            this.changedEffectIds.add(StatusEffect.getRawId(getEffectOpposites().get(statusEffect)));
         }
     }
 

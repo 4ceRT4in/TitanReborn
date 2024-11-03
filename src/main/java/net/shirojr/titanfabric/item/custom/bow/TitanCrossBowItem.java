@@ -126,6 +126,12 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
             itemStack = getProjectileType(shooter, crossbow);
         }
         ItemStack itemStack2 = itemStack.copy();
+
+        //if itemstack is potion only load a single one
+        if (itemStack.isOf(Items.LINGERING_POTION) || itemStack.isOf(Items.SPLASH_POTION)) {
+            projectileCount = 1;
+        }
+
         for (int k = 0; k < projectileCount; ++k) {
             if (k > 0) {
                 itemStack = itemStack2.copy();

@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -83,9 +84,25 @@ public abstract class LivingEntityMixin {
             default -> effectDuration = effect.getDuration();
         }
 
+        StatusEffectInstance newStatusEffectInstance = new StatusEffectInstance(
+                effect.getEffectType(),
+                effectDuration,
+                effect.getAmplifier(),
+                effect.isAmbient(),
+                effect.shouldShowParticles(),
+                effect.shouldShowIcon()
+        );
+
+        // Copy over the previous effect data if it exists
+        StatusEffectInstanceAccessor originalAccessor = (StatusEffectInstanceAccessor) effect;
+        StatusEffectInstanceAccessor newAccessor = (StatusEffectInstanceAccessor) newStatusEffectInstance;
+        if (originalAccessor.titanfabric$getPreviousStatusEffect() != null) {
+            newAccessor.titanfabric$setPreviousStatusEffect(
+                    new StatusEffectInstance(originalAccessor.titanfabric$getPreviousStatusEffect())
+            );
+        }
+
         StatusEffectInstance statusEffectInstance = activeStatusEffects.get(effect.getEffectType());
-        StatusEffectInstance newStatusEffectInstance = new StatusEffectInstance(effect.getEffectType(), effectDuration, effect.getAmplifier(), effect.isAmbient(), effect.shouldShowParticles(),
-                effect.shouldShowIcon());
 
         if (statusEffectInstance == null) {
             activeStatusEffects.put(newStatusEffectInstance.getEffectType(), newStatusEffectInstance);
