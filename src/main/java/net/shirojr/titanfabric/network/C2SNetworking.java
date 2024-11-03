@@ -54,21 +54,16 @@ public class C2SNetworking {
         Item newItem = buf.readItemStack().getItem();
 
         server.execute(() -> {
-            float healthValue;
-
+            // Only handle the case where we're removing Legend armor
+            // When equipping new armor, the attribute system handles it automatically
             if (oldItem instanceof LegendArmorItem legendArmorItem) {
-                healthValue = legendArmorItem.getHealthValue();
+                float currentHealth = player.getHealth();
+                float maxHealth = player.getMaxHealth();
 
-                if (player.getHealth() > healthValue) {
-                    player.setHealth(player.getMaxHealth() - healthValue);
-                }
-            }
-
-            if (newItem instanceof LegendArmorItem legendArmorItem) {
-                healthValue = legendArmorItem.getHealthValue();
-
-                if (player.getHealth() > healthValue) {
-                    player.setHealth(player.getMaxHealth() + healthValue);
+                // Force an update by setting health to max if it's above the new max health
+                // This fixes the vanilla visual desync
+                if (currentHealth > (maxHealth - legendArmorItem.getHealthValue())) {
+                    player.setHealth(maxHealth - legendArmorItem.getHealthValue());
                 }
             }
         });
