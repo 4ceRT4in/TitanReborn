@@ -17,16 +17,19 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrows;
 
-import java.util.List;
+import java.util.*;
 
 import static net.shirojr.titanfabric.network.NetworkingIdentifiers.*;
 
@@ -112,25 +115,68 @@ public class C2SNetworking {
             ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
             PlayerInventory inventory = player.getInventory();
             List<ItemStack> arrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(inventory, bowItem);
-            if (arrowStacks.size() == 0) return;
+
+            // Filter to keep only the stack with the highest count of each type or unique effect (for TitanFabricArrowItem)
+            List<ItemStack> filteredArrowStacks = new ArrayList<>();
+            Map<Item, ItemStack> highestCountStacks = new HashMap<>();
+            Map<String, ItemStack> effectBasedStacks = new HashMap<>();
+
+            for (ItemStack stack : arrowStacks) {
+                Item item = stack.getItem();
+
+                // Special case for TitanFabricArrowItem - check both item and weapon effect for uniqueness
+                if (item instanceof TitanFabricArrowItem) {
+                    Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(
+                            stack.getOrCreateNbt().getCompound(WeaponEffectData.EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
+
+                    // If effect data is present, use it to determine uniqueness
+                    if (effectData.isPresent()) {
+                        String effectKey = item.toString() + "-" + effectData.get().weaponEffect().name();
+
+                        if (!effectBasedStacks.containsKey(effectKey) || stack.getCount() > effectBasedStacks.get(effectKey).getCount()) {
+                            effectBasedStacks.put(effectKey, stack);
+                        }
+                    } else {
+                        // Fallback to general count tracking if no effect data is present
+                        if (!highestCountStacks.containsKey(item) || stack.getCount() > highestCountStacks.get(item).getCount()) {
+                            highestCountStacks.put(item, stack);
+                        }
+                    }
+                } else {
+                    // General case for non-TitanFabricArrowItem items, grouped by item type only
+                    if (!highestCountStacks.containsKey(item) || stack.getCount() > highestCountStacks.get(item).getCount()) {
+                        highestCountStacks.put(item, stack);
+                    }
+                }
+            }
+
+            // Combine both maps into filteredArrowStacks
+            filteredArrowStacks.addAll(highestCountStacks.values());
+            filteredArrowStacks.addAll(effectBasedStacks.values());
+
+            if (filteredArrowStacks.size() == 0) return;
             ItemStack newSelectedArrowStack;
 
             if (arrowSelection.titanfabric$getSelectedArrowIndex().isPresent()) {
                 ItemStack selectedArrowStack = player.getInventory().getStack(arrowSelection.titanfabric$getSelectedArrowIndex().get());
-                if (arrowStacks.contains(selectedArrowStack)) {
-                    int newIndexInArrowList = arrowStacks.indexOf(selectedArrowStack) + 1;
-                    if (newIndexInArrowList > arrowStacks.size() - 1) newIndexInArrowList = 0;
-                    newSelectedArrowStack = arrowStacks.get(newIndexInArrowList);
+                if (filteredArrowStacks.contains(selectedArrowStack)) {
+                    int newIndexInArrowList = filteredArrowStacks.indexOf(selectedArrowStack) + 1;
+                    if (newIndexInArrowList > filteredArrowStacks.size() - 1) newIndexInArrowList = 0;
+                    newSelectedArrowStack = filteredArrowStacks.get(newIndexInArrowList);
                 } else {
-                    newSelectedArrowStack = arrowStacks.get(0);
+                    newSelectedArrowStack = filteredArrowStacks.get(0);
                 }
             } else {
-                newSelectedArrowStack = arrowStacks.get(0);
+                newSelectedArrowStack = filteredArrowStacks.get(0);
             }
+
             Text arrowStackName = newSelectedArrowStack.getItem().getName(newSelectedArrowStack);
             player.sendMessage(new TranslatableText("actionbar.titanfabric.arrow_selection").append(arrowStackName), true);
             arrowSelection.titanfabric$setSelectedArrowIndex(newSelectedArrowStack);
             LoggerUtil.devLogger("SelectedStack: " + newSelectedArrowStack.getName());
         });
     }
+
+
+
 }
