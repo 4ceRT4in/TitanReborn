@@ -71,6 +71,7 @@
             "translation": [0, 0, -2]
         }
     },
+    "gui_light": "front",
     "groups": [
         {
             "name": "shield",
