@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench by ShiroJR",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "block/red_wool",
+		"0": "block/white_wool",
 		"2": "titanfabric:items/parachute_strings",
-		"particle": "block/red_wool"
+		"particle": "block/white_wool"
 	},
 	"elements": [
 		{
