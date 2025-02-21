@@ -89,15 +89,32 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public void onSlotClick(int slotId, int button, SlotActionType actionType, PlayerEntity player) {
+        if(player.getMainHandStack().isEmpty()) {
+            super.onSlotClick(slotId, button, actionType, player);
+            return;
+        }
         if(slotId >= 0){
-            Slot slot = this.getSlot(slotId);
-            // Prevent moving the backpack item itself
-            if (slot != null && slot.getStack() == this.backpackStack) {
-                return; // Cancel the action if the backpack is clicked
+            Slot slot = this.slots.get(slotId);
+            if (actionType == SlotActionType.SWAP && button >= 0 && button < 9) {
+                ItemStack swappedItem = player.getInventory().getStack(button);
+                if (swappedItem == player.getMainHandStack()) {
+                    return;
+                }
+            }
+            if (slot.hasStack()) {
+                ItemStack stackInSlot = slot.getStack();
+                if (stackInSlot == player.getMainHandStack() || this.getCursorStack() == player.getMainHandStack()) {
+                    if (actionType == SlotActionType.THROW || actionType == SlotActionType.SWAP || actionType == SlotActionType.QUICK_MOVE ||
+                            actionType == SlotActionType.PICKUP || actionType == SlotActionType.CLONE ||
+                            actionType == SlotActionType.QUICK_CRAFT || actionType == SlotActionType.PICKUP_ALL) {
+                        return;
+                    }
+                }
             }
         }
-
-        super.onSlotClick(slotId, button, actionType, player);
+        if (this.getCursorStack() != player.getMainHandStack()) {
+            super.onSlotClick(slotId, button, actionType, player);
+        }
     }
 
     @Override
@@ -135,7 +152,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
-        if (stack.getItem() instanceof BackPackItem)
+        if (stack == this.backpackStack)
             return false;
         return super.canInsertIntoSlot(stack, slot);
     }

@@ -40,8 +40,12 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
             return;
         }
         ButtonWidget buttonWidget = new ButtonWidget(this.x + 2, this.height / 2 - 106,
-                20, 20, new LiteralText("<<"), button ->
-                this.client.setScreen(new InventoryScreen(this.client.player)));
+                20, 20, new LiteralText("<<"), button -> {
+            if(this.client.mouse != null) {
+                this.client.mouse.unlockCursor();
+            }
+            this.client.setScreen(new InventoryScreen(this.client.player));
+        });
         this.addDrawableChild(buttonWidget);
     }
 

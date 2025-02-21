@@ -8,10 +8,10 @@ import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
 
 public class TitanFabricPlacedFeatures {
     public static final RegistryEntry<PlacedFeature> CITRIN_ORE_UPPER = PlacedFeatures.register("citrin_ore_upper",
-            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(70,
+            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(7,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(80), YOffset.aboveBottom(384))));
     public static final RegistryEntry<PlacedFeature> CITRIN_ORE_MIDDLE = PlacedFeatures.register("citrin_ore_middle",
-            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(7,
+            TitanFabricConfiguredFeatures.CITRIN_ORE, TitanFabricOreFeatures.modifiersWithCount(6,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(0), YOffset.aboveBottom(56))));
     public static final RegistryEntry<PlacedFeature> CITRIN_ORE_SMALL = PlacedFeatures.register("citrin_ore_small",
             TitanFabricConfiguredFeatures.CITRIN_ORE_SMALL, TitanFabricOreFeatures.modifiersWithCount(6,

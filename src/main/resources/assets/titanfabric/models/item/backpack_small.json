@@ -1,6 +1,72 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/backpack_small"
-  }
+    "layer0": "titanfabric:items/backpack/backpack_small"
+  },
+  "overrides": [
+    {
+      "predicate": { "red": 1.0 },
+      "model": "titanfabric:item/backpack_small_red"
+    },
+    {
+      "predicate": { "orange": 1.0 },
+      "model": "titanfabric:item/backpack_small_orange"
+    },
+    {
+      "predicate": { "blue": 1.0 },
+      "model": "titanfabric:item/backpack_small_blue"
+    },
+    {
+      "predicate": { "gray": 1.0 },
+      "model": "titanfabric:item/backpack_small_gray"
+    },
+    {
+      "predicate": { "lime": 1.0 },
+      "model": "titanfabric:item/backpack_small_lime"
+    },
+    {
+      "predicate": { "pink": 1.0 },
+      "model": "titanfabric:item/backpack_small_pink"
+    },
+    {
+      "predicate": { "purple": 1.0 },
+      "model": "titanfabric:item/backpack_small_purple"
+    },
+    {
+      "predicate": { "light_blue": 1.0 },
+      "model": "titanfabric:item/backpack_small_light_blue"
+    },
+    {
+      "predicate": { "light_gray": 1.0 },
+      "model": "titanfabric:item/backpack_small_light_gray"
+    },
+    {
+      "predicate": { "yellow": 1.0 },
+      "model": "titanfabric:item/backpack_small_yellow"
+    },
+    {
+      "predicate": { "magenta": 1.0 },
+      "model": "titanfabric:item/backpack_small_magenta"
+    },
+    {
+      "predicate": { "cyan": 1.0 },
+      "model": "titanfabric:item/backpack_small_cyan"
+    },
+    {
+      "predicate": { "brown": 1.0 },
+      "model": "titanfabric:item/backpack_small_brown"
+    },
+    {
+      "predicate": { "green": 1.0 },
+      "model": "titanfabric:item/backpack_small_green"
+    },
+    {
+      "predicate": { "black": 1.0 },
+      "model": "titanfabric:item/backpack_small_black"
+    },
+    {
+      "predicate": { "white": 1.0 },
+      "model": "titanfabric:item/backpack_small_white"
+    }
+  ]
 }

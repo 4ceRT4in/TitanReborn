@@ -3,6 +3,8 @@ package net.shirojr.titanfabric.block;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.sound.BlockSoundGroup;
@@ -20,10 +22,10 @@ public class TitanFabricBlocks {
             new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(4.5f).strength(3.0f, 3.0f).requiresTool(), 3));
     public static final Block EMBER_ORE = registerBlock("ember_ore",
-            new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
+            new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHER_ORE).mapColor(DyeColor.RED)
                     .hardness(4.5f).strength(3.5f, 3.0f).requiresTool(), 4));
     public static final Block DEEPSTALE_LEGEND_ORE = registerBlock("deepslate_legend_ore",
-            new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
+            new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.DEEPSLATE).mapColor(MapColor.DEEPSLATE_GRAY)
                     .hardness(10.0f).strength(4.5f, 3.0f).requiresTool(), 7));
 
     public static final Block CITRIN_BLOCK = registerBlock("citrin_block",

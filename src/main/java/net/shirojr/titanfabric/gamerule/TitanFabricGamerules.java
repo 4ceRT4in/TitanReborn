@@ -7,6 +7,7 @@ import net.minecraft.world.GameRules;
 public class TitanFabricGamerules {
 
     public static final GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("legacyCombat", GameRules.Category.PLAYER, true);
+    public static final GameRules.Key<GameRules.BooleanRule> LEGACY_ENCHANTMENTS = registerBooleanGamerule("legacyEnchantments", GameRules.Category.MISC, true);
     public static final GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("legacyFoodRegeneration", GameRules.Category.PLAYER, true);
 
     private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(String name, GameRules.Category category, boolean defaultValue) {

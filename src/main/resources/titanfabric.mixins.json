@@ -6,6 +6,7 @@
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
     "AnvilScreenHandlerMixin",
+    "AreaEffectCloudEntityMixin",
     "ArmorItemMixin",
     "ArmorMaterialsMixin",
     "AxeItemMixin",
@@ -13,25 +14,25 @@
     "BrewingRecipeRegistryInvoker",
     "BrewingRecipeRegistryMixin",
     "CrossbowItemMixin",
+    "EnchantmentHelperMixin",
     "HungerManagerMixin",
     "ItemMixin",
     "ItemsMixin",
     "ItemStackMixin",
+    "LingeringPotionItemMixin",
     "LivingEntityMixin",
+    "ParticleManagerMixin",
     "PlayerEntityMixin",
     "PotionItemMixin",
     "ServerPlayerEntityMixin",
     "ShapedRecipeMixin",
     "SmithingRecipeMixin",
+    "SoulFireBlockMixin",
+    "SplashPotionItemMixin",
     "StatusEffectInstanceMixin",
     "StatusEffectMixin",
     "StatusEffectsMixin",
-    "SwordItemMixin",
-    "SplashPotionItemMixin",
-    "AreaEffectCloudEntityMixin",
-    "ParticleManagerMixin",
-    "LingeringPotionItemMixin"
-
+    "SwordItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -39,6 +40,7 @@
   "client": [
     "client.AbstractClientPlayerEntityMixin",
     "client.ArrowEntityRendererMixin",
+    "client.BackgroundRendererMixin",
     "client.BipedEntityModelMixin",
     "client.ClientPlayerEntityMixin",
     "client.GameOptionsMixin",
@@ -47,7 +49,6 @@
     "client.InventoryScreenMixin",
     "client.PlayerEntityRendererMixin",
     "client.PlayerHeldItemFeatureRendererMixin",
-    "client.BackgroundRendererMixin",
     "client.StatusEffectUtilMixin"
   ]
 }

@@ -1,0 +1,99 @@
+{
+	"credit": "Made with Blockbench by ShiroJR",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "block/gray_wool",
+		"2": "titanfabric:items/parachute_strings",
+		"particle": "block/gray_wool"
+	},
+	"elements": [
+		{
+			"from": [2, 12.2, 4],
+			"to": [6, 12.25, 12],
+			"rotation": {"angle": 22.5, "axis": "z", "origin": [2, 12.125, 8]},
+			"faces": {
+				"north": {"uv": [2, 0, 4, 0.025], "texture": "#0"},
+				"east": {"uv": [4, 0, 8, 0.025], "texture": "#0"},
+				"south": {"uv": [2, 0, 4, 0.025], "texture": "#0"},
+				"west": {"uv": [4, 0, 8, 0.025], "texture": "#0"},
+				"up": {"uv": [0, 0, 14, 14], "texture": "#0"},
+				"down": {"uv": [0, 0, 14, 14], "texture": "#0"}
+			}
+		},
+		{
+			"from": [10, 12.2, 4],
+			"to": [14, 12.25, 12],
+			"rotation": {"angle": -22.5, "axis": "z", "origin": [14, 12.125, 8]},
+			"faces": {
+				"north": {"uv": [4, 0, 2, 0.025], "texture": "#0"},
+				"east": {"uv": [8, 0, 4, 0.025], "texture": "#0"},
+				"south": {"uv": [4, 0, 2, 0.025], "texture": "#0"},
+				"west": {"uv": [8, 0, 4, 0.025], "texture": "#0"},
+				"up": {"uv": [14, 0, 0, 14], "texture": "#0"},
+				"down": {"uv": [14, 0, 0, 14], "texture": "#0"}
+			}
+		},
+		{
+			"from": [5.64768, 13.72122, 4],
+			"to": [10.35232, 13.77122, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-0.35232, -0.17878, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 2.35232, 0.025], "texture": "#0"},
+				"east": {"uv": [0, 0, 4, 0.025], "texture": "#0"},
+				"south": {"uv": [0, 0, 1, 0.025], "texture": "#0"},
+				"west": {"uv": [0, 0, 4, 0.025], "texture": "#0"},
+				"up": {"uv": [0, 0, 14, 14], "texture": "#0"},
+				"down": {"uv": [0, 0, 14, 14], "texture": "#0"}
+			}
+		},
+		{
+			"from": [2, 4, 7.5],
+			"to": [14, 13, 7.5],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 4, 7.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 4.5], "texture": "#2"},
+				"east": {"uv": [0, 0, 0, 4.5], "texture": "#2"},
+				"south": {"uv": [6, 0, 0, 4.5], "texture": "#2"},
+				"west": {"uv": [0, 0, 0, 4.5], "texture": "#2"},
+				"up": {"uv": [6, 0, 0, 0], "texture": "#2"},
+				"down": {"uv": [6, 0, 0, 0], "texture": "#2"}
+			}
+		},
+		{
+			"from": [2, 4, 8.5],
+			"to": [14, 13, 8.5],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 4, 8.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 6, 4.5], "texture": "#2"},
+				"east": {"uv": [0, 0, 0, 4.5], "texture": "#2"},
+				"south": {"uv": [6, 0, 0, 4.5], "texture": "#2"},
+				"west": {"uv": [0, 0, 0, 4.5], "texture": "#2"},
+				"up": {"uv": [6, 0, 0, 0], "texture": "#2"},
+				"down": {"uv": [6, 0, 0, 0], "texture": "#2"}
+			}
+		}
+	],
+	"display": {
+		"ground": {
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [30, -30, 0],
+			"translation": [0, -1.75, 0]
+		}
+	},
+	"groups": [
+		{
+			"name": "glider_new",
+			"origin": [10, 14, 6],
+			"color": 0,
+			"children": [0, 1, 2]
+		},
+		{
+			"name": "strings",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [3, 4]
+		}
+	]
+}

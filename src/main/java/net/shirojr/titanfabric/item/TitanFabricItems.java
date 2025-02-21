@@ -22,6 +22,7 @@ import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
 import net.shirojr.titanfabric.item.custom.misc.CutPotion;
+import net.shirojr.titanfabric.item.custom.misc.FlintAndEmberItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
@@ -113,7 +114,10 @@ public class TitanFabricItems {
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
     public static final TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
-            new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
+            new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(500)));
+
+    public static final FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
+            new FlintAndEmberItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(64)));
 
     public static final TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
     public static final CutPotion CUT_POTION = registerItem("cut_potion", new CutPotion(new FabricItemSettings()));

@@ -5,6 +5,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.recipe.custom.DyeableRecipe;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.recipe.custom.MultiBowRecipe;
 import net.shirojr.titanfabric.recipe.custom.WeaponRecipe;
@@ -15,7 +16,8 @@ public enum TitanFabricRecipes {
     MULTI_BOW_UPGRADE_SMITHING("multi_bow_upgrade", MultiBowRecipe.Serializer.INSTANCE, MultiBowRecipe.Type.INSTANCE),
     WEAPON_EFFECT_SMITHING("weapon_effect", WeaponRecipe.Serializer.INSTANCE, WeaponRecipe.Type.INSTANCE),
     ESSENCE_EFFECT_CRAFTING("essence_effect", EffectRecipe.Serializer.ESSENCE_EFFECT_INSTANCE, EffectRecipe.Type.ESSENCE_EFFECT_INSTANCE),
-    ARROW_EFFECT_CRAFTING("arrow_effect", EffectRecipe.Serializer.ARROW_EFFECT_INSTANCE, EffectRecipe.Type.ARROW_EFFECT_INSTANCE);
+    ARROW_EFFECT_CRAFTING("arrow_effect", EffectRecipe.Serializer.ARROW_EFFECT_INSTANCE, EffectRecipe.Type.ARROW_EFFECT_INSTANCE),
+    DYEABLE_CRAFTING("dyeable_crafting", DyeableRecipe.Serializer.INSTANCE, DyeableRecipe.Type.INSTANCE);
 
     private final RecipeData data;
 

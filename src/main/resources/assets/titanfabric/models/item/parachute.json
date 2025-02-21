@@ -73,6 +73,68 @@
 			}
 		}
 	],
+	"overrides": [
+		{
+			"predicate": { "red": 1.0 },
+			"model": "titanfabric:item/parachute_red"
+		},
+		{
+			"predicate": { "orange": 1.0 },
+			"model": "titanfabric:item/parachute_orange"
+		},
+		{
+			"predicate": { "blue": 1.0 },
+			"model": "titanfabric:item/parachute_blue"
+		},
+		{
+			"predicate": { "gray": 1.0 },
+			"model": "titanfabric:item/parachute_gray"
+		},
+		{
+			"predicate": { "lime": 1.0 },
+			"model": "titanfabric:item/parachute_lime"
+		},
+		{
+			"predicate": { "pink": 1.0 },
+			"model": "titanfabric:item/parachute_pink"
+		},
+		{
+			"predicate": { "purple": 1.0 },
+			"model": "titanfabric:item/parachute_purple"
+		},
+		{
+			"predicate": { "light_blue": 1.0 },
+			"model": "titanfabric:item/parachute_light_blue"
+		},
+		{
+			"predicate": { "light_gray": 1.0 },
+			"model": "titanfabric:item/parachute_light_gray"
+		},
+		{
+			"predicate": { "yellow": 1.0 },
+			"model": "titanfabric:item/parachute_yellow"
+		},
+		{
+			"predicate": { "magenta": 1.0 },
+			"model": "titanfabric:item/parachute_magenta"
+		},
+		{
+			"predicate": { "cyan": 1.0 },
+			"model": "titanfabric:item/parachute_cyan"
+		},
+		{
+			"predicate": { "brown": 1.0 },
+			"model": "titanfabric:item/parachute_brown"
+		},
+		{
+			"predicate": { "green": 1.0 },
+			"model": "titanfabric:item/parachute_green"
+		},
+		{
+			"predicate": { "black": 1.0 },
+			"model": "titanfabric:item/parachute_black"
+		}
+	],
 	"display": {
 		"ground": {
 			"scale": [0.5, 0.5, 0.5]

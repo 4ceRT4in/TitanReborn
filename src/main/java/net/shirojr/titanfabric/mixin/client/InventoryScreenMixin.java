@@ -6,8 +6,10 @@ import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookProvider;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
+import net.minecraft.client.gui.screen.world.EditGameRulesScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -47,6 +49,9 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         int buttonX = recipeBook.findLeftEdge(this.width, this.backgroundWidth);
         this.buttonWidget = new ButtonWidget(buttonX + 2, this.height / 2 - 106,
                 20, 20, new LiteralText(">>"), button -> {
+            if(this.client.mouse != null) {
+                this.client.mouse.unlockCursor();
+            }
             PacketByteBuf buf = PacketByteBufs.create();
             ClientPlayNetworking.send(NetworkingIdentifiers.EXTENDED_INVENTORY_OPEN, buf);
         });

@@ -1,0 +1,14 @@
+{
+  "type": "titanfabric:dyeable_crafting",
+  "ingredients": [
+    {
+      "item": "titanfabric:parachute"
+    },
+    {
+      "item": "minecraft:gray_dye"
+    }
+  ],
+  "result": {
+    "item": "titanfabric:parachute"
+  }
+}

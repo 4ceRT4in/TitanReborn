@@ -10,6 +10,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
+import net.shirojr.titanfabric.color.TitanFabricColorProviders;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
@@ -19,6 +20,7 @@ import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 import java.util.List;
+import java.util.Objects;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
 import static net.shirojr.titanfabric.util.effects.WeaponEffectType.ADDITIONAL_EFFECT;
@@ -26,6 +28,7 @@ import static net.shirojr.titanfabric.util.effects.WeaponEffectType.INNATE_EFFEC
 
 @Environment(EnvType.CLIENT)
 public class ModelPredicateProviders {
+
     public static void register() {
         registerWeaponEffects(TitanFabricItems.DIAMOND_GREATSWORD);
         registerWeaponEffects(TitanFabricItems.CITRIN_SWORD);
@@ -50,6 +53,11 @@ public class ModelPredicateProviders {
         registerBowProviders(TitanFabricItems.MULTI_BOW_3);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_3);
         registerCrossBowProviders();
+
+        registerColorItemProvider(TitanFabricItems.BACKPACK_BIG);
+        registerColorItemProvider(TitanFabricItems.BACKPACK_MEDIUM);
+        registerColorItemProvider(TitanFabricItems.BACKPACK_SMALL);
+        registerColorItemProvider(TitanFabricItems.PARACHUTE);
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -147,6 +155,12 @@ public class ModelPredicateProviders {
                 case WITHER -> 0.5f;
             };
         });
+    }
+    public static void registerColorItemProvider(Item item) {
+        for (String colors : TitanFabricColorProviders.COLOR_KEYS) {
+            ModelPredicateProviderRegistry.register(item, new Identifier(colors),
+                    (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors) ? 1.0F : 0.0F);
+        }
     }
 
     private static void registerStrengthProvider(Item item, Identifier identifier) {

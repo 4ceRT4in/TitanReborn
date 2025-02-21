@@ -5,9 +5,11 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 
 public class BackPackItemScreen extends HandledScreen<BackPackItemScreenHandler> {
@@ -35,6 +37,35 @@ public class BackPackItemScreen extends HandledScreen<BackPackItemScreenHandler>
         }
 
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+    }
+
+    @Override
+    protected boolean handleHotbarKeyPressed(int keyCode, int scanCode) {
+        if (this.handler.getCursorStack().isEmpty() && this.focusedSlot != null) {
+            assert this.client != null;
+            if (this.client.options.swapHandsKey.matchesKey(keyCode, scanCode)) {
+                if (this.client.player != null) {
+                    if (this.focusedSlot.hasStack() && this.focusedSlot.getStack() == this.client.player.getMainHandStack()) {
+                        return false;
+                    }
+                    this.onMouseClick(this.focusedSlot, this.focusedSlot.id, 40, SlotActionType.SWAP);
+                    return true;
+                }
+            }
+
+            for(int i = 0; i < 9; ++i) {
+                if (this.client.options.hotbarKeys[i].matchesKey(keyCode, scanCode)) {
+                    if (this.client.player != null) {
+                        if (this.focusedSlot.hasStack() && this.focusedSlot.getStack() == this.client.player.getMainHandStack()) {
+                            return false;
+                        }
+                        this.onMouseClick(this.focusedSlot, this.focusedSlot.id, i, SlotActionType.SWAP);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override

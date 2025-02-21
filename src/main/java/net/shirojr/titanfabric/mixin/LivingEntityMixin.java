@@ -1,16 +1,22 @@
 package net.shirojr.titanfabric.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.item.*;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.tag.EntityTypeTags;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.event.GameEvent;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
@@ -22,6 +28,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -116,7 +123,11 @@ public abstract class LivingEntityMixin {
         }
         cir.setReturnValue(false);
     }
-
+    private boolean titanFabric$renderCrossBowFix(ItemStack instance, Item item, Operation<Boolean> original) {
+        boolean originalEvaluation = original.call(instance, item);
+        if (!item.equals(Items.CROSSBOW)) return originalEvaluation;
+        return originalEvaluation || instance.getItem() instanceof CrossbowItem;
+    }
     @ModifyVariable(method = "travel", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/effect/StatusEffects;SLOW_FALLING:Lnet/minecraft/entity/effect/StatusEffect;", shift = At.Shift.BEFORE, by = 1), ordinal = 0)
     private double titanfabric$handleSafeLandingEffect(double original) {
         LivingEntity entity = ((LivingEntity) (Object) this);
