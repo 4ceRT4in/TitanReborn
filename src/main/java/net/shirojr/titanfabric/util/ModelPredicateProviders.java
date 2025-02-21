@@ -11,6 +11,7 @@ import net.minecraft.item.PotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
+import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
@@ -157,7 +158,7 @@ public class ModelPredicateProviders {
         });
     }
     public static void registerColorItemProvider(Item item) {
-        for (String colors : TitanFabricColorProviders.COLOR_KEYS) {
+        for (String colors : TitanFabricDyeProviders.COLOR_KEYS) {
             ModelPredicateProviderRegistry.register(item, new Identifier(colors),
                     (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors) ? 1.0F : 0.0F);
         }

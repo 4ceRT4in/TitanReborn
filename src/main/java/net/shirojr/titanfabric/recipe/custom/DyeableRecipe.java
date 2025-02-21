@@ -15,6 +15,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
+import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.util.recipes.SlotArrangementType;
 
 public class DyeableRecipe extends ShapelessRecipe {
@@ -39,40 +40,50 @@ public class DyeableRecipe extends ShapelessRecipe {
                 }
             }
         }
-        return !itemToDye.isEmpty() && !dye.isEmpty();
+        if (itemToDye.isEmpty() || dye.isEmpty()) return false;
+
+        return itemToDye.getItem() == this.getOutput().getItem();
     }
 
     @Override
     public ItemStack craft(CraftingInventory craftingInventory) {
-        ItemStack itemToDye = ItemStack.EMPTY;
+        ItemStack inputItem = ItemStack.EMPTY;
         ItemStack dye = ItemStack.EMPTY;
-
         for (int i = 0; i < craftingInventory.size(); i++) {
             ItemStack stack = craftingInventory.getStack(i);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof DyeItem) {
                     dye = stack;
                 } else {
-                    itemToDye = stack.copy();
+                    inputItem = stack;
                 }
             }
         }
 
-        if (itemToDye.isEmpty() || dye.isEmpty()) {
+        if (inputItem.isEmpty() || dye.isEmpty()) {
             return ItemStack.EMPTY;
         }
+        ItemStack result = this.getOutput().copy();
+        if (inputItem.hasNbt()) {
+            NbtCompound inputNbt = inputItem.getNbt().copy();
+            NbtCompound resultNbt = result.getOrCreateNbt();
+            for (String key : inputNbt.getKeys()) {
+                resultNbt.put(key, inputNbt.get(key));
+            }
+            result.setNbt(resultNbt);
+        }
 
-        NbtCompound nbt = itemToDye.getOrCreateNbt();
-        String newDyeName = ((DyeItem) dye.getItem()).getColor().getName();
-
-        for (String key : TitanFabricColorProviders.COLOR_KEYS) {
+        NbtCompound nbt = result.getOrCreateNbt();
+        for (String key : TitanFabricDyeProviders.COLOR_KEYS) {
             if (nbt.contains(key)) {
                 nbt.remove(key);
             }
         }
+
+        String newDyeName = ((DyeItem) dye.getItem()).getColor().getName();
         nbt.putBoolean(newDyeName, true);
 
-        return itemToDye;
+        return result;
     }
 
     @Override
@@ -88,7 +99,7 @@ public class DyeableRecipe extends ShapelessRecipe {
             String group = JsonHelper.getString(jsonObject, "group", "");
             DefaultedList<Ingredient> ingredients = getIngredients(JsonHelper.getArray(jsonObject, "ingredients"));
             if (ingredients.size() != 2) {
-                throw new JsonParseException("DyableRecipe requires 2 ingredients: one item and dye tag //");
+                throw new JsonParseException("DyebleRecipe requires 2 ingredients: one item and a dye tag.");
             }
             ItemStack output = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
             return new DyeableRecipe(identifier, group, output, ingredients);

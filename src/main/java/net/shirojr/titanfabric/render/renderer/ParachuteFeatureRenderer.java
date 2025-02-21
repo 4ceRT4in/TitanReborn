@@ -14,6 +14,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
+import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.render.model.ParachuteFeatureModel;
@@ -26,7 +27,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
     private static final Map<String, Identifier> PARACHUTE_TEXTURES = new HashMap<>();
 
     static {
-        for (String color : TitanFabricColorProviders.COLOR_KEYS) {
+        for (String color : TitanFabricDyeProviders.COLOR_KEYS) {
             PARACHUTE_TEXTURES.put(color, new Identifier(TitanFabric.MODID, "textures/entity/parachute/parachute_" + color + ".png"));
         }
     }
@@ -61,7 +62,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
             NbtCompound nbt = mainHand.getNbt();
             assert nbt != null;
             if (nbt.contains("Activated") && nbt.getBoolean("Activated")) {
-                return TitanFabricColorProviders.getColorFromNBT(nbt);
+                return TitanFabricDyeProviders.getColorFromNBT(nbt);
             }
         }
         ItemStack offHand = entity.getOffHandStack();
@@ -69,7 +70,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
             NbtCompound nbt = offHand.getNbt();
             assert nbt != null;
             if (nbt.contains("Activated") && nbt.getBoolean("Activated")) {
-                return TitanFabricColorProviders.getColorFromNBT(nbt);
+                return TitanFabricDyeProviders.getColorFromNBT(nbt);
             }
         }
         return "white";

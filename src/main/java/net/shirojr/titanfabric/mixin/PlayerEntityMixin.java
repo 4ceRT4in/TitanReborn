@@ -237,32 +237,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     }
 
 
-    @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-    private float modifyDamageAmount(float amount, DamageSource source) {
-        PlayerEntity entity = (PlayerEntity) (Object) this;
-        if (entity.getWorld() != null && !entity.getWorld().isClient() && source != null) {
-            if (source == DamageSource.IN_FIRE) {
-                BlockPos pos = entity.getBlockPos();
-                BlockState blockState = entity.getWorld().getBlockState(pos);
-                if (blockState.isOf(Blocks.SOUL_FIRE)) {
-                    int totalArmor = 0;
-                    for (ItemStack armorStack : entity.getArmorItems()) {
-                        if (!armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem armorItem) {
-                            totalArmor += armorItem.getMaterial().getProtectionAmount(armorItem.getSlotType());
-                        }
-                    }
-                    if (totalArmor > 0) {
-                        float multiplier = 1.0F - (totalArmor * 0.04F);
-                        multiplier = Math.max(0.0F, multiplier);
-                        return (amount * multiplier);
-                    }
-                }
-            }
-        }
-        return amount;
-    }
-
-
     // Can be used to show the indicator for entity in range
     // @Inject(method = "getAttackCooldownProgress", at = @At("HEAD"), cancellable = true)
     // private void titanfabric$getAttackCooldownProgressMixin(float baseTime,CallbackInfoReturnable<Float> cir) {

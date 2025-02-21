@@ -55,7 +55,7 @@ public class TitanFabricParachuteItem extends Item {
                         nbtCompound.putBoolean("Activated", false);
                         stack.setNbt(nbtCompound);
                     } else {
-                        if(Math.random() <= 0.025) {
+                        if(Math.random() <= 0.075) {
                             stack.damage(1, playerEntity, player -> player.sendToolBreakStatus(player.getActiveHand()));
                         }
                         Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);

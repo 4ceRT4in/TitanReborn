@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
@@ -15,6 +16,7 @@ import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.tag.EntityTypeTags;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
@@ -137,6 +139,30 @@ public abstract class LivingEntityMixin {
         }
         return original;
     }
+
+    @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    private float modifyDamageAmount(float amount, DamageSource source) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity.getWorld() != null && !entity.getWorld().isClient() && source != null) {
+            if (source == DamageSource.IN_FIRE) {
+                BlockPos pos = entity.getBlockPos();
+                BlockState blockState = entity.getWorld().getBlockState(pos);
+                int totalArmor = 0;
+                for (ItemStack armorStack : entity.getArmorItems()) {
+                    if (!armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem armorItem) {
+                        totalArmor += armorItem.getMaterial().getProtectionAmount(armorItem.getSlotType());
+                    }
+                }
+                if (totalArmor > 0) {
+                    float multiplier = 1.0F - (totalArmor * 0.04F);
+                    multiplier = Math.max(0.0F, multiplier);
+                    return (amount * multiplier);
+                }
+            }
+        }
+        return amount;
+    }
+
 
     @ModifyVariable(method = "applyMovementInput", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private Vec3d titanfabric$applyMovementInputMixin(Vec3d original) {
