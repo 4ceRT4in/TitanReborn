@@ -16,7 +16,7 @@ public abstract class EnchantmentHelperMixin {
     private static void modifySharpnessDamage(ItemStack stack, EntityGroup group, CallbackInfoReturnable<Float> cir) {
         int level = EnchantmentHelper.getLevel(Enchantments.SHARPNESS, stack);
         if (level > 0) {
-            float damage = (level * 1.25F); // 1.8 sharpness level
+            float damage = (level * 1.0F);
             cir.setReturnValue(damage);
         }
     }
