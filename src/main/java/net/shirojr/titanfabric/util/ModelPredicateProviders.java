@@ -15,6 +15,7 @@ import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
+import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
@@ -59,6 +60,8 @@ public class ModelPredicateProviders {
         registerColorItemProvider(TitanFabricItems.BACKPACK_MEDIUM);
         registerColorItemProvider(TitanFabricItems.BACKPACK_SMALL);
         registerColorItemProvider(TitanFabricItems.PARACHUTE);
+
+        registerBundleItemProvider(TitanFabricItems.POTION_BUNDLE);
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -157,11 +160,16 @@ public class ModelPredicateProviders {
             };
         });
     }
-    public static void registerColorItemProvider(Item item) {
+    private static void registerColorItemProvider(Item item) {
         for (String colors : TitanFabricDyeProviders.COLOR_KEYS) {
             ModelPredicateProviderRegistry.register(item, new Identifier(colors),
                     (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors) ? 1.0F : 0.0F);
         }
+    }
+
+    private static void registerBundleItemProvider(Item item) {
+        ModelPredicateProviderRegistry.register(item, new Identifier("filled"),
+                (stack, world, entity, seed) -> PotionBundleItem.getAmountFilled(stack));
     }
 
     private static void registerStrengthProvider(Item item, Identifier identifier) {

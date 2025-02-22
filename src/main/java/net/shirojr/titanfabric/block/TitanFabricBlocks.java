@@ -2,10 +2,7 @@ package net.shirojr.titanfabric.block;
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
@@ -18,6 +15,9 @@ import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricBlocks {
 
+    public static final Block LEGEND_CRYSTAL = registerBlock("legend_crystal",
+            new AmethystClusterBlock(7, 3,FabricBlockSettings.of(Material.AMETHYST).nonOpaque().ticksRandomly().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
+                    .strength(3.5F).luminance(state -> 8).requiresTool()));
     public static final Block CITRIN_ORE = registerBlock("citrin_ore",
             new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(4.5f).strength(3.0f, 3.0f).requiresTool(), 3));

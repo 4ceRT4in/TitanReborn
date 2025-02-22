@@ -130,6 +130,7 @@
   "item.titanfabric.weak2_diamond_greatsword": "§bDiamond Greatsword",
   "item.titanfabric.wither1_diamond_greatsword": "§bDiamond Greatsword",
   "item.titanfabric.wither2_diamond_greatsword": "§bDiamond Greatsword",
+  "item.titanfabric.potion_bundle": "Potion Bundle",
   "item.titanfabric.backpack_small": "Small Backpack",
   "item.titanfabric.backpack_medium": "Medium Backpack",
   "item.titanfabric.backpack_big": "Big Backpack",
@@ -207,6 +208,7 @@
   "tooltip.titanfabric.colorBlack": "§fColor: §8Black",
   "tooltip.titanfabric.colorWhite": "§fColor: §fWhite",
 
+  "block.titanfabric.legend_crystal": "§e§kl §r§3Titan Crystal §e§kl",
   "block.titanfabric.citrin_ore": "§eCitrin Ore",
   "block.titanfabric.citrin_block": "§eCitrin Block",
   "block.titanfabric.deepslate_legend_ore": "§e§kl §r§3Titan Deepslate Ore §e§kl",

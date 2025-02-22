@@ -19,10 +19,7 @@ import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
-import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
-import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
-import net.shirojr.titanfabric.item.custom.misc.CutPotion;
-import net.shirojr.titanfabric.item.custom.misc.FlintAndEmberItem;
+import net.shirojr.titanfabric.item.custom.misc.*;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
@@ -110,8 +107,6 @@ public class TitanFabricItems {
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
     public static final Item EMBER_SHARD = registerItem("ember_shard",
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
-    public static final Item LEGEND_CRYSTAL = registerItem("legend_crystal",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
     public static final TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
             new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(250)));
@@ -130,6 +125,9 @@ public class TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F)
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
+
+    public static final PotionBundleItem POTION_BUNDLE  = registerItem("potion_bundle",
+            new PotionBundleItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
 
     public static final BackPackItem BACKPACK_SMALL = registerItem("backpack_small",
             new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.SMALL));

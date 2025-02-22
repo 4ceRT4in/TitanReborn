@@ -166,6 +166,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
                 if (netherArmorCount > 0) {
 
                     if (netherArmorCount == 4) {
+                        player.setFireTicks(0);
                         cir.setReturnValue(false);
                     } else {
                         if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), netherArmorCount)) {

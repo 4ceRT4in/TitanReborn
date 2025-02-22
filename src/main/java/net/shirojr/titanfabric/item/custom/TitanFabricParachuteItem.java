@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.tag.ItemTags;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -55,7 +56,7 @@ public class TitanFabricParachuteItem extends Item {
                         nbtCompound.putBoolean("Activated", false);
                         stack.setNbt(nbtCompound);
                     } else {
-                        if(Math.random() <= 0.075) {
+                        if(Math.random() <= 0.05) {
                             stack.damage(1, playerEntity, player -> player.sendToolBreakStatus(player.getActiveHand()));
                         }
                         Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);
@@ -114,6 +115,12 @@ public class TitanFabricParachuteItem extends Item {
             }
         }
         return false;
+    }
+
+
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return ingredient.isIn(ItemTags.WOOL);
     }
 
     @Override

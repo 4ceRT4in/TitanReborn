@@ -1,0 +1,6 @@
+{
+    "parent": "titanfabric:item/potion_bundle",
+    "textures": {
+        "layer0": "titanfabric:items/potion_bundle_filled"
+    }
+}

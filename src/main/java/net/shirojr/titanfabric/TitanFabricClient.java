@@ -38,6 +38,7 @@ public class TitanFabricClient implements ClientModInitializer {
         HandledScreens.register(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, ExtendedInventoryScreen::new);
 
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.LEGEND_CRYSTAL, RenderLayer.getCutout());
 
         GasTextureSheet.initialize();
         ParticleFactoryRegistry.getInstance().register(TitanFabric.GAS_PARTICLE, GasParticleFactory::new);

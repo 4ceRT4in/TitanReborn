@@ -2,6 +2,10 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "titanfabric:items/legend_crystal"
+  },
+  "display": {
+    "head": {
+      "translation": [ 0, 14, -5 ]
+    }
   }
-
 }

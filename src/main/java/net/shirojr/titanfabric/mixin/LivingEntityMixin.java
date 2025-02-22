@@ -145,8 +145,6 @@ public abstract class LivingEntityMixin {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity.getWorld() != null && !entity.getWorld().isClient() && source != null) {
             if (source == DamageSource.IN_FIRE) {
-                BlockPos pos = entity.getBlockPos();
-                BlockState blockState = entity.getWorld().getBlockState(pos);
                 int totalArmor = 0;
                 for (ItemStack armorStack : entity.getArmorItems()) {
                     if (!armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem armorItem) {

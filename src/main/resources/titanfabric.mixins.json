@@ -4,6 +4,7 @@
   "package": "net.shirojr.titanfabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractFireBlockMixin",
     "AbstractFurnaceBlockEntityMixin",
     "AnvilScreenHandlerMixin",
     "AreaEffectCloudEntityMixin",
@@ -21,6 +22,7 @@
     "ItemStackMixin",
     "LingeringPotionItemMixin",
     "LivingEntityMixin",
+    "OreFeatureMixin",
     "ParticleManagerMixin",
     "PlayerEntityMixin",
     "PotionItemMixin",
