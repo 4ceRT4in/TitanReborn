@@ -17,7 +17,7 @@ public class TitanFabricBlocks {
 
     public static final Block LEGEND_CRYSTAL = registerBlock("legend_crystal",
             new AmethystClusterBlock(7, 3,FabricBlockSettings.of(Material.AMETHYST).nonOpaque().ticksRandomly().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
-                    .strength(3.5F).luminance(state -> 8).requiresTool()));
+                    .strength(3.5F).luminance(state -> 10).requiresTool()));
     public static final Block CITRIN_ORE = registerBlock("citrin_ore",
             new TitanFabricOreBlock(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.STONE).mapColor(DyeColor.GRAY)
                     .hardness(4.5f).strength(3.0f, 3.0f).requiresTool(), 3));

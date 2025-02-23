@@ -20,6 +20,7 @@ import java.util.Random;
 @Mixin(OreFeature.class)
 public abstract class OreFeatureMixin {
 
+    @Unique
     private static final Random random = new Random();
 
     @Redirect(method = "generateVeinPart", at = @At(
@@ -27,10 +28,10 @@ public abstract class OreFeatureMixin {
             target = "Lnet/minecraft/world/chunk/ChunkSection;setBlockState(IIILnet/minecraft/block/BlockState;Z)Lnet/minecraft/block/BlockState;"
     ))
     private BlockState redirectSetBlockState(ChunkSection instance, int x, int y, int z, BlockState state, boolean lock) {
-        BlockState previousState = instance.setBlockState(x, y, z, state);
+        BlockState previousState = instance.setBlockState(x, y, z, state, lock);
 
         if (state.getBlock() == TitanFabricBlocks.DEEPSTALE_LEGEND_ORE) {
-            if (Math.random() <= 0.4) { // 40% chance (bumped cause 20 was too low, in order to match with the checks)
+            if (Math.random() <= 0.25) { // reduced to 25% again
                 int crystalCount = MathHelper.nextInt(random, 1, 3);
 
                 for (int i = 0; i < crystalCount; i++) {
@@ -39,10 +40,10 @@ public abstract class OreFeatureMixin {
                     int ny = MathHelper.clamp(y + MathHelper.nextInt(random, -range, range), 0, 15);
                     int nz = MathHelper.clamp(z + MathHelper.nextInt(random, -range, range), 0, 15);
 
-                    if (isValidChunkCoordinate(nx, ny, nz) && isValidCrystalPlacement(instance, nx, ny, nz)) {
+                    if (isValidCrystalPlacement(instance, nx, ny, nz)) {
                         Direction facing = getCrystalFacing(instance, nx, ny, nz);
                         BlockState crystalState = TitanFabricBlocks.LEGEND_CRYSTAL.getDefaultState().with(Properties.FACING, facing);
-                        instance.setBlockState(nx, ny, nz, crystalState);
+                        instance.setBlockState(nx, ny, nz, crystalState, lock);
                     }
                 }
             }
@@ -57,11 +58,20 @@ public abstract class OreFeatureMixin {
 
     @Unique
     private boolean isValidCrystalPlacement(ChunkSection instance, int x, int y, int z) {
-        if (!isValidChunkCoordinate(x, y, z) || !isValidChunkCoordinate(x, y - 1, z)) return false;
-
-        BlockState belowState = instance.getBlockState(x, y - 1, z);
-        return (belowState.getBlock() == net.minecraft.block.Blocks.DEEPSLATE || belowState.getBlock() == TitanFabricBlocks.DEEPSTALE_LEGEND_ORE)
-                && instance.getBlockState(x, y, z).isAir();
+        if (!isValidChunkCoordinate(x, y, z) || !instance.getBlockState(x, y, z).isAir()) return false;
+        for (Direction direction : Direction.values()) {
+            int nx = x + direction.getOffsetX();
+            int ny = y + direction.getOffsetY();
+            int nz = z + direction.getOffsetZ();
+            if (isValidChunkCoordinate(nx, ny, nz)) {
+                BlockState adjacentState = instance.getBlockState(nx, ny, nz);
+                if (adjacentState.getBlock() == net.minecraft.block.Blocks.DEEPSLATE ||
+                        adjacentState.getBlock() == TitanFabricBlocks.DEEPSTALE_LEGEND_ORE) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Unique
@@ -72,7 +82,8 @@ public abstract class OreFeatureMixin {
             int nz = z + direction.getOffsetZ();
             if (isValidChunkCoordinate(nx, ny, nz)) {
                 BlockState adjacentState = instance.getBlockState(nx, ny, nz);
-                if (!adjacentState.isAir() && adjacentState.getBlock() != TitanFabricBlocks.LEGEND_CRYSTAL && adjacentState.getBlock() != net.minecraft.block.Blocks.LAVA && adjacentState.getBlock() != Blocks.WATER) {
+                if (adjacentState.getBlock() == net.minecraft.block.Blocks.DEEPSLATE ||
+                        adjacentState.getBlock() == TitanFabricBlocks.DEEPSTALE_LEGEND_ORE) {
                     return direction.getOpposite();
                 }
             }

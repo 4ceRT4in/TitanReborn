@@ -154,7 +154,7 @@ public abstract class LivingEntityMixin {
                 if (totalArmor > 0) {
                     float multiplier = 1.0F - (totalArmor * 0.04F);
                     multiplier = Math.max(0.0F, multiplier);
-                    return (amount * multiplier);
+                    return (amount * multiplier) + 0.5F;
                 }
             }
         }
