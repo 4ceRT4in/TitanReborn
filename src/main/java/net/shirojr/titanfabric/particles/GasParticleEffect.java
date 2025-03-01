@@ -1,78 +1,40 @@
 package net.shirojr.titanfabric.particles;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.network.PacketByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.util.registry.Registry;
-import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.TitanFabricParticles;
 
-import java.util.Locale;
+public record GasParticleEffect(float red, float green, float blue, float scale,
+                                float alpha) implements ParticleEffect {
 
-public class GasParticleEffect implements ParticleEffect {
-    public static final ParticleEffect.Factory<GasParticleEffect> PARAMETERS_FACTORY = new ParticleEffect.Factory<GasParticleEffect>() {
-        @Override
-        public GasParticleEffect read(ParticleType<GasParticleEffect> type, StringReader reader) throws CommandSyntaxException {
-            reader.expect(' ');
-            float red = reader.readFloat();
-            reader.expect(' ');
-            float green = reader.readFloat();
-            reader.expect(' ');
-            float blue = reader.readFloat();
-            reader.expect(' ');
-            float scale = reader.readFloat();
-            reader.expect(' ');
-            float alpha = reader.readFloat();
-            return new GasParticleEffect(red, green, blue, scale, alpha);
-        }
+    public static final MapCodec<GasParticleEffect> CODEC = RecordCodecBuilder.mapCodec(
+            instance -> instance.group(
+                            Codec.FLOAT.fieldOf("red").forGetter(particleEffect -> particleEffect.red),
+                            Codec.FLOAT.fieldOf("green").forGetter(particleEffect -> particleEffect.green),
+                            Codec.FLOAT.fieldOf("blue").forGetter(particleEffect -> particleEffect.blue),
+                            Codec.FLOAT.fieldOf("scale").forGetter(particleEffect -> particleEffect.scale),
+                            Codec.FLOAT.fieldOf("alpha").forGetter(particleEffect -> particleEffect.alpha))
+                    .apply(instance, GasParticleEffect::new)
+    );
 
-        @Override
-        public GasParticleEffect read(ParticleType<GasParticleEffect> type, PacketByteBuf buf) {
-            return new GasParticleEffect(buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
-        }
-    };
-
-    private final float red;
-    private final float green;
-    private final float blue;
-    private final float scale;
-    private final float alpha;
-
-    public GasParticleEffect(float red, float green, float blue, float scale, float alpha) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.scale = scale;
-        this.alpha = alpha;
-    }
+    public static final PacketCodec<RegistryByteBuf, GasParticleEffect> PACKET_CODEC = PacketCodec.tuple(
+            PacketCodecs.FLOAT, GasParticleEffect::red,
+            PacketCodecs.FLOAT, GasParticleEffect::green,
+            PacketCodecs.FLOAT, GasParticleEffect::blue,
+            PacketCodecs.FLOAT, GasParticleEffect::scale,
+            PacketCodecs.FLOAT, GasParticleEffect::alpha,
+            GasParticleEffect::new
+    );
 
     @Override
     public ParticleType<?> getType() {
-        return TitanFabric.GAS_PARTICLE;
-    }
-
-    public float getRed() { return red; }
-    public float getGreen() { return green; }
-    public float getBlue() { return blue; }
-    public float getScale() { return scale; }
-
-    public float getAlpha() {
-        return alpha;
-    }
-
-    @Override
-    public void write(PacketByteBuf buf) {
-        buf.writeFloat(red);
-        buf.writeFloat(green);
-        buf.writeFloat(blue);
-        buf.writeFloat(scale);
-        buf.writeFloat(alpha);
-    }
-
-    @Override
-    public String asString() {
-        return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getId(this.getType()), red, green, blue, scale, alpha);
+        return TitanFabricParticles.GAS_PARTICLE;
     }
 }
 

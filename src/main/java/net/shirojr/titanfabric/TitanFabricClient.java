@@ -41,7 +41,7 @@ public class TitanFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.LEGEND_CRYSTAL, RenderLayer.getCutout());
 
         GasTextureSheet.initialize();
-        ParticleFactoryRegistry.getInstance().register(TitanFabric.GAS_PARTICLE, GasParticleFactory::new);
+        ParticleFactoryRegistry.getInstance().register(TitanFabricParticles.GAS_PARTICLE, GasParticleFactory::new);
 
         TitanFabric.LOGGER.info("Initialized all " + TitanFabric.MODID + " client components");
     }
