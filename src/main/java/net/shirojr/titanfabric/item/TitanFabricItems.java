@@ -109,7 +109,7 @@ public class TitanFabricItems {
             new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(64)));
 
     public static final TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
-            new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(250)));
+            new TitanFabricParachuteItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
 
     public static final FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
             new FlintAndEmberItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(64)));
@@ -126,8 +126,8 @@ public class TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
 
-    public static final PotionBundleItem POTION_BUNDLE  = registerItem("potion_bundle",
-            new PotionBundleItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1)));
+    public static final BackPackItem POTION_BUNDLE  = registerItem("potion_bundle",
+            new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.POTION));
 
     public static final BackPackItem BACKPACK_SMALL = registerItem("backpack_small",
             new BackPackItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1), BackPackItem.Type.SMALL));

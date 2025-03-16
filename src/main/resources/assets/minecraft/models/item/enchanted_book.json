@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/enchanted_book"
+  },
+    "overrides": [
+    {
+      "predicate": { "overpowered": 1.0 },
+      "model": "titanfabric:item/overpowered_enchanted_book"
+    }
+	]
+}

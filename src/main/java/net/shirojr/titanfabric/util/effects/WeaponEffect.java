@@ -11,7 +11,7 @@ import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_K
 
 public enum WeaponEffect {
     BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS, 0x23307C),
-    FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null, -1),
+    FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null, PotionUtil.getColor(Potions.FIRE_RESISTANCE)),
     POISON("weapon_poison", StatusEffects.POISON, PotionUtil.getColor(Potions.POISON)),
     WEAK("weapon_weak", StatusEffects.WEAKNESS, PotionUtil.getColor(Potions.WEAKNESS)),
     WITHER("weapon_wither", StatusEffects.INSTANT_DAMAGE, StatusEffects.WITHER, 0x0D0D0D);

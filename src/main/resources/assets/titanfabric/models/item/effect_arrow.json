@@ -12,6 +12,12 @@
     },
     {
       "predicate": {
+        "effect": 0.2
+      },
+      "model": "titanfabric:item/fire_arrow"
+    },
+    {
+      "predicate": {
         "effect": 0.3
       },
       "model": "titanfabric:item/poison_arrow"

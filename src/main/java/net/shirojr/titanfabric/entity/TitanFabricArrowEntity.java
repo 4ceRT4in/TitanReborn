@@ -122,6 +122,7 @@ public class TitanFabricArrowEntity extends ArrowEntity {
             case POISON -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/poison_arrow.png");
             case WEAK -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/weakness_arrow.png");
             case WITHER -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/wither_arrow.png");
+            case FIRE -> new Identifier(TitanFabric.MODID, "textures/items/projectiles/fire_arrow.png");
             default -> new Identifier("textures/entity/projectiles/arrow.png");
         };
     }

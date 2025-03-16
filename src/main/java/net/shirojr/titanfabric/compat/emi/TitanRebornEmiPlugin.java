@@ -61,9 +61,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
                 registry.addRecipe(new EffectEmiRecipe(effectRecipe, VanillaEmiRecipeCategories.CRAFTING, WeaponEffect.POISON, "poison_upgrade"));
                 registry.addRecipe(new EffectEmiRecipe(effectRecipe, VanillaEmiRecipeCategories.CRAFTING, WeaponEffect.WITHER, "wither_upgrade"));
                 registry.addRecipe(new EffectEmiRecipe(effectRecipe, VanillaEmiRecipeCategories.CRAFTING, WeaponEffect.WEAK, "weak_upgrade"));
-                if (!effectRecipe.base.ingredient().test(new ItemStack(Items.ARROW))) {
-                    registry.addRecipe(new EffectEmiRecipe(effectRecipe, VanillaEmiRecipeCategories.CRAFTING, WeaponEffect.FIRE, "fire_upgrade"));
-                }
+                registry.addRecipe(new EffectEmiRecipe(effectRecipe, VanillaEmiRecipeCategories.CRAFTING, WeaponEffect.FIRE, "fire_upgrade"));
 
                 LoggerUtil.devLogger("Registered EMI recipe: " + recipe.getId());
             }

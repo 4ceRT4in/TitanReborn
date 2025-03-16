@@ -39,7 +39,7 @@ public class TitanFabricBlocks {
                     .hardness(12.0f).strength(6.0f).requiresTool()));
 
     public static final Block DIAMOND_FURNACE = registerBlock("diamond_furnace",
-            new DiamondFurnaceBlock(FabricBlockSettings.of(Material.METAL).mapColor(DyeColor.CYAN)
+            new DiamondFurnaceBlock(FabricBlockSettings.copyOf(Blocks.FURNACE).mapColor(DyeColor.CYAN)
                     .requiresTool().strength(3.5f)));
 
     public static final Block NETHERITE_ANVIL = registerBlock("netherite_anvil",

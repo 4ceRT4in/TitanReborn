@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -25,8 +26,10 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType, ItemStack backpackStack) {
         super(backPackType == BackPackItem.Type.SMALL ? TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER
-                : backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER
-                : TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
+                        : backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER
+                        : backPackType == BackPackItem.Type.BIG ? TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER
+                        : TitanFabricScreenHandlers.POTION_BUNDLE_SCREEN_HANDLER,
+                syncId);
         checkSize(inventory, backPackType.getSize());
 
         this.inventory = inventory;
@@ -39,6 +42,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
         switch (backPackType) {
             case MEDIUM -> location = new Point(35, 22);
             case BIG -> location = new Point(35, 18);
+            case POTION -> location = new Point(62, 17);
             default -> location = new Point(35, 34);
         }
         addStorageSlots(backPackType, location);
@@ -62,8 +66,17 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     }
 
     private void addStorageSlots(BackPackItem.Type type, Point pos) {
-        int columns = 6, slotSize = 18;
-        int rows = (int) (double) (type.getSize() / columns);
+        int columns;
+        int rows;
+        if (type == BackPackItem.Type.POTION) {
+            columns = 3;
+            rows = 3;
+        } else {
+            columns = 6;
+            rows = type.getSize() / columns;
+        }
+
+        int slotSize = 18;
         Point slotPos = new Point(pos);
 
         int slotIndex = 0;
@@ -93,6 +106,17 @@ public class BackPackItemScreenHandler extends ScreenHandler {
             super.onSlotClick(slotId, button, actionType, player);
             return;
         }
+        if (this.backPackType == BackPackItem.Type.POTION && slotId >= 0 && slotId < this.inventory.size()) {
+            ItemStack itemToCheck = ItemStack.EMPTY;
+            if (actionType == SlotActionType.SWAP) {
+                itemToCheck = player.getInventory().getStack(button);
+            } else {
+                itemToCheck = this.getCursorStack();
+            }
+            if (!itemToCheck.isEmpty() && !(itemToCheck.getItem() instanceof PotionItem)) {
+                return;
+            }
+        }
         if(slotId >= 0){
             Slot slot = this.slots.get(slotId);
             if (actionType == SlotActionType.SWAP && button >= 0 && button < 9) {
@@ -120,13 +144,25 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = (Slot) this.slots.get(index);
+        Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack()) {
             ItemStack itemStack2 = slot.getStack();
             itemStack = itemStack2.copy();
-            if (index < this.inventory.size() ? !this.insertItem(itemStack2, this.inventory.size(), this.slots.size(), true) : !this.insertItem(itemStack2, 0, this.inventory.size(), false)) {
-                return ItemStack.EMPTY;
+            if (this.backPackType == BackPackItem.Type.POTION) {
+                if (index >= this.inventory.size() && !(itemStack2.getItem() instanceof PotionItem)) {
+                    return ItemStack.EMPTY;
+                }
             }
+            if (index < this.inventory.size()) {
+                if (!this.insertItem(itemStack2, this.inventory.size(), this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else {
+                if (!this.insertItem(itemStack2, 0, this.inventory.size(), false)) {
+                    return ItemStack.EMPTY;
+                }
+            }
+
             if (itemStack2.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);
             } else {

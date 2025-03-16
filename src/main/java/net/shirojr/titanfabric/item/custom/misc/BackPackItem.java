@@ -167,7 +167,7 @@ public class BackPackItem extends Item {
     }
 
     public enum Type {
-        SMALL("small", 6, Rarity.UNCOMMON), MEDIUM("medium", 12, Rarity.RARE), BIG("big", 18, Rarity.EPIC);
+        SMALL("small", 6, Rarity.UNCOMMON), MEDIUM("medium", 12, Rarity.RARE), BIG("big", 18, Rarity.EPIC), POTION("potion", 9, Rarity.RARE);
 
         private final String id;
         private final int size;

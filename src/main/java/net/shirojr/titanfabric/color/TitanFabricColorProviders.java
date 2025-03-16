@@ -107,13 +107,6 @@ public class TitanFabricColorProviders {
     }
 
     public static void register() {
-        /*
-        - Code for generating the colored backpack textures, not needed anymore.
-
-        createBackpackTextures("big");
-        createBackpackTextures("medium");
-        createBackpackTextures("small");
-         */
         LoggerUtil.devLogger("initialising color providers");
     }
 }

@@ -15,6 +15,7 @@
     "BrewingRecipeRegistryInvoker",
     "BrewingRecipeRegistryMixin",
     "CrossbowItemMixin",
+    "DamageEnchantmentMixin",
     "EnchantmentHelperMixin",
     "HungerManagerMixin",
     "ItemMixin",
@@ -26,6 +27,8 @@
     "ParticleManagerMixin",
     "PlayerEntityMixin",
     "PotionItemMixin",
+    "PowerEnchantmentMixin",
+    "ProtectionEnchantmentMixin",
     "ServerPlayerEntityMixin",
     "ShapedRecipeMixin",
     "SmithingRecipeMixin",
@@ -45,12 +48,14 @@
     "client.BackgroundRendererMixin",
     "client.BipedEntityModelMixin",
     "client.ClientPlayerEntityMixin",
+    "client.EntityRenderDispatcherMixin",
     "client.GameOptionsMixin",
     "client.HeldItemRendererMixin",
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",
     "client.PlayerEntityRendererMixin",
     "client.PlayerHeldItemFeatureRendererMixin",
-    "client.StatusEffectUtilMixin"
+    "client.StatusEffectUtilMixin",
+    "client.ItemRendererMixin"
   ]
 }

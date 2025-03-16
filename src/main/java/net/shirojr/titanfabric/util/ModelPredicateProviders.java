@@ -3,19 +3,18 @@ package net.shirojr.titanfabric.util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.enchantment.*;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.color.TitanFabricColorProviders;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
-import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
+import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
@@ -61,7 +60,9 @@ public class ModelPredicateProviders {
         registerColorItemProvider(TitanFabricItems.BACKPACK_SMALL);
         registerColorItemProvider(TitanFabricItems.PARACHUTE);
 
-        registerBundleItemProvider(TitanFabricItems.POTION_BUNDLE);
+        registerPotionBundle(TitanFabricItems.POTION_BUNDLE);
+
+        registerOverpoweredEnchantedBookPredicate(Items.ENCHANTED_BOOK);
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -115,11 +116,32 @@ public class ModelPredicateProviders {
                     if (effect == null) return 0.0f;
                     return switch (effect) {
                         case BLIND -> 0.1f;
+                        case FIRE -> 0.2f;
                         case POISON -> 0.3f;
                         case WEAK -> 0.4f;
                         case WITHER -> 0.5f;
                         default -> 0.0f;
                     };
+                });
+    }
+
+    private static void registerPotionBundle(Item item) {
+        ModelPredicateProviderRegistry.register(item, new Identifier("filled"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof BackPackItem) {
+                        NbtCompound nbt = stack.getOrCreateNbt();
+                        if (nbt.contains(BackPackItem.INVENTORY_NBT_KEY)) {
+                            NbtCompound inventoryNbt = nbt.getCompound(BackPackItem.INVENTORY_NBT_KEY);
+                            for (String key : inventoryNbt.getKeys()) {
+                                NbtCompound itemNbt = inventoryNbt.getCompound(key);
+                                ItemStack itemStack = ItemStack.fromNbt(itemNbt);
+                                if (!itemStack.isEmpty()) {
+                                    return 1.0F;
+                                }
+                            }
+                        }
+                    }
+                    return 0.0F;
                 });
     }
 
@@ -167,10 +189,34 @@ public class ModelPredicateProviders {
         }
     }
 
-    private static void registerBundleItemProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, new Identifier("filled"),
-                (stack, world, entity, seed) -> PotionBundleItem.getAmountFilled(stack));
+    private static void registerOverpoweredEnchantedBookPredicate(Item item) {
+        ModelPredicateProviderRegistry.register(item, new Identifier("overpowered"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof EnchantedBookItem) {
+                        NbtCompound nbt = stack.getNbt();
+                        if (nbt != null && nbt.contains("StoredEnchantments", 9)) {
+                            NbtList enchantments = nbt.getList("StoredEnchantments", 10);
+
+                            for (int i = 0; i < enchantments.size(); i++) {
+                                NbtCompound enchantmentTag = enchantments.getCompound(i);
+                                String enchantmentId = enchantmentTag.getString("id");
+                                int level = enchantmentTag.getInt("lvl");
+                                if (enchantmentId.equals("minecraft:sharpness") && level >= 6) {
+                                    return 1.0f;
+                                }
+                                if (enchantmentId.equals("minecraft:protection") && level >= 5) {
+                                    return 1.0f;
+                                }
+                                if (enchantmentId.equals("minecraft:power") && level >= 6) {
+                                    return 1.0f;
+                                }
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
     }
+
 
     private static void registerStrengthProvider(Item item, Identifier identifier) {
         if (item == null) return;

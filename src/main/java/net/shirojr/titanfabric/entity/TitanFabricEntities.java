@@ -19,7 +19,7 @@ public class TitanFabricEntities {
             new Identifier(TitanFabric.MODID, "arrow_item"),
             FabricEntityTypeBuilder.<TitanFabricArrowEntity>create(SpawnGroup.MISC, (entityType, world) ->
                             new TitanFabricArrowEntity(world)).dimensions(EntityDimensions.fixed(0.5f, 0.5f))
-                    .trackRangeBlocks(4).trackedUpdateRate(20).build());
+                    .trackRangeBlocks(60).trackedUpdateRate(20).build());
     public static final EntityType<CitrinStarEntity> CITRIN_STAR = Registry.register(Registry.ENTITY_TYPE,
             new Identifier(TitanFabric.MODID, "citrin_star"),
             FabricEntityTypeBuilder.<CitrinStarEntity>create(SpawnGroup.MISC, (entityType, world) ->

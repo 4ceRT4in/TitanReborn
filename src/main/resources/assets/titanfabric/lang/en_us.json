@@ -28,6 +28,7 @@
   "item.titanfabric.weakness_arrow": "§7Weakness Arrow",
   "item.titanfabric.poison_arrow": "§2Poison Arrow",
   "item.titanfabric.wither_arrow": "§8Wither Arrow",
+  "item.titanfabric.fire_arrow": "§6Fire Arrow",
   "item.titanfabric.blindness_arrow": "§1Blindness Arrow",
   "item.titanfabric.legend_bow": "§e§kl §r§3Titan Bow §e§kl",
   "item.titanfabric.multi_bow": "§cMulti Bow",
@@ -181,6 +182,7 @@
   "tooltip.titanfabric.poisonArrowEffect": "Applies §2Poison II §rfor 5 Seconds",
   "tooltip.titanfabric.weaknessArrowEffect": "Applies §7Weakness II §rfor 5 Seconds",
   "tooltip.titanfabric.witherArrowEffect": "Applies §8Wither II §rfor 5 Seconds",
+  "tooltip.titanfabric.fireArrowEffect": "Applies §6Fire §rfor 5 Seconds",
 
   "tooltip.titanfabric.blindnessArrowItem":"Applies §1Blindness II §rfor 5 Seconds",
   "tooltip.titanfabric.poisonArrowItem":"Applies §2Poison II §rfor 5 Seconds",
@@ -217,6 +219,8 @@
   "block.titanfabric.legend_block": "§e§kl §r§3Titan Block §e§kl",
   "block.titanfabric.diamond_furnace": "§bDiamond Furnace",
   "block.titanfabric.netherite_anvil": "§8Netherite Anvil",
+
+  "entity.titanfabric.arrow_item": "Effect Arrow",
 
   "container.titanfabric.diamond_furnace": "§bDiamond Furnace",
 

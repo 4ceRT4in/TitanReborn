@@ -16,6 +16,7 @@ public class BackPackItemScreen extends HandledScreen<BackPackItemScreenHandler>
     private static final Identifier TEXTURE_SMALL = new Identifier(TitanFabric.MODID, "textures/gui/backpack_small.png");
     private static final Identifier TEXTURE_MEDIUM = new Identifier(TitanFabric.MODID, "textures/gui/backpack_medium.png");
     private static final Identifier TEXTURE_BIG = new Identifier(TitanFabric.MODID, "textures/gui/backpack_big.png");
+    private static final Identifier TEXTURE_POTION = new Identifier(TitanFabric.MODID, "textures/gui/potion_bundle.png");
     public BackPackItemScreen(BackPackItemScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
     }
@@ -31,6 +32,7 @@ public class BackPackItemScreen extends HandledScreen<BackPackItemScreenHandler>
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         switch (handler.getBackPackItemType()) {
+            case POTION -> RenderSystem.setShaderTexture(0, TEXTURE_POTION);
             case BIG -> RenderSystem.setShaderTexture(0, TEXTURE_BIG);
             case MEDIUM -> RenderSystem.setShaderTexture(0, TEXTURE_MEDIUM);
             default -> RenderSystem.setShaderTexture(0, TEXTURE_SMALL);

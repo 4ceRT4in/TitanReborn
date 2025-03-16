@@ -77,6 +77,35 @@
     },
     {
       "predicate": {
+        "handle": 0.2
+      },
+      "model": "titanfabric:item/legend_bow_fire"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "handle": 0.2
+      },
+      "model": "titanfabric:item/legend_bow_pulling_0_fire"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "handle": 0.2
+      },
+      "model": "titanfabric:item/legend_bow_pulling_1_fire"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "handle": 0.2
+      },
+      "model": "titanfabric:item/legend_bow_pulling_2_fire"
+    },
+    {
+      "predicate": {
         "handle": 0.3
       },
       "model": "titanfabric:item/legend_bow_poison"

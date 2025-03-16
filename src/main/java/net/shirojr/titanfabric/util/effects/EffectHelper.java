@@ -70,7 +70,8 @@ public final class EffectHelper {
 
     public static int getColor(WeaponEffect weaponEffect) {
         StatusEffect effect = weaponEffect.getOutputEffect();
-        if (effect == null) return -1;
+        if (weaponEffect == WeaponEffect.FIRE) return PotionUtil.getColor(Potions.FIRE_RESISTANCE);
+        if(effect == null) return -1;
         return effect.getColor();
     }
 
