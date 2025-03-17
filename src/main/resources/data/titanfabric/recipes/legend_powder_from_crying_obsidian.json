@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:crying_obsidian"
+        },
+        {
+            "item": "titanfabric:legend_crystal"
+        },
+        {
+            "item": "minecraft:diamond"
+        }
+    ],
+    "result": {
+        "item": "titanfabric:legend_powder",
+        "count": 1
+    }
+}
