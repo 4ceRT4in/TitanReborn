@@ -153,10 +153,7 @@
   "item.minecraft.tipped_arrow.effect.indestructibility_potion": "Arrow of Indestructibility",
   "item.minecraft.tipped_arrow.effect.long_indestructibility_potion": "Arrow of Indestructibility",
 
-  "tooltip.titanfabric.legendBootsItem": "§5+1 Max Health",
-  "tooltip.titanfabric.legendChestplateItem": "§5+4 Max Health",
-  "tooltip.titanfabric.legendLeggingsItem": "§5+3 Max Health",
-  "tooltip.titanfabric.legendHelmetItem": "§5+2 Max Health",
+  "tooltip.titanfabric.legendArmorHealth": "§5+%s Max Health",
   "tooltip.titanfabric.netherArmor": "§6+25% Fire Protection",
   "tooltip.titanfabric.citrinArmor": "§2+25% Magic Protection",
 

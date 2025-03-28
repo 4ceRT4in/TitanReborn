@@ -34,12 +34,12 @@ public enum TitanFabricRecipes {
     }
 
     public static void registerModRecipes() {
-        LoggerUtil.devLogger("Registering %s Mod recipes".formatted(TitanFabric.MODID));
+        LoggerUtil.devLogger("Registering %s Mod recipes".formatted(TitanFabric.MOD_ID));
     }
 
     public record RecipeData(Identifier identifier, RecipeSerializer<?> serializer, RecipeType<?> type) {
         public RecipeData(String name, RecipeSerializer<?> serializer, RecipeType<?> type) {
-            this(new Identifier(TitanFabric.MODID, name), serializer, type);
+            this(new Identifier(TitanFabric.MOD_ID, name), serializer, type);
             register();
         }
 

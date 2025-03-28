@@ -5,7 +5,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -75,7 +75,7 @@ public enum SlotArrangementType {
         } else if (firstEffectStack.getItem() instanceof WeaponEffectCrafting essenceIngredient) {
             effect = essenceIngredient.ingredientEffect(firstEffectStack);
         } else {
-            Optional<WeaponEffectData> effectData = WeaponEffectData.fromNbt(firstEffectStack.copy().getOrCreateNbt(), WeaponEffectType.ADDITIONAL_EFFECT);
+            Optional<WeaponEffectData> effectData = WeaponEffectData.get(firstEffectStack.copy().getOrCreateNbt(), WeaponEffectType.ADDITIONAL_EFFECT);
             if (effectData.isEmpty()) return null;
             effect = effectData.get().weaponEffect();
         }

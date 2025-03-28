@@ -2,9 +2,6 @@ package net.shirojr.titanfabric.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -24,11 +21,10 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -125,7 +121,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         this.dataTracker.set(SHOOTING_ARROWS, shootsArrows);
     }
 
-    @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (!(stack.getItem() instanceof SelectableArrows bowItem)) return;
         PlayerEntity player = (PlayerEntity) (Object) this;
@@ -280,7 +276,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         this.getItemCooldownManager().set(TitanFabricItems.LEGEND_SHIELD.asItem(), 90);
     }
 
-    @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$arrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (!((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayerEntity)) return;
         if (serverPlayerEntity.getAbilities().creativeMode) return;

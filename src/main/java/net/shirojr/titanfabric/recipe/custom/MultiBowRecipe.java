@@ -9,7 +9,7 @@ import net.minecraft.recipe.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 

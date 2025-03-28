@@ -2,15 +2,13 @@ package net.shirojr.titanfabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
-import net.shirojr.titanfabric.block.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.*;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
-import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.entity.TitanFabricEntities;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
-import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.network.C2SNetworking;
+import net.shirojr.titanfabric.network.TitanFabricC2SNetworking;
 import net.shirojr.titanfabric.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
@@ -22,22 +20,25 @@ import org.slf4j.LoggerFactory;
 
 public class TitanFabric implements ModInitializer {
 
-    public static final String MODID = "titanfabric";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+    public static final String MOD_ID = "titanfabric";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
     public void onInitialize() {
         TitanFabricConfiguredFeatures.registerConfiguredFeatures();
         TitanFabricItems.registerModItems();
+        TitanFabricArmorMaterials.initialize();
         TitanFabricRecipes.registerModRecipes();
         TitanFabricBlocks.registerModBlocks();
-        TitanFabricBlockEntities.registerBlockEntities();
+        TitanFabricItemGroups.initialize();
+        TitanFabricBlockEntities.initialize();
         TitanFabricEntities.register();
+        TitanFabricNetworkingPayloads.initialize();
         TitanFabricScreenHandlers.register();
-        TitanFabricStatusEffects.registerStatusEffects();
+        TitanFabricStatusEffects.initialize();
         TitanFabricPotions.register();
         TitanFabricWorldGen.generateWorldGen();
-        C2SNetworking.registerServerReceivers();
+        TitanFabricC2SNetworking.initialize();
         TitanFabricGamerules.register();
         TitanFabricStats.register();
         TitanFabricEvents.registerEvents();
@@ -47,6 +48,6 @@ public class TitanFabric implements ModInitializer {
     }
 
     public static Identifier getId(String path) {
-        return Identifier.of(MODID, path);
+        return Identifier.of(MOD_ID, path);
     }
 }

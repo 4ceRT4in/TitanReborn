@@ -12,10 +12,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.color.TitanFabricColorProviders;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.render.model.ParachuteFeatureModel;
 
@@ -28,7 +28,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
 
     static {
         for (String color : TitanFabricDyeProviders.COLOR_KEYS) {
-            PARACHUTE_TEXTURES.put(color, new Identifier(TitanFabric.MODID, "textures/entity/parachute/parachute_" + color + ".png"));
+            PARACHUTE_TEXTURES.put(color, TitanFabric.getId("textures/entity/parachute/parachute_" + color + ".png"));
         }
     }
 
@@ -52,7 +52,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
         matrices.push();
         matrices.scale(4, 4, 4);
         matrices.translate(0, -1.36, 0);
-        parachuteModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(texture)), light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+        parachuteModel.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(texture)), light, OverlayTexture.DEFAULT_UV, ColorHelper.Argb.fromFloats(1f, 1f, 1f, 1f));
         matrices.pop();
     }
 

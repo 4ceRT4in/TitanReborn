@@ -16,7 +16,7 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
-import net.shirojr.titanfabric.block.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import org.jetbrains.annotations.Nullable;

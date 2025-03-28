@@ -2,19 +2,20 @@ package net.shirojr.titanfabric.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class TargetedInventoryCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(CommandManager.literal("inventory")
                 .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
                 .then(CommandManager.literal("player")
@@ -43,8 +44,9 @@ public class TargetedInventoryCommand {
         if (user == null || target == null) return -1;
         PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(target);
         if (playerData == null) return -1;
-        openInventory(user, target.getDisplayName().asString(), target.getUuidAsString(), playerData);
-
+        if (target.getDisplayName() != null) {
+            openInventory(user, target.getDisplayName().getString(), target.getUuidAsString(), playerData);
+        }
         return 1;
     }
 
@@ -61,10 +63,10 @@ public class TargetedInventoryCommand {
         List<String> description = new ArrayList<>();
         if (targetName != null) description.add(targetName);
         if (targetUuid != null) description.add(targetUuid);
-        user.openHandledScreen(new ExtendedScreenHandlerFactory() {
+        user.openHandledScreen(new ExtendedScreenHandlerFactory<ExtendedInventoryOpenPacket>() {
             @Override
-            public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
-                buf.writeCollection(description, PacketByteBuf::writeString);
+            public ExtendedInventoryOpenPacket getScreenOpeningData(ServerPlayerEntity player) {
+                return new ExtendedInventoryOpenPacket(description);
             }
 
             @Override

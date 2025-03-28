@@ -5,7 +5,7 @@ import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.util.Lazy;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 
 import java.util.function.Supplier;
 

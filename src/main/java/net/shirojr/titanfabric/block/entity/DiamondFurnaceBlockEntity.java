@@ -7,9 +7,8 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.FurnaceScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
-import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
+import net.shirojr.titanfabric.init.TitanFabricBlockEntities;
 
 public class DiamondFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
@@ -19,7 +18,7 @@ public class DiamondFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
 
     @Override
     protected Text getContainerName() {
-        return new TranslatableText("container.titanfabric.diamond_furnace");
+        return Text.translatable("container.titanfabric.diamond_furnace");
     }
 
     @Override

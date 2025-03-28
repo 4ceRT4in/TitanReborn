@@ -9,10 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
-import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
@@ -23,8 +23,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.function.Supplier;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
@@ -47,7 +45,7 @@ public final class EffectHelper {
         WeaponEffectType weaponEffectType = WeaponEffectType.getType(type.getNbtKey());
         if (!compound.getKeys().contains(type.getNbtKey())) return -1;
         if (weaponEffectType == null) return -1;
-        Optional<WeaponEffectData> data = WeaponEffectData.fromNbt(compound, weaponEffectType);
+        Optional<WeaponEffectData> data = WeaponEffectData.get(compound, weaponEffectType);
         return data.map(WeaponEffectData::strength).orElse(-1);
     }
 
@@ -69,9 +67,9 @@ public final class EffectHelper {
     }
 
     public static int getColor(WeaponEffect weaponEffect) {
-        StatusEffect effect = weaponEffect.getOutputEffect();
+        RegistryEntry<StatusEffect> effect = weaponEffect.getOutputEffect();
         if (effect == null) return -1;
-        return effect.getColor();
+        return effect.value().getColor();
     }
 
     /**

@@ -1,6 +1,5 @@
 package net.shirojr.titanfabric.util.items;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +13,6 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.util.TitanFabricTags;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
-import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
 
 import java.util.function.Predicate;
 
@@ -22,9 +20,9 @@ import java.util.function.Predicate;
  * Utillity Class to clean up {@linkplain net.shirojr.titanfabric.item.custom.bow.MultiBowItem MultiBowItem class} a bit.
  */
 public final class MultiBowHelper {
-    public static final String FULL_ARROW_COUNT_NBT_KEY = TitanFabric.MODID + ".concurrent_arrows";
-    public static final String ARROWS_LEFT_NBT_KEY = TitanFabric.MODID + ".arrows_left";
-    public static final String PROJECTILE_TICK_NBT_KEY = TitanFabric.MODID + ".projectile_tick";
+    public static final String FULL_ARROW_COUNT_NBT_KEY = TitanFabric.MOD_ID + ".concurrent_arrows";
+    public static final String ARROWS_LEFT_NBT_KEY = TitanFabric.MOD_ID + ".arrows_left";
+    public static final String PROJECTILE_TICK_NBT_KEY = TitanFabric.MOD_ID + ".projectile_tick";
 
     private MultiBowHelper() {
         // private ctor to avoid instantiating this utility class

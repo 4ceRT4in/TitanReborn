@@ -4,9 +4,8 @@ package net.shirojr.titanfabric.item.custom;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
-import net.shirojr.titanfabric.item.TitanFabricItemGroups;
+import net.shirojr.titanfabric.init.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.items.Anvilable;
 
 public class TitanFabricShieldItem extends ShieldItem implements Anvilable {

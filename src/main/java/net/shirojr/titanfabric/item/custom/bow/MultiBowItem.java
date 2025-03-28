@@ -15,7 +15,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.item.TitanFabricItemGroups;
+import net.shirojr.titanfabric.init.TitanFabricItemGroups;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;

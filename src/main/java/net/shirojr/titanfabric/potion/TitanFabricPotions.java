@@ -1,36 +1,39 @@
 package net.shirojr.titanfabric.potion;
 
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.block.TitanFabricBlocks;
-import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
-import net.shirojr.titanfabric.item.TitanFabricItems;
-import net.shirojr.titanfabric.mixin.BrewingRecipeRegistryInvoker;
+import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricPotions {
-    public static Potion INDESTRUCTIBLE_POTION =
+    public static RegistryEntry<Potion> INDESTRUCTIBLE_POTION =
             registerPotion("indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
-                    3600, 0, Potions.AWKWARD, Item.fromBlock(TitanFabricBlocks.LEGEND_CRYSTAL));
-    public static Potion LONG_INDESTRUCTIBLE_POTION =
+                    3600, 0, Potions.AWKWARD, TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
+    public static RegistryEntry<Potion> LONG_INDESTRUCTIBLE_POTION =
             registerPotion("long_indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
                     9600, 0, INDESTRUCTIBLE_POTION, Items.REDSTONE);
 
-    public static Potion registerPotion(String id, StatusEffect effect, int duration, int amplifier, Potion input, Item ingredient) {
-        Potion potion = new Potion(new StatusEffectInstance(effect, duration, amplifier));
-        registerRecipes(input, ingredient, potion);
-        return Registry.register(Registry.POTION, new Identifier(TitanFabric.MODID, id), potion);
+    public static RegistryEntry<Potion> registerPotion(String id, RegistryEntry<StatusEffect> effect, int duration, int amplifier, RegistryEntry<Potion> input, Item ingredient) {
+        Potion potion = Registry.register(Registries.POTION, TitanFabric.getId(id), new Potion(new StatusEffectInstance(effect, duration, amplifier)));
+        RegistryEntry<Potion> entry = Registries.POTION.getEntry(potion);
+        registerRecipes(input, ingredient, entry);
+        return entry;
     }
 
-    public static void registerRecipes(Potion input, Item ingredient, Potion output) {
-        BrewingRecipeRegistryInvoker.invokeRegisterPotionRecipe(input, ingredient, output);
+    public static void registerRecipes(RegistryEntry<Potion> input, Item ingredient, RegistryEntry<Potion> output) {
+        FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> {
+            builder.registerPotionRecipe(input, ingredient, output);
+        });
     }
 
     public static void register() {

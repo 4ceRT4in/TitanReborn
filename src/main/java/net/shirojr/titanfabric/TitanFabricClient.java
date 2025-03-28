@@ -7,11 +7,11 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
-import net.shirojr.titanfabric.block.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
 import net.shirojr.titanfabric.entity.TitanFabricEntities;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
-import net.shirojr.titanfabric.network.S2CNetworking;
+import net.shirojr.titanfabric.init.TitanFabricParticles;
 import net.shirojr.titanfabric.particles.GasParticleFactory;
 import net.shirojr.titanfabric.particles.GasTextureSheet;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
@@ -28,9 +28,10 @@ public class TitanFabricClient implements ClientModInitializer {
         TitanFabricKeyBinds.register();
         TitanFabricColorProviders.register();
         TitanFabricEntities.registerClient();
+        TitanFabricParticles.initialize();
 
         ModelPredicateProviders.register();
-        S2CNetworking.registerClientReceivers();
+        TitanFabricS2CNetworking.registerClientReceivers();
 
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER, BackPackItemScreen::new);
@@ -42,7 +43,5 @@ public class TitanFabricClient implements ClientModInitializer {
 
         GasTextureSheet.initialize();
         ParticleFactoryRegistry.getInstance().register(TitanFabricParticles.GAS_PARTICLE, GasParticleFactory::new);
-
-        TitanFabric.LOGGER.info("Initialized all " + TitanFabric.MODID + " client components");
     }
 }

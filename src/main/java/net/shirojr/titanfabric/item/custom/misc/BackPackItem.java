@@ -26,7 +26,7 @@ import java.util.List;
 
 public class BackPackItem extends Item {
     private final BackPackItem.Type backpackType;
-    public static final String INVENTORY_NBT_KEY = TitanFabric.MODID + ".backpack.inventory";
+    public static final String INVENTORY_NBT_KEY = TitanFabric.MOD_ID + ".backpack.inventory";
 
     public BackPackItem(Settings settings, Type backPackType) {
         super(settings);

@@ -8,7 +8,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.shirojr.titanfabric.TitanFabricParticles;
+import net.shirojr.titanfabric.init.TitanFabricParticles;
 
 public record GasParticleEffect(float red, float green, float blue, float scale,
                                 float alpha) implements ParticleEffect {

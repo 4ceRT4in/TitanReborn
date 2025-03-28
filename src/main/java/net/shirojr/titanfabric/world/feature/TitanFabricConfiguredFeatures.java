@@ -3,7 +3,7 @@ package net.shirojr.titanfabric.world.feature;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.gen.feature.*;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.block.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.util.LoggerUtil;
 
 import java.util.List;
@@ -42,6 +42,6 @@ public class TitanFabricConfiguredFeatures {
             ConfiguredFeatures.register("legend_ore_buried", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 8, 1.0f));
 
     public static void registerConfiguredFeatures() {
-        LoggerUtil.devLogger("Registering " + TitanFabric.MODID + " ConfiguredFeatures");
+        LoggerUtil.devLogger("Registering " + TitanFabric.MOD_ID + " ConfiguredFeatures");
     }
 }

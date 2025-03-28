@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.recipe.custom;
 
 import com.google.gson.JsonObject;
-import dev.emi.emi.api.stack.EmiIngredient;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -10,7 +9,7 @@ import net.minecraft.recipe.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
@@ -20,7 +19,6 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
@@ -57,8 +55,8 @@ public class WeaponRecipe extends SmithingRecipe {
             return false;
         NbtCompound additionCompound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         NbtCompound baseCompound = baseStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
-        Optional<WeaponEffectData> baseAdditionData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
-        Optional<WeaponEffectData> modifierInnateData = WeaponEffectData.fromNbt(additionCompound, WeaponEffectType.INNATE_EFFECT);
+        Optional<WeaponEffectData> baseAdditionData = WeaponEffectData.get(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
+        Optional<WeaponEffectData> modifierInnateData = WeaponEffectData.get(additionCompound, WeaponEffectType.INNATE_EFFECT);
         if (modifierInnateData.isEmpty())
             return false;
         if (baseAdditionData.isPresent()) {
@@ -87,9 +85,9 @@ public class WeaponRecipe extends SmithingRecipe {
         NbtCompound baseCompound = baseStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         NbtCompound additionCompound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
 
-        Optional<WeaponEffectData> baseInnateEffectData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.INNATE_EFFECT);
-        Optional<WeaponEffectData> baseAdditionEffectData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
-        Optional<WeaponEffectData> modifierInnateEffectData = WeaponEffectData.fromNbt(additionCompound, WeaponEffectType.INNATE_EFFECT);
+        Optional<WeaponEffectData> baseInnateEffectData = WeaponEffectData.get(baseCompound, WeaponEffectType.INNATE_EFFECT);
+        Optional<WeaponEffectData> baseAdditionEffectData = WeaponEffectData.get(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
+        Optional<WeaponEffectData> modifierInnateEffectData = WeaponEffectData.get(additionCompound, WeaponEffectType.INNATE_EFFECT);
 
         if (modifierInnateEffectData.isPresent()) {
             this.weaponEffectData = modifierInnateEffectData.get();
@@ -145,9 +143,9 @@ public class WeaponRecipe extends SmithingRecipe {
         NbtCompound baseCompound = baseStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
         NbtCompound additionCompound = additionStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
 
-        Optional<WeaponEffectData> baseInnateEffectData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.INNATE_EFFECT);
-        Optional<WeaponEffectData> baseAdditionEffectData = WeaponEffectData.fromNbt(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
-        Optional<WeaponEffectData> modifierInnateEffectData = WeaponEffectData.fromNbt(additionCompound, WeaponEffectType.INNATE_EFFECT);
+        Optional<WeaponEffectData> baseInnateEffectData = WeaponEffectData.get(baseCompound, WeaponEffectType.INNATE_EFFECT);
+        Optional<WeaponEffectData> baseAdditionEffectData = WeaponEffectData.get(baseCompound, WeaponEffectType.ADDITIONAL_EFFECT);
+        Optional<WeaponEffectData> modifierInnateEffectData = WeaponEffectData.get(additionCompound, WeaponEffectType.INNATE_EFFECT);
 
         if (modifierInnateEffectData.isPresent()) {
             this.weaponEffectData = modifierInnateEffectData.get();

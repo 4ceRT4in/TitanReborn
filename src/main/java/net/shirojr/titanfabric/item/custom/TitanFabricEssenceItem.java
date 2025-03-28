@@ -9,7 +9,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.item.TitanFabricItemGroups;
+import net.shirojr.titanfabric.init.TitanFabricItemGroups;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
@@ -29,7 +29,7 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
 
     @Override
     public Text getName(ItemStack stack) {
-        Optional<WeaponEffectData> data = WeaponEffectData.fromNbt(stack.getOrCreateNbt()
+        Optional<WeaponEffectData> data = WeaponEffectData.get(stack.getOrCreateNbt()
                 .getCompound(EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
         if (data.isEmpty() || data.get().weaponEffect() == null) return super.getName(stack);
         return switch (data.get().weaponEffect()) {
@@ -49,7 +49,7 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        Optional<WeaponEffectData> data = WeaponEffectData.fromNbt(stack.getOrCreateNbt()
+        Optional<WeaponEffectData> data = WeaponEffectData.get(stack.getOrCreateNbt()
                 .getCompound(EFFECTS_COMPOUND_NBT_KEY), WeaponEffectType.INNATE_EFFECT);
         if (data.isPresent() && data.get().weaponEffect() != null) {
             String tooltipPrefix = "tooltip.titanfabric.";

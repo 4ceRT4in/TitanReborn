@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SaveInvCommand {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, boolean dedicated) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(CommandManager.literal("saveinv").requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
                 .executes(SaveInvCommand::runSave));
     }

@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.block.custom;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
@@ -14,15 +15,20 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.block.TitanFabricBlockEntities;
 import net.shirojr.titanfabric.block.entity.DiamondFurnaceBlockEntity;
+import net.shirojr.titanfabric.init.TitanFabricBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
-
 public class DiamondFurnaceBlock extends AbstractFurnaceBlock {
+    public static final MapCodec<DiamondFurnaceBlock> CODEC = createCodec(DiamondFurnaceBlock::new);
+
     public DiamondFurnaceBlock(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    protected MapCodec<? extends AbstractFurnaceBlock> getCodec() {
+        return CODEC;
     }
 
     @Override
@@ -37,7 +43,7 @@ public class DiamondFurnaceBlock extends AbstractFurnaceBlock {
     @Override
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, TitanFabricBlockEntities.DIAMOND_FURNACE, AbstractFurnaceBlockEntity::tick);
+        return validateTicker(type, TitanFabricBlockEntities.DIAMOND_FURNACE, AbstractFurnaceBlockEntity::tick);
     }
 
     @Nullable
@@ -47,7 +53,7 @@ public class DiamondFurnaceBlock extends AbstractFurnaceBlock {
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, net.minecraft.util.math.random.Random random) {
         if (!state.get(LIT)) return;
 
         double xOrigin = (double) pos.getX() + 0.5;

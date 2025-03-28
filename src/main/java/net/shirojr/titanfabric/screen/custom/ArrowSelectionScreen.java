@@ -7,7 +7,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
-import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 import net.shirojr.titanfabric.screen.element.ArrowButtonWidget;
 

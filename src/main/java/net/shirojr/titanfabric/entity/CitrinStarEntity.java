@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.entity;
 
+import com.google.common.collect.HashBiMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -8,27 +9,21 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.particle.DustColorTransitionParticleEffect;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
-import net.shirojr.titanfabric.item.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
 
 public class CitrinStarEntity extends ThrownItemEntity {
 
-    private final List<Integer> changedEffectIds = new ArrayList<Integer>();
+    private final List<RegistryEntry<StatusEffect>> changedEffects = new ArrayList<>();
 
     public CitrinStarEntity(World world) {
         super(TitanFabricEntities.CITRIN_STAR, world);
@@ -46,25 +41,25 @@ public class CitrinStarEntity extends ThrownItemEntity {
     @Override
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (!this.world.isClient()) {
+        if (!this.getWorld().isClient()) {
             if (!this.isRemoved()) {
                 this.discard();
             }
         }
     }
 
-    private void updateStatusEffects(LivingEntity livingEntity, StatusEffect statusEffect) {
-        if(!world.isClient) {
-            if (livingEntity.hasStatusEffect(statusEffect) && !this.changedEffectIds.contains(StatusEffect.getRawId(statusEffect))) {
+    private void updateStatusEffects(LivingEntity livingEntity, RegistryEntry<StatusEffect> statusEffect) {
+        if (!getWorld().isClient) {
+            boolean unchanged = livingEntity.hasStatusEffect(statusEffect) && !this.changedEffects.contains(statusEffect);
+            if (unchanged) {
                 StatusEffectInstance oldEffectInstance = livingEntity.getStatusEffect(statusEffect);
                 StatusEffectInstanceAccessor oldAccessor = (StatusEffectInstanceAccessor) oldEffectInstance;
-                if(oldAccessor != null) {
+                if (oldAccessor != null) {
                     StatusEffectInstance previousEffect = oldAccessor.titanfabric$getPreviousStatusEffect();
                     if (previousEffect != null) {
                         return;
                     }
                 }
-
 
                 int oldDuration = oldEffectInstance.getDuration();
                 int newDuration = Math.min(oldDuration, 200); // Use 200 ticks or the old duration if it's less
@@ -91,7 +86,7 @@ public class CitrinStarEntity extends ThrownItemEntity {
                     livingEntity.addStatusEffect(newEffectInstance);
                 }
 
-                this.changedEffectIds.add(StatusEffect.getRawId(getEffectOpposites().get(statusEffect)));
+                this.changedEffects.add(getEffectOpposites().get(statusEffect));
             }
 
         }
@@ -103,9 +98,9 @@ public class CitrinStarEntity extends ThrownItemEntity {
 
         Entity entity = entityHitResult.getEntity();
         if (entity instanceof LivingEntity livingEntity && !livingEntity.getWorld().isClient()) {
-            for (Map.Entry<StatusEffect, StatusEffect> entry : getEffectOpposites().entrySet()) {
-                StatusEffect effect = entry.getKey();
-                StatusEffect oppositeEffect = entry.getValue();
+            for (var entry : getEffectOpposites().entrySet()) {
+                RegistryEntry<StatusEffect> effect = entry.getKey();
+                RegistryEntry<StatusEffect> oppositeEffect = entry.getValue();
                 updateStatusEffects(livingEntity, effect);
                 updateStatusEffects(livingEntity, oppositeEffect);
             }
@@ -129,7 +124,7 @@ public class CitrinStarEntity extends ThrownItemEntity {
                 );
             }
 
-            this.changedEffectIds.clear();
+            this.changedEffects.clear();
         }
     }
 
@@ -143,27 +138,12 @@ public class CitrinStarEntity extends ThrownItemEntity {
         }
     }
 
-    @Override
-    @Nullable
-    public Entity moveToWorld(ServerWorld destination) {
-        Entity entity = this.getOwner();
-        if (entity != null && entity.world.getRegistryKey() != destination.getRegistryKey()) {
-            this.setOwner(null);
-        }
-        return super.moveToWorld(destination);
+    private HashBiMap<RegistryEntry<StatusEffect>, RegistryEntry<StatusEffect>> getEffectOpposites() {
+        HashBiMap<RegistryEntry<StatusEffect>, RegistryEntry<StatusEffect>> map = HashBiMap.create();
+        map.put(StatusEffects.BLINDNESS, StatusEffects.NIGHT_VISION);
+        map.put(StatusEffects.POISON, StatusEffects.REGENERATION);
+        map.put(StatusEffects.WEAKNESS, StatusEffects.STRENGTH);
+        map.put(StatusEffects.SLOWNESS, StatusEffects.SPEED);
+        return map;
     }
-
-    private final HashMap<StatusEffect, StatusEffect> getEffectOpposites() {
-        final HashMap<StatusEffect, StatusEffect> effectOpposites = new HashMap<StatusEffect, StatusEffect>();
-        effectOpposites.put(StatusEffects.BLINDNESS, StatusEffects.NIGHT_VISION);
-        effectOpposites.put(StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS);
-        effectOpposites.put(StatusEffects.POISON, StatusEffects.REGENERATION);
-        effectOpposites.put(StatusEffects.REGENERATION, StatusEffects.POISON);
-        effectOpposites.put(StatusEffects.WEAKNESS, StatusEffects.STRENGTH);
-        effectOpposites.put(StatusEffects.STRENGTH, StatusEffects.WEAKNESS);
-        effectOpposites.put(StatusEffects.SLOWNESS, StatusEffects.SPEED);
-        effectOpposites.put(StatusEffects.SPEED, StatusEffects.SLOWNESS);
-        return effectOpposites;
-    }
-
 }

@@ -2,9 +2,7 @@ package net.shirojr.titanfabric.screen.element;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.PressableWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -12,11 +10,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.shirojr.titanfabric.TitanFabric;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +20,7 @@ public class ArrowButtonWidget extends PressableWidget {
     private final int index;
     private final PressAction onPress;
     private final ItemRenderer itemRenderer;
-    public static final Identifier WIDGETS_TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/button_sprite_small.png");
+    public static final Identifier WIDGETS_TEXTURE = new Identifier(TitanFabric.MOD_ID, "textures/gui/button_sprite_small.png");
 
     public ArrowButtonWidget(int index, int x, int y, int width, int height,
                              @Nullable Text message, PressAction onPress, ItemRenderer itemRenderer) {

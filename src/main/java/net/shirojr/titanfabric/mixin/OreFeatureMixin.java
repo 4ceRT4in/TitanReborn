@@ -1,15 +1,12 @@
 package net.shirojr.titanfabric.mixin;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.gen.feature.OreFeature;
-import net.shirojr.titanfabric.block.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;

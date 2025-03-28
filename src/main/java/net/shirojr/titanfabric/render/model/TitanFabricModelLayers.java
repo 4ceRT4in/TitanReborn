@@ -25,6 +25,6 @@ public class TitanFabricModelLayers {
     }
 
     private static EntityModelLayer create(String id, String layer) {
-        return new EntityModelLayer(new Identifier(TitanFabric.MODID, id), layer);
+        return new EntityModelLayer(new Identifier(TitanFabric.MOD_ID, id), layer);
     }
 }

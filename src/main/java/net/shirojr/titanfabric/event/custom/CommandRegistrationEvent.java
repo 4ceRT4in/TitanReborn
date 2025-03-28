@@ -1,6 +1,6 @@
 package net.shirojr.titanfabric.event.custom;
 
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.shirojr.titanfabric.command.SaveInvCommand;
 import net.shirojr.titanfabric.command.TargetedInventoryCommand;
 

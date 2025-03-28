@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.minecraft.nbt.NbtElement;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -67,7 +68,7 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
             StatusEffectInstance witherEffect = entity.getStatusEffect(StatusEffects.WITHER);
             if (witherEffect != null) {
                 int i = (50 + ((witherEffect.getAmplifier() + 1) * 10)) >> amplifier;
-                return i > 0 ? duration % i == 0 : true;
+                return i <= 0 || duration % i == 0;
             }
         }
         return this.type.canApplyUpdateEffect(duration, amplifier);
@@ -94,7 +95,7 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
     }
 
     @Inject(method = "writeNbt", at = @At("HEAD"))
-    private void writeNbtMixin(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> info) {
+    private void writeNbtMixin(CallbackInfoReturnable<NbtElement> cir) {
         if (this.previousStatusEffectInstance != null) {
             NbtCompound previousEffect = new NbtCompound();
             previousEffect.putInt("Id", StatusEffect.getRawId(this.previousStatusEffectInstance.getEffectType()));
@@ -121,8 +122,7 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
 
     @Override
     public void titanfabric$setPreviousStatusEffect(@Nullable StatusEffectInstance statusEffectInstance) {
-        this.previousStatusEffectInstance = statusEffectInstance != null ?
-                new StatusEffectInstance(statusEffectInstance) : null;
+        this.previousStatusEffectInstance = statusEffectInstance != null ? new StatusEffectInstance(statusEffectInstance) : null;
         this.appliedPreviousStatusEffectInstance = false;
     }
 

@@ -29,7 +29,7 @@ public class TitanFabricScreenHandlers {
                     (syncId, inventory, buf) -> new ExtendedInventoryScreenHandler(syncId, inventory, new SimpleInventory(8), buf)));
 
     private static <T extends ScreenHandler> ScreenHandlerType<T> registerScreenHandler(String name, ScreenHandlerType<T> screenHandlerType) {
-        return Registry.register(Registry.SCREEN_HANDLER, new Identifier(TitanFabric.MODID, name), screenHandlerType);
+        return Registry.register(Registry.SCREEN_HANDLER, new Identifier(TitanFabric.MOD_ID, name), screenHandlerType);
     }
 
     public static void register() {

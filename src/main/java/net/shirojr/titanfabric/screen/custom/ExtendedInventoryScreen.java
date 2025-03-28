@@ -15,11 +15,8 @@ import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScreenHandler> {
-    public static final Identifier TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/extended_inventory.png");
+    public static final Identifier TEXTURE = new Identifier(TitanFabric.MOD_ID, "textures/gui/extended_inventory.png");
 
     public ExtendedInventoryScreen(ExtendedInventoryScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title == null ? Text.of("") : title);
