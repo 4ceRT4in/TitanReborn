@@ -1,9 +1,11 @@
 package net.shirojr.titanfabric.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.BlockState;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.gen.feature.OreFeature;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
@@ -12,19 +14,15 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Random;
 
 @Mixin(OreFeature.class)
 public abstract class OreFeatureMixin {
-
-    @Unique
-    private static final Random random = new Random();
 
     @Redirect(method = "generateVeinPart", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/chunk/ChunkSection;setBlockState(IIILnet/minecraft/block/BlockState;Z)Lnet/minecraft/block/BlockState;"
     ))
-    private BlockState redirectSetBlockState(ChunkSection instance, int x, int y, int z, BlockState state, boolean lock) {
+    private BlockState redirectSetBlockState(ChunkSection instance, int x, int y, int z, BlockState state, boolean lock, @Local(argsOnly = true) Random random) {
         BlockState previousState = instance.setBlockState(x, y, z, state, lock);
 
         if (state.getBlock() == TitanFabricBlocks.DEEPSTALE_LEGEND_ORE) {

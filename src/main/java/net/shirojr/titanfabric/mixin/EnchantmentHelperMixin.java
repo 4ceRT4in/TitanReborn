@@ -1,23 +1,26 @@
 package net.shirojr.titanfabric.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityGroup;
-import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Slice;
 
-@Mixin(EnchantmentHelper.class)
+@Mixin(Enchantments.class)
 public abstract class EnchantmentHelperMixin {
 
-    @Inject(method = "getAttackDamage", at = @At("HEAD"), cancellable = true)
-    private static void modifySharpnessDamage(ItemStack stack, EntityGroup group, CallbackInfoReturnable<Float> cir) {
-        int level = EnchantmentHelper.getLevel(Enchantments.SHARPNESS, stack);
+    @ModifyExpressionValue(method = "bootstrap",
+            slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/enchantment/Enchantments;SHARPNESS:Lnet/minecraft/registry/RegistryKey;")),
+            at = @At(value = "CONSTANT", args = "floatValue=0.5", ordinal = 0)
+    )
+    private static float modifySharpnessDamage(float original) {
+        /*int level = EnchantmentHelper.getLevel(Enchantments.SHARPNESS, stack);
         if (level > 0) {
-            float damage = (level * 1.0F);
-            cir.setReturnValue(damage);
-        }
+            return (level * 1.0F);
+        }*/
+        //FIXME: might be removable, check datapack enchants
+        return original;
     }
 }

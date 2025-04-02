@@ -6,12 +6,11 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.block.entity.DiamondFurnaceBlockEntity;
@@ -24,26 +23,26 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(AbstractFurnaceBlockEntity.class)
 public abstract class AbstractFurnaceBlockEntityMixin {
 
-    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;getCookTime(Lnet/minecraft/world/World;Lnet/minecraft/recipe/RecipeType;Lnet/minecraft/inventory/Inventory;)I"))
-    private static int titanfabric$getDiamondFurnaceCookTime(World world, RecipeType<? extends AbstractCookingRecipe> recipeType, Inventory inventory, Operation<Integer> original, @Local(argsOnly = true) AbstractFurnaceBlockEntity blockEntity) {
-        int originalEvaluation = original.call(world, recipeType, inventory);
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;getCookTime(Lnet/minecraft/world/World;Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;)I"))
+    private static int titanfabric$getDiamondFurnaceCookTime(World world, AbstractFurnaceBlockEntity furnace, Operation<Integer> original, @Local(argsOnly = true) AbstractFurnaceBlockEntity blockEntity) {
+        int originalEvaluation = original.call(world, furnace);
         return blockEntity instanceof DiamondFurnaceBlockEntity ? originalEvaluation / 2 : originalEvaluation;
     }
 
-    @WrapOperation(method = "setStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;getCookTime(Lnet/minecraft/world/World;Lnet/minecraft/recipe/RecipeType;Lnet/minecraft/inventory/Inventory;)I"))
-    private int titanfabric$getDiamondFurnaceCookTimeOnStack(World world, RecipeType<? extends AbstractCookingRecipe> recipeType, Inventory inventory, Operation<Integer> original) {
-        int originalEvaluation = original.call(world, recipeType, inventory);
+    @WrapOperation(method = "setStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;getCookTime(Lnet/minecraft/world/World;Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;)I"))
+    private int titanfabric$getDiamondFurnaceCookTimeOnStack(World world, AbstractFurnaceBlockEntity furnace, Operation<Integer> original) {
+        int originalEvaluation = original.call(world, furnace);
         BlockEntity blockEntity = (AbstractFurnaceBlockEntity) (Object) this;
         return blockEntity instanceof DiamondFurnaceBlockEntity ? originalEvaluation / 2 : originalEvaluation;
     }
 
-    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;canAcceptRecipeOutput(Lnet/minecraft/recipe/Recipe;Lnet/minecraft/util/collection/DefaultedList;I)Z"))
-    private static boolean titanFabric$blockLowHeatSmelting(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots, int count, Operation<Boolean> original, @Local(argsOnly = true) AbstractFurnaceBlockEntity blockEntity) {
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;canAcceptRecipeOutput(Lnet/minecraft/registry/DynamicRegistryManager;Lnet/minecraft/recipe/RecipeEntry;Lnet/minecraft/util/collection/DefaultedList;I)Z"))
+    private static boolean titanFabric$blockLowHeatSmelting(DynamicRegistryManager registryManager, @Nullable RecipeEntry<?> recipe, DefaultedList<ItemStack> slots, int count, Operation<Boolean> original, @Local(argsOnly = true) AbstractFurnaceBlockEntity blockEntity) {
         ItemStack smeltMaterialStack = slots.get(0);
         if (smeltMaterialStack.isIn(TitanFabricTags.Items.HIGH_HEAT_SMELTING)) {
             if (!blockEntity.getCachedState().isIn(TitanFabricTags.Blocks.HIGH_HEAT_FURNACES)) return false;
         }
-        return original.call(recipe, slots, count);
+        return original.call(registryManager, recipe, slots, count);
     }
 
 
@@ -52,19 +51,23 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @WrapOperation(method = "tick",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;craftRecipe(Lnet/minecraft/recipe/Recipe;Lnet/minecraft/util/collection/DefaultedList;I)Z"
+                    target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;craftRecipe(Lnet/minecraft/registry/DynamicRegistryManager;Lnet/minecraft/recipe/RecipeEntry;Lnet/minecraft/util/collection/DefaultedList;I)Z"
             )
     )
-    private static boolean titanFabric$craftDiamondFurnaceRecipe(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots,
-                                                                 int count, Operation<Boolean> original,
+    private static boolean titanFabric$craftDiamondFurnaceRecipe(DynamicRegistryManager registryManager, @Nullable RecipeEntry<?> recipe,
+                                                                 DefaultedList<ItemStack> slots, int count, Operation<Boolean> original,
                                                                  @Local(argsOnly = true) AbstractFurnaceBlockEntity furnaceBlockEntity) {
-        if (!(furnaceBlockEntity instanceof DiamondFurnaceBlockEntity)) return original.call(recipe, slots, count);
+        if (!(furnaceBlockEntity instanceof DiamondFurnaceBlockEntity)) {
+            return original.call(registryManager, recipe, slots, count);
+        }
         ItemStack inputSlotStack = slots.get(0);
         ItemStack fuelSlotStack = slots.get(1);
         ItemStack outputSlotStack = slots.get(2);
         int changeAmount = inputSlotStack.isIn(TitanFabricTags.Items.BETTER_SMELTING_ITEMS) ? 2 : 1;
-        if (recipe == null || !hasValidOutput(recipe, slots, count, changeAmount)) return false;
-        ItemStack recipeOutputStack = recipe.getOutput();
+        if (recipe == null || !hasValidOutput(registryManager, recipe.value(), slots, count, changeAmount)) {
+            return false;
+        }
+        ItemStack recipeOutputStack = recipe.value().getResult(registryManager);
 
         if (outputSlotStack.isEmpty()) {
             ItemStack output = recipeOutputStack.copy();
@@ -81,15 +84,15 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     }
 
     @Unique
-    private static boolean hasValidOutput(Recipe<?> recipe, DefaultedList<ItemStack> slots, int inputSlotCount, int changeAmount) {
+    private static boolean hasValidOutput(DynamicRegistryManager registryManager, Recipe<?> recipe, DefaultedList<ItemStack> slots, int inputSlotCount, int changeAmount) {
         ItemStack smeltingMaterial = slots.get(0);
         ItemStack outputSlotStack = slots.get(2);
-        ItemStack recipeOutputStack = recipe.getOutput();
+        ItemStack recipeOutputStack = recipe.getResult(registryManager);
         int outputSlotCount = outputSlotStack.getCount();
 
         if (smeltingMaterial.isEmpty() || recipeOutputStack.isEmpty()) return false;
         if (outputSlotStack.isEmpty()) return true;
-        if (!outputSlotStack.isItemEqualIgnoreDamage(recipeOutputStack)) return false;
+        if (!ItemStack.areItemsAndComponentsEqual(outputSlotStack, recipeOutputStack)) return false;
         if (outputSlotCount < inputSlotCount / changeAmount && outputSlotCount < outputSlotStack.getMaxCount())
             return true;
         return outputSlotStack.getCount() < smeltingMaterial.getMaxCount();

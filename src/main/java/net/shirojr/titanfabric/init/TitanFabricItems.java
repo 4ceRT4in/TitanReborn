@@ -1,5 +1,7 @@
 package net.shirojr.titanfabric.init;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -80,7 +82,7 @@ public interface TitanFabricItems {
     TitanFabricSwordItem NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings().fireproof()));
 
-    TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1).maxDamage(-1)));
+    TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1).maxDamage(-1).component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)));
     LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
     MultiBowItem MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(1, 10, 500));
     MultiBowItem MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2, 20, 1000));

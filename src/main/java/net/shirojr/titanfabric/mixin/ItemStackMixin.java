@@ -1,5 +1,7 @@
 package net.shirojr.titanfabric.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.fabric.api.item.v1.FabricItemStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -14,16 +16,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Random;
-
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements FabricItemStack {
-    @Inject(method = "damage(ILjava/util/Random;Lnet/minecraft/server/network/ServerPlayerEntity;)Z", at = @At("HEAD"), cancellable = true)
-    private void titanfabric$ItemStackDamage(int amount, Random random, ServerPlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
-        if (player == null) return;
+    @ModifyExpressionValue(method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
+    private boolean titanfabric$ItemStackDamage(boolean original, @Local(argsOnly = true) ServerPlayerEntity player) {
+        if (player == null) return original;
         if (player.hasStatusEffect(TitanFabricStatusEffects.INDESTRUCTIBILITY)) {
-            cir.setReturnValue(false);
+            return false;
         }
+        return original;
     }
 
     @Inject(at = @At("HEAD"), method = "finishUsing")

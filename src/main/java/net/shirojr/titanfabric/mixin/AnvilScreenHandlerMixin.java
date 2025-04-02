@@ -9,15 +9,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
-import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -27,7 +26,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -89,15 +87,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         player.getWorld().playSound(null, pos, SoundEvents.ITEM_TRIDENT_RETURN, SoundCategory.BLOCKS, 1f, 1f);
     }
 
-    @Redirect(method = "updateResult",
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setCustomName(Lnet/minecraft/text/Text;)Lnet/minecraft/item/ItemStack;"),
-                    to = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;set(I)V", ordinal = 5)
-            ),
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;set(I)V")
-    )
-    private void titanfabric$modifyXpCost(Property instance, int i) {
-        LoggerUtil.devLogger("used anvil redirect for xp");
+    @WrapOperation(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;set(I)V", ordinal = 4))
+    private void reduceXpCost(Property instance, int i, Operation<Void> original) {
         Optional<BlockState> blockState = context.get(World::getBlockState);
         int xp = calculateXp(blockState.orElse(null), i);
         instance.set(xp);

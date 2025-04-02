@@ -3,30 +3,26 @@ package net.shirojr.titanfabric.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.tag.TagKey;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.shirojr.titanfabric.TitanFabric;
 
-@SuppressWarnings("ALL")
+
 public class TitanFabricTags {
     private static <T> TagKey<T> createTag(String name, RegistryKey<? extends Registry<T>> registryKey) {
-        return TagKey.of(registryKey, new Identifier(TitanFabric.MOD_ID, name));
-    }
-
-    private static <T> TagKey<T> createCommonTag(String name, RegistryKey<? extends Registry<T>> registryKey) {
-        return TagKey.of(registryKey, new Identifier("c", name));
+        return TagKey.of(registryKey, TitanFabric.getId(name));
     }
 
     public static class Items {
-        public static final TagKey<Item> DEFAULT_ARROWS = createTag("default_selectable_arrows", Registry.ITEM_KEY);
-        public static final TagKey<Item> DEFAULT_CROSSBOW_ARROWS = createTag("default_selectable_crossbow_arrows", Registry.ITEM_KEY);
-        public static final TagKey<Item> BETTER_SMELTING_ITEMS = createTag("improved_diamond_furnace_smelting_items", Registry.ITEM_KEY);
-        public static final TagKey<Item> HIGH_HEAT_SMELTING = createTag("high_heat_smelting_only_items", Registry.ITEM_KEY);
+        public static final TagKey<Item> DEFAULT_ARROWS = createTag("default_selectable_arrows", RegistryKeys.ITEM);
+        public static final TagKey<Item> DEFAULT_CROSSBOW_ARROWS = createTag("default_selectable_crossbow_arrows", RegistryKeys.ITEM);
+        public static final TagKey<Item> BETTER_SMELTING_ITEMS = createTag("improved_diamond_furnace_smelting_items", RegistryKeys.ITEM);
+        public static final TagKey<Item> HIGH_HEAT_SMELTING = createTag("high_heat_smelting_only_items", RegistryKeys.ITEM);
     }
 
     public static class Blocks {
-        public static final TagKey<Block> HIGH_HEAT_FURNACES = createTag("high_heat_furnaces", Registry.BLOCK_KEY);
+        public static final TagKey<Block> HIGH_HEAT_FURNACES = createTag("high_heat_furnaces", RegistryKeys.BLOCK);
     }
 }

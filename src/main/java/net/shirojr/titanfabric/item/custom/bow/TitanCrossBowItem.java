@@ -2,7 +2,8 @@ package net.shirojr.titanfabric.item.custom.bow;
 
 import com.google.common.collect.Lists;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.CrossbowUser;
@@ -61,28 +62,22 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ArrowSelectionHelper.cleanUpProjectileSelection(user, this);
         ItemStack itemStack = user.getStackInHand(hand);
-        if (isCharged(itemStack)) {
-            shootAll(world, user, hand, itemStack, getSpeed(itemStack), 1.0f);
-            setCharged(itemStack, false);
+        ChargedProjectilesComponent chargedProjectilesComponent = itemStack.get(DataComponentTypes.CHARGED_PROJECTILES);
+        if (chargedProjectilesComponent != null && !chargedProjectilesComponent.isEmpty()) {
+            this.shootAll(world, user, hand, itemStack, getSpeed(chargedProjectilesComponent), 1.0F, null);
             return TypedActionResult.consume(itemStack);
-        }
-
-        if (!user.getArrowType(itemStack).isEmpty() || !getProjectileType(user, itemStack).isEmpty()) {
-            if (!isCharged(itemStack)) {
-                this.charged = false;
-                this.loaded = false;
-                user.setCurrentHand(hand);
-            }
+        } else if (!user.getProjectileType(itemStack).isEmpty()) {
+            this.charged = false;
+            this.loaded = false;
+            user.setCurrentHand(hand);
             return TypedActionResult.consume(itemStack);
+        } else {
+            return TypedActionResult.fail(itemStack);
         }
-        return TypedActionResult.fail(itemStack);
     }
 
-    private static float getSpeed(ItemStack stack) {
-        if (hasProjectile(stack, Items.FIREWORK_ROCKET)) {
-            return 1.6f;
-        }
-        return 3.15f;
+    private static float getSpeed(ChargedProjectilesComponent stack) {
+        return stack.contains(Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
     }
 
     @Override
@@ -90,7 +85,6 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
         int i = this.getMaxUseTime(stack) - remainingUseTicks;
         float f = getPullProgress(i, stack);
         if (f >= 1.0f && !isCharged(stack) && loadProjectiles(user, stack)) {
-            setCharged(stack, true);
             SoundCategory soundCategory = user instanceof PlayerEntity ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_CROSSBOW_LOADING_END, soundCategory, 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.5f + 1.0f) + 0.2f);
         }
@@ -118,10 +112,19 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
     }
 
     private static boolean loadProjectiles(LivingEntity shooter, ItemStack crossbow) {
-        int multiShotLevel = EnchantmentHelper.getLevel(Enchantments.MULTISHOT, crossbow);
+        List<ItemStack> list = load(crossbow, shooter.getProjectileType(crossbow), shooter);
+        if (!list.isEmpty()) {
+            crossbow.set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.of(list));
+            return true;
+        }
+        return false;
+
+
+
+        /*int multiShotLevel = EnchantmentHelper.getLevel(Enchantments.MULTISHOT, crossbow);
         int projectileCount = multiShotLevel == 0 ? 1 : 3;
         boolean bl = shooter instanceof PlayerEntity && ((PlayerEntity) shooter).getAbilities().creativeMode;
-        ItemStack itemStack = shooter.getArrowType(crossbow);
+        ItemStack itemStack = shooter.getProjectileType(crossbow);
         if (itemStack.isEmpty()) {
             itemStack = getProjectileType(shooter, crossbow);
         }
@@ -145,17 +148,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
             }
             return false;
         }
-        return true;
-    }
-
-    public static boolean isCharged(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getNbt();
-        return nbtCompound != null && nbtCompound.getBoolean(CHARGED_KEY);
-    }
-
-    public static void setCharged(ItemStack stack, boolean charged) {
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
-        nbtCompound.putBoolean(CHARGED_KEY, charged);
+        return true;*/
     }
 
     private static void putProjectile(ItemStack crossbow, ItemStack projectile) {
@@ -227,7 +220,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows,
             //if (projectileEntity instanceof PotionEntity) {
             //    projectileEntity.setVelocity(vec3f.getX(), vec3f.getY(), vec3f.getZ(), speed * 0.4f, divergence);
             //} else {
-                projectileEntity.setVelocity(vec3f.getX(), vec3f.getY(), vec3f.getZ(), speed, divergence);
+            projectileEntity.setVelocity(vec3f.getX(), vec3f.getY(), vec3f.getZ(), speed, divergence);
             //}
         }
         crossbow.damage(bl ? 3 : 1, shooter, e -> e.sendToolBreakStatus(hand));

@@ -4,9 +4,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.TitanFabricTags;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
@@ -21,9 +21,9 @@ import java.util.function.Predicate;
 
 @Mixin(BowItem.class)
 public class BowItemMixin implements SelectableArrows {
-    @Inject(method = "getProjectiles", at = @At("HEAD"),cancellable = true)
+    @Inject(method = "getProjectiles", at = @At("HEAD"), cancellable = true)
     private void titanfabric$getProjectiles(CallbackInfoReturnable<Predicate<ItemStack>> cir) {
-        BowItem bowItem = (BowItem)(Object) this;
+        BowItem bowItem = (BowItem) (Object) this;
         if (!(bowItem instanceof SelectableArrows weaponWithSelectableArrows)) return;
         Predicate<ItemStack> validArrowItem = stack -> {
             for (Item arrow : weaponWithSelectableArrows.titanFabric$supportedArrows()) {
@@ -41,6 +41,6 @@ public class BowItemMixin implements SelectableArrows {
 
     @Override
     public List<Item> titanFabric$supportedArrows() {
-        return Registry.ITEM.stream().filter(item -> item.getDefaultStack().isIn(TitanFabricTags.Items.DEFAULT_ARROWS)).toList();
+        return Registries.ITEM.stream().filter(item -> item.getDefaultStack().isIn(TitanFabricTags.Items.DEFAULT_ARROWS)).toList();
     }
 }

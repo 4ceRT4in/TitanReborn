@@ -1,13 +1,12 @@
 package net.shirojr.titanfabric.mixin;
 
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameRules;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +30,7 @@ public abstract class HungerManagerMixin {
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     private void updateMixin(PlayerEntity player, CallbackInfo info) {
         if (player.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_FOOD_REGENERATION)) {
-            Difficulty difficulty = player.world.getDifficulty();
+            Difficulty difficulty = player.getWorld().getDifficulty();
             this.prevFoodLevel = this.foodLevel;
             if (this.exhaustion > 4.0f) {
                 this.exhaustion -= 4.0f;
@@ -41,11 +40,12 @@ public abstract class HungerManagerMixin {
                     this.foodLevel = Math.max(this.foodLevel - 1, 0);
                 }
             }
-            if (player.world.getGameRules().getBoolean(GameRules.NATURAL_REGENERATION) && this.foodLevel >= 18 && player.canFoodHeal()) {
+            if (player.getWorld().getGameRules().getBoolean(GameRules.NATURAL_REGENERATION) && this.foodLevel >= 18 && player.canFoodHeal()) {
                 ++this.foodTickTimer;
                 int requiredFoodTick = 80;
-                if (player.hasStatusEffect(StatusEffects.WITHER)) {
-                    requiredFoodTick = 80 + 8 * player.getStatusEffect(StatusEffects.WITHER).getAmplifier();
+                StatusEffectInstance witherEffectInstance = player.getStatusEffect(StatusEffects.WITHER);
+                if (witherEffectInstance != null) {
+                    requiredFoodTick = 80 + 8 * witherEffectInstance.getAmplifier();
                 }
                 if (this.foodTickTimer >= requiredFoodTick) {
                     player.heal(1.0f);
@@ -56,7 +56,7 @@ public abstract class HungerManagerMixin {
                 ++this.foodTickTimer;
                 if (this.foodTickTimer >= 80) {
                     if (player.getHealth() > 10.0f || difficulty == Difficulty.HARD || player.getHealth() > 1.0f && difficulty == Difficulty.NORMAL) {
-                        player.damage(DamageSource.STARVE, 1.0f);
+                        player.damage(player.getDamageSources().starve(), 1.0f);
                     }
                     this.foodTickTimer = 0;
                 }

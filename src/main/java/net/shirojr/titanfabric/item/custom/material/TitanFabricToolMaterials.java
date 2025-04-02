@@ -1,66 +1,67 @@
 package net.shirojr.titanfabric.item.custom.material;
 
+import com.google.common.base.Suppliers;
+import net.minecraft.block.Block;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.util.Lazy;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 
 import java.util.function.Supplier;
 
 public enum TitanFabricToolMaterials implements ToolMaterial {
 
-    WOOD(59, 1.0f, 0.0f, 1, 15,
-            () -> Ingredient.fromTag(ItemTags.PLANKS)),
-    GOLD(32, 6.0f, 0.0f, 6, 22,
-            () -> Ingredient.ofItems(Items.GOLD_INGOT)),
-    STONE(131, 2.0f, 0.0f, 2, 5,
-            () -> Ingredient.fromTag(ItemTags.STONE_TOOL_MATERIALS)),
-    IRON(250, 3.0f, 0.0f, 3, 14,
-            () -> Ingredient.ofItems(Items.IRON_INGOT)),
-    DIAMOND(1561, 4.0f, 0.0f, 4, 10,
-            () -> Ingredient.ofItems(Items.DIAMOND)),
-    NETHERITE(2031, 5.0f, 0.0f, 5, 15,
-            () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
+    WOOD(BlockTags.INCORRECT_FOR_WOODEN_TOOL, 59, 1.0f, 0.0f, 15,
+            Ingredient.fromTag(ItemTags.PLANKS)),
+    GOLD(BlockTags.INCORRECT_FOR_GOLD_TOOL, 32, 6.0f, 0.0f, 22,
+            Ingredient.ofItems(Items.GOLD_INGOT)),
+    STONE(BlockTags.INCORRECT_FOR_STONE_TOOL, 131, 2.0f, 0.0f, 5,
+            Ingredient.fromTag(ItemTags.STONE_TOOL_MATERIALS)),
+    IRON(BlockTags.INCORRECT_FOR_IRON_TOOL, 250, 3.0f, 0.0f, 14,
+            Ingredient.ofItems(Items.IRON_INGOT)),
+    DIAMOND(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1561, 4.0f, 0.0f, 10,
+            Ingredient.ofItems(Items.DIAMOND)),
+    NETHERITE(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2031, 5.0f, 0.0f, 15,
+            Ingredient.ofItems(Items.NETHERITE_INGOT)),
 
-    CITRIN(250, 3.0f, 0.0f, 2, 14,
-            () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
-    EMBER(375, 3.0f, 0.0f, 2, 18,
-            () -> Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
-    LEGEND(-1, 4.0f, 0.0f, 3, 22,
-            () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
+    CITRIN(BlockTags.INCORRECT_FOR_IRON_TOOL, 250, 3.0f, 0.0f, 14,
+            Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
+    EMBER(BlockTags.INCORRECT_FOR_IRON_TOOL, 375, 3.0f, 0.0f, 18,
+            Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
+    LEGEND(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, -1, 4.0f, 0.0f, 22,
+            Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
 
-    CITRIN_GREAT(1000, 3.0f, 0.0f, 2, 10,
-                         () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
-    EMBER_GREAT(1500, 3.0f, 0.0f, 2, 14,
-                         () -> Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
-    DIAMOND_GREAT(2000, 4.0f, 0.0f, 3, 10,
-            () -> Ingredient.ofItems(Items.DIAMOND)),
-    NETHERITE_GREAT(2500, 5.0f, 0.0f, 4, 15,
-            () -> Ingredient.ofItems(Items.NETHERITE_INGOT)),
-    LEGEND_GREAT(-1, 5.0f, 0.0f, 4, 18,
-                         () -> Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
+    CITRIN_GREAT(BlockTags.INCORRECT_FOR_IRON_TOOL, 1000, 3.0f, 0.0f, 10,
+            Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
+    EMBER_GREAT(BlockTags.INCORRECT_FOR_IRON_TOOL, 1500, 3.0f, 0.0f, 14,
+            Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
+    DIAMOND_GREAT(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 2000, 4.0f, 0.0f, 10,
+            Ingredient.ofItems(Items.DIAMOND)),
+    NETHERITE_GREAT(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2500, 5.0f, 0.0f, 15,
+            Ingredient.ofItems(Items.NETHERITE_INGOT)),
+    LEGEND_GREAT(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, -1, 5.0f, 0.0f, 18,
+            Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
 
-
-
+    private final TagKey<Block> inverseTag;
     private final int durability;
     private final float miningSpeedMultiplier;
     private final float attackDamage;
-    private final int miningLevel;
     private final int enchantability;
-    private final Lazy<Ingredient> repairIngredientSupplier;
+    private final Supplier<Ingredient> repairIngredientSupplier;
 
-    TitanFabricToolMaterials(int durability, float miningSpeedMultiplier, float attackDamage,
-                                     int miningLevel, int enchantability,
-                                     Supplier<Ingredient> repairIngredientSupplier) {
+    TitanFabricToolMaterials(TagKey<Block> inverseTag, int durability, float miningSpeedMultiplier, float attackDamage,
+                             int enchantability, Ingredient repairIngredient) {
+        this.inverseTag = inverseTag;
         this.durability = durability;
         this.miningSpeedMultiplier = miningSpeedMultiplier;
         this.attackDamage = attackDamage;
-        this.miningLevel = miningLevel;
         this.enchantability = enchantability;
-        this.repairIngredientSupplier = new Lazy<Ingredient>(repairIngredientSupplier);
+        this.repairIngredientSupplier = Suppliers.memoize(() -> repairIngredient);
     }
+
     @Override
     public int getDurability() {
         return this.durability;
@@ -77,8 +78,8 @@ public enum TitanFabricToolMaterials implements ToolMaterial {
     }
 
     @Override
-    public int getMiningLevel() {
-        return this.miningLevel;
+    public TagKey<Block> getInverseTag() {
+        return this.inverseTag;
     }
 
     @Override

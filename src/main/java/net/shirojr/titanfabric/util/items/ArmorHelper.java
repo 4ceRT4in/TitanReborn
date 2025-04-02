@@ -1,21 +1,36 @@
 package net.shirojr.titanfabric.util.items;
 
-import java.util.List;
-import java.util.stream.IntStream;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.ItemStack;
+import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 
 public class ArmorHelper {
-
-    public static List<Item> getArmorItems(PlayerEntity playerEntity) {
-        return IntStream.rangeClosed(0, 3).mapToObj(playerEntity.getInventory()::getArmorStack).map(ItemStack::getItem).toList();
+    public static int getEmberArmorCount(LivingEntity entity) {
+        int i = 0;
+        for (ItemStack armorStack : entity.getArmorItems()) {
+            if (armorStack.getItem() instanceof EmberArmorItem) i++;
+        }
+        return i;
     }
 
-    public static int getNetherArmorCount(PlayerEntity playerEntity) {
-        return (int) getArmorItems(playerEntity).stream().filter(item -> item instanceof EmberArmorItem).count();
+    public static int getCitrinArmorCount(LivingEntity entity) {
+        int i = 0;
+        for (ItemStack armorStack : entity.getArmorItems()) {
+            if (armorStack.getItem() instanceof CitrinArmorItem) i++;
+        }
+        return i;
     }
 
+    public static int getNetheriteArmorCount(LivingEntity entity) {
+        int i = 0;
+        for (ItemStack armorStack : entity.getArmorItems()) {
+            if (armorStack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial().value().equals(ArmorMaterials.NETHERITE.value())) {
+                i++;
+            }
+        }
+        return i;
+    }
 }

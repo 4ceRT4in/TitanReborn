@@ -4,7 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 
 import java.util.List;
@@ -33,10 +33,10 @@ public class ArrowSelectionHelper {
         if (isArrowSupported && inventoryContainsSelectedStack) return;
 
         if (user instanceof ServerPlayerEntity serverPlayer)
-            serverPlayer.sendMessage(new TranslatableText("actionbar.titanfabric.not_compatible"), true);
+            serverPlayer.sendMessage(Text.translatable("actionbar.titanfabric.not_compatible"), true);
         List<ItemStack> selectableArrows = findAllSupportedArrowStacks(user.getInventory(), bowItem);
         ItemStack newSelectedStack = null;
-        if (selectableArrows.size() > 0) newSelectedStack = selectableArrows.get(0);
+        if (!selectableArrows.isEmpty()) newSelectedStack = selectableArrows.get(0);
         arrowSelection.titanfabric$setSelectedArrowIndex(newSelectedStack);
     }
 }

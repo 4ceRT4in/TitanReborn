@@ -2,27 +2,22 @@ package net.shirojr.titanfabric.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.*;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.tag.EntityTypeTags;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.event.GameEvent;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
+import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +25,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -48,7 +42,7 @@ public abstract class LivingEntityMixin {
 
     @Shadow
     @Final
-    private Map<StatusEffect, StatusEffectInstance> activeStatusEffects;
+    private Map<RegistryEntry<StatusEffect>, StatusEffectInstance> activeStatusEffects;
 
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
@@ -61,7 +55,7 @@ public abstract class LivingEntityMixin {
         if (!canHaveStatusEffect(effect))
             return;
 
-        List<StatusEffect> blockedEffectList = List.of(StatusEffects.BLINDNESS, StatusEffects.POISON, StatusEffects.WEAKNESS, StatusEffects.WITHER, StatusEffects.SLOWNESS);
+        List<RegistryEntry<StatusEffect>> blockedEffectList = List.of(StatusEffects.BLINDNESS, StatusEffects.POISON, StatusEffects.WEAKNESS, StatusEffects.WITHER, StatusEffects.SLOWNESS);
 
         for (var entry : blockedEffectList) {
             if (!blockedEffectList.contains(effect.getEffectType()))
@@ -125,30 +119,25 @@ public abstract class LivingEntityMixin {
         }
         cir.setReturnValue(false);
     }
-    private boolean titanFabric$renderCrossBowFix(ItemStack instance, Item item, Operation<Boolean> original) {
-        boolean originalEvaluation = original.call(instance, item);
-        if (!item.equals(Items.CROSSBOW)) return originalEvaluation;
-        return originalEvaluation || instance.getItem() instanceof CrossbowItem;
-    }
-    @ModifyVariable(method = "travel", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/effect/StatusEffects;SLOW_FALLING:Lnet/minecraft/entity/effect/StatusEffect;", shift = At.Shift.BEFORE, by = 1), ordinal = 0)
-    private double titanfabric$handleSafeLandingEffect(double original) {
-        LivingEntity entity = ((LivingEntity) (Object) this);
-        if (entity.getVelocity().getY() < 0 && TitanFabricParachuteItem.isParachuteActivated(entity)) {
-            original = 0.005D;
-            entity.onLanding();
+
+    @WrapOperation(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFinalGravity()D"))
+    private double modifyGravityForParachute(LivingEntity instance, Operation<Double> original) {
+        if (instance.getVelocity().getY() >= 0 || !TitanFabricParachuteItem.isParachuteActivated(instance)) {
+            return original.call(instance);
         }
-        return original;
+        instance.onLanding();
+        return 0.005;
     }
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private float modifyDamageAmount(float amount, DamageSource source) {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity.getWorld() != null && !entity.getWorld().isClient() && source != null) {
-            if (source == DamageSource.IN_FIRE) {
+            if (source.isIn(DamageTypeTags.IS_FIRE)) {
                 int totalArmor = 0;
                 for (ItemStack armorStack : entity.getArmorItems()) {
                     if (!armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem armorItem) {
-                        totalArmor += armorItem.getMaterial().getProtectionAmount(armorItem.getSlotType());
+                        totalArmor += armorItem.getProtection();
                     }
                 }
                 if (totalArmor > 0) {
@@ -212,7 +201,7 @@ public abstract class LivingEntityMixin {
                         if (target.getRandom().nextFloat() < f) {
                             target.getItemCooldownManager().set(target.getActiveItem().getItem(), 100);
                             target.clearActiveItem();
-                            target.world.sendEntityStatus(target, (byte) 30);
+                            target.getWorld().sendEntityStatus(target, (byte) 30);
                         }
                     }
                 }
@@ -222,36 +211,15 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    /*@Inject(method = "applyEnchantmentsToDamage", at = @At("HEAD"), cancellable = true)
-    protected void applyEnchantmentsToDamage(DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
-
-        if (source.isUnblockable()) {
-        } else {
-            if (((LivingEntity) (Object) this).hasStatusEffect(StatusEffects.RESISTANCE) && source != DamageSource.OUT_OF_WORLD) {
-                float i = (((LivingEntity) (Object) this).getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 2.5F;//5
-                float j = 25 - i; //20 | 10 | 30 || 22.5
-                float f = amount * j; //2.11 * 20 = 42,2 | 2.11 * 10 = 21.1 | 2.11 * 30 = 63,3 | 2.11 * 22.5 =
-                float g = amount; //2.11
-                amount = Math.max(f / 25.0F, 0.0F); //1,68 | 0,844
-                float h = (g - amount); //2.11 - 1,68 =
-
-                if (h > 0.0F && h < 3.4028235E37F) {
-                    if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity) {
-                        (((ServerPlayerEntity) (Object) this)).increaseStat(Stats.DAMAGE_RESISTED, Math.round(h * 10.0F));
-                    } else if (source.getAttacker() instanceof ServerPlayerEntity) {
-                        ((ServerPlayerEntity)source.getAttacker()).increaseStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(h * 10.0F));
-                    }
-                }
-            }
-            if (amount <= 0.0F) {
-                cir.setReturnValue(0.0F);
-            } else {
-                int i = EnchantmentHelper.getProtectionAmount(((LivingEntity) (Object) this).getArmorItems(), source);
-                if (i > 0) {
-                    amount = DamageUtil.getInflictedDamage(amount, (float)i);
-                }
-                cir.setReturnValue(amount);
+    @ModifyVariable(method = "setOnFireForTicks", at = @At("HEAD"), argsOnly = true)
+    private int handleFireTicksForArmor(int ticks) {
+        if (ticks > 0) {
+            int netherArmorCount = ArmorHelper.getEmberArmorCount((LivingEntity) (Object) this);
+            if (netherArmorCount > 0) {
+                float seconds = ticks * 0.05f;
+                ticks = netherArmorCount == 4 ? 0 : (int) (seconds * netherArmorCount * 0.25f);
             }
         }
-    }*/
+        return ticks;
+    }
 }
