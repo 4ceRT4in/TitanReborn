@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " # ",
+        "#S#",
+        " # "
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:diamond"
+        },
+        "S": {
+            "item": "titanfabric:diamond_armor_plating"
+        }
+    },
+    "result": {
+        "item": "titanfabric:diamond_armor_plating",
+        "count": 2
+    }
+}

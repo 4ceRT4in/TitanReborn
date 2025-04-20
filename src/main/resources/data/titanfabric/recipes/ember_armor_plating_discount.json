@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " # ",
+        "#S#",
+        " # "
+    ],
+    "key": {
+        "#": {
+            "item": "titanfabric:ember_ingot"
+        },
+        "S": {
+            "item": "titanfabric:ember_armor_plating"
+        }
+    },
+    "result": {
+        "item": "titanfabric:ember_armor_plating",
+        "count": 2
+    }
+}
