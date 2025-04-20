@@ -1,7 +1,7 @@
 {
     "type": "minecraft:smithing",
     "base": {
-        "item": "titanfabric:diamond_shield"
+        "item": "minecraft:shield"
     },
     "addition": {
         "item": "titanfabric:legend_ingot"
