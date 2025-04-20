@@ -42,8 +42,8 @@ public class TitanFabricClientTickEvents {
                 String s2 = "";
                 String color = "";
                 if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.CITRIN)) {
-                    s2 = s + "Magic Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
-                    color = "§2";
+                    s2 = s + "Citrin Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
+                    color = "§e";
                 } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.DIAMOND)) {
                     s2 = s + "Diamond Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
                     color = "§b";
