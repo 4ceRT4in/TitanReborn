@@ -1,6 +1,9 @@
 package net.shirojr.titanfabric.mixin;
 
 import java.util.List;
+
+import net.shirojr.titanfabric.util.effects.ArmorPlateType;
+import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.client.item.TooltipContext;
@@ -43,6 +46,27 @@ public abstract class ArmorItemMixin extends Item {
         super.appendTooltip(stack, world, tooltip, context);
         if (stack.getItem() == Items.NETHERITE_HELMET || stack.getItem() == Items.NETHERITE_CHESTPLATE || stack.getItem() == Items.NETHERITE_LEGGINGS || stack.getItem() == Items.NETHERITE_BOOTS) {
             tooltip.add(new TranslatableText("tooltip.titanfabric.netherite_effect"));
+        }
+        if(ArmorPlatingHelper.hasArmorPlating(stack)) {
+            String s = null;
+            String color = "";
+            if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.CITRIN)) {
+                s = "+2.5% Magic Weapon Protection §7" + ArmorPlatingHelper.getDurability(stack);
+                color = "§2";
+            } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.DIAMOND)) {
+                s = "+2.5% Diamond Weapon Protection §7" + ArmorPlatingHelper.getDurability(stack);
+                color = "§b";
+            } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.NETHERITE)) {
+                s = "+2.5% Netherite Weapon Protection §7" + ArmorPlatingHelper.getDurability(stack);
+                color = "§8";
+            } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.LEGEND)) {
+                s = "+2.5% Titan Weapon Protection §7" + ArmorPlatingHelper.getDurability(stack);
+                color = "§3";
+            } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.EMBER)) {
+                s = "+2.5% Ember Weapon Protection §7" + ArmorPlatingHelper.getDurability(stack);
+                color = "§c";
+            }
+            tooltip.add(Text.of(color + s));
         }
     }
 

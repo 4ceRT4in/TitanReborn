@@ -45,18 +45,19 @@
   "client": [
     "client.AbstractClientPlayerEntityMixin",
     "client.ArrowEntityRendererMixin",
-    "client.BufferBuilderStorageMixin",
     "client.BackgroundRendererMixin",
     "client.BipedEntityModelMixin",
+    "client.BufferBuilderStorageMixin",
     "client.ClientPlayerEntityMixin",
     "client.EntityRenderDispatcherMixin",
     "client.GameOptionsMixin",
     "client.HeldItemRendererMixin",
+    "client.InGameHudMixin",
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",
+    "client.ItemRendererMixin",
     "client.PlayerEntityRendererMixin",
     "client.PlayerHeldItemFeatureRendererMixin",
-    "client.StatusEffectUtilMixin",
-    "client.ItemRendererMixin"
+    "client.StatusEffectUtilMixin"
   ]
 }

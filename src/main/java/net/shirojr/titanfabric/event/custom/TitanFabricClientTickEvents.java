@@ -36,39 +36,6 @@ public class TitanFabricClientTickEvents {
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleKeyBindEvent);
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleArmorTickEvent);
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleSoulFireEvent);
-        ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
-            if (ArmorPlatingHelper.hasArmorPlating(stack)) {
-                String s = "+2.5% ";
-                String s2 = "";
-                String color = "";
-                if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.CITRIN)) {
-                    s2 = s + "Magic Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
-                    color = "§2";
-                } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.DIAMOND)) {
-                    s2 = s + "Diamond Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
-                    color = "§b";
-                } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.NETHERITE)) {
-                    s2 = s + "Netherite Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
-                    color = "§8";
-                } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.LEGEND)) {
-                    s2 = s + "Titan Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
-                    color = "§3";
-                } else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.EMBER)) {
-                    s2 = s + "Ember Weapon Protection (" + ArmorPlatingHelper.getDurability(stack) + ")";
-                    color = "§c";
-                }
-
-                if (!s2.isEmpty()) {
-                    if (lines.size() > 1 && lines.get(1).getString().isBlank()) {
-                        lines.set(1, Text.of(color + s2));
-                    } else if (lines.size() > 2) {
-                        lines.set(2, Text.of(color + s2));
-                    } else {
-                        lines.add(Text.of(color + s2));
-                    }
-                }
-            }
-        });
     }
 
     private static void handleKeyBindEvent(MinecraftClient client) {

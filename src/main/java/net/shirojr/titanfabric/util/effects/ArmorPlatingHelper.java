@@ -1,7 +1,9 @@
 package net.shirojr.titanfabric.util.effects;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.shirojr.titanfabric.item.TitanFabricItems;
 
 import java.util.Objects;
 
@@ -60,5 +62,15 @@ public class ArmorPlatingHelper {
         }
 
         return null;
+    }
+
+    public static Item getPlateItem(ArmorPlateType plateType) {
+        return switch (plateType) {
+            case CITRIN -> TitanFabricItems.CITRIN_ARMOR_PLATING;
+            case DIAMOND -> TitanFabricItems.DIAMOND_ARMOR_PLATING;
+            case EMBER -> TitanFabricItems.EMBER_ARMOR_PLATING;
+            case NETHERITE -> TitanFabricItems.NETHERITE_ARMOR_PLATING;
+            case LEGEND -> TitanFabricItems.LEGEND_ARMOR_PLATING;
+        };
     }
 }
