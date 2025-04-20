@@ -48,7 +48,7 @@ public abstract class ArmorItemMixin extends Item {
             tooltip.add(new TranslatableText("tooltip.titanfabric.netherite_effect"));
         }
         if(ArmorPlatingHelper.hasArmorPlating(stack)) {
-            String s = null;
+            String s = "";
             String color = "";
             if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.CITRIN)) {
                 s = "+2.5% Magic Weapon Protection §7" + ArmorPlatingHelper.getDurability(stack);
