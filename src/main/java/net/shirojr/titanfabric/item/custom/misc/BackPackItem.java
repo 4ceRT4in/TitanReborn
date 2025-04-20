@@ -19,6 +19,7 @@ import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,70 +100,7 @@ public class BackPackItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if (stack.hasNbt()) {
-            if (stack.getNbt().contains("red")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorRed"));
-                return;
-            }
-            if(stack.getNbt().contains("orange")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorOrange"));
-                return;
-            }
-            if (stack.getNbt().contains("blue")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBlue"));
-                return;
-            }
-            if (stack.getNbt().contains("gray")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorGray"));
-                return;
-            }
-            if (stack.getNbt().contains("lime")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLime"));
-                return;
-            }
-            if (stack.getNbt().contains("pink")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorPink"));
-                return;
-            }
-            if (stack.getNbt().contains("purple")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorPurple"));
-                return;
-            }
-            if (stack.getNbt().contains("light_blue")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLightBlue"));
-                return;
-            }
-            if (stack.getNbt().contains("light_gray")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLightGray"));
-                return;
-            }
-            if (stack.getNbt().contains("yellow")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorYellow"));
-                return;
-            }
-            if (stack.getNbt().contains("magenta")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorMagenta"));
-                return;
-            }
-            if (stack.getNbt().contains("cyan")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorCyan"));
-                return;
-            }
-            if (stack.getNbt().contains("brown")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBrown"));
-                return;
-            }
-            if (stack.getNbt().contains("green")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorGreen"));
-                return;
-            }
-            if (stack.getNbt().contains("black")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBlack"));
-                return;
-            }
-            if (stack.getNbt().contains("white")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorWhite"));
-                return;
-            }
+            TitanFabricDyeProviders.applyColorTooltip(tooltip, stack);
         }
     }
 

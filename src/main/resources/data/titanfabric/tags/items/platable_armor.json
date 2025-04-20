@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "titanfabric:citrin_helmet",
+    "titanfabric:citrin_chestplate",
+    "titanfabric:citrin_leggings",
+    "titanfabric:citrin_boots",
+    "minecraft:diamond_helmet",
+    "minecraft:diamond_chestplate",
+    "minecraft:diamond_leggings",
+    "minecraft:diamond_boots",
+    "titanfabric:ember_helmet",
+    "titanfabric:ember_chestplate",
+    "titanfabric:ember_leggings",
+    "titanfabric:ember_boots",
+    "minecraft:netherite_helmet",
+    "minecraft:netherite_chestplate",
+    "minecraft:netherite_leggings",
+    "minecraft:netherite_boots",
+    "titanfabric:legend_helmet",
+    "titanfabric:legend_chestplate",
+    "titanfabric:legend_leggings",
+    "titanfabric:legend_boots"
+  ]
+}

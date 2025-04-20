@@ -16,6 +16,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
@@ -33,6 +34,9 @@ import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
+import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
+import net.shirojr.titanfabric.util.effects.ArmorPlateType;
+import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
@@ -47,6 +51,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -58,7 +63,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     private static final TrackedData<Integer> SELECTED_ARROW = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
     @Unique
     private static final TrackedData<Boolean> SHOOTING_ARROWS = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BOOLEAN);
-
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -94,6 +98,46 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void titanfabric$writeNbt(NbtCompound nbt, CallbackInfo ci) {
         nbt.putBoolean("shoots_arrows", titanfabric$isShootingArrows());
+    }
+
+    @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    private float damage(float amount, DamageSource source) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if(!player.getWorld().isClient()) {
+            if(source != null && source.getSource() != null && source.getSource() instanceof LivingEntity attacker) {
+                ItemStack mainIs = attacker.getMainHandStack();
+
+                if(mainIs != null && mainIs.getItem() instanceof ToolItem) {
+                    ToolMaterial toolMaterial = ((ToolItem)mainIs.getItem()).getMaterial();
+
+                    Map<ToolMaterial, ArmorPlateType> armorPlateTypes = Map.of(
+                            ToolMaterials.DIAMOND, ArmorPlateType.DIAMOND,
+                            ToolMaterials.NETHERITE, ArmorPlateType.NETHERITE,
+                            TitanFabricToolMaterials.CITRIN, ArmorPlateType.CITRIN,
+                            TitanFabricToolMaterials.EMBER, ArmorPlateType.EMBER,
+                            TitanFabricToolMaterials.LEGEND, ArmorPlateType.LEGEND
+                    );
+                    ArmorPlateType plateType = armorPlateTypes.get(toolMaterial);
+                    if (plateType != null) {
+                        int armorProb = 0;
+                        for(ItemStack armorItem : player.getArmorItems()) {
+                            if(!armorItem.isEmpty() && armorItem.hasNbt()) {
+                                if(ArmorPlatingHelper.hasArmorSpecificPlating(armorItem, plateType)) {
+                                    ArmorPlatingHelper.damage(armorItem, 2);
+                                    armorProb++;
+                                }
+                            }
+                        }
+
+                        if(armorProb > 0) {
+                            float damageReduction = 0.025f * armorProb; //2.5%
+                            return amount * (1.0f - damageReduction);
+                        }
+                    }
+                }
+            }
+        }
+        return amount;
     }
 
     @Override

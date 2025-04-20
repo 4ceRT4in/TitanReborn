@@ -35,41 +35,53 @@ public class DiamondFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
     @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
-        ItemStack result = ItemStack.EMPTY;
+        ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack()) {
-            ItemStack slotStack = slot.getStack();
-            result = slotStack.copy();
+            ItemStack originalStack = slot.getStack();
+            itemStack = originalStack.copy();
             if (index == 2 || index == 3) {
-                if (!this.insertItem(slotStack, 4, 40, true)) {
+                if (!this.insertItem(originalStack, 4, 40, true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickTransfer(slotStack, result);
-            } else if (index == 0 || index == 1) {
-                if (!this.insertItem(slotStack, 4, 40, false)) {
+                slot.onQuickTransfer(originalStack, itemStack);
+            }
+            else if (index < 4) {
+                if (!this.insertItem(originalStack, 4, 40, false)) {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (this.isSmeltable(slotStack)) {
-                    if (!this.insertItem(slotStack, 0, 1, false)) {
+                if (this.isSmeltable(originalStack)) {
+                    if (!this.insertItem(originalStack, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else if (this.isFuel(slotStack)) {
-                    if (!this.insertItem(slotStack, 1, 2, false)) {
+                } else if (this.isFuel(originalStack)) {
+                    if (!this.insertItem(originalStack, 1, 2, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index >= 4 && index < 31) {
+                    if (!this.insertItem(originalStack, 31, 40, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (index >= 31 && index < 40) {
+                    if (!this.insertItem(originalStack, 4, 31, false)) {
                         return ItemStack.EMPTY;
                     }
                 }
             }
-            if (slotStack.isEmpty()) {
+
+            if (originalStack.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }
-            if (slotStack.getCount() == result.getCount()) {
+
+            if (originalStack.getCount() == itemStack.getCount()) {
                 return ItemStack.EMPTY;
             }
-            slot.onTakeItem(player, slotStack);
+
+            slot.onTakeItem(player, originalStack);
         }
-        return result;
+        return itemStack;
     }
 }

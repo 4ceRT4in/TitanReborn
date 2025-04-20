@@ -24,6 +24,9 @@ public class TitanFabricTags {
         public static final TagKey<Item> DEFAULT_CROSSBOW_ARROWS = createTag("default_selectable_crossbow_arrows", Registry.ITEM_KEY);
         public static final TagKey<Item> BETTER_SMELTING_ITEMS = createTag("improved_diamond_furnace_smelting_items", Registry.ITEM_KEY);
         public static final TagKey<Item> HIGH_HEAT_SMELTING = createTag("high_heat_smelting_only_items", Registry.ITEM_KEY);
+        public static final TagKey<Item> PLATABLE_ARMOR = createTag("platable_armor", Registry.ITEM_KEY);
+        public static final TagKey<Item> DYE = createTag("dye", Registry.ITEM_KEY);
+        public static final TagKey<Item> ARMOR_PLATING = createTag("armor_plating", Registry.ITEM_KEY);
     }
 
     public static class Blocks {

@@ -1,6 +1,14 @@
 package net.shirojr.titanfabric.color;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 
 public class TitanFabricDyeProviders {
 
@@ -9,6 +17,52 @@ public class TitanFabricDyeProviders {
             "light_blue", "light_gray", "yellow", "magenta",
             "cyan", "brown", "green", "black", "white"
     };
+
+    public static void applyColorTooltip(List<Text> tooltip, ItemStack stack) {
+        if (stack.hasNbt() && stack.getNbt() != null) {
+            if (stack.getNbt().contains("red")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorRed"));
+            } else if (stack.getNbt().contains("orange")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorOrange"));
+            } else if (stack.getNbt().contains("blue")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBlue"));
+            } else if (stack.getNbt().contains("gray")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorGray"));
+            } else if (stack.getNbt().contains("lime")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLime"));
+            } else if (stack.getNbt().contains("pink")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorPink"));
+            } else if (stack.getNbt().contains("purple")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorPurple"));
+            } else if (stack.getNbt().contains("light_blue")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLightBlue"));
+            } else if (stack.getNbt().contains("light_gray")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLightGray"));
+            } else if (stack.getNbt().contains("yellow")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorYellow"));
+            } else if (stack.getNbt().contains("magenta")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorMagenta"));
+            } else if (stack.getNbt().contains("cyan")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorCyan"));
+            } else if (stack.getNbt().contains("brown")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBrown"));
+            } else if (stack.getNbt().contains("green")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorGreen"));
+            } else if (stack.getNbt().contains("black")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBlack"));
+            } else if (stack.getNbt().contains("white")) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorWhite"));
+            } else {
+                if(stack.getItem() instanceof TitanFabricParachuteItem) {
+                    tooltip.add(new TranslatableText("tooltip.titanfabric.colorWhite"));
+                }
+            }
+        } else {
+            if(stack.getItem() instanceof TitanFabricParachuteItem) {
+                tooltip.add(new TranslatableText("tooltip.titanfabric.colorWhite"));
+            }
+        }
+    }
 
     public static String getColorFromNBT(NbtCompound nbt) {
         if(nbt != null) {

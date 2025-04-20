@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.screen.custom;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -18,7 +19,7 @@ import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScreenHandler> {
+public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInventoryScreenHandler> {
     public static final Identifier TEXTURE = new Identifier(TitanFabric.MODID, "textures/gui/extended_inventory.png");
 
     public ExtendedInventoryScreen(ExtendedInventoryScreenHandler handler, PlayerInventory inventory, Text title) {

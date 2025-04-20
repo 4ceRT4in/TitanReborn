@@ -45,6 +45,7 @@
   "client": [
     "client.AbstractClientPlayerEntityMixin",
     "client.ArrowEntityRendererMixin",
+    "client.BufferBuilderStorageMixin",
     "client.BackgroundRendererMixin",
     "client.BipedEntityModelMixin",
     "client.ClientPlayerEntityMixin",

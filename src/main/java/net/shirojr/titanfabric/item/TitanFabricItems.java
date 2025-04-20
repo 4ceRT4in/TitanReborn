@@ -91,6 +91,8 @@ public class TitanFabricItems {
 
     public static final TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
             new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
+    public static final TitanFabricShieldItem NETHERITE_SHIELD = registerItem("netherite_shield",
+            new TitanFabricShieldItem(1685*2, 60, 16, Items.NETHERITE_INGOT));
     public static final TitanFabricShieldItem LEGEND_SHIELD = registerItem("legend_shield",
             new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
 
@@ -113,6 +115,21 @@ public class TitanFabricItems {
 
     public static final FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
             new FlintAndEmberItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(64)));
+
+    public static final Item CITRIN_ARMOR_PLATING = registerItem("citrin_armor_plating",
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+
+    public static final Item DIAMOND_ARMOR_PLATING = registerItem("diamond_armor_plating",
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+
+    public static final Item EMBER_ARMOR_PLATING = registerItem("ember_armor_plating",
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+
+    public static final Item NETHERITE_ARMOR_PLATING = registerItem("netherite_armor_plating",
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+
+    public static final Item LEGEND_ARMOR_PLATING = registerItem("legend_armor_plating",
+            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
 
     public static final TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
     public static final CutPotion CUT_POTION = registerItem("cut_potion", new CutPotion(new FabricItemSettings()));

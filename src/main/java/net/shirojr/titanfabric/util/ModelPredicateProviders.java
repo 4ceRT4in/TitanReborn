@@ -44,6 +44,7 @@ public class ModelPredicateProviders {
         registerBasicInnateItemsProvider(TitanFabricItems.ARROW);
 
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
+        registerShieldProviders(TitanFabricItems.NETHERITE_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
 
         registerLegendBowProviders();
