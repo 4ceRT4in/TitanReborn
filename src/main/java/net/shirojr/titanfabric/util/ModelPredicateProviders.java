@@ -4,11 +4,15 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.enchantment.*;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.potion.PotionUtil;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
+import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.item.TitanFabricItems;
@@ -64,6 +68,7 @@ public class ModelPredicateProviders {
         registerPotionBundle(TitanFabricItems.POTION_BUNDLE);
 
         registerOverpoweredEnchantedBookPredicate(Items.ENCHANTED_BOOK);
+        registerFrostburnPotionPredicate(Items.POTION);
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -188,6 +193,20 @@ public class ModelPredicateProviders {
             ModelPredicateProviderRegistry.register(item, new Identifier(colors),
                     (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors) ? 1.0F : 0.0F);
         }
+    }
+    Rarity
+    private static void registerFrostburnPotionPredicate(Item item) {
+        ModelPredicateProviderRegistry.register(item, new Identifier("frostburn"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof PotionItem) {
+                        if(stack.hasNbt() && stack.getNbt() != null && stack.getSubNbt("Potion") != null) {
+                            if(Objects.requireNonNull(stack.getSubNbt("Potion")).contains("titanfabric:frostburn_potion")) {
+                                return 1.0f;
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
     }
 
     private static void registerOverpoweredEnchantedBookPredicate(Item item) {

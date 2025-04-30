@@ -12,6 +12,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,6 +33,14 @@ public abstract class ItemStackMixin implements FabricItemStack {
         if (player == null) return;
         if (player.hasStatusEffect(TitanFabricStatusEffects.INDESTRUCTIBILITY)) {
             cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "hasGlint", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$hasGlint(CallbackInfoReturnable<Boolean> cir) {
+        ItemStack stack = (ItemStack)(Object)this;
+        if (ArmorPlatingHelper.hasArmorPlating(stack)) {
+            cir.setReturnValue(true);
         }
     }
 

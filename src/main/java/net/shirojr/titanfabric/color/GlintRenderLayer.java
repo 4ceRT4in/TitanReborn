@@ -58,7 +58,7 @@ public class GlintRenderLayer extends RenderLayer {
     }
 
     private static RenderLayer buildGlintRenderLayer(String name) {
-        final Identifier res = new Identifier(TitanFabric.MODID, "textures/misc/glint_" + name + ".png");
+        final Identifier res = new Identifier(TitanFabric.MODID, "textures/glints/glint_" + name + ".png");
 
         return RenderLayer.of("glint_" + name, VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .shader(RenderPhase.GLINT_SHADER)
@@ -72,7 +72,7 @@ public class GlintRenderLayer extends RenderLayer {
     }
 
     private static RenderLayer buildEntityGlintRenderLayer(String name) {
-        final Identifier res = new Identifier(TitanFabric.MODID, "textures/misc/glint_" + name + ".png");
+        final Identifier res = new Identifier(TitanFabric.MODID, "textures/glints/glint_" + name + ".png");
 
         return RenderLayer.of("entity_glint_" + name, VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .shader(RenderPhase.ENTITY_GLINT_SHADER)
@@ -88,7 +88,7 @@ public class GlintRenderLayer extends RenderLayer {
 
 
     private static RenderLayer buildGlintDirectRenderLayer(String name) {
-        final Identifier res = new Identifier(TitanFabric.MODID, "textures/misc/glint_" + name + ".png");
+        final Identifier res = new Identifier(TitanFabric.MODID, "textures/glints/glint_" + name + ".png");
 
         return RenderLayer.of("glint_direct_" + name, VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .shader(RenderPhase.DIRECT_GLINT_SHADER)
@@ -103,7 +103,7 @@ public class GlintRenderLayer extends RenderLayer {
 
 
     private static RenderLayer buildEntityGlintDirectRenderLayer(String name) {
-        final Identifier res = new Identifier(TitanFabric.MODID, "textures/misc/glint_" + name + ".png");
+        final Identifier res = new Identifier(TitanFabric.MODID, "textures/glints/glint_" + name + ".png");
 
         return RenderLayer.of("entity_glint_direct_" + name, VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .shader(RenderPhase.DIRECT_ENTITY_GLINT_SHADER)
@@ -117,7 +117,7 @@ public class GlintRenderLayer extends RenderLayer {
     }
 
     private static RenderLayer buildArmorGlintRenderLayer(String name) {
-        final Identifier res = new Identifier(TitanFabric.MODID, "textures/misc/glint_" + name + ".png");
+        final Identifier res = new Identifier(TitanFabric.MODID, "textures/glints/glint_" + name + ".png");
 
         return RenderLayer.of("armor_glint_" + name, VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .shader(RenderPhase.ARMOR_GLINT_SHADER)
@@ -132,7 +132,7 @@ public class GlintRenderLayer extends RenderLayer {
     }
 
     private static RenderLayer buildArmorEntityGlintRenderLayer(String name) {
-        final Identifier res = new Identifier(TitanFabric.MODID, "textures/misc/glint_" + name + ".png");
+        final Identifier res = new Identifier(TitanFabric.MODID, "textures/glints/glint_" + name + ".png");
 
         return RenderLayer.of("armor_entity_glint_" + name, VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .shader(RenderPhase.ARMOR_ENTITY_GLINT_SHADER)
@@ -147,7 +147,7 @@ public class GlintRenderLayer extends RenderLayer {
     }
 
     private static RenderLayer buildTranslucentGlint(String name) {
-        final Identifier res = new Identifier(TitanFabric.MODID, "textures/misc/glint_" + name + ".png");
+        final Identifier res = new Identifier(TitanFabric.MODID, "textures/glints/glint_" + name + ".png");
 
         return RenderLayer.of("glint_translucent_" + name, VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, RenderLayer.MultiPhaseParameters.builder()
                 .shader(TRANSLUCENT_GLINT_SHADER)

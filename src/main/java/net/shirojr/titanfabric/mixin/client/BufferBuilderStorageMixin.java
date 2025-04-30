@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferBuilderStorage;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.shirojr.titanfabric.color.GlintRenderLayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,10 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 public class BufferBuilderStorageMixin {
 
-    /*@Inject(method = "assignBufferBuilder", at = @At("HEAD"))
+    @Inject(method = "assignBufferBuilder", at = @At("HEAD"))
     private static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferBuilder> mapBuildersIn, RenderLayer renderTypeIn, CallbackInfo callbackInfo) {
         GlintRenderLayer.addGlintTypes(mapBuildersIn);
     }
-
-     */
 }

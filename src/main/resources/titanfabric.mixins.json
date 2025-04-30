@@ -44,6 +44,7 @@
   },
   "client": [
     "client.AbstractClientPlayerEntityMixin",
+    "client.ArmorFeatureRendererMixin",
     "client.ArrowEntityRendererMixin",
     "client.BackgroundRendererMixin",
     "client.BipedEntityModelMixin",
@@ -51,6 +52,7 @@
     "client.ClientPlayerEntityMixin",
     "client.EntityRenderDispatcherMixin",
     "client.GameOptionsMixin",
+    "client.HeartTypeMixin",
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.InGameOverlayRendererMixin",

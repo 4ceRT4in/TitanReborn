@@ -60,7 +60,7 @@ public class ArmorPlatingRecipe extends SmithingRecipe {
             outputStack = ItemStack.EMPTY;
         }
         if (plateType != null) {
-            ArmorPlatingHelper.applyArmorPlate(outputStack, plateType, i);
+            ArmorPlatingHelper.applyArmorPlate(outputStack, plateType);
         }
 
         return outputStack;

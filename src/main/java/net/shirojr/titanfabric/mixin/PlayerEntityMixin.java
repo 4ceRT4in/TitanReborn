@@ -120,15 +120,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
                     ArmorPlateType plateType = armorPlateTypes.get(toolMaterial);
                     if (plateType != null) {
                         int armorProb = 0;
-                        for(ItemStack armorItem : player.getArmorItems()) {
-                            if(!armorItem.isEmpty() && armorItem.hasNbt()) {
-                                if(ArmorPlatingHelper.hasArmorSpecificPlating(armorItem, plateType)) {
-                                    ArmorPlatingHelper.damage(armorItem, 2);
-                                    armorProb++;
-                                }
-                            }
-                        }
-
                         if(armorProb > 0) {
                             float damageReduction = 0.025f * armorProb; //2.5%
                             return amount * (1.0f - damageReduction);

@@ -22,6 +22,12 @@ public class TitanFabricPotions {
     public static Potion LONG_INDESTRUCTIBLE_POTION =
             registerPotion("long_indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
                     9600, 0, INDESTRUCTIBLE_POTION, Items.REDSTONE);
+    public static Potion FROSTBURN_POTION =
+            registerPotion("frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
+                    600, 0, Potions.AWKWARD, Items.SNOWBALL);
+    public static Potion LONG_FROSTBURN_POTION =
+            registerPotion("long_frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
+                    1200, 0, FROSTBURN_POTION, Items.REDSTONE);
 
     public static Potion registerPotion(String id, StatusEffect effect, int duration, int amplifier, Potion input, Item ingredient) {
         Potion potion = new Potion(new StatusEffectInstance(effect, duration, amplifier));

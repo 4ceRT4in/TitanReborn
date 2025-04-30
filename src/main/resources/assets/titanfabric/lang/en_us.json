@@ -1,9 +1,13 @@
 {
   "emi.category.titanfabric.diamond_furnace_recipes": "§bDiamond Furnace Smelting",
   "effect.titanfabric.indestructibility": "Indestructible",
+  "effect.titanfabric.frostburn": "Frostburn",
   "item.minecraft.potion.effect.indestructibility_potion": "Indestructibility Potion",
   "item.minecraft.splash_potion.effect.indestructibility_potion": "Splash Potion of Indestructibility",
   "item.minecraft.lingering_potion.effect.indestructibility_potion": "Lingering Potion of Indestructibility",
+  "item.minecraft.potion.effect.frostburn_potion": "Frostburn Potion",
+  "item.minecraft.splash_potion.effect.frostburn_potion": "Splash Potion of Frostburn",
+  "item.minecraft.lingering_potion.effect.frostburn_potion": "Lingering Potion of Frostburn",
 
   "item.titanfabric.citrin_shard": "§eCitrin Shard",
   "item.titanfabric.legend_ingot": "§e§kl §r§3Titan Ingot §e§kl",
@@ -167,11 +171,17 @@
   "tooltip.titanfabric.netherArmor": "§6+25% Fire Protection",
   "tooltip.titanfabric.citrinArmor": "§2+25% Magic Protection",
 
-  "tooltip.titanfabric.citrin_armor_plating": "Applies §2+2.5% Citrin Weapon Protection §on Armor",
-  "tooltip.titanfabric.ember_armor_plating": "Applies §c+2.5% Ember Weapon Protection §on Armor",
-  "tooltip.titanfabric.diamond_armor_plating": "Applies §b+2.5% Diamond Weapon Protection §on Armor",
-  "tooltip.titanfabric.legend_armor_plating": "Applies §3+2.5% Titan Weapon Protection §on Armor",
-  "tooltip.titanfabric.netherite_armor_plating": "Applies §8+2.5% Netherite Weapon Protection §on Armor",
+  "tooltip.titanfabric.citrin_armor_plating": "Applies §2+2.5% Magic Weapon Protection §fon Armor",
+  "tooltip.titanfabric.ember_armor_plating": "Applies §c+2.5% Ember Weapon Protection §fon Armor",
+  "tooltip.titanfabric.diamond_armor_plating": "Applies §b+2.5% Diamond Weapon Protection §fon Armor",
+  "tooltip.titanfabric.legend_armor_plating": "Applies §3+2.5% Titan Weapon Protection §fon Armor",
+  "tooltip.titanfabric.netherite_armor_plating": "Applies §8+2.5% Netherite Weapon Protection §fon Armor",
+
+  "tooltip.titanfabric.citrin_armor_plating_equipped": "§2+2.5% Magic Weapon Protection",
+  "tooltip.titanfabric.ember_armor_plating_equipped": "§c+2.5% Ember Weapon Protection",
+  "tooltip.titanfabric.diamond_armor_plating_equipped": "§b+2.5% Diamond Weapon Protection",
+  "tooltip.titanfabric.legend_armor_plating_equipped": "§3+2.5% Titan Weapon Protection",
+  "tooltip.titanfabric.netherite_armor_plating_equipped": "§8+2.5% Netherite Weapon Protection",
 
   "tooltip.titanfabric.1Blind": "§125% Blindness Chance",
   "tooltip.titanfabric.2Blind": "§150% Blindness Chance",

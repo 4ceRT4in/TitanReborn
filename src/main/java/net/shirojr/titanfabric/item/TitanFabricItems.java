@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.*;
+import net.shirojr.titanfabric.item.custom.armor.ArmorPlatingItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.parts.LegendArmorBootsItem;
@@ -26,6 +27,7 @@ import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.SwordType;
+import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 
 @SuppressWarnings("unused")
 public class TitanFabricItems {
@@ -116,20 +118,20 @@ public class TitanFabricItems {
     public static final FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
             new FlintAndEmberItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(1).maxDamage(64)));
 
-    public static final Item CITRIN_ARMOR_PLATING = registerItem("citrin_armor_plating",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+    public static final ArmorPlatingItem CITRIN_ARMOR_PLATING = registerItem("citrin_armor_plating",
+            new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.CITRIN));
 
-    public static final Item DIAMOND_ARMOR_PLATING = registerItem("diamond_armor_plating",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+    public static final ArmorPlatingItem DIAMOND_ARMOR_PLATING = registerItem("diamond_armor_plating",
+            new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.DIAMOND));
 
-    public static final Item EMBER_ARMOR_PLATING = registerItem("ember_armor_plating",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+    public static final ArmorPlatingItem EMBER_ARMOR_PLATING = registerItem("ember_armor_plating",
+            new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.EMBER));
 
-    public static final Item NETHERITE_ARMOR_PLATING = registerItem("netherite_armor_plating",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+    public static final ArmorPlatingItem NETHERITE_ARMOR_PLATING = registerItem("netherite_armor_plating",
+            new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.NETHERITE));
 
-    public static final Item LEGEND_ARMOR_PLATING = registerItem("legend_armor_plating",
-            new Item(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16)));
+    public static final ArmorPlatingItem LEGEND_ARMOR_PLATING = registerItem("legend_armor_plating",
+            new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.LEGEND));
 
     public static final TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
     public static final CutPotion CUT_POTION = registerItem("cut_potion", new CutPotion(new FabricItemSettings()));

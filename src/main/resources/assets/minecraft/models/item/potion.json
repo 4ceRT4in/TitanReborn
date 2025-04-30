@@ -1,0 +1,13 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "item/potion_overlay",
+        "layer1": "item/potion"
+    },
+    "overrides": [
+        {
+            "predicate": { "frostburn": 1.0 },
+            "model": "titanfabric:item/frostburn_potion"
+        }
+    ]
+}

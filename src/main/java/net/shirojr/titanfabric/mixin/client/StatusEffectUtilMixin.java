@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -29,6 +30,7 @@ public abstract class StatusEffectUtilMixin {
     }
 
     // Helper method to check if the player has a full Netherite armor set equipped
+    @Unique
     private static boolean hasFullNetheriteArmor(PlayerEntity player) {
         // Check each armor slot for Netherite armor
         return player.getEquippedStack(EquipmentSlot.HEAD).getItem() == Items.NETHERITE_HELMET &&
