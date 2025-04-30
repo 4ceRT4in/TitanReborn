@@ -194,7 +194,7 @@ public class ModelPredicateProviders {
                     (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors) ? 1.0F : 0.0F);
         }
     }
-    Rarity
+
     private static void registerFrostburnPotionPredicate(Item item) {
         ModelPredicateProviderRegistry.register(item, new Identifier("frostburn"),
                 (stack, world, entity, seed) -> {
