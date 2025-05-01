@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
+import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -52,6 +53,12 @@ public abstract class LivingEntityMixin {
 
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
+
+    @Inject(method = "onStatusEffectApplied", at = @At("TAIL"))
+    private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        ImmunityEffect.checkAndBlockNegativeEffect(entity, effect);
+    }
 
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", cancellable = true, at = @At("HEAD"))
     private void titanfabric$addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {

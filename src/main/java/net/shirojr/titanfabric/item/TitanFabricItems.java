@@ -92,11 +92,11 @@ public class TitanFabricItems {
             new TitanFabricArrowItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(32)));
 
     public static final TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
-            new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
+            new TitanFabricShieldItem(1685, 60, 1,false, Items.DIAMOND));
     public static final TitanFabricShieldItem NETHERITE_SHIELD = registerItem("netherite_shield",
-            new TitanFabricShieldItem(1685*2, 60, 16, Items.NETHERITE_INGOT));
+            new TitanFabricShieldItem(1685*2, 60, 16,true, Items.NETHERITE_INGOT));
     public static final TitanFabricShieldItem LEGEND_SHIELD = registerItem("legend_shield",
-            new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
+            new TitanFabricShieldItem(-1, 40, 24,false, TitanFabricItems.LEGEND_INGOT));
 
     public static final CitrinStarItem CITRIN_STAR = registerItem("citrin_star",
             new CitrinStarItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(4)));
@@ -128,7 +128,7 @@ public class TitanFabricItems {
             new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.EMBER));
 
     public static final ArmorPlatingItem NETHERITE_ARMOR_PLATING = registerItem("netherite_armor_plating",
-            new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.NETHERITE));
+            new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16).fireproof(), ArmorPlateType.NETHERITE));
 
     public static final ArmorPlatingItem LEGEND_ARMOR_PLATING = registerItem("legend_armor_plating",
             new ArmorPlatingItem(new FabricItemSettings().group(TitanFabricItemGroups.TITAN).maxCount(16), ArmorPlateType.LEGEND));

@@ -23,6 +23,15 @@ public class ArmorPlatingHelper {
         return stack.getNbt().contains(armorPlateType.getKey());
     }
 
+    public static void removeAllArmorPlates(ItemStack stack) {
+        if (!stack.hasNbt()) return;
+        assert stack.getNbt() != null;
+        for (ArmorPlateType type : ArmorPlateType.values()) {
+            if(stack.getNbt().contains(type.getKey())) {
+                stack.getNbt().remove(type.getKey());
+            }
+        }
+    }
 
     public static void applyArmorPlate(ItemStack stack, ArmorPlateType armorPlateType) {
         if(hasArmorPlating(stack)) return;

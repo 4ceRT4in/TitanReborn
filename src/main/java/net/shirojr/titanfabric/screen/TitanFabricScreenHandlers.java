@@ -37,7 +37,7 @@ public class TitanFabricScreenHandlers {
     public static ScreenHandlerType<DiamondFurnaceScreenHandler> DIAMOND_FURNACE_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(
             new Identifier(TitanFabric.MODID, "diamond_furnace"),
             DiamondFurnaceScreenHandler::new
-    );;
+    );
 
     private static <T extends ScreenHandler> ScreenHandlerType<T> registerScreenHandler(String name, ScreenHandlerType<T> screenHandlerType) {
         return Registry.register(Registry.SCREEN_HANDLER, new Identifier(TitanFabric.MODID, name), screenHandlerType);

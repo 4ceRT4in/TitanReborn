@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "titanfabric:item/frostburn_potion",
-        "layer1": "titanfabric:item/frostburn_potion"
+        "layer0": "titanfabric:items/frostburn_potion",
+        "layer1": "titanfabric:items/frostburn_potion"
     }
 }

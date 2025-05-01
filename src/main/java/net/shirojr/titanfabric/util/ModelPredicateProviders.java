@@ -3,7 +3,6 @@ package net.shirojr.titanfabric.util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
-import net.minecraft.enchantment.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
@@ -11,10 +10,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.registry.Registry;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
+import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
@@ -68,7 +65,9 @@ public class ModelPredicateProviders {
         registerPotionBundle(TitanFabricItems.POTION_BUNDLE);
 
         registerOverpoweredEnchantedBookPredicate(Items.ENCHANTED_BOOK);
-        registerFrostburnPotionPredicate(Items.POTION);
+        registerCustomPotionPredicate(Items.POTION);
+        registerCustomPotionPredicate(Items.SPLASH_POTION);
+        registerCustomPotionPredicate(Items.LINGERING_POTION);
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -195,12 +194,23 @@ public class ModelPredicateProviders {
         }
     }
 
-    private static void registerFrostburnPotionPredicate(Item item) {
+    private static void registerCustomPotionPredicate(Item item) {
         ModelPredicateProviderRegistry.register(item, new Identifier("frostburn"),
                 (stack, world, entity, seed) -> {
-                    if (stack.getItem() instanceof PotionItem) {
-                        if(stack.hasNbt() && stack.getNbt() != null && stack.getSubNbt("Potion") != null) {
-                            if(Objects.requireNonNull(stack.getSubNbt("Potion")).contains("titanfabric:frostburn_potion")) {
+                    if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+                        for (StatusEffectInstance effect : PotionUtil.getPotion(stack).getEffects()) {
+                            if (effect.getEffectType() == TitanFabricStatusEffects.FROSTBURN) {
+                                return 1.0f;
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
+        ModelPredicateProviderRegistry.register(item, new Identifier("immunity"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+                        for (StatusEffectInstance effect : PotionUtil.getPotion(stack).getEffects()) {
+                            if (effect.getEffectType() == TitanFabricStatusEffects.IMMUNITY) {
                                 return 1.0f;
                             }
                         }

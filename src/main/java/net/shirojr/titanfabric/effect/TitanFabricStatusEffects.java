@@ -10,6 +10,7 @@ public class TitanFabricStatusEffects {
     public static StatusEffect INDESTRUCTIBILITY;
     public static StatusEffect SAFE_FALLING;
     public static StatusEffect FROSTBURN;
+    public static StatusEffect IMMUNITY;
 
     private static StatusEffect registerStatusEffect(String name, StatusEffect statusEffect) {
         return Registry.register(Registry.STATUS_EFFECT, new Identifier(TitanFabric.MODID, name), statusEffect);
@@ -19,5 +20,6 @@ public class TitanFabricStatusEffects {
         INDESTRUCTIBILITY = registerStatusEffect("indestructibility", new IndestructibileStatusEffect(StatusEffectCategory.BENEFICIAL, 0x8379E0));
         SAFE_FALLING = registerStatusEffect("safe_falling", new SafeFallingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x34ABEB));
         FROSTBURN = registerStatusEffect("frostburn", new FrostburnEffect(StatusEffectCategory.HARMFUL, 0x9DBFE8));
+        IMMUNITY = registerStatusEffect("immunity", new ImmunityEffect(StatusEffectCategory.BENEFICIAL, 0xC3FF00));
     }
 }

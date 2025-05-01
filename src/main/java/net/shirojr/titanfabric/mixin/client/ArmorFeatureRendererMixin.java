@@ -31,13 +31,6 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
     private void beforeRenderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
         ItemStack stack = entity.getEquippedStack(armorSlot);
         DyeColor color = null;
-        if (ArmorPlatingHelper.hasArmorPlating(stack)) {
-            if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.CITRIN)) color = DyeColor.YELLOW;
-            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.LEGEND)) color = DyeColor.CYAN;
-            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.NETHERITE)) color = DyeColor.BLACK;
-            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.EMBER)) color = DyeColor.RED;
-            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.DIAMOND)) color = DyeColor.BLUE;
-        }
         if (stack.hasEnchantments()) {
             Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
             for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
@@ -47,6 +40,13 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
                     break;
                 }
             }
+        }
+        if (ArmorPlatingHelper.hasArmorPlating(stack)) {
+            if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.CITRIN)) color = DyeColor.YELLOW;
+            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.LEGEND)) color = DyeColor.CYAN;
+            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.NETHERITE)) color = DyeColor.BLACK;
+            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.EMBER)) color = DyeColor.RED;
+            else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.DIAMOND)) color = DyeColor.BLUE;
         }
         GlintContext.setColor(color);
     }

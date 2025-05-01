@@ -4,3 +4,4 @@ accessible	class	net/minecraft/client/render/RenderLayer$MultiPhaseParameters
 accessible	method	net/minecraft/client/render/RenderLayer	of	(Ljava/lang/String;Lnet/minecraft/client/render/VertexFormat;Lnet/minecraft/client/render/VertexFormat$DrawMode;ILnet/minecraft/client/render/RenderLayer$MultiPhaseParameters;)Lnet/minecraft/client/render/RenderLayer$MultiPhase;
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
 accessible field net/minecraft/client/gui/hud/InGameHud$HeartType hasBlinkingTexture Z
+accessible method net/minecraft/client/render/item/ItemRenderer renderGuiQuad (Lnet/minecraft/client/render/BufferBuilder;IIIIIIII)V

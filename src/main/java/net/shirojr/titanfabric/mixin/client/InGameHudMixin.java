@@ -8,6 +8,8 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
@@ -87,6 +89,25 @@ public abstract class InGameHudMixin extends DrawableHelper {
             this.drawTexture(matrices, x, y, 141, 166, 24, 24);
 
             this.client.getItemRenderer().renderGuiItemIcon(armorItem, x + 4, y + 4);
+
+            if (armorItem.isItemBarVisible()) {
+                RenderSystem.disableDepthTest();
+                RenderSystem.disableTexture();
+                RenderSystem.disableBlend();
+
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder bufferBuilder = tessellator.getBuffer();
+
+                int itemBarStep = armorItem.getItemBarStep();
+                int itemBarColor = armorItem.getItemBarColor();
+                this.client.getItemRenderer().renderGuiQuad(bufferBuilder, x + 2 + 4, y + 13 + 4, 13, 2, 0, 0, 0, 255);
+                this.client.getItemRenderer().renderGuiQuad(bufferBuilder, x + 2 + 4, y + 13 + 4, itemBarStep, 1,
+                        itemBarColor >> 16 & 0xFF, itemBarColor >> 8 & 0xFF, itemBarColor & 0xFF, 255);
+
+                RenderSystem.enableBlend();
+                RenderSystem.enableTexture();
+                RenderSystem.enableDepthTest();
+            }
 
             y += 25;
         }

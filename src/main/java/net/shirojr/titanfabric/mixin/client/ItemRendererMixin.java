@@ -48,6 +48,17 @@ public abstract class ItemRendererMixin {
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"))
     private void renderItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
         DyeColor color = null;
+        if (stack.hasEnchantments()) {
+            Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
+            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                if ((entry.getKey() == Enchantments.SHARPNESS && entry.getValue() >= 6)
+                        || (entry.getKey() == Enchantments.PROTECTION && entry.getValue() >= 5)
+                        || (entry.getKey() == Enchantments.POWER && entry.getValue() >= 6)) {
+                    color = DyeColor.ORANGE;
+                    break;
+                }
+            }
+        }
         if (ArmorPlatingHelper.hasArmorPlating(stack)) {
             if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.CITRIN)) color = DyeColor.YELLOW;
             else if (ArmorPlatingHelper.hasArmorSpecificPlating(stack, ArmorPlateType.LEGEND)) color = DyeColor.CYAN;
@@ -64,17 +75,6 @@ public abstract class ItemRendererMixin {
                 if ((id.equals(Registry.ENCHANTMENT.getId(Enchantments.SHARPNESS)) && level >= 6)
                         || (id.equals(Registry.ENCHANTMENT.getId(Enchantments.PROTECTION)) && level >= 5)
                         || (id.equals(Registry.ENCHANTMENT.getId(Enchantments.POWER)) && level >= 6)) {
-                    color = DyeColor.ORANGE;
-                    break;
-                }
-            }
-        }
-        if (stack.hasEnchantments()) {
-            Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
-            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                if ((entry.getKey() == Enchantments.SHARPNESS && entry.getValue() >= 6)
-                        || (entry.getKey() == Enchantments.PROTECTION && entry.getValue() >= 5)
-                        || (entry.getKey() == Enchantments.POWER && entry.getValue() >= 6)) {
                     color = DyeColor.ORANGE;
                     break;
                 }

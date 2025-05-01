@@ -56,8 +56,11 @@ public class ArmorPlatingRecipe extends SmithingRecipe {
             plateType = ArmorPlateType.NETHERITE;
             i = 450;
         }
-        if(ArmorPlatingHelper.hasArmorPlating(outputStack)) {
+        if(!outputStack.hasEnchantments()) {
             outputStack = ItemStack.EMPTY;
+        }
+        if(ArmorPlatingHelper.hasArmorPlating(outputStack)) {
+            ArmorPlatingHelper.removeAllArmorPlates(outputStack);
         }
         if (plateType != null) {
             ArmorPlatingHelper.applyArmorPlate(outputStack, plateType);
