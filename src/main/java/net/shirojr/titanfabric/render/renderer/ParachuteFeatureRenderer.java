@@ -11,6 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
@@ -27,8 +28,8 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
     private static final Map<String, Identifier> PARACHUTE_TEXTURES = new HashMap<>();
 
     static {
-        for (String color : TitanFabricDyeProviders.COLOR_KEYS) {
-            PARACHUTE_TEXTURES.put(color, new Identifier(TitanFabric.MODID, "textures/entity/parachute/parachute_" + color + ".png"));
+        for (DyeColor color : DyeColor.values()) {
+            PARACHUTE_TEXTURES.put(color.getName(), new Identifier(TitanFabric.MODID, "textures/entity/parachute/parachute_" + color + ".png"));
         }
     }
 

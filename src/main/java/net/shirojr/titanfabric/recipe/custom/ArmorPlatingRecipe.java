@@ -13,6 +13,7 @@ import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class ArmorPlatingRecipe extends SmithingRecipe {

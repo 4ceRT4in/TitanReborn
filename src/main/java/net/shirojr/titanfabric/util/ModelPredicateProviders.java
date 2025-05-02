@@ -9,6 +9,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.potion.PotionUtil;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
@@ -188,9 +189,9 @@ public class ModelPredicateProviders {
         });
     }
     private static void registerColorItemProvider(Item item) {
-        for (String colors : TitanFabricDyeProviders.COLOR_KEYS) {
-            ModelPredicateProviderRegistry.register(item, new Identifier(colors),
-                    (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors) ? 1.0F : 0.0F);
+        for (DyeColor colors : DyeColor.values()) {
+            ModelPredicateProviderRegistry.register(item, new Identifier(colors.getName()),
+                    (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors.getName()) ? 1.0F : 0.0F);
         }
     }
 

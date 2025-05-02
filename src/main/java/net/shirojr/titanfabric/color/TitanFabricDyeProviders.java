@@ -12,12 +12,6 @@ import java.util.List;
 
 public class TitanFabricDyeProviders {
 
-    public static final String[] COLOR_KEYS = {
-            "red", "orange", "blue", "gray", "lime", "pink", "purple",
-            "light_blue", "light_gray", "yellow", "magenta",
-            "cyan", "brown", "green", "black", "white"
-    };
-
     public static void applyColorTooltip(List<Text> tooltip, ItemStack stack) {
         if (stack.hasNbt() && stack.getNbt() != null) {
             if (stack.getNbt().contains("red")) {

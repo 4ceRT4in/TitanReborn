@@ -54,10 +54,12 @@ public abstract class LivingEntityMixin {
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
 
-    @Inject(method = "onStatusEffectApplied", at = @At("TAIL"))
-    private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void tick(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        ImmunityEffect.checkAndBlockNegativeEffect(entity, effect);
+        for (StatusEffectInstance effects : List.copyOf(entity.getStatusEffects())) { // copying in order to prevent a ConcurrentModificationException
+            ImmunityEffect.checkAndBlockNegativeEffect(entity, effects);
+        }
     }
 
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", cancellable = true, at = @At("HEAD"))

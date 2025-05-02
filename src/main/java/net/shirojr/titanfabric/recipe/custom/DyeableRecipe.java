@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
@@ -74,9 +75,9 @@ public class DyeableRecipe extends ShapelessRecipe {
         }
 
         NbtCompound nbt = result.getOrCreateNbt();
-        for (String key : TitanFabricDyeProviders.COLOR_KEYS) {
-            if (nbt.contains(key)) {
-                nbt.remove(key);
+        for (DyeColor color : DyeColor.values()) {
+            if (nbt.contains(color.getName())) {
+                nbt.remove(color.getName());
             }
         }
 
