@@ -39,7 +39,7 @@ public enum WeaponEffectType {
     }
 
     @Nullable
-    public static WeaponEffectType getType(String nbtKey) {
-        return BY_KEY.get(nbtKey);
+    public static WeaponEffectType getType(String key) {
+        return BY_KEY.get(key);
     }
 }

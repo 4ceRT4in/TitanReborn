@@ -1,30 +1,26 @@
 package net.shirojr.titanfabric.util.effects;
 
+import com.google.common.collect.Iterables;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.item.*;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
-import net.shirojr.titanfabric.item.custom.TitanFabricEssenceItem;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-
-import static net.shirojr.titanfabric.util.effects.WeaponEffectData.*;
 
 /**
  * Helper class for TitanFabric {@linkplain WeaponEffect}
@@ -41,29 +37,13 @@ public final class EffectHelper {
      * @return Strength of the Weapon Effect
      */
     public static int getEffectStrength(ItemStack itemStack, WeaponEffectType type) {
-        NbtCompound compound = getWeaponEffectDataCompound(itemStack);
-        WeaponEffectType weaponEffectType = WeaponEffectType.getType(type.getNbtKey());
-        if (!compound.getKeys().contains(type.getNbtKey())) return -1;
-        if (weaponEffectType == null) return -1;
-        Optional<WeaponEffectData> data = WeaponEffectData.get(compound, weaponEffectType);
-        return data.map(WeaponEffectData::strength).orElse(-1);
-    }
-
-    /**
-     * Sets the {@linkplain WeaponEffect TitanFabric WeaponEffect} strength. It does not translate directly to StatusEffect's amplifier!<br><br>
-     * Used to write custom NBT information to the ItemStack
-     */
-    @SuppressWarnings("unused")
-    public static ItemStack setEffectStrength(ItemStack itemStack, WeaponEffectType type, int strength) {
-        NbtCompound originalNbt = getWeaponEffectDataCompound(itemStack);
-        if (!originalNbt.contains(type.getNbtKey())) return itemStack;
-        if (!originalNbt.getCompound(type.getNbtKey()).contains(EFFECTS_STRENGTH_NBT_KEY)) return itemStack;
-        originalNbt.getCompound(type.getNbtKey()).putInt(EFFECTS_STRENGTH_NBT_KEY, strength);
-        return itemStack;
-    }
-
-    public static NbtCompound getWeaponEffectDataCompound(ItemStack stack) {
-        return stack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
+        HashSet<WeaponEffectData> effectSet = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        if (effectSet == null) return -1;
+        for (WeaponEffectData entry : effectSet) {
+            if (!entry.type().equals(type)) continue;
+            return entry.strength();
+        }
+        return -1;
     }
 
     public static int getColor(WeaponEffect weaponEffect) {
@@ -73,27 +53,21 @@ public final class EffectHelper {
     }
 
     /**
-     * Sets the {@linkplain WeaponEffectData TitanFabric WeaponEffectData}.<br><br>
-     * Used to write custom NBT information to the ItemStack
+     * Sets the valid {@linkplain WeaponEffectData TitanFabric WeaponEffectData}
      */
     public static ItemStack getStackWithEffects(ItemStack itemStack, List<WeaponEffectData> effectDataList) {
         if (itemStack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
             if (!titanFabricSwordItem.canHaveWeaponEffects()) return itemStack;
         }
-        NbtCompound stackNbt = itemStack.getOrCreateNbt();
-        for (WeaponEffectData entry : effectDataList) {
-            NbtCompound newTypeCompound = new NbtCompound();
-            newTypeCompound.putString(EFFECT_NBT_KEY, entry.weaponEffect().getId());
-            newTypeCompound.putInt(EFFECTS_STRENGTH_NBT_KEY, entry.strength());
-            if (!stackNbt.contains(EFFECTS_COMPOUND_NBT_KEY)) {
-                NbtCompound freshCompound = new NbtCompound();
-                freshCompound.put(entry.type().getNbtKey(), newTypeCompound);
-                stackNbt.put(EFFECTS_COMPOUND_NBT_KEY, freshCompound);
-            } else {
-                NbtCompound compound = stackNbt.getCompound(EFFECTS_COMPOUND_NBT_KEY);
-                compound.put(entry.type().getNbtKey(), newTypeCompound);
-            }
+        if (!(itemStack.getItem() instanceof WeaponEffectCrafting weaponEffectHandler)) {
+            return itemStack;
         }
+        HashSet<WeaponEffectData> validEffects = new HashSet<>(effectDataList);
+        for (WeaponEffectData entry : effectDataList) {
+            if (!weaponEffectHandler.supportedEffects().contains(entry.weaponEffect())) continue;
+            validEffects.add(entry);
+        }
+        itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, validEffects);
         return itemStack;
     }
 
@@ -101,157 +75,126 @@ public final class EffectHelper {
         return getStackWithEffects(itemStack, List.of(effectData));
     }
 
-    public static ItemStack removeEffectsFromStack(ItemStack itemStack) {
-        ItemStack output = itemStack.copy();
-        output.getOrCreateNbt().remove(EFFECTS_COMPOUND_NBT_KEY);
-        return output;
+    public static void removeEffectsFromStack(ItemStack itemStack) {
+        if (!itemStack.contains(TitanFabricDataComponents.WEAPON_EFFECTS)) return;
+        itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>());
     }
 
     @Nullable
     public static WeaponEffect getWeaponEffectFromPotion(ItemStack stack) {
-        if (!stack.isOf(Items.POTION)) return null;
-        List<StatusEffectInstance> statusEffects = PotionUtil.getPotionEffects(stack);
-        if (statusEffects.size() > 1) {
+        PotionContentsComponent potionComponent = stack.get(DataComponentTypes.POTION_CONTENTS);
+        if (potionComponent == null) return null;
+        if (Iterables.size(potionComponent.getEffects()) > 1) {
             LoggerUtil.devLogger("Potion had more then one StatusEffect", true, null);
             return null;
         }
         for (var entry : WeaponEffect.values()) {
             if (entry.getIngredientEffect() == null) continue;
-            if (entry.getIngredientEffect().equals(statusEffects.get(0).getEffectType())) return entry;
+            if (entry.getIngredientEffect().equals(potionComponent.getEffects().iterator().next().getEffectType())) {
+                return entry;
+            }
         }
         LoggerUtil.devLogger("Couldn't find matching potion effect to map to WeaponEffect");
         return null;
     }
 
     public static ItemStack getPotionFromWeaponEffect(WeaponEffect weaponEffect) {
-        // Check if the weaponEffect has a valid ingredient effect
         if (weaponEffect.getIngredientEffect() == null) {
             LoggerUtil.devLogger("WeaponEffect has no associated IngredientEffect", true, null);
             return ItemStack.EMPTY;
         }
 
-        // Create a potion item stack
-        ItemStack potionStack = new ItemStack(Items.POTION);
-
-        // Set a base potion type using a switch-like structure
         if (weaponEffect.getIngredientEffect() == StatusEffects.NIGHT_VISION || weaponEffect.getIngredientEffect() == StatusEffects.BLINDNESS) {
-            // BLIND effect
-            PotionUtil.setPotion(potionStack, Potions.NIGHT_VISION); // Assuming NIGHT_VISION for BLIND effect
-
+            return PotionContentsComponent.createStack(Items.POTION, Potions.NIGHT_VISION);
         } else if (weaponEffect.getIngredientEffect() == StatusEffects.FIRE_RESISTANCE) {
-            // FIRE effect
-            PotionUtil.setPotion(potionStack, Potions.FIRE_RESISTANCE);
+            return PotionContentsComponent.createStack(Items.POTION, Potions.FIRE_RESISTANCE);
         } else if (weaponEffect.getIngredientEffect() == StatusEffects.POISON) {
-            // POISON effect
-            PotionUtil.setPotion(potionStack, Potions.POISON);
+            return PotionContentsComponent.createStack(Items.POTION, Potions.POISON);
         } else if (weaponEffect.getIngredientEffect() == StatusEffects.WEAKNESS) {
-            // WEAK effect
-            PotionUtil.setPotion(potionStack, Potions.WEAKNESS);
+            return PotionContentsComponent.createStack(Items.POTION, Potions.WEAKNESS);
         } else if (weaponEffect.getIngredientEffect() == StatusEffects.INSTANT_DAMAGE || weaponEffect.getIngredientEffect() == StatusEffects.WITHER) {
-            // WITHER effect
-            PotionUtil.setPotion(potionStack, Potions.HARMING); // Assuming INSTANT_DAMAGE for WITHER
+            return PotionContentsComponent.createStack(Items.POTION, Potions.HARMING);
         } else {
             LoggerUtil.devLogger("No matching StatusEffect for WeaponEffect: " + weaponEffect.name());
             return ItemStack.EMPTY;
         }
-
-        // Log if needed
-        LoggerUtil.devLogger("Potion created for WeaponEffect: " + weaponEffect.name());
-
-        return potionStack;
     }
 
-
-    /**
-     * @return True, if the ItemStack contains any {@linkplain WeaponEffect TitanFabric WeaponEffect}
-     */
-    public static boolean stackHasNoWeaponEffectData(NbtCompound nbtCompound) {
-        return !nbtCompound.contains(EFFECTS_COMPOUND_NBT_KEY);
-    }
-
-    public static boolean stackHasWeaponEffect(ItemStack itemStack) {
-        if (!itemStack.hasNbt()) return false;
-        NbtCompound nbt = itemStack.getNbt();
-        if (nbt == null || !nbt.contains(EFFECTS_COMPOUND_NBT_KEY)) return false;
-        NbtCompound compound = nbt.getCompound(EFFECTS_COMPOUND_NBT_KEY);
-        for (String nbtKey : compound.getKeys()) {
-            WeaponEffectType type = WeaponEffectType.getType(nbtKey);
-            if (type == null) continue;
-            WeaponEffect weaponEffectCompound = WeaponEffect.getEffect(compound.getCompound(type.getNbtKey()).getString(EFFECT_NBT_KEY));
-            if (weaponEffectCompound == null) continue;
-            return true;
+    public static boolean hasNoWeaponEffect(ItemStack itemStack) {
+        HashSet<WeaponEffectData> effectList = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        if (effectList == null) return true;
+        for (WeaponEffectData entry : effectList) {
+            if (entry.type() == null) continue;
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static boolean shouldEffectApply(Random random, int strength) {
         return random.nextInt(100) <= (25 * strength);
     }
 
-    /**
-     * Generates a List of ItemStacks from a single base ItemStack. The List contains all possible variants of the
-     * base ItemStack in combination with the {@linkplain WeaponEffect TitanFabric WeaponEffect}
-     *
-     * @param baseItem original ItemStack
-     * @param stacks   list of all registered ItemStacks.
-     */
-    public static void generateAllEffectVersionStacks(Item baseItem, DefaultedList<ItemStack> stacks, boolean addBaseItem) {
-        if (!(baseItem instanceof WeaponEffectCrafting baseItemEffects)) return;
-        List<WeaponEffect> possibleEffects = baseItemEffects.supportedEffects();
-        if (baseItem instanceof TitanFabricArrowItem) {
-            for (WeaponEffect entry : possibleEffects) {
-                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 2);
-                ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
-                stacks.add(effectStack);
-            }
-        } else if (baseItem instanceof TitanFabricEssenceItem) {
-            for (WeaponEffect entry : possibleEffects) {
-                WeaponEffectData data = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, entry, 1);
-                ItemStack effectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), data);
-                stacks.add(effectStack);
-            }
-        } else if (baseItem instanceof TitanFabricSwordItem swordItem) {
-            ItemStack onlyInnateItemStack = new ItemStack(baseItem);
-            if (addBaseItem) {
-                if (swordItem.getBaseEffect() != null) {
-                    WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, swordItem.getBaseEffect(), 1);
-                    EffectHelper.applyEffectToStack(onlyInnateItemStack, innateEffectData);
-                }
-                stacks.add(onlyInnateItemStack);
-            }
-            for (WeaponEffect entry : possibleEffects) {
-                for (int effectStrengthVersion = 1; effectStrengthVersion < 3; effectStrengthVersion++) {
-                    WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, effectStrengthVersion);
-                    ItemStack effectItemStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), additionalEffectData);
-                    if (swordItem.getBaseEffect() != null) {
-                        WeaponEffectData innateData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, swordItem.getBaseEffect(), 1);
-                        EffectHelper.applyEffectToStack(effectItemStack, innateData);
-                    }
-                    stacks.add(effectItemStack);
-                }
-            }
-        } else {
-            stacks.add(new ItemStack(baseItem));
-            for (WeaponEffect entry : possibleEffects) {
-                WeaponEffectData firstData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, 0);
-                WeaponEffectData secondData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry, 1);
-                ItemStack firstEffectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), firstData);
-                ItemStack secondEffectStack = EffectHelper.applyEffectToStack(new ItemStack(baseItem), secondData);
-                stacks.add(firstEffectStack);
-                stacks.add(secondEffectStack);
+    public static <T extends SwordItem> List<ItemStack> generateSwordsStacks(T swordItem, boolean addBaseItem) {
+        if (!(swordItem instanceof WeaponEffectCrafting weaponEffectHandler)) {
+            return List.of(swordItem.getDefaultStack());
+        }
+        ItemStack defaultStack = swordItem.getDefaultStack();
+        List<ItemStack> stacks = new ArrayList<>();
+        if (addBaseItem) {
+            stacks.add(defaultStack);
+        }
+
+        for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
+            for (int effectStrength = 1; effectStrength < 3; effectStrength++) {
+                WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, weaponEffect, effectStrength);
+                ItemStack effectItemStack = EffectHelper.applyEffectToStack(swordItem.getDefaultStack(), additionalEffectData);
+                stacks.add(effectItemStack);
             }
         }
+        return stacks;
+    }
+
+    public static <T extends ArrowItem> List<ItemStack> generateArrowStacks(T arrowItem, boolean addBaseItem) {
+        if (!(arrowItem instanceof WeaponEffectCrafting weaponEffectHandler)) {
+            return List.of(arrowItem.getDefaultStack());
+        }
+        ItemStack defaultStack = arrowItem.getDefaultStack();
+        List<ItemStack> stacks = new ArrayList<>();
+        if (addBaseItem) {
+            stacks.add(defaultStack);
+        }
+
+        for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
+            WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 2);
+            ItemStack effectItemStack = EffectHelper.applyEffectToStack(arrowItem.getDefaultStack(), additionalEffectData);
+            stacks.add(effectItemStack);
+        }
+        return stacks;
+    }
+
+    public static <T extends Item> List<ItemStack> generateEssenceStacks(T essenceStack, boolean addBaseItem) {
+        if (!(essenceStack instanceof WeaponEffectCrafting weaponEffectHandler)) {
+            return List.of(essenceStack.getDefaultStack());
+        }
+        ItemStack defaultStack = essenceStack.getDefaultStack();
+        List<ItemStack> stacks = new ArrayList<>();
+        if (addBaseItem) {
+            stacks.add(defaultStack);
+        }
+
+        for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
+            WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 1);
+            ItemStack effectItemStack = EffectHelper.applyEffectToStack(essenceStack.getDefaultStack(), additionalEffectData);
+            stacks.add(effectItemStack);
+        }
+        return stacks;
     }
 
     public static void applyWeaponEffectsOnTarget(World world, ItemStack itemStack, LivingEntity target) {
-        NbtCompound compound = itemStack.getOrCreateNbt().getCompound(EFFECTS_COMPOUND_NBT_KEY);
-        for (String nbtKey : compound.getKeys()) {
-            WeaponEffectType type = WeaponEffectType.getType(nbtKey);
-            if (type == null) continue;
-            String currentEffect = compound.getCompound(nbtKey).getString(WeaponEffectData.EFFECT_NBT_KEY);
-            int strength = EffectHelper.getEffectStrength(itemStack, type);
-            WeaponEffectData data = new WeaponEffectData(type, WeaponEffect.getEffect(currentEffect), strength);
-            applyWeaponEffectOnTarget(data, world, target, itemStack.getItem() instanceof ArrowItem, itemStack.getItem() instanceof ArrowItem);
+        var weaponEffects = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        if (weaponEffects == null) return;
+        for (WeaponEffectData entry : weaponEffects) {
+            applyWeaponEffectOnTarget(entry, world, target, itemStack.getItem() instanceof ArrowItem, itemStack.getItem() instanceof ArrowItem);
         }
     }
 
@@ -294,11 +237,6 @@ public final class EffectHelper {
                 );
             }
         }
-    }
-
-    public static boolean haveSameEffects(ItemStack stack1, ItemStack stack2) {
-        if (!stackHasWeaponEffect(stack1) || !stackHasWeaponEffect(stack2)) return false;
-        return getWeaponEffectDataCompound(stack1).equals(getWeaponEffectDataCompound(stack2));
     }
 
     public static List<WeaponEffect> getAllPossibleEffects(Item baseItem) {

@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -11,14 +11,6 @@ base {
 }
 
 repositories {
-	// Cloth config api for custom config
-	maven { url "https://maven.shedaniel.me/" }
-	maven { url "https://maven.terraformersmc.com/releases/" }
-
-	// ModMenu & Fabric Shield Lib
-	maven { url "https://maven.terraformersmc.com/releases/com/terraformersmc/modmenu/" }
-	maven { url = 'https://jitpack.io' }
-
 	// Modrinth
 	exclusiveContent {
 		forRepository {
@@ -53,11 +45,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	// Cloth config api for custom configs
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
 
 	// EMI compat
 	modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
@@ -105,5 +92,11 @@ publishing {
 configurations.all {
 	resolutionStrategy {
 		force("net.fabricmc:fabric-loader:$loader_version")
+	}
+}
+
+fabricApi {
+	configureDataGeneration() {
+		client = true
 	}
 }

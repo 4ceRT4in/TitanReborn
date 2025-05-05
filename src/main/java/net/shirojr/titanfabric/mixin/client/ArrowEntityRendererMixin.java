@@ -17,7 +17,7 @@ public abstract class ArrowEntityRendererMixin {
         }
 
         // Proceed with the texture if TitanFabricArrowEntity has a valid effect and texture
-        return titanFabricArrowEntity.getEffect().isPresent() ? titanFabricArrowEntity.getTexture() : original;
+        return titanFabricArrowEntity.getInateWeaponEffectData() != null ? titanFabricArrowEntity.getTexture() : original;
     }
 }
 

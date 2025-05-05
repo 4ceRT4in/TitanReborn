@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.render.model;
 
 import com.google.common.collect.Sets;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 
 import java.util.Set;
@@ -25,6 +24,6 @@ public class TitanFabricModelLayers {
     }
 
     private static EntityModelLayer create(String id, String layer) {
-        return new EntityModelLayer(new Identifier(TitanFabric.MOD_ID, id), layer);
+        return new EntityModelLayer(TitanFabric.getId(id), layer);
     }
 }

@@ -57,6 +57,9 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
     }
 
     private String getParachuteColor(T entity) {
+        
+
+
         ItemStack mainHand = entity.getMainHandStack();
         if (mainHand.isOf(TitanFabricItems.PARACHUTE) && mainHand.hasNbt()) {
             NbtCompound nbt = mainHand.getNbt();

@@ -4,16 +4,16 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
-import net.shirojr.titanfabric.init.TitanFabricBlocks;
+import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
-import net.shirojr.titanfabric.entity.TitanFabricEntities;
+import net.shirojr.titanfabric.init.TitanFabricEntities;
+import net.shirojr.titanfabric.entity.client.ArrowItemRenderer;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
-import net.shirojr.titanfabric.init.TitanFabricParticles;
-import net.shirojr.titanfabric.particles.GasParticleFactory;
-import net.shirojr.titanfabric.particles.GasTextureSheet;
+import net.shirojr.titanfabric.init.TitanFabricBlocks;
+import net.shirojr.titanfabric.network.TitanFabricS2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
 import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
@@ -27,11 +27,9 @@ public class TitanFabricClient implements ClientModInitializer {
         TitanFabricEvents.registerClientEvents();
         TitanFabricKeyBinds.register();
         TitanFabricColorProviders.register();
-        TitanFabricEntities.registerClient();
-        TitanFabricParticles.initialize();
 
         ModelPredicateProviders.register();
-        TitanFabricS2CNetworking.registerClientReceivers();
+        TitanFabricS2CNetworking.initialize();
 
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER, BackPackItemScreen::new);
@@ -41,7 +39,7 @@ public class TitanFabricClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.LEGEND_CRYSTAL, RenderLayer.getCutout());
 
-        GasTextureSheet.initialize();
-        ParticleFactoryRegistry.getInstance().register(TitanFabricParticles.GAS_PARTICLE, GasParticleFactory::new);
+        EntityRendererRegistry.register(TitanFabricEntities.ARROW_ITEM, ArrowItemRenderer::new);
+        EntityRendererRegistry.register(TitanFabricEntities.CITRIN_STAR, FlyingItemEntityRenderer::new);
     }
 }

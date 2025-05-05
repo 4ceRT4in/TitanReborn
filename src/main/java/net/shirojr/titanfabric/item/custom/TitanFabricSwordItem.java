@@ -1,12 +1,12 @@
 package net.shirojr.titanfabric.item.custom;
 
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -15,7 +15,6 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.ToolTipHelper;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,10 +26,19 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
 
     public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage,
                                 float attackSpeed, SwordType swordType, WeaponEffect baseEffect, Item.Settings settings) {
-        super(toolMaterial, attackDamage, attackSpeed, settings);
+        super(toolMaterial, settings.attributeModifiers(SwordItem.createAttributeModifiers(toolMaterial, attackDamage, attackSpeed)));
         this.canHaveWeaponEffects = canHaveWeaponEffects;
         this.baseEffect = baseEffect;
         this.swordType = swordType;
+    }
+
+    @Override
+    public ItemStack getDefaultStack() {
+        ItemStack stack = super.getDefaultStack();
+        if (this.getBaseEffect() != null) {
+            EffectHelper.applyEffectToStack(stack, new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, this.getBaseEffect(), 1));
+        }
+        return stack;
     }
 
     public boolean canHaveWeaponEffects() {
@@ -50,24 +58,9 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     }
 
     @Override
-    public Optional<ItemType> titanfabric$getCraftingType() {
-        return Optional.of(ItemType.PRODUCT);
-    }
-
-    @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if (!isIn(group)) return;
-        if (this.canHaveWeaponEffects) {
-            EffectHelper.generateAllEffectVersionStacks(this, stacks, true);
-        } else {
-            stacks.add(new ItemStack(this));
-        }
-    }
-
-    @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         ToolTipHelper.appendSwordToolTip(tooltip, stack);
-        super.appendTooltip(stack, world, tooltip, context);
+        super.appendTooltip(stack, context, tooltip, type);
     }
 
     @Override
@@ -78,15 +71,5 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
         }
 
         return super.postHit(stack, target, attacker);
-    }
-
-    @Override
-    public void onCraft(ItemStack stack, World world, PlayerEntity player) {
-        super.onCraft(stack, world, player);
-        WeaponEffect baseEffect = this.getBaseEffect();
-        if(baseEffect != null) {
-            WeaponEffectData innateEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, baseEffect, 1);
-            EffectHelper.applyEffectToStack(stack, innateEffectData);
-        }
     }
 }

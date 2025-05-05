@@ -1,16 +1,17 @@
 package net.shirojr.titanfabric.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.CameraSubmersionType;
 import net.minecraft.client.render.FogShape;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class BackgroundRendererMixin {
 
     @Inject(method = "applyFog", at = @At("HEAD"), cancellable = true)
-    private static void applyFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, CallbackInfo ci) {
+    private static void applyFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci) {
         ci.cancel();
         CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();
         Entity entity = camera.getFocusedEntity();
@@ -32,7 +33,7 @@ public class BackgroundRendererMixin {
             if (entity.isSpectator()) {
                 f = -8.0F;
                 g = viewDistance * 0.5F;
-            } else if (entity instanceof LivingEntity && ((LivingEntity)entity).hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+            } else if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
                 f = 0.0F;
                 g = 3.0F;
             } else {
@@ -47,10 +48,10 @@ public class BackgroundRendererMixin {
                 f = 0.0F;
                 g = 2.0F;
             }
-        } else if (entity instanceof LivingEntity && ((LivingEntity)entity).hasStatusEffect(StatusEffects.BLINDNESS)) {
-            int i = ((LivingEntity)entity).getStatusEffect(StatusEffects.BLINDNESS).getDuration();
-            int level = ((LivingEntity)entity).getStatusEffect(StatusEffects.BLINDNESS).getAmplifier();
-            float h = MathHelper.lerp(Math.min(1.0F, (float)i / 20.0F), viewDistance, 5.0F);
+        } else if (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(StatusEffects.BLINDNESS)) {
+            int i = ((LivingEntity) entity).getStatusEffect(StatusEffects.BLINDNESS).getDuration();
+            int level = ((LivingEntity) entity).getStatusEffect(StatusEffects.BLINDNESS).getAmplifier();
+            float h = MathHelper.lerp(Math.min(1.0F, (float) i / 20.0F), viewDistance, 5.0F);
             if (fogType == BackgroundRenderer.FogType.FOG_SKY) {
                 f = 0.0F;
                 g = (h * 0.8F) * (level == 0 ? 2 : 1);
@@ -63,8 +64,8 @@ public class BackgroundRendererMixin {
             g = 96.0F;
             if (entity instanceof ClientPlayerEntity clientPlayerEntity) {
                 g *= Math.max(0.25F, clientPlayerEntity.getUnderwaterVisibility());
-                RegistryEntry<Biome> registryEntry = clientPlayerEntity.world.getBiome(clientPlayerEntity.getBlockPos());
-                if (Biome.getCategory(registryEntry) == Biome.Category.SWAMP) {
+                RegistryEntry<Biome> registryEntry = clientPlayerEntity.getWorld().getBiome(clientPlayerEntity.getBlockPos());
+                if (registryEntry.isIn(BiomeTags.HAS_CLOSER_WATER_FOG)) {
                     g *= 0.85F;
                 }
             }

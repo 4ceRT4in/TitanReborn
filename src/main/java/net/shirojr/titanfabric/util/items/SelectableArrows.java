@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface SelectableArrows {
     List<Item> titanFabric$supportedArrows();
+
+    //FIXME: check getProjectiles in RangedWeapon class
 }

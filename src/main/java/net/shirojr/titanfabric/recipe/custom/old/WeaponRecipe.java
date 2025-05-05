@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.recipe.custom;
+package net.shirojr.titanfabric.recipe.custom.old;
 
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.Inventory;
@@ -16,7 +16,6 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
-import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 
 import java.util.Arrays;
 import java.util.Optional;

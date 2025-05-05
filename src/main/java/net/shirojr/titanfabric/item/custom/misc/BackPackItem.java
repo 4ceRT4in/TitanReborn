@@ -1,7 +1,8 @@
 package net.shirojr.titanfabric.item.custom.misc;
 
+import com.mojang.serialization.Codec;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -16,13 +17,13 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
+import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Map;
 
 public class BackPackItem extends Item {
     private final BackPackItem.Type backpackType;
@@ -49,6 +50,12 @@ public class BackPackItem extends Item {
             return;
         if (!world.isClient()) {
             user.openHandledScreen(new ExtendedScreenHandlerFactory() {
+
+                @Override
+                public Object getScreenOpeningData(ServerPlayerEntity player) {
+                    return null;
+                }
+
                 @Override
                 public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
                     buf.writeItemStack(backpackItemStack);
@@ -62,7 +69,7 @@ public class BackPackItem extends Item {
                 @Override
                 public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
                     Type backPackType = backPackItem.getBackpackType();
-                    Inventory inventory = getInventoryFromNbt(backpackItemStack, backPackType);
+                    Inventory inventory = getInventory(backpackItemStack, backPackType);
 
                     return new BackPackItemScreenHandler(syncId, playerInventory, inventory, backPackType, backpackItemStack);
                 }
@@ -70,7 +77,7 @@ public class BackPackItem extends Item {
         }
     }
 
-    public static Inventory getInventoryFromNbt(ItemStack itemStack, Type type) {
+    public static Inventory getInventory(ItemStack itemStack, Type type) {
         NbtCompound nbtCompound = itemStack.getOrCreateNbt().getCompound(INVENTORY_NBT_KEY);
 
         Inventory inventory = new SimpleInventory(type.getSize());
@@ -92,82 +99,18 @@ public class BackPackItem extends Item {
     }
 
     @Override
-    public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
+    public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
     }
 
-    @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if (stack.hasNbt()) {
-            if (stack.getNbt().contains("red")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorRed"));
-                return;
-            }
-            if(stack.getNbt().contains("orange")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorOrange"));
-                return;
-            }
-            if (stack.getNbt().contains("blue")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBlue"));
-                return;
-            }
-            if (stack.getNbt().contains("gray")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorGray"));
-                return;
-            }
-            if (stack.getNbt().contains("lime")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLime"));
-                return;
-            }
-            if (stack.getNbt().contains("pink")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorPink"));
-                return;
-            }
-            if (stack.getNbt().contains("purple")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorPurple"));
-                return;
-            }
-            if (stack.getNbt().contains("light_blue")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLightBlue"));
-                return;
-            }
-            if (stack.getNbt().contains("light_gray")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorLightGray"));
-                return;
-            }
-            if (stack.getNbt().contains("yellow")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorYellow"));
-                return;
-            }
-            if (stack.getNbt().contains("magenta")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorMagenta"));
-                return;
-            }
-            if (stack.getNbt().contains("cyan")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorCyan"));
-                return;
-            }
-            if (stack.getNbt().contains("brown")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBrown"));
-                return;
-            }
-            if (stack.getNbt().contains("green")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorGreen"));
-                return;
-            }
-            if (stack.getNbt().contains("black")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorBlack"));
-                return;
-            }
-            if (stack.getNbt().contains("white")) {
-                tooltip.add(new TranslatableText("tooltip.titanfabric.colorWhite"));
-                return;
-            }
-        }
-    }
 
-    public enum Type {
-        SMALL("small", 6, Rarity.UNCOMMON), MEDIUM("medium", 12, Rarity.RARE), BIG("big", 18, Rarity.EPIC);
+    public enum Type implements StringIdentifiable {
+        SMALL("small", 6, Rarity.UNCOMMON),
+        MEDIUM("medium", 12, Rarity.RARE),
+        BIG("big", 18, Rarity.EPIC);
+
+        private final Map<String, Type> TYPES = new Object2ObjectArrayMap<>();
+        public final Codec<Type> CODEC = Codec.stringResolver(StringIdentifiable::asString, TYPES::get);
 
         private final String id;
         private final int size;
@@ -177,6 +120,7 @@ public class BackPackItem extends Item {
             this.id = id;
             this.size = size;
             this.rarity = rarity;
+            TYPES.put(id, this);
         }
 
         public String getId() {
@@ -189,6 +133,11 @@ public class BackPackItem extends Item {
 
         public Rarity getRarity() {
             return rarity;
+        }
+
+        @Override
+        public String asString() {
+            return getId();
         }
     }
 }

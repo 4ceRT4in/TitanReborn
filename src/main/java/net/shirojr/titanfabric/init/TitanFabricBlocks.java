@@ -62,7 +62,7 @@ public interface TitanFabricBlocks {
         TitanFabricItems.ALL_ITEMS.add(new ItemStack(registeredEntry));
     }
 
-    static void registerModBlocks() {
-        LoggerUtil.devLogger("Registering " + TitanFabric.MOD_ID + " Mod blocks");
+    static void initialize() {
+        // static initialisation
     }
 }

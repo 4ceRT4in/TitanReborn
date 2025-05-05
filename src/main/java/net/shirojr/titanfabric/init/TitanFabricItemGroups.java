@@ -18,7 +18,10 @@ public class TitanFabricItemGroups {
                     .build());
 
     static {
-        ItemGroupEvents.modifyEntriesEvent(TITAN).register(entries -> entries.addAll(TitanFabricItems.ALL_ITEMS));
+        ItemGroupEvents.modifyEntriesEvent(TITAN).register(entries -> {
+            entries.addAll(TitanFabricItems.ALL_ITEMS);
+            //TODO: add special variants with different versions, e.g. multi bow
+        });
     }
 
     @SuppressWarnings("SameParameterValue")

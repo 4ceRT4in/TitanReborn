@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
 import net.minecraft.item.*;
-import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.Optional;

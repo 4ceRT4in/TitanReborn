@@ -134,12 +134,9 @@ public class PlayerInventoryHandler {
         if (inventory.isEmpty()) return false;
         // Assuming you want to drop items at the position of each team member or a specific position
         // For simplicity, let's drop it at the first player in the team's location
-        ServerPlayerEntity player = server.getPlayerManager().getPlayerList().stream()
+        server.getPlayerManager().getPlayerList().stream()
                 .filter(p -> teamName.equals(p.getScoreboardTeam() != null ? p.getScoreboardTeam().getName() : null))
-                .findFirst().orElse(null);
-        if (player != null) {
-            ItemScatterer.spawn(player.getWorld(), player.getBlockPos(), inventory.get());
-        }
+                .findFirst().ifPresent(player -> ItemScatterer.spawn(player.getWorld(), player.getBlockPos(), inventory.get()));
         setTeamInventory(teamName, new SimpleInventory(PersistentPlayerData.INV_SIZE), server);
         return true;
     }

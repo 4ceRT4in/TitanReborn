@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionUtil;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
@@ -32,8 +31,8 @@ public class TitanFabricColorProviders {
             if (!stack.getOrDefault(TitanFabricDataComponents.CHARGED, false)) return -1;
             if (TitanCrossBowItem.getProjectiles(stack).isEmpty()) return -1;
             ItemStack firstProjectileStack = TitanCrossBowItem.getProjectiles(stack).get(0);
-            if (WeaponEffectData.get(firstProjectileStack.getOrCreateNbt(), WeaponEffectType.INNATE_EFFECT).isPresent()) {
-                WeaponEffectData weaponEffectData = WeaponEffectData.get(firstProjectileStack.getOrCreateNbt(), WeaponEffectType.INNATE_EFFECT).get();
+            if (WeaponEffectData.get(firstProjectileStack, WeaponEffectType.INNATE_EFFECT).isPresent()) {
+                WeaponEffectData weaponEffectData = WeaponEffectData.get(firstProjectileStack, WeaponEffectType.INNATE_EFFECT).get();
                 if (weaponEffectData.weaponEffect().getColor() != -1) return weaponEffectData.weaponEffect().getColor();
             }
             if (firstProjectileStack.contains(DataComponentTypes.POTION_CONTENTS)) {
@@ -107,13 +106,6 @@ public class TitanFabricColorProviders {
     }
 
     public static void register() {
-        /*
-        - Code for generating the colored backpack textures, not needed anymore.
-
-        createBackpackTextures("big");
-        createBackpackTextures("medium");
-        createBackpackTextures("small");
-         */
         LoggerUtil.devLogger("initialising color providers");
     }
 }

@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.entity;
 
 import com.google.common.collect.HashBiMap;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -16,6 +17,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
+import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 
 import java.util.ArrayList;
@@ -25,8 +27,8 @@ public class CitrinStarEntity extends ThrownItemEntity {
 
     private final List<RegistryEntry<StatusEffect>> changedEffects = new ArrayList<>();
 
-    public CitrinStarEntity(World world) {
-        super(TitanFabricEntities.CITRIN_STAR, world);
+    public CitrinStarEntity(EntityType<? extends ThrownItemEntity> type, World world) {
+        super(type, world);
     }
 
     public CitrinStarEntity(World world, LivingEntity owner) {

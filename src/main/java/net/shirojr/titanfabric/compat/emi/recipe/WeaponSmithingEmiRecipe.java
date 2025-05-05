@@ -9,7 +9,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.recipe.custom.WeaponRecipe;
+import net.shirojr.titanfabric.recipe.custom.old.WeaponRecipe;
 
 import java.util.List;
 

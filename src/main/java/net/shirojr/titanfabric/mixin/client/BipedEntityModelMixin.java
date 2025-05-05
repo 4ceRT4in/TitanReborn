@@ -42,7 +42,7 @@ public abstract class BipedEntityModelMixin<T extends LivingEntity> extends Anim
     @Unique
     private float waveLegs = 0.0f;
 
-    @Inject(method = "setAngles", at = @At("TAIL"))
+    @Inject(method = "setAngles*", at = @At("TAIL"))
     private void setAnglesMixin(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo info) {
         if (livingEntity instanceof PlayerEntity player) {
             if (TitanFabricParachuteItem.isParachuteActivated(player)) {

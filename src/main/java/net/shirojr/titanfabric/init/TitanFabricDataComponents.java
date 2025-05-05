@@ -7,25 +7,40 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.util.TitanFabricCodecs;
+import net.shirojr.titanfabric.util.BackPackContent;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.function.Consumer;
 
 public interface TitanFabricDataComponents {
     ComponentType<Boolean> CHARGED = register("charged",
-            itemStackBuilder -> itemStackBuilder
-                    .codec(Codec.BOOL)
-                    .packetCodec(PacketCodecs.BOOL)
-    );
+            itemStackBuilder -> itemStackBuilder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
+
+    ComponentType<Boolean> ACTIVATED = register("activated",
+            builder -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
+
+    ComponentType<Integer> MULTI_BOW_MAX_ARROWS_COUNT = register("max_arrow_count",
+            builder -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+
+    ComponentType<Integer> MULTI_BOW_ARROWS_COUNT = register("arrow_count",
+            builder -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+
+    ComponentType<Integer> MULTI_BOW_PROJECTILE_TICK = register("shooting_tick",
+            builder -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+
+    ComponentType<WeaponEffect> WEAPON_EFFECT = register("weapon_effect",
+            builder -> builder.codec(WeaponEffect.CODEC).packetCodec(WeaponEffect.PACKET_CODEC));
+
     ComponentType<HashSet<WeaponEffectData>> WEAPON_EFFECTS = register("weapon_effects",
             weaponEffectDataBuilder -> weaponEffectDataBuilder
                     .codec(TitanFabricCodecs.WEAPON_EFFECTS)
                     .packetCodec(WeaponEffectData.PACKET_CODEC.collect(PacketCodecs.toCollection(HashSet::new)))
     );
 
+    ComponentType<BackPackContent> BACKPACK_CONTENT = register("backpack_content",
+            builder -> builder.codec(BackPackContent.CODEC).packetCodec(BackPackContent.PACKET_CODEC));
 
     @SuppressWarnings("SameParameterValue")
     private static <T> ComponentType<T> register(String name, Consumer<ComponentType.Builder<T>> componentTypeConsumer) {

@@ -11,6 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.network.NetworkingIdentifiers;
+import net.shirojr.titanfabric.network.packet.ArrowSelectionPacket;
 import net.shirojr.titanfabric.registry.KeyBindRegistry;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
 
@@ -34,7 +35,7 @@ public class TitanFabricClientTickEvents {
 
         if (TitanFabricKeyBinds.ARROW_SELECTION_KEY.isPressed()) {
             if (!keyBinds.wasPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY)) {
-                ClientPlayNetworking.send(NetworkingIdentifiers.ARROW_SELECTION, PacketByteBufs.create());
+                new ArrowSelectionPacket().sendPacket();
                 keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, true);
             }
         } else {

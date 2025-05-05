@@ -1,116 +1,108 @@
 package net.shirojr.titanfabric.recipe.custom;
 
-import com.google.gson.JsonObject;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.inventory.Inventory;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.*;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SmithingRecipe;
+import net.minecraft.recipe.input.SmithingRecipeInput;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.init.TitanFabricItems;
-import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
-import net.shirojr.titanfabric.util.items.MultiBowHelper;
+import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
 
-public class MultiBowRecipe extends SmithingRecipe {
-    private final Ingredient base;
-    private final Ingredient addition;
-    private final ItemStack result;
+import java.util.stream.Stream;
 
-    public MultiBowRecipe(Identifier id, Ingredient base, Ingredient addition, ItemStack result) {
-        super(id, base, addition, result);
+public class MultiBowRecipe implements SmithingRecipe {
+    final Ingredient base;
+    final Ingredient addition;
+    final ItemStack result;
+
+    public MultiBowRecipe(Ingredient base, Ingredient addition, ItemStack result) {
         this.base = base;
         this.addition = addition;
         this.result = result;
     }
 
-    @Override
-    public boolean matches(Inventory inventory, World world) {
-        ItemStack baseStack = inventory.getStack(0);
-        ItemStack additionStack = inventory.getStack(1);
-        if (!(baseStack.getItem() instanceof MultiBowItem baseCraftingItem)) return false;
-        if (!(additionStack.getItem() instanceof MultiBowItem additionCraftingItem)) return false;
-        if (!(result.getItem() instanceof MultiBowItem)) return false;
 
-        int baseItemLevel = baseCraftingItem.getFullArrowCount();
-        int additionItemLevel = additionCraftingItem.getFullArrowCount();
-        if (baseItemLevel != additionItemLevel) return false;
-        if (baseItemLevel < 1 || baseItemLevel > 2) return false;
-        return this.base.test(baseStack) && this.addition.test(additionStack);
+    @Override
+    public boolean matches(SmithingRecipeInput input, World world) {
+        return input.template().isEmpty() && this.base.test(input.base()) && this.addition.test(input.addition());
     }
 
     @Override
-    public ItemStack craft(Inventory inventory) {
-        ItemStack baseStack = inventory.getStack(0);
-        ItemStack additionStack = inventory.getStack(1);
-        ItemStack outputStack = this.result.copy();
-
-        if (!(baseStack.getItem() instanceof MultiBowItem baseStackArrowSystem)) return null;
-        if (!(additionStack.getItem() instanceof MultiBowItem)) return null;
-
-        int damage = Math.max(baseStack.getDamage() - additionStack.getDamage(), additionStack.getDamage() - baseStack.getDamage());
-        damage = Math.max(0, damage);
-        outputStack.setDamage(damage);
-        if (baseStack.hasCustomName()) outputStack.setCustomName(baseStack.getName());
-        if (baseStack.hasEnchantments()) {
-            var enchantmentList = EnchantmentHelper.fromNbt(baseStack.getEnchantments()).entrySet();
-            for (var enchantment : enchantmentList) {
-                outputStack.addEnchantment(enchantment.getKey(), enchantment.getValue());
-            }
-        }
-        outputStack.setRepairCost(baseStack.getRepairCost());
-        MultiBowHelper.setFullArrowCount(outputStack, baseStackArrowSystem.getFullArrowCount() + 1);
-        return outputStack;
+    public ItemStack craft(SmithingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
+        ItemStack itemStack = input.addition().copyComponentsToNewStack(this.result.getItem(), this.result.getCount());
+        itemStack.applyUnvalidatedChanges(this.result.getComponentChanges());
+        return itemStack;
     }
 
     @Override
-    public ItemStack getOutput() {
+    public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
         return this.result;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
+        return TitanFabricRecipeSerializers.WEAPON_EFFECT;
     }
 
     @Override
-    public ItemStack createIcon() {
-        return new ItemStack(TitanFabricItems.MULTI_BOW_3);
+    public boolean testTemplate(ItemStack stack) {
+        return stack.isEmpty();
+    }
+
+    @Override
+    public boolean testBase(ItemStack stack) {
+        return this.base.test(stack);
+    }
+
+    @Override
+    public boolean testAddition(ItemStack stack) {
+        return this.addition.test(stack);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return  Stream.of(this.base, this.addition).anyMatch(Ingredient::isEmpty);
     }
 
     public static class Serializer implements RecipeSerializer<MultiBowRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
+        private static final MapCodec<MultiBowRecipe> CODEC = RecordCodecBuilder.mapCodec(
+                instance -> instance.group(
+                                Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter(recipe -> recipe.base),
+                                Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter(recipe -> recipe.addition),
+                                ItemStack.VALIDATED_CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
+                        )
+                        .apply(instance, MultiBowRecipe::new)
+        );
+        public static final PacketCodec<RegistryByteBuf, MultiBowRecipe> PACKET_CODEC = PacketCodec.ofStatic(
+                MultiBowRecipe.Serializer::write, MultiBowRecipe.Serializer::read
+        );
 
         @Override
-        public MultiBowRecipe read(Identifier id, JsonObject json) {
-            Ingredient base = Ingredient.fromJson(JsonHelper.getObject(json, "base"));
-            Ingredient addition = Ingredient.fromJson(JsonHelper.getObject(json, "addition"));
-            ItemStack result = ShapedRecipe.outputFromJson(JsonHelper.getObject(json, "result"));
-            return new MultiBowRecipe(id, base, addition, result);
+        public MapCodec<MultiBowRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public MultiBowRecipe read(Identifier id, PacketByteBuf buf) {
-            Ingredient base = Ingredient.fromPacket(buf);
-            Ingredient addition = Ingredient.fromPacket(buf);
-            ItemStack resultStack = buf.readItemStack();
-            return new MultiBowRecipe(id, base, addition, resultStack);
+        public PacketCodec<RegistryByteBuf, MultiBowRecipe> packetCodec() {
+            return PACKET_CODEC;
         }
 
-        @Override
-        public void write(PacketByteBuf buf, MultiBowRecipe recipe) {
-            recipe.base.write(buf);
-            recipe.addition.write(buf);
-            buf.writeItemStack(recipe.result);
-        }
-    }
-
-    public static class Type implements RecipeType<MultiBowRecipe> {
-        private Type() {
+        private static MultiBowRecipe read(RegistryByteBuf buf) {
+            Ingredient ingredient2 = Ingredient.PACKET_CODEC.decode(buf);
+            Ingredient ingredient3 = Ingredient.PACKET_CODEC.decode(buf);
+            ItemStack itemStack = ItemStack.PACKET_CODEC.decode(buf);
+            return new MultiBowRecipe(ingredient2, ingredient3, itemStack);
         }
 
-        public static final Type INSTANCE = new Type();
-        public static final String ID = "multi_bow_upgrade";
+        private static void write(RegistryByteBuf buf, MultiBowRecipe recipe) {
+            Ingredient.PACKET_CODEC.encode(buf, recipe.base);
+            Ingredient.PACKET_CODEC.encode(buf, recipe.addition);
+            ItemStack.PACKET_CODEC.encode(buf, recipe.result);
+        }
     }
 }

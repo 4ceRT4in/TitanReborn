@@ -1,16 +1,15 @@
 package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.util.TitanFabricTags;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 
@@ -20,12 +19,7 @@ import java.util.function.Predicate;
  * Utillity Class to clean up {@linkplain net.shirojr.titanfabric.item.custom.bow.MultiBowItem MultiBowItem class} a bit.
  */
 public final class MultiBowHelper {
-    public static final String FULL_ARROW_COUNT_NBT_KEY = TitanFabric.MOD_ID + ".concurrent_arrows";
-    public static final String ARROWS_LEFT_NBT_KEY = TitanFabric.MOD_ID + ".arrows_left";
-    public static final String PROJECTILE_TICK_NBT_KEY = TitanFabric.MOD_ID + ".projectile_tick";
-
     private MultiBowHelper() {
-        // private ctor to avoid instantiating this utility class
     }
 
     /**
@@ -35,8 +29,7 @@ public final class MultiBowHelper {
      * @param arrows   count of concurrent arrows
      */
     public static void setFullArrowCount(ItemStack bowStack, int arrows) {
-        bowStack.getOrCreateNbt().putInt(FULL_ARROW_COUNT_NBT_KEY, arrows);
-        if (arrows < 1) bowStack.removeSubNbt(FULL_ARROW_COUNT_NBT_KEY);
+        bowStack.set(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, arrows);
     }
 
     /**
@@ -46,13 +39,11 @@ public final class MultiBowHelper {
      * @return amount of arrows, which will be shot at the same time
      */
     public static int getFullArrowCount(ItemStack itemStack) {
-        if (!itemStack.getOrCreateNbt().contains(FULL_ARROW_COUNT_NBT_KEY)) return 0;
-        return itemStack.getOrCreateNbt().getInt(FULL_ARROW_COUNT_NBT_KEY);
+        return itemStack.getOrDefault(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, 1);
     }
 
-    public static int getArrowsLeftNbt(ItemStack itemStack) {
-        if (!itemStack.getOrCreateNbt().contains(ARROWS_LEFT_NBT_KEY)) return 0;
-        return itemStack.getOrCreateNbt().getInt(ARROWS_LEFT_NBT_KEY);
+    public static int getArrowsLeft(ItemStack itemStack) {
+        return itemStack.getOrDefault(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT, 0);
     }
 
     /**
@@ -61,14 +52,12 @@ public final class MultiBowHelper {
      * @param bowStack original Bow ItemStack
      * @param arrows   new value of arrows
      */
-    public static void setArrowsLeftNbt(ItemStack bowStack, int arrows) {
-        bowStack.getOrCreateNbt().putInt(ARROWS_LEFT_NBT_KEY, arrows);
-        if (arrows < 1) bowStack.removeSubNbt(ARROWS_LEFT_NBT_KEY);
+    public static void setArrowsLeft(ItemStack bowStack, int arrows) {
+        bowStack.set(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT, arrows);
     }
 
     public static boolean hasArrowsLeft(ItemStack bowStack) {
-        NbtCompound nbt = bowStack.getNbt();
-        return nbt != null && nbt.contains(ARROWS_LEFT_NBT_KEY);
+        return bowStack.getOrDefault(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT, 0) > 0;
     }
 
     /**
@@ -82,13 +71,12 @@ public final class MultiBowHelper {
      */
     public static boolean handleArrowConsumption(PlayerEntity player, ItemStack bowStack, ItemStack arrowStack) {
         PlayerInventory inventory = player.getInventory();
-        if (player.getAbilities().creativeMode || EnchantmentHelper.getLevel(Enchantments.INFINITY, bowStack) > 0)
+        if (player.getWorld() instanceof ServerWorld serverWorld && EnchantmentHelper.getAmmoUse(serverWorld, bowStack, arrowStack, 1) > 0)
             return true;
         if (!inventory.contains(arrowStack) || arrowStack.getCount() < 1)
             return false;
 
-        //arrowStack.decrement(1);
-        inventory.removeStack(inventory.getSlotWithStack(arrowStack), 1);
+        arrowStack.decrementUnlessCreative(1, player);
         return true;
     }
 
@@ -118,17 +106,10 @@ public final class MultiBowHelper {
     }
 
     public static PersistentProjectileEntity prepareArrow(World world, PlayerEntity player, ItemStack arrowStack,
-                                                          float pitch, float yaw, double pullProgress,
-                                                          int powerLevel, int punchLevel, int flameLevel) {
-
+                                                          float pitch, float yaw, double pullProgress, ItemStack bowStack) {
         ArrowItem arrowItem = (ArrowItem) (arrowStack.getItem() instanceof ArrowItem ? arrowStack.getItem() : Items.ARROW);
-        PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world, arrowStack, player);
+        PersistentProjectileEntity persistentProjectileEntity = arrowItem.createArrow(world, arrowStack, player, bowStack);
         persistentProjectileEntity.setVelocity(player, pitch, yaw, 0.0f, (float) pullProgress * 3.0f, 1.0f);
-
-        double powerDamage = persistentProjectileEntity.getDamage() + powerLevel * 0.5 + 0.5;
-        if (powerLevel > 0) persistentProjectileEntity.setDamage(powerDamage);
-        if (punchLevel > 0) persistentProjectileEntity.setPunch(punchLevel);
-        if (flameLevel > 0) persistentProjectileEntity.setOnFireFor(100);
         if (pullProgress == 1.0f) persistentProjectileEntity.setCritical(true);
 
         return persistentProjectileEntity;

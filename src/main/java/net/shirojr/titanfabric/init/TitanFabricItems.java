@@ -17,13 +17,17 @@ import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
-import net.shirojr.titanfabric.item.custom.misc.*;
+import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
+import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
+import net.shirojr.titanfabric.item.custom.misc.FlintAndEmberItem;
+import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
-import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.SwordType;
+import net.shirojr.titanfabric.util.BackPackContent;
+import net.shirojr.titanfabric.util.effects.EffectHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,21 +66,29 @@ public interface TitanFabricItems {
     //endregion
 
     CitrinSwordItem CITRIN_SWORD = registerItem("citrin_sword",
-            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, SwordType.DEFAULT, new Item.Settings()));
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, SwordType.DEFAULT, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.CITRIN_SWORD, true));
     CitrinSwordItem CITRIN_GREATSWORD = registerItem("citrin_greatsword",
-            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.CITRIN_GREATSWORD, true));
     EmberSwordItem EMBER_SWORD = registerItem("ember_sword",
-            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new Item.Settings()));
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.EMBER_SWORD, true));
     EmberSwordItem EMBER_GREATSWORD = registerItem("ember_greatsword",
-            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.EMBER_GREATSWORD, true));
     LegendSwordItem LEGEND_SWORD = registerItem("legend_sword",
-            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT, new Item.Settings()));
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.LEGEND_SWORD, true));
     LegendSwordItem LEGEND_GREATSWORD = registerItem("legend_greatsword",
-            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.LEGEND_GREATSWORD, true));
     DiamondSwordItem DIAMOND_SWORD = registerItem("diamond_sword",
-            new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 6, -2.4f, SwordType.DEFAULT, null, new Item.Settings()));
+            new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 6, -2.4f, SwordType.DEFAULT, null, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.DIAMOND_SWORD, false));
     TitanFabricSwordItem DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
-            new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings()));
+            new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings()),
+            EffectHelper.generateSwordsStacks(TitanFabricItems.DIAMOND_GREATSWORD, true));
     SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE,
             new Item.Settings().maxDamage(2031).fireproof().attributeModifiers(SwordItem.createAttributeModifiers(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f)));  // registered in ItemsMixin class
     TitanFabricSwordItem NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
@@ -84,12 +96,16 @@ public interface TitanFabricItems {
 
     TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1).maxDamage(-1).component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)));
     LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
-    MultiBowItem MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(1, 10, 500));
-    MultiBowItem MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(2, 20, 1000));
-    MultiBowItem MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(3, 30, 1500));
+    MultiBowItem MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(
+            new Item.Settings().maxCount(1).maxDamage(500), 1, 10));
+    MultiBowItem MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(
+            new Item.Settings().maxCount(1).maxDamage(1000), 2, 20));
+    MultiBowItem MULTI_BOW_3 = registerItem("multi_bow_3", new MultiBowItem(
+            new Item.Settings().maxCount(1).maxDamage(1500), 3, 30));
+
 
     TitanFabricArrowItem ARROW = registerItem("effect_arrow",
-            new TitanFabricArrowItem(new Item.Settings().maxCount(32)));
+            new TitanFabricArrowItem(new Item.Settings().maxCount(32)), EffectHelper.generateArrowStacks(TitanFabricItems.ARROW, false));
 
     TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
             new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
@@ -111,13 +127,13 @@ public interface TitanFabricItems {
             new Item(new Item.Settings().maxCount(64)));
 
     TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
-            new TitanFabricParachuteItem(new Item.Settings().maxCount(1).maxDamage(250)));
+            new TitanFabricParachuteItem(new Item.Settings().maxCount(1).maxDamage(250).component(TitanFabricDataComponents.ACTIVATED, false)));
 
     FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
             new FlintAndEmberItem(new Item.Settings().maxCount(1).maxDamage(64)));
 
-    TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem());
-    CutPotion CUT_POTION = registerItem("cut_potion", new CutPotion(new Item.Settings()));
+    TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem(
+            new Item.Settings().maxCount(64)), EffectHelper.generateEssenceStacks(TitanFabricItems.ESSENCE, false));
 
     Item SWORD_HANDLE = registerItem("sword_handle",
             new Item(new Item.Settings().maxCount(64)));
@@ -132,22 +148,30 @@ public interface TitanFabricItems {
             new PotionBundleItem(new Item.Settings().maxCount(1)));
 
     BackPackItem BACKPACK_SMALL = registerItem("backpack_small",
-            new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.SMALL));
+            new BackPackItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.DEFAULT),
+                    BackPackItem.Type.SMALL));
 
     BackPackItem BACKPACK_MEDIUM = registerItem("backpack_medium",
-            new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.MEDIUM));
+            new BackPackItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.DEFAULT),
+                    BackPackItem.Type.MEDIUM));
 
     BackPackItem BACKPACK_BIG = registerItem("backpack_big",
-            new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.BIG));
+            new BackPackItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.DEFAULT),
+                    BackPackItem.Type.BIG));
 
-    private static <T extends Item> T registerItem(String name, T item) {
+
+    private static <T extends Item> T registerItem(String name, T item, List<ItemStack> itemGroupStacks) {
         T registeredEntry = Registry.register(Registries.ITEM, TitanFabric.getId(name), item);
-        ALL_ITEMS.add(new ItemStack(registeredEntry));
+        ALL_ITEMS.addAll(itemGroupStacks);
         return registeredEntry;
     }
 
-    static void registerModItems() {
-        LoggerUtil.devLogger("Registering " + TitanFabric.MOD_ID + " Mod items");
+    private static <T extends Item> T registerItem(String name, T item) {
+        return registerItem(name, item, List.of(new ItemStack(item)));
+    }
+
+    static void initialize() {
+        // static initialisation
     }
 
     private static int removeBaseDamage(int damage) {
