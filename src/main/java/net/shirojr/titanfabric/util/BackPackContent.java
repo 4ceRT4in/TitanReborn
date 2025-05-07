@@ -18,17 +18,14 @@ public record BackPackContent(List<ItemStack> stacks, BackPackItem.Type type) im
 
     public static final PacketCodec<RegistryByteBuf, BackPackContent> PACKET_CODEC = PacketCodec.tuple(
             ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()), BackPackContent::stacks,
-            PacketCodecs.BYTE.xmap(index -> BackPackItem.Type.values()[index], backPackType -> (byte) backPackType.ordinal()),
+            PacketCodecs.BYTE.xmap(index -> BackPackItem.Type.values()[index], backPackType -> (byte) backPackType.ordinal()), BackPackContent::type,
             BackPackContent::new
     );
 
-    public static final Codec<BackPackContent> CODEC = RecordCodecBuilder.<BackPackContent>create(instance -> instance.group(
+    public static final Codec<BackPackContent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ItemStack.CODEC.listOf().fieldOf("stacks").forGetter(BackPackContent::stacks),
-            BackPackItem.Type.
-    ));
-
-        ItemStack.CODEC.listOf().xmap(BackPackContent::new, component -> component.stacks);
-
+            BackPackItem.Type.CODEC.fieldOf("type").forGetter(BackPackContent::type)
+    ).apply(instance, BackPackContent::new));
 
     public ItemStack get(int index) {
         return this.stacks.get(index);
@@ -43,7 +40,7 @@ public record BackPackContent(List<ItemStack> stacks, BackPackItem.Type type) im
     }
 
     public Iterable<ItemStack> iterateCopy() {
-        return Lists.<ItemStack, ItemStack>transform(this.stacks, ItemStack::copy);
+        return Lists.transform(this.stacks, ItemStack::copy);
     }
 
     public int size() {
