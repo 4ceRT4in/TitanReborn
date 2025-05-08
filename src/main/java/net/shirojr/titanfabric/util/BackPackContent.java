@@ -3,13 +3,16 @@ package net.shirojr.titanfabric.util;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.util.collection.DefaultedList;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 

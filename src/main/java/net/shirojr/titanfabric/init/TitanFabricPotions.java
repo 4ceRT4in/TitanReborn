@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.potion;
+package net.shirojr.titanfabric.init;
 
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.entity.effect.StatusEffect;
@@ -11,8 +11,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
-import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricPotions {

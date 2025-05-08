@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.item.Item;
-import net.shirojr.titanfabric.screen.custom.ArrowSelectionScreen;
 
 import java.util.List;
 

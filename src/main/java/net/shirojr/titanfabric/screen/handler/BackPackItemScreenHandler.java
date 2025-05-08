@@ -9,18 +9,22 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
+import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.util.BackPackContent;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BackPackItemScreenHandler extends ScreenHandler {
     private final Inventory inventory;
-    private final BackPackItem.Type backPackType;
     private final ItemStack backpackStack;
 
-    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, BackPackItem.Type type, PacketByteBuf buf) {
-        this(syncId, playerInventory, new SimpleInventory(type.getSize()), type, buf.readItemStack());
+    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, BackPackScreenPacket packet) {
+        this(syncId, playerInventory, new SimpleInventory(packet.getSize()), type, buf.readItemStack());
     }
 
     public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType, ItemStack backpackStack) {
@@ -56,9 +60,14 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public void close(PlayerEntity player) {
-        super.close(player);
-        BackPackItem.writeNbtFromInventory(backpackStack, inventory);
+    public void onClosed(PlayerEntity player) {
+        super.onClosed(player);
+        List<ItemStack> storedStacks = new ArrayList<>();
+        for (int i = 0; i < inventory.size(); i++) {
+            storedStacks.add(i, inventory.getStack(i));
+        }
+        BackPackContent content = new BackPackContent(storedStacks, backPackType);
+        backpackStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, content);
     }
 
     private void addStorageSlots(BackPackItem.Type type, Point pos) {
@@ -89,11 +98,11 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public void onSlotClick(int slotId, int button, SlotActionType actionType, PlayerEntity player) {
-        if(player.getMainHandStack().isEmpty()) {
+        if (player.getMainHandStack().isEmpty()) {
             super.onSlotClick(slotId, button, actionType, player);
             return;
         }
-        if(slotId >= 0){
+        if (slotId >= 0) {
             Slot slot = this.slots.get(slotId);
             if (actionType == SlotActionType.SWAP && button >= 0 && button < 9) {
                 ItemStack swappedItem = player.getInventory().getStack(button);
@@ -118,21 +127,24 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int index) {
+    public ItemStack quickMove(PlayerEntity player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = (Slot) this.slots.get(index);
-        if (slot != null && slot.hasStack()) {
-            ItemStack itemStack2 = slot.getStack();
-            itemStack = itemStack2.copy();
-            if (index < this.inventory.size() ? !this.insertItem(itemStack2, this.inventory.size(), this.slots.size(), true) : !this.insertItem(itemStack2, 0, this.inventory.size(), false)) {
-                return ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot.hasStack()) {
+            ItemStack toInsert = slot.getStack();
+            itemStack = toInsert.copy();
+            if (index < backPackType.getSize()) {
+                if (!this.insertItem(toInsert, 0, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
             }
-            if (itemStack2.isEmpty()) {
+            if (toInsert.isEmpty()) {
                 slot.setStack(ItemStack.EMPTY);
             } else {
                 slot.markDirty();
             }
         }
+
         return itemStack;
     }
 

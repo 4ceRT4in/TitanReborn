@@ -52,7 +52,7 @@ public class BackPackItem extends Item {
 
                 @Override
                 public BackPackScreenPacket getScreenOpeningData(ServerPlayerEntity player) {
-                    return new BackPackScreenPacket(user.getId());
+                    return new BackPackScreenPacket(stack);
                 }
 
                 @Override

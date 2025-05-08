@@ -95,8 +95,8 @@ public class WeaponEffectRecipe implements SmithingRecipe {
         private static final MapCodec<WeaponEffectRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                                 Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter(recipe -> recipe.base),
-                                Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter(recipe -> recipe.addition),
-                                )
+                                Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter(recipe -> recipe.addition)
+                        )
                         .apply(instance, WeaponEffectRecipe::new)
         );
         public static final PacketCodec<RegistryByteBuf, WeaponEffectRecipe> PACKET_CODEC = PacketCodec.ofStatic(

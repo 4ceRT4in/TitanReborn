@@ -9,7 +9,7 @@ import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.network.TitanFabricC2SNetworking;
-import net.shirojr.titanfabric.potion.TitanFabricPotions;
+import net.shirojr.titanfabric.init.TitanFabricPotions;
 import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.util.LoggerUtil;
