@@ -218,6 +218,17 @@ public class ModelPredicateProviders {
                     }
                     return 0.0f;
                 });
+        ModelPredicateProviderRegistry.register(item, new Identifier("indestructible"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+                        for (StatusEffectInstance effect : PotionUtil.getPotion(stack).getEffects()) {
+                            if (effect.getEffectType() == TitanFabricStatusEffects.INDESTRUCTIBILITY) {
+                                return 1.0f;
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
     }
 
     private static void registerOverpoweredEnchantedBookPredicate(Item item) {

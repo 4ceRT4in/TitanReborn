@@ -8,15 +8,22 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
+import net.minecraft.text.TranslatableText;
+import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.util.HeartsManager;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
@@ -30,6 +37,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)
@@ -37,6 +45,8 @@ public abstract class InGameHudMixin extends DrawableHelper {
     @Final
     @Shadow
     private MinecraftClient client;
+
+    @Shadow private int scaledHeight;
 
     @Inject(method = "render", at = @At("HEAD"))
     public void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {

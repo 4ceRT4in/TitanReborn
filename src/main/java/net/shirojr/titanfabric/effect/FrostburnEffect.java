@@ -4,6 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffects;
 
 import java.util.Objects;
 
@@ -21,14 +22,16 @@ public class FrostburnEffect extends StatusEffect {
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         int totalDuration = Objects.requireNonNull(entity.getStatusEffect(TitanFabricStatusEffects.FROSTBURN)).getDuration();
-        int maxDuration = 600;
+        int maxDuration = 500;
 
         boolean isFirstHalf = totalDuration > maxDuration / 2;
 
         if (isFirstHalf) {
-            entity.damage(DamageSource.MAGIC, 1.0F + amplifier * 0.5F);
+            entity.damage(DamageSource.MAGIC, 1.0f);
         } else {
-            entity.damage(DamageSource.MAGIC, 0.5F + amplifier * 0.5F);
+            if (entity.getHealth() < entity.getMaxHealth()) {
+                entity.heal(1.0f);
+            }
         }
     }
 }

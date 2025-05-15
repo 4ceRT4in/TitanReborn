@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.network.PacketByteBuf;
@@ -114,7 +115,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
             } else {
                 itemToCheck = this.getCursorStack();
             }
-            if (!itemToCheck.isEmpty() && !(itemToCheck.getItem() instanceof SplashPotionItem)) {
+            if (!itemToCheck.isEmpty() && !(itemToCheck.getItem() instanceof SplashPotionItem || itemToCheck.getItem() instanceof LingeringPotionItem)) {
                 return;
             }
         }
@@ -150,7 +151,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
             ItemStack itemStack2 = slot.getStack();
             itemStack = itemStack2.copy();
             if (this.backPackType == BackPackItem.Type.POTION) {
-                if (index >= this.inventory.size() && !(itemStack2.getItem() instanceof SplashPotionItem)) {
+                if (index >= this.inventory.size() && !(itemStack2.getItem() instanceof SplashPotionItem || itemStack2.getItem() instanceof LingeringPotionItem)) {
                     return ItemStack.EMPTY;
                 }
             }

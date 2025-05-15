@@ -267,6 +267,7 @@
   "overlay.titanfabric.netherite.resistance": "Active",
 
   "screen.titanfabric.extended_inventory.title": "Save Inventory",
+  "screen.titanfabric.immunity_effect_blocked": "Blocked Effects ",
 
   "actionbar.titanfabric.arrow_selection": "Projectile: ",
   "actionbar.titanfabric.not_compatible": "§6[Warning]§r Projectile is not compatible",

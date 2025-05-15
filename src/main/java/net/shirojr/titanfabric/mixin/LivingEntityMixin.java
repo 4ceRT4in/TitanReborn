@@ -9,6 +9,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.event.GameEvent;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -28,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -35,8 +38,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Mixin(LivingEntity.class)
@@ -51,14 +53,30 @@ public abstract class LivingEntityMixin {
     @Final
     private Map<StatusEffect, StatusEffectInstance> activeStatusEffects;
 
+    @Unique
+    private final Set<StatusEffect> immunity$protectedEffects = new HashSet<>();
+
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
 
-    @Inject(method = "tick", at = @At("TAIL"))
-    private void tick(CallbackInfo ci) {
-        LivingEntity entity = (LivingEntity) (Object) this;
-        for (StatusEffectInstance effects : List.copyOf(entity.getStatusEffects())) { // copying in order to prevent a ConcurrentModificationException
-            ImmunityEffect.checkAndBlockNegativeEffect(entity, effects);
+
+
+    @Inject(method = "tickStatusEffects", at = @At("HEAD"))
+    private void onTickStatusEffects(CallbackInfo ci) {
+        LivingEntity self = (LivingEntity)(Object)this;
+        for (StatusEffectInstance effectInstance : new ArrayList<>(self.getStatusEffects())) {
+            StatusEffect effect = effectInstance.getEffectType();
+
+            if (effect.getCategory() == StatusEffectCategory.HARMFUL) {
+                ImmunityEffect.checkAndBlockNegativeEffect(self, effectInstance);
+            }
+        }
+    }
+
+    @Inject(method = "removeStatusEffect", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$removeStatusEffect(StatusEffect type, CallbackInfoReturnable<Boolean> cir) {
+        if (type == TitanFabricStatusEffects.IMMUNITY) {
+            immunity$protectedEffects.clear();
         }
     }
 

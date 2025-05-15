@@ -12,6 +12,10 @@
         {
             "predicate": { "immunity": 1.0 },
             "model": "titanfabric:item/immunity_splash_potion"
+        },
+        {
+            "predicate": { "indestructible": 1.0 },
+            "model": "titanfabric:item/indestructible_splash_potion"
         }
     ]
 }
