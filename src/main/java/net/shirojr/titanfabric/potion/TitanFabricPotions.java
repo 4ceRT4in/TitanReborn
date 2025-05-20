@@ -18,10 +18,10 @@ import net.shirojr.titanfabric.util.LoggerUtil;
 public class TitanFabricPotions {
     public static Potion INDESTRUCTIBLE_POTION =
             registerPotion("indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
-                    3600, 0, Potions.AWKWARD, Item.fromBlock(TitanFabricBlocks.LEGEND_CRYSTAL));
+                    1800, 0, Potions.AWKWARD, Item.fromBlock(TitanFabricBlocks.LEGEND_CRYSTAL));
     public static Potion LONG_INDESTRUCTIBLE_POTION =
             registerPotion("long_indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
-                    9600, 0, INDESTRUCTIBLE_POTION, Items.REDSTONE);
+                    3600, 0, INDESTRUCTIBLE_POTION, Items.REDSTONE);
     public static Potion FROSTBURN_POTION =
             registerPotion("frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
                     400, 0, Potions.AWKWARD, Items.SNOWBALL);

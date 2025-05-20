@@ -1,41 +1,36 @@
 package net.shirojr.titanfabric.util.effects;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.shirojr.titanfabric.item.TitanFabricItems;
-
-import java.util.Objects;
 
 public class ArmorPlatingHelper {
 
     public static boolean hasArmorPlating(ItemStack stack) {
         if (!stack.hasNbt()) return false;
         assert stack.getNbt() != null;
-        return stack.getNbt().contains(ArmorPlateType.CITRIN.getKey()) || stack.getNbt().contains(ArmorPlateType.DIAMOND.getKey()) || stack.getNbt().contains(ArmorPlateType.EMBER.getKey())
-                || stack.getNbt().contains(ArmorPlateType.NETHERITE.getKey()) || stack.getNbt().contains(ArmorPlateType.LEGEND.getKey());
+        return stack.getNbt().contains(ArmorPlateType.CITRIN.getId()) || stack.getNbt().contains(ArmorPlateType.DIAMOND.getId()) || stack.getNbt().contains(ArmorPlateType.EMBER.getId())
+                || stack.getNbt().contains(ArmorPlateType.NETHERITE.getId()) || stack.getNbt().contains(ArmorPlateType.LEGEND.getId());
     }
 
 
     public static boolean hasArmorSpecificPlating(ItemStack stack, ArmorPlateType armorPlateType) {
         if (!stack.hasNbt()) return false;
         assert stack.getNbt() != null;
-        return stack.getNbt().contains(armorPlateType.getKey());
+        return stack.getNbt().contains(armorPlateType.getId());
     }
 
     public static void removeAllArmorPlates(ItemStack stack) {
         if (!stack.hasNbt()) return;
         assert stack.getNbt() != null;
         for (ArmorPlateType type : ArmorPlateType.values()) {
-            if(stack.getNbt().contains(type.getKey())) {
-                stack.getNbt().remove(type.getKey());
+            if(stack.getNbt().contains(type.getId())) {
+                stack.getNbt().remove(type.getId());
             }
         }
     }
 
     public static void applyArmorPlate(ItemStack stack, ArmorPlateType armorPlateType) {
         if(hasArmorPlating(stack)) return;
-        stack.getOrCreateNbt().putBoolean(armorPlateType.getKey(), true);
+        stack.getOrCreateNbt().putBoolean(armorPlateType.getId(), true);
     }
 
     public static ArmorPlateType getArmorPlatingType(ItemStack stack) {
@@ -47,7 +42,10 @@ public class ArmorPlatingHelper {
         return null;
     }
 
-    /*public static void damage(ItemStack stack, int damage) {
+    /*
+
+
+    public static void damage(ItemStack stack, int damage) {
         if(!hasArmorPlating(stack)) return;
         if(!stack.hasNbt()) return;
         assert stack.getNbt() != null;

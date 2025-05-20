@@ -1,11 +1,7 @@
 package net.shirojr.titanfabric.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
@@ -13,16 +9,11 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.*;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.tag.EntityTypeTags;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.event.GameEvent;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
-import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.item.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -30,11 +21,9 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -53,13 +42,8 @@ public abstract class LivingEntityMixin {
     @Final
     private Map<StatusEffect, StatusEffectInstance> activeStatusEffects;
 
-    @Unique
-    private final Set<StatusEffect> immunity$protectedEffects = new HashSet<>();
-
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
-
-
 
     @Inject(method = "tickStatusEffects", at = @At("HEAD"))
     private void onTickStatusEffects(CallbackInfo ci) {
@@ -73,10 +57,24 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "removeStatusEffect", at = @At("HEAD"), cancellable = true)
-    private void titanfabric$removeStatusEffect(StatusEffect type, CallbackInfoReturnable<Boolean> cir) {
-        if (type == TitanFabricStatusEffects.IMMUNITY) {
-            immunity$protectedEffects.clear();
+    @Inject(method = "damage", at = @At("HEAD"))
+    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if(source != null && source.getAttacker() != null && !source.isProjectile()) {
+            Entity attacker = source.getAttacker();
+            LivingEntity self = (LivingEntity) (Object) this;
+            if (!(attacker instanceof LivingEntity attackingEntity)) return;
+
+            if (self.isBlocking() && self.getActiveItem().getItem() == TitanFabricItems.NETHERITE_SHIELD) {
+                Vec3d vec1 = attacker.getPos().subtract(self.getPos()).normalize();
+                Vec3d vec2 = self.getRotationVec(1.0F).normalize();
+
+                double d = vec2.dotProduct(vec1);
+
+                if (d > 0.5) {
+                    attackingEntity.addVelocity(vec1.x , 0.5, vec1.z);
+                    attackingEntity.velocityDirty = true;
+                }
+            }
         }
     }
 
@@ -249,36 +247,16 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    /*@Inject(method = "applyEnchantmentsToDamage", at = @At("HEAD"), cancellable = true)
-    protected void applyEnchantmentsToDamage(DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
-
-        if (source.isUnblockable()) {
-        } else {
-            if (((LivingEntity) (Object) this).hasStatusEffect(StatusEffects.RESISTANCE) && source != DamageSource.OUT_OF_WORLD) {
-                float i = (((LivingEntity) (Object) this).getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 2.5F;//5
-                float j = 25 - i; //20 | 10 | 30 || 22.5
-                float f = amount * j; //2.11 * 20 = 42,2 | 2.11 * 10 = 21.1 | 2.11 * 30 = 63,3 | 2.11 * 22.5 =
-                float g = amount; //2.11
-                amount = Math.max(f / 25.0F, 0.0F); //1,68 | 0,844
-                float h = (g - amount); //2.11 - 1,68 =
-
-                if (h > 0.0F && h < 3.4028235E37F) {
-                    if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity) {
-                        (((ServerPlayerEntity) (Object) this)).increaseStat(Stats.DAMAGE_RESISTED, Math.round(h * 10.0F));
-                    } else if (source.getAttacker() instanceof ServerPlayerEntity) {
-                        ((ServerPlayerEntity)source.getAttacker()).increaseStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(h * 10.0F));
-                    }
-                }
-            }
-            if (amount <= 0.0F) {
-                cir.setReturnValue(0.0F);
-            } else {
-                int i = EnchantmentHelper.getProtectionAmount(((LivingEntity) (Object) this).getArmorItems(), source);
-                if (i > 0) {
-                    amount = DamageUtil.getInflictedDamage(amount, (float)i);
-                }
-                cir.setReturnValue(amount);
-            }
+    @ModifyVariable(method = "applyEnchantmentsToDamage", at = @At(value = "STORE", ordinal = 0), index = 2, argsOnly = true)
+    private float applyEnchantmentsToDamage(float amount, DamageSource source, float originalAmount) {
+        LivingEntity self = (LivingEntity)(Object)this;
+        if (self.hasStatusEffect(StatusEffects.RESISTANCE) && source != DamageSource.OUT_OF_WORLD && !source.isUnblockable()) {
+            StatusEffectInstance status = self.getStatusEffect(StatusEffects.RESISTANCE);
+            int i = (status.getAmplifier() + 1) * 10;
+            int j = 100 - i;
+            float f = originalAmount * (float)j / 100.0F;
+            amount = Math.max(f, 0.0F);
         }
-    }*/
+        return amount;
+    }
 }

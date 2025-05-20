@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -16,6 +17,7 @@ import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.effect.TitanFabricStatusEffects;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,12 +35,34 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler>
     public AbstractInventoryScreenMixin(T handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
     }
+
+    @Inject(method = "render", at = @At("TAIL"))
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        renderImmunity(matrices);
+    }
+
+    @Unique
+    private void renderImmunity(MatrixStack matrices) {
+        if (client != null && client.player != null && client.player.getStatusEffects().size() > 1) {
+            UUID uuid = client.player.getUuid();
+            StatusEffectInstance immunityInstance = client.player.getStatusEffect(TitanFabricStatusEffects.IMMUNITY);
+            StatusEffect blocked = ImmunityEffect.getBlockedEffects(uuid);
+
+            if (immunityInstance != null && blocked != null) {
+                String blockedName = blocked.getName().getString();
+                int width = textRenderer.getWidth(blockedName);
+                int x = this.x + (this.backgroundWidth / 2) - (width / 2);
+                int y = this.y - 50;
+                textRenderer.draw(matrices, blockedName, x, y, 0xFF5555);
+            }
+        }
+    }
+
     @Inject(
             method = "drawStatusEffectDescriptions",
             at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lnet/minecraft/client/gui/screen/ingame/AbstractInventoryScreen;getStatusEffectDescription(Lnet/minecraft/entity/effect/StatusEffectInstance;)Lnet/minecraft/text/Text;",
-                    shift = At.Shift.AFTER
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/screen/ingame/AbstractInventoryScreen;getStatusEffectDescription(Lnet/minecraft/entity/effect/StatusEffectInstance;)Lnet/minecraft/text/Text;"
             )
     )
     private void drawStatusEffectDescriptions(MatrixStack matrices, int x, int height, Iterable<StatusEffectInstance> statusEffects, CallbackInfo ci) {
@@ -50,11 +74,10 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler>
 
                 if (effect == TitanFabricStatusEffects.IMMUNITY) {
                     UUID uuid = client.player.getUuid();
-                    Set<StatusEffect> blocked = ImmunityEffect.getBlockedEffects(uuid);
-                    if (blocked != null && !blocked.isEmpty()) {
-                        List<String> lines = blocked.stream()
-                                .map(e -> e.getName().getString())
-                                .toList();
+                    StatusEffect blocked = ImmunityEffect.getBlockedEffects(uuid);
+
+                    if (blocked != null) {
+                        String blockedName = blocked.getName().getString();
 
                         int baseTextX = x + 10 + 18;
                         int effectNameWidth = textRenderer.getWidth(effect.getName());
@@ -66,11 +89,7 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler>
                         matrices.translate(textX, textY, 0);
                         matrices.scale(scale, scale, 1f);
 
-                        int lineHeight = 9;
-                        for (int i = 0; i < lines.size(); i++) {
-                            String line = lines.get(i);
-                            textRenderer.draw(matrices, line, 0, i * lineHeight, 0xFF5555);
-                        }
+                        textRenderer.draw(matrices, blockedName, 0, 0, 0xFF5555);
 
                         matrices.pop();
                     }

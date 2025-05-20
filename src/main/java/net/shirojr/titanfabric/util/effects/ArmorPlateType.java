@@ -7,13 +7,13 @@ public enum ArmorPlateType {
     NETHERITE("netherite_armor_plating"),
     LEGEND("legend_armor_plating");
 
-    private final String key;
+    private final String id;
 
     ArmorPlateType(String id) {
-        this.key = id;
+        this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getId() {
+        return id;
     }
 }

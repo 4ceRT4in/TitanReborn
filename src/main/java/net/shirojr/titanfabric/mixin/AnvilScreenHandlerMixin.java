@@ -113,6 +113,5 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     private int calculateXp(@Nullable BlockState state, int originalXp) {
         if (state == null || !state.isOf(TitanFabricBlocks.NETHERITE_ANVIL)) return originalXp;
         return Math.max(1, originalXp / 2);
-
     }
 }

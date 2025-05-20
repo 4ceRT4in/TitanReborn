@@ -17,7 +17,7 @@ import static net.minecraft.client.gui.hud.InGameHud.HeartType.NORMAL;
 public abstract class HeartTypeMixin {
 
     @Inject(method = "getU", at = @At("HEAD"), cancellable = true)
-    private void onGetU(boolean halfHeart, boolean blinking, CallbackInfoReturnable<Integer> cir) {
+    private void getU(boolean halfHeart, boolean blinking, CallbackInfoReturnable<Integer> cir) {
         InGameHud.HeartType self = (InGameHud.HeartType)(Object)this;
         int i;
         if (self == CONTAINER) {

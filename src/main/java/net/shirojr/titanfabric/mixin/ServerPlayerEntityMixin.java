@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -21,6 +22,12 @@ public abstract class ServerPlayerEntityMixin {
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void titanfabric$onDeath(DamageSource source, CallbackInfo ci) {
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-        ImmunityEffect.resetImmunity(player, true);
+        ImmunityEffect.resetImmunity(player);
+    }
+
+    @Inject(method = "copyFrom", at = @At("TAIL"))
+    private void titanfabric$copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ImmunityEffect.resetImmunity(player);
     }
 }
