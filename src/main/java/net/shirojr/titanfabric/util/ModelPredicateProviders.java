@@ -8,25 +8,24 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
-import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
 import static net.shirojr.titanfabric.util.effects.WeaponEffectType.ADDITIONAL_EFFECT;
 import static net.shirojr.titanfabric.util.effects.WeaponEffectType.INNATE_EFFECT;
 
+@SuppressWarnings("SameParameterValue")
 @Environment(EnvType.CLIENT)
 public class ModelPredicateProviders {
 
@@ -71,12 +70,10 @@ public class ModelPredicateProviders {
     private static void registerBasicInnateItemsProvider(Item item) {
         ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("effect"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
-                    if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(INNATE_EFFECT.getNbtKey()))
-                        return 0.0f;
-                    NbtCompound typeCompound = EffectHelper.getWeaponEffectDataCompound(itemStack).getCompound(INNATE_EFFECT.getNbtKey());
-                    WeaponEffect effect = WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY));
-                    if (effect == null) return 0.0f;
-                    return switch (effect) {
+                    Optional<WeaponEffectData> effectData = WeaponEffectData.get(itemStack, INNATE_EFFECT);
+                    if (effectData.isEmpty()) return 0;
+                    if (effectData.get().weaponEffect() == null) return 0.0f;
+                    return switch (effectData.get().weaponEffect()) {
                         case BLIND -> 0.1f;
                         case FIRE -> 0.2f;
                         case POISON -> 0.3f;
@@ -91,13 +88,13 @@ public class ModelPredicateProviders {
     }
 
     private static void registerBowProviders(Item item) {
-        registerBowPull(item, new Identifier("pull"));
-        registerBowPulling(item, new Identifier("pulling"));
+        registerBowPull(item, Identifier.ofVanilla("pull"));
+        registerBowPulling(item, Identifier.ofVanilla("pulling"));
     }
 
     private static void registerLegendBowProviders() {
         registerBowProviders(TitanFabricItems.LEGEND_BOW);
-        registerLegendBowVersionProvider(new Identifier("handle"));
+        registerLegendBowVersionProvider(Identifier.ofVanilla("handle"));
     }
 
     private static void registerLegendBowVersionProvider(Identifier identifier) {
@@ -108,11 +105,10 @@ public class ModelPredicateProviders {
                     if (clientPlayer.titanfabric$getSelectedArrowIndex().isEmpty()) return 0.0f;
                     ItemStack savedArrowItemStack = player.getInventory().getStack(clientPlayer.titanfabric$getSelectedArrowIndex().get());
                     if (!(savedArrowItemStack.getItem() instanceof TitanFabricArrowItem)) return 0.0f;
-                    NbtCompound typeCompound = EffectHelper.getWeaponEffectDataCompound(savedArrowItemStack)
-                            .getCompound(INNATE_EFFECT.getNbtKey());
-                    WeaponEffect effect = WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY));
-                    if (effect == null) return 0.0f;
-                    return switch (effect) {
+                    Optional<WeaponEffectData> effectData = WeaponEffectData.get(savedArrowItemStack, INNATE_EFFECT);
+                    if (effectData.isEmpty()) return 0.0f;
+                    if (effectData.get().weaponEffect() == null) return 0.0f;
+                    return switch (effectData.get().weaponEffect()) {
                         case BLIND -> 0.1f;
                         case POISON -> 0.3f;
                         case WEAK -> 0.4f;
@@ -128,14 +124,14 @@ public class ModelPredicateProviders {
     }
 
     private static void registerCrossBowCharge() {
-        ModelPredicateProviderRegistry.register(TitanFabricItems.TITAN_CROSSBOW, new Identifier("charged"),
+        ModelPredicateProviderRegistry.register(TitanFabricItems.TITAN_CROSSBOW, Identifier.ofVanilla("charged"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
-                    if (!itemStack.getOrCreateNbt().contains("Charged")) return 0;
-                    if (!itemStack.getOrCreateNbt().getBoolean("Charged")) return 0;
-                    if (!(itemStack.getItem() instanceof TitanCrossBowItem)) return 0;
-                    List<ItemStack> loadedProjectiles = TitanCrossBowItem.getProjectiles(itemStack);
-                    if (loadedProjectiles.size() < 1) return 0;
-                    ItemStack firstProjectileStack = loadedProjectiles.get(0);
+                    boolean charged = Optional.ofNullable(itemStack.get(TitanFabricDataComponents.CHARGED)).orElse(false);
+                    if (!charged) return 0.0f;
+                    if (!(itemStack.getItem() instanceof TitanCrossBowItem)) return 0.0f;
+                    List<ItemStack> loadedProjectiles = TitanCrossBowItem.getLoadedProjectiles(itemStack);
+                    if (loadedProjectiles.isEmpty()) return 0;
+                    ItemStack firstProjectileStack = loadedProjectiles.getFirst();
                     if (firstProjectileStack.isOf(Items.SPECTRAL_ARROW)) return 0.1f;
                     if (firstProjectileStack.getItem() instanceof PotionItem) return 0.2f;
                     return 1.0f;
@@ -145,12 +141,10 @@ public class ModelPredicateProviders {
     private static void registerEffectProvider(Item item, Identifier identifier) {
         if (item == null) return;
         ModelPredicateProviderRegistry.register(item, identifier, (itemStack, clientWorld, livingEntity, seed) -> {
-            if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(ADDITIONAL_EFFECT.getNbtKey()))
-                return 0.0f;
-            NbtCompound typeCompound = EffectHelper.getWeaponEffectDataCompound(itemStack).getCompound(ADDITIONAL_EFFECT.getNbtKey());
-            WeaponEffect effect = WeaponEffect.getEffect(typeCompound.getString(EFFECT_NBT_KEY));
-            if (effect == null) return 0.0f;
-            return switch (effect) {
+            Optional<WeaponEffectData> effectData = WeaponEffectData.get(itemStack, ADDITIONAL_EFFECT);
+            if (effectData.isEmpty()) return 0.0f;
+            if (effectData.get().weaponEffect() == null) return 0.0f;
+            return switch (effectData.get().weaponEffect()) {
                 case BLIND -> 0.1f;
                 case FIRE -> 0.2f;
                 case POISON -> 0.3f;
@@ -159,15 +153,13 @@ public class ModelPredicateProviders {
             };
         });
     }
+
     private static void registerColorItemProvider(Item item) {
-        for (String colors : TitanFabricDyeProviders.COLOR_KEYS) {
-            ModelPredicateProviderRegistry.register(item, new Identifier(colors),
-                    (stack, world, entity, seed) -> stack.hasNbt() && Objects.requireNonNull(stack.getNbt()).getBoolean(colors) ? 1.0F : 0.0F);
-        }
+        //TODO: add color provider impl, mby with interface too?
     }
 
     private static void registerBundleItemProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla() new Identifier("filled"),
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("filled"),
                 (stack, world, entity, seed) -> PotionBundleItem.getAmountFilled(stack));
     }
 
@@ -182,7 +174,7 @@ public class ModelPredicateProviders {
         if (item == null) return;
         ModelPredicateProviderRegistry.register(item, identifier, (stack, world, entity, seed) -> {
             if (stack == null || entity == null || entity.getActiveItem() != stack) return 0.0f;
-            float maxUseTime = stack.getMaxUseTime();
+            float maxUseTime = stack.getMaxUseTime(entity);
             float leftUseTime = entity.getItemUseTimeLeft();
             return (maxUseTime - leftUseTime) / 20.0f;
             //return 0.65f;
@@ -201,14 +193,14 @@ public class ModelPredicateProviders {
 
     private static void registerBowArrowCount(Item item) {
         if (item == null) return;
-        ModelPredicateProviderRegistry.register(item, new Identifier("arrows"), (stack, world, entity, seed) -> {
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("arrows"), (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
             return MultiBowHelper.getFullArrowCount(stack) * 0.1f;
         });
     }
 
     private static void registerShieldBlockingProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, new Identifier("blocking"), (stack, world, entity, seed) -> {
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("blocking"), (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
             return entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f;
         });

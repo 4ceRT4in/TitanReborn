@@ -2,13 +2,12 @@ package net.shirojr.titanfabric.init;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.component.ComponentType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.util.TitanFabricCodecs;
 import net.shirojr.titanfabric.util.BackPackContent;
+import net.shirojr.titanfabric.util.TitanFabricCodecs;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.recipes.PotionBundleContent;
