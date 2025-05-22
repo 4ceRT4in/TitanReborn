@@ -11,8 +11,8 @@ import net.shirojr.titanfabric.recipe.builder.WeaponEffectRecipeJsonBuilder;
 
 import java.util.concurrent.CompletableFuture;
 
-public class TitanRebornRecipeProvider extends FabricRecipeProvider {
-    public TitanRebornRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+public class TitanFabricRecipeProvider extends FabricRecipeProvider {
+    public TitanFabricRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 

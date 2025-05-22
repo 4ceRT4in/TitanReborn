@@ -3,16 +3,13 @@ package net.shirojr.titanfabric.util;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.util.collection.DefaultedList;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -57,6 +54,7 @@ public record BackPackContent(List<ItemStack> stacks, BackPackItem.Type type) im
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof BackPackContent component)) return false;
+        if (!component.type.equals(this.type)) return false;
         for (int i = 0; i < component.size(); i++) {
             ItemStack left = this.stacks.get(i);
             ItemStack right = component.stacks.get(i);

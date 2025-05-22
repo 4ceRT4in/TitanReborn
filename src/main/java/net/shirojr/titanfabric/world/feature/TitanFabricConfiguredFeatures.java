@@ -1,10 +1,12 @@
 package net.shirojr.titanfabric.world.feature;
 
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.registry.Registerable;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.gen.feature.*;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
-import net.shirojr.titanfabric.util.LoggerUtil;
 
 import java.util.List;
 
@@ -41,7 +43,23 @@ public class TitanFabricConfiguredFeatures {
     public static final RegistryEntry<ConfiguredFeature<OreFeatureConfig, ?>> LEGEND_ORE_BURIED =
             ConfiguredFeatures.register("legend_ore_buried", Feature.ORE, new OreFeatureConfig(OVERWORLD_LEGEND_ORES, 8, 1.0f));
 
-    public static void registerConfiguredFeatures() {
-        LoggerUtil.devLogger("Registering " + TitanFabric.MOD_ID + " ConfiguredFeatures");
+
+    public static void bootstrap(Registerable<ConfiguredFeature<?, ?>> context) {
+
+    }
+
+    private static RegistryKey<ConfiguredFeature<?, ?>> getKey(String name) {
+        return RegistryKey.of(RegistryKeys.CONFIGURED_FEATURE, TitanFabric.getId(name));
+    }
+
+    private static <FC extends FeatureConfig, F extends Feature<FC>> void register(Registerable<ConfiguredFeature<?, ?>> context,
+                                                                                   RegistryKey<ConfiguredFeature<?, ?>> key,
+                                                                                   F feature, FC configuration) {
+        context.register(key, new ConfiguredFeature<>(feature, configuration));
+    }
+
+
+    public static void initialize() {
+        // static init
     }
 }

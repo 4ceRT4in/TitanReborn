@@ -25,9 +25,10 @@ import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
-import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.BackPackContent;
+import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.recipes.PotionBundleContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +96,7 @@ public interface TitanFabricItems {
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings().fireproof()));
 
     TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1).maxDamage(-1).component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)));
-    LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem());
+    LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem(new Item.Settings().maxCount(1).maxDamage(-1)));
     MultiBowItem MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(
             new Item.Settings().maxCount(1).maxDamage(500), 1, 10));
     MultiBowItem MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(
@@ -145,7 +146,7 @@ public interface TitanFabricItems {
                             .build())));
 
     PotionBundleItem POTION_BUNDLE = registerItem("potion_bundle",
-            new PotionBundleItem(new Item.Settings().maxCount(1)));
+            new PotionBundleItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.POTION_BUNDLE_CONTENT, PotionBundleContent.DEFAULT)));
 
     BackPackItem BACKPACK_SMALL = registerItem("backpack_small",
             new BackPackItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.DEFAULT),

@@ -64,12 +64,12 @@ public class ModelPredicateProviders {
     }
 
     private static void registerWeaponEffects(Item item) {
-        registerEffectProvider(item, new Identifier("effect"));
-        registerStrengthProvider(item, new Identifier("strength"));
+        registerEffectProvider(item, Identifier.ofVanilla("effect"));
+        registerStrengthProvider(item, Identifier.ofVanilla("strength"));
     }
 
     private static void registerBasicInnateItemsProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, new Identifier("effect"),
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("effect"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!EffectHelper.getWeaponEffectDataCompound(itemStack).contains(INNATE_EFFECT.getNbtKey()))
                         return 0.0f;
@@ -167,7 +167,7 @@ public class ModelPredicateProviders {
     }
 
     private static void registerBundleItemProvider(Item item) {
-        ModelPredicateProviderRegistry.register(item, new Identifier("filled"),
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla() new Identifier("filled"),
                 (stack, world, entity, seed) -> PotionBundleItem.getAmountFilled(stack));
     }
 

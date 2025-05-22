@@ -11,6 +11,7 @@ import net.shirojr.titanfabric.util.TitanFabricCodecs;
 import net.shirojr.titanfabric.util.BackPackContent;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.recipes.PotionBundleContent;
 
 import java.util.HashSet;
 import java.util.function.Consumer;
@@ -42,6 +43,9 @@ public interface TitanFabricDataComponents {
 
     ComponentType<BackPackContent> BACKPACK_CONTENT = register("backpack_content",
             builder -> builder.codec(BackPackContent.CODEC).packetCodec(BackPackContent.PACKET_CODEC));
+
+    ComponentType<PotionBundleContent> POTION_BUNDLE_CONTENT = register("potion_bundle_content",
+            builder -> builder.codec(PotionBundleContent.CODEC).packetCodec(PotionBundleContent.PACKET_CODEC));
 
     @SuppressWarnings("SameParameterValue")
     private static <T> ComponentType<T> register(String name, Consumer<ComponentType.Builder<T>> componentTypeConsumer) {

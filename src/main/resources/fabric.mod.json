@@ -27,9 +27,6 @@
     ],
     "fabric-datagen": [
       "net.shirojr.titanfabric.TitanFabricDatagen"
-    ],
-    "emi": [
-      "net.shirojr.titanfabric.compat.emi.TitanRebornEmiPlugin"
     ]
   },
   "mixins": [

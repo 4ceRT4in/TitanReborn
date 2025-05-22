@@ -20,7 +20,6 @@ import java.util.Map;
 
 public class TitanFabricColorProviders {
     static {
-        create(TitanFabricItems.CUT_POTION);
         create(TitanFabricItems.TITAN_CROSSBOW);
     }
 

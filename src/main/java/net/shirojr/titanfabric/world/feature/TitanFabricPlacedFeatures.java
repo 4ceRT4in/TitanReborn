@@ -1,10 +1,16 @@
 package net.shirojr.titanfabric.world.feature;
 
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.registry.Registerable;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.gen.YOffset;
-import net.minecraft.world.gen.feature.PlacedFeature;
-import net.minecraft.world.gen.feature.PlacedFeatures;
+import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
+import net.minecraft.world.gen.placementmodifier.PlacementModifier;
+import net.shirojr.titanfabric.TitanFabric;
+
+import java.util.List;
 
 public class TitanFabricPlacedFeatures {
     public static final RegistryEntry<PlacedFeature> CITRIN_ORE_UPPER = PlacedFeatures.register("citrin_ore_upper",
@@ -37,5 +43,18 @@ public class TitanFabricPlacedFeatures {
             TitanFabricConfiguredFeatures.LEGEND_ORE_BURIED, TitanFabricOreFeatures.modifiersWithCount(2,
                     HeightRangePlacementModifier.trapezoid(YOffset.aboveBottom(-80), YOffset.fixed(0))));
 
-    
+
+    public static void bootstrap(Registerable<PlacedFeature> context) {
+        var configuredFeatures = context.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
+
+    }
+
+    private static RegistryKey<PlacedFeature> getKey(String name) {
+        return RegistryKey.of(RegistryKeys.PLACED_FEATURE, TitanFabric.getId(name));
+    }
+
+    private static void register(Registerable<PlacedFeature> context, RegistryKey<PlacedFeature> key,
+                                 RegistryEntry<ConfiguredFeature<?, ?>> configuredFeature, List<PlacementModifier> modifiers) {
+        context.register(key, new PlacedFeature(configuredFeature, List.copyOf(modifiers)));
+    }
 }
