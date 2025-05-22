@@ -88,8 +88,8 @@ public record PotionBundleContent(List<ItemStack> stacks) implements TooltipData
         return occupancy;
     }
 
-    public boolean hasSpace() {
-        return getAvailableSpace() > 0;
+    public boolean hasNoSpace() {
+        return getAvailableSpace() <= 0;
     }
 
     public int getAvailableSpace() {
@@ -103,7 +103,7 @@ public record PotionBundleContent(List<ItemStack> stacks) implements TooltipData
         bundleStack.set(TitanFabricDataComponents.POTION_BUNDLE_CONTENT, this);
     }
 
-    // ------------------- [ util ] -----------------------
+    // ------------------- [ util ] -------------------
 
     /**
      * Adds potion stack to potion bundle content and decrements original stack accordingly
@@ -114,12 +114,10 @@ public record PotionBundleContent(List<ItemStack> stacks) implements TooltipData
      */
     public int addToContent(ItemStack potionStack) {
         int addedAmount = 0;
-        if (potionStack.isEmpty() || !(potionStack.getItem() instanceof PotionItem)) {
+        if (potionStack.isEmpty() || !(potionStack.getItem() instanceof PotionItem) || hasNoSpace()) {
             return addedAmount;
         }
-        int currentOccupancy = this.nonEmptySlots().size();
-        int availableSpace = MAX_STORAGE - currentOccupancy;
-        addedAmount = Math.min(potionStack.getCount(), availableSpace);
+        addedAmount = Math.min(potionStack.getCount(), getAvailableSpace());
         if (addedAmount < 1) {
             return addedAmount;
         }

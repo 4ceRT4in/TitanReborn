@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class PotionBundleItem extends BundleItem {
-    private static final String POTION_ITEMS_KEY = "PotionItems";
     private static final int POTION_BAR_COLOR = MathHelper.packRgb(0.6f, 0.2f, 0.8f);
 
     public PotionBundleItem(Item.Settings settings) {
@@ -61,7 +60,7 @@ public class PotionBundleItem extends BundleItem {
             if (!(slotStack.getItem() instanceof PotionItem)) {
                 return false;
             }
-            if (!content.hasSpace()) {
+            if (content.hasNoSpace()) {
                 return false;
             }
             int added = content.addToContent(slot.takeStackRange(slotStack.getCount(), content.getAvailableSpace(), player));
@@ -89,7 +88,7 @@ public class PotionBundleItem extends BundleItem {
             if (!(otherStack.getItem() instanceof PotionItem)) {
                 return false;
             }
-            if (!content.hasSpace()) {
+            if (content.hasNoSpace()) {
                 return false;
             }
             int added = content.addToContent(otherStack);
@@ -111,6 +110,7 @@ public class PotionBundleItem extends BundleItem {
         content.dropContent(user);
         this.playDropContentsSound(user);
         user.incrementStat(Stats.USED.getOrCreateStat(this));
+        content.savePersistent(bundle);
         return TypedActionResult.success(bundle, world.isClient());
     }
 
