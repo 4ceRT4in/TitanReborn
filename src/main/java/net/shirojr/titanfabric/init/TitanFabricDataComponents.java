@@ -10,7 +10,7 @@ import net.shirojr.titanfabric.util.BackPackContent;
 import net.shirojr.titanfabric.util.TitanFabricCodecs;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
-import net.shirojr.titanfabric.util.recipes.PotionBundleContent;
+import net.shirojr.titanfabric.util.PotionBundleContent;
 
 import java.util.HashSet;
 import java.util.function.Consumer;

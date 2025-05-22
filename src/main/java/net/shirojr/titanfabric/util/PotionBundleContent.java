@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.util.recipes;
+package net.shirojr.titanfabric.util;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;

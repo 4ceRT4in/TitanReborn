@@ -3,52 +3,68 @@ package net.shirojr.titanfabric.util;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.util.collection.DefaultedList;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-public record BackPackContent(List<ItemStack> stacks, BackPackItem.Type type) implements TooltipData {
-    public static final BackPackContent DEFAULT = new BackPackContent(List.of(), BackPackItem.Type.SMALL);
-
+public record BackPackContent(SimpleInventory inventory, BackPackItem.Type type) implements TooltipData {
     public static final PacketCodec<RegistryByteBuf, BackPackContent> PACKET_CODEC = PacketCodec.tuple(
-            ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()), BackPackContent::stacks,
+            ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()), BackPackContent::getStacks,
             PacketCodecs.BYTE.xmap(index -> BackPackItem.Type.values()[index], backPackType -> (byte) backPackType.ordinal()), BackPackContent::type,
             BackPackContent::new
     );
 
+    public BackPackContent(List<ItemStack> stacks, BackPackItem.Type type) {
+        this(toInventory(stacks), type);
+    }
+
+    public static BackPackContent getDefault(BackPackItem.Type type) {
+        return new BackPackContent(List.of(), type);
+    }
+
     public static final Codec<BackPackContent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ItemStack.CODEC.listOf().fieldOf("stacks").forGetter(BackPackContent::stacks),
+            ItemStack.CODEC.listOf().fieldOf("stacks").forGetter(BackPackContent::getStacks),
             BackPackItem.Type.CODEC.fieldOf("type").forGetter(BackPackContent::type)
     ).apply(instance, BackPackContent::new));
 
     public ItemStack get(int index) {
-        return this.stacks.get(index);
+        return this.inventory.getStack(index);
+    }
+
+    public DefaultedList<ItemStack> getStacks() {
+        return this.inventory.getHeldStacks();
     }
 
     public Stream<ItemStack> stream() {
-        return this.stacks.stream().map(ItemStack::copy);
+        return this.inventory.getHeldStacks().stream().map(ItemStack::copy);
     }
 
-    public Iterable<ItemStack> iterate() {
-        return this.stacks;
+    public Iterator<ItemStack> iterate() {
+        return this.inventory.getHeldStacks().iterator();
     }
 
     public Iterable<ItemStack> iterateCopy() {
-        return Lists.transform(this.stacks, ItemStack::copy);
+        return Lists.transform(this.inventory.getHeldStacks(), ItemStack::copy);
     }
 
     public int size() {
-        return this.stacks.size();
+        return this.inventory.size();
     }
 
     public boolean isEmpty() {
-        return this.stacks.isEmpty();
+        return this.inventory.isEmpty();
     }
 
     public boolean equals(Object o) {
@@ -56,10 +72,39 @@ public record BackPackContent(List<ItemStack> stacks, BackPackItem.Type type) im
         if (!(o instanceof BackPackContent component)) return false;
         if (!component.type.equals(this.type)) return false;
         for (int i = 0; i < component.size(); i++) {
-            ItemStack left = this.stacks.get(i);
-            ItemStack right = component.stacks.get(i);
+            ItemStack left = this.getStacks().get(i);
+            ItemStack right = component.getStacks().get(i);
             if (!ItemStack.areEqual(left, right)) return false;
         }
         return true;
+    }
+
+    public void onOpen(PlayerEntity player) {
+
+    }
+
+    public static Optional<BackPackContent> get(ItemStack stack) {
+        return Optional.ofNullable(stack.get(TitanFabricDataComponents.BACKPACK_CONTENT));
+    }
+
+    public static BackPackContent getOrThrow(ItemStack stack) {
+        return get(stack).orElseThrow(() -> new NullPointerException("Backpack has no valid content data"));
+    }
+
+    public void savePersistent(ItemStack bundleStack) {
+        if (!bundleStack.contains(TitanFabricDataComponents.BACKPACK_CONTENT)) {
+            throw new NullPointerException("Bundle Stack has no Bundle Content data");
+        }
+        bundleStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, this);
+    }
+
+    // ------------------- [ util ] -------------------
+
+    private static SimpleInventory toInventory(List<ItemStack> stacks) {
+        SimpleInventory inventory = new SimpleInventory(stacks.size());
+        for (ItemStack stack : stacks) {
+            inventory.addStack(stack);
+        }
+        return inventory;
     }
 }

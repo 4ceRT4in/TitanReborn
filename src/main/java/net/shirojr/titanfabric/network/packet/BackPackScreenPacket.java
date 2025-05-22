@@ -17,6 +17,4 @@ public record BackPackScreenPacket(ItemStack backPackStack) implements CustomPay
     public Id<? extends CustomPayload> getId() {
         return IDENTIFIER;
     }
-
-
 }

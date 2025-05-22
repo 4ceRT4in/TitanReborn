@@ -2,56 +2,43 @@ package net.shirojr.titanfabric.screen.handler;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.util.BackPackContent;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BackPackItemScreenHandler extends ScreenHandler {
-    private final Inventory inventory;
     private final ItemStack backpackStack;
+    private final BackPackContent content;
 
     public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, BackPackScreenPacket packet) {
-        this(syncId, playerInventory, new SimpleInventory(packet.getSize()), type, buf.readItemStack());
+        this(syncId, playerInventory, packet.backPackStack());
     }
 
-    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BackPackItem.Type backPackType, ItemStack backpackStack) {
-        super(backPackType == BackPackItem.Type.SMALL ? TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER
-                : backPackType == BackPackItem.Type.MEDIUM ? TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER
-                : TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
-        checkSize(inventory, backPackType.getSize());
-
-        this.inventory = inventory;
-        this.backPackType = backPackType;
+    public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, ItemStack backpackStack) {
+        super(TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, syncId);
         this.backpackStack = backpackStack;
+        this.content = BackPackContent.getOrThrow(this.backpackStack);
+        this.content.onOpen(playerInventory.player);
 
-        inventory.onOpen(playerInventory.player);
-
-        Point location;
-        switch (backPackType) {
-            case MEDIUM -> location = new Point(35, 22);
-            case BIG -> location = new Point(35, 18);
-            default -> location = new Point(35, 34);
-        }
-        addStorageSlots(backPackType, location);
+        Point location = switch (content.type()) {
+            case MEDIUM -> new Point(35, 22);
+            case BIG -> new Point(35, 18);
+            default -> new Point(35, 34);
+        };
+        addStorageSlots(content, location);
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
     }
 
     public BackPackItem.Type getBackPackItemType() {
-        return this.backPackType;
+        return this.content.type();
     }
 
     @Override
@@ -62,17 +49,12 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     @Override
     public void onClosed(PlayerEntity player) {
         super.onClosed(player);
-        List<ItemStack> storedStacks = new ArrayList<>();
-        for (int i = 0; i < inventory.size(); i++) {
-            storedStacks.add(i, inventory.getStack(i));
-        }
-        BackPackContent content = new BackPackContent(storedStacks, backPackType);
-        backpackStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, content);
+        content.savePersistent(this.backpackStack);
     }
 
-    private void addStorageSlots(BackPackItem.Type type, Point pos) {
+    private void addStorageSlots(BackPackContent content, Point pos) {
         int columns = 6, slotSize = 18;
-        int rows = (int) (double) (type.getSize() / columns);
+        int rows = (int) (double) (content.type().getSize() / columns);
         Point slotPos = new Point(pos);
 
         int slotIndex = 0;
@@ -81,7 +63,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
                 slotPos.y = pos.y + (slotSize * row);
                 slotPos.x = pos.x + (slotSize * column);
 
-                this.addSlot(new Slot(this.inventory, slotIndex, slotPos.x, slotPos.y) {
+                this.addSlot(new Slot(this.content.inventory(), slotIndex, slotPos.x, slotPos.y) {
                     @Override
                     public boolean canInsert(ItemStack stack) {
                         if (stack.getItem() instanceof BackPackItem) {
@@ -133,7 +115,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
         if (slot.hasStack()) {
             ItemStack toInsert = slot.getStack();
             itemStack = toInsert.copy();
-            if (index < backPackType.getSize()) {
+            if (index < this.content.size()) {
                 if (!this.insertItem(toInsert, 0, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }

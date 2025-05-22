@@ -26,9 +26,9 @@ import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.BackPackContent;
+import net.shirojr.titanfabric.util.PotionBundleContent;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.recipes.PotionBundleContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,20 +145,17 @@ public interface TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
 
-    PotionBundleItem POTION_BUNDLE = registerItem("potion_bundle",
-            new PotionBundleItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.POTION_BUNDLE_CONTENT, PotionBundleContent.DEFAULT)));
+    PotionBundleItem POTION_BUNDLE = registerItem("potion_bundle", new PotionBundleItem(new Item.Settings().maxCount(1)
+            .component(TitanFabricDataComponents.POTION_BUNDLE_CONTENT, PotionBundleContent.DEFAULT)));
 
-    BackPackItem BACKPACK_SMALL = registerItem("backpack_small",
-            new BackPackItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.DEFAULT),
-                    BackPackItem.Type.SMALL));
+    BackPackItem BACKPACK_SMALL = registerItem("backpack_small", new BackPackItem(new Item.Settings().maxCount(1)
+            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.SMALL))));
 
-    BackPackItem BACKPACK_MEDIUM = registerItem("backpack_medium",
-            new BackPackItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.DEFAULT),
-                    BackPackItem.Type.MEDIUM));
+    BackPackItem BACKPACK_MEDIUM = registerItem("backpack_medium", new BackPackItem(new Item.Settings().maxCount(1)
+            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.MEDIUM))));
 
-    BackPackItem BACKPACK_BIG = registerItem("backpack_big",
-            new BackPackItem(new Item.Settings().maxCount(1).component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.DEFAULT),
-                    BackPackItem.Type.BIG));
+    BackPackItem BACKPACK_BIG = registerItem("backpack_big", new BackPackItem(new Item.Settings().maxCount(1)
+            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.BIG))));
 
 
     private static <T extends Item> T registerItem(String name, T item, List<ItemStack> itemGroupStacks) {

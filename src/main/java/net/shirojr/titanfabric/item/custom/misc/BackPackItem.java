@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -17,24 +16,15 @@ import net.minecraft.util.Rarity;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 import net.shirojr.titanfabric.util.BackPackContent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 public class BackPackItem extends Item {
-    private final BackPackItem.Type backpackType;
-
-    public BackPackItem(Settings settings, Type backPackType) {
+    public BackPackItem(Settings settings) {
         super(settings);
-        this.backpackType = backPackType;
-    }
-
-    public BackPackItem.Type getBackpackType() {
-        return this.backpackType;
     }
 
     @Override
@@ -62,26 +52,19 @@ public class BackPackItem extends Item {
 
                 @Override
                 public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-                    Type backPackType = backPackItem.getBackpackType();
-                    Inventory inventory = getInventory(stack, backPackType);
-
-                    return new BackPackItemScreenHandler(syncId, playerInventory, inventory, backPackType, stack);
+                    return new BackPackItemScreenHandler(syncId, playerInventory, stack);
                 }
             });
         }
     }
 
-    @Nullable
+    public BackPackItem.Type getBackpackType(ItemStack itemStack) {
+        return BackPackContent.getOrThrow(itemStack).type();
+    }
+
+
     public static Inventory getInventory(ItemStack itemStack, Type type) {
-        BackPackContent content = itemStack.get(TitanFabricDataComponents.BACKPACK_CONTENT);
-        if (content == null) return null;
-
-        Inventory inventory = new SimpleInventory(content.size());
-        for (int i = 0; i < content.size(); i++) {
-            inventory.setStack(i, content.stacks().get(i));
-        }
-
-        return inventory;
+        return BackPackContent.getOrThrow(itemStack).inventory();
     }
 
     @Override
