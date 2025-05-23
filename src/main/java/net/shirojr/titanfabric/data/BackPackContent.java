@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.util;
+package net.shirojr.titanfabric.data;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;

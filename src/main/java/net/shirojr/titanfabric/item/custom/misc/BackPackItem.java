@@ -18,7 +18,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
-import net.shirojr.titanfabric.util.BackPackContent;
+import net.shirojr.titanfabric.data.BackPackContent;
 
 import java.util.Map;
 

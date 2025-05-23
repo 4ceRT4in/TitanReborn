@@ -43,8 +43,7 @@ public class PersistentWorldData extends PersistentState {
         }
         PersistentWorldData serverState = getServerState(entity.getWorld().getServer());
 
-        if (entity instanceof ServerPlayerEntity) {
-            ServerPlayerEntity player = (ServerPlayerEntity) entity;
+        if (entity instanceof ServerPlayerEntity player) {
             String teamName = getPlayerTeamName(player);
             if (teamName != null) {
                 // If player is in a team, return or create a PersistentPlayerData for the team

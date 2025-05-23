@@ -17,7 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.util.PotionBundleContent;
+import net.shirojr.titanfabric.data.PotionBundleContent;
 
 import java.util.List;
 import java.util.Optional;

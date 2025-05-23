@@ -66,7 +66,7 @@ public class TargetedInventoryCommand {
         user.openHandledScreen(new ExtendedScreenHandlerFactory<ExtendedInventoryOpenPacket>() {
             @Override
             public ExtendedInventoryOpenPacket getScreenOpeningData(ServerPlayerEntity player) {
-                return new ExtendedInventoryOpenPacket(description);
+                return new ExtendedInventoryOpenPacket(description, playerData.extraInventory);
             }
 
             @Override
@@ -77,10 +77,9 @@ public class TargetedInventoryCommand {
             @Override
             public ScreenHandler createMenu(int syncId, PlayerInventory userInventory, PlayerEntity player) {
                 Inventory extendedInventory = new SimpleInventory(8);
-                if (playerData != null) {
-                    extendedInventory = playerData.extraInventory;
-                }
-                return new ExtendedInventoryScreenHandler(syncId, userInventory, extendedInventory, description);
+                if (playerData == null) return null;
+                ExtendedInventoryOpenPacket packet = new ExtendedInventoryOpenPacket(List.of(), extendedInventory);
+                return new ExtendedInventoryScreenHandler(syncId, userInventory, packet);
             }
         });
     }

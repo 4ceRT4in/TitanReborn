@@ -9,7 +9,7 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
-import net.shirojr.titanfabric.util.BackPackContent;
+import net.shirojr.titanfabric.data.BackPackContent;
 
 import java.awt.*;
 

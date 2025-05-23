@@ -25,8 +25,8 @@ import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
-import net.shirojr.titanfabric.util.BackPackContent;
-import net.shirojr.titanfabric.util.PotionBundleContent;
+import net.shirojr.titanfabric.data.BackPackContent;
+import net.shirojr.titanfabric.data.PotionBundleContent;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 

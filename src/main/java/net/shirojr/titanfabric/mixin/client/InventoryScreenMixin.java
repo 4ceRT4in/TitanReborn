@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookProvider;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.text.Text;
@@ -44,12 +45,13 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 
     @Inject(method = "init", at = @At("TAIL"))
     private void titanfabric$addInventoryScreenElements(CallbackInfo ci) {
-        if (this.client == null) return;
+        if (this.client == null || this.client.player == null) return;
         int buttonX = recipeBook.findLeftEdge(this.width, this.backgroundWidth);
         var builder = ButtonWidget.builder(Text.literal(">>"), button -> {
             if (this.client.mouse != null) {
                 this.client.mouse.unlockCursor();
             }
+            ClientPlayerEntity player = this.client.player;
             new ExtendedInventoryOpenPacket(List.of()).sendPacket();
         });
         builder.dimensions(buttonX + 2, this.height / 2 - 106, 20, 20);

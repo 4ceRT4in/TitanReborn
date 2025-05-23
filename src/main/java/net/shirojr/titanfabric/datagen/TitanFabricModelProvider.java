@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.data;
+package net.shirojr.titanfabric.datagen;
 
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
