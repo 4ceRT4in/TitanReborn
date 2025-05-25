@@ -33,7 +33,7 @@ public class TitanFabricBlockLootTableProvider extends FabricBlockLootTableProvi
         addDrop(TitanFabricBlocks.EMBER_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.EMBER_ORE, TitanFabricItems.EMBER_SHARD, 4f, 5f));
         addDrop(TitanFabricBlocks.LEGEND_BLOCK);
         addDrop(TitanFabricBlocks.LEGEND_CRYSTAL, addDropWithSilkAndFortune(TitanFabricBlocks.LEGEND_CRYSTAL, 4f, 5f));
-        //addDrop(TitanFabricBlocks.NETHERITE_ANVIL, addSurvivesExplosionCondition());
+        addDrop(TitanFabricBlocks.NETHERITE_ANVIL);
     }
 
     public LootTable.Builder addDropWithSilkAndFortune(Block drop, Item item, float min, float max) {
