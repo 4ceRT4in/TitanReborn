@@ -52,7 +52,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
                 this.client.mouse.unlockCursor();
             }
             ClientPlayerEntity player = this.client.player;
-            new ExtendedInventoryOpenPacket(List.of()).sendPacket();
+            new ExtendedInventoryOpenPacket(player.getId()).sendPacket();
         });
         builder.dimensions(buttonX + 2, this.height / 2 - 106, 20, 20);
         builder.narrationSupplier(DEFAULT_NARRATION_SUPPLIER);

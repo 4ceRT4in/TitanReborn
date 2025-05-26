@@ -1,16 +1,13 @@
 package net.shirojr.titanfabric.event.custom;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.PacketByteBuf;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
-import net.shirojr.titanfabric.network.NetworkingIdentifiers;
+import net.shirojr.titanfabric.network.packet.ArmorLifePacket;
 import net.shirojr.titanfabric.network.packet.ArrowSelectionPacket;
 import net.shirojr.titanfabric.registry.KeyBindRegistry;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
@@ -65,11 +62,6 @@ public class TitanFabricClientTickEvents {
         armorList = currentArmorSet;
         if (!(differenceOld instanceof LegendArmorItem) && !(differenceNew instanceof LegendArmorItem)) return;
         if (differenceOld instanceof LegendArmorItem && differenceNew instanceof LegendArmorItem) return;
-
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeItemStack(differenceOld.getDefaultStack());
-        buf.writeItemStack(differenceNew.getDefaultStack());
-
-        ClientPlayNetworking.send(NetworkingIdentifiers.ARMOR_HANDLING_CHANNEL, buf);
+        new ArmorLifePacket(differenceOld.getDefaultStack(), differenceNew.getDefaultStack()).sendPacket();
     }
 }

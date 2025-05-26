@@ -23,7 +23,7 @@ public class TitanFabricColorProviders {
             if (!stack.getOrDefault(TitanFabricDataComponents.CHARGED, false)) return -1;
             ChargedProjectilesComponent loadedProjectiles = stack.get(DataComponentTypes.CHARGED_PROJECTILES);
             if (loadedProjectiles == null || loadedProjectiles.isEmpty()) return -1;
-            ItemStack firstProjectileStack = loadedProjectiles.getProjectiles().getFirst();
+            ItemStack firstProjectileStack = loadedProjectiles.getProjectiles().get(0);
             if (WeaponEffectData.get(firstProjectileStack, WeaponEffectType.INNATE_EFFECT).isPresent()) {
                 WeaponEffectData weaponEffectData = WeaponEffectData.get(firstProjectileStack, WeaponEffectType.INNATE_EFFECT).get();
                 if (weaponEffectData.weaponEffect().getColor() != -1) return weaponEffectData.weaponEffect().getColor();

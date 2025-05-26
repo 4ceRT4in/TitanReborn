@@ -2,14 +2,15 @@ package net.shirojr.titanfabric.persistent;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.shirojr.titanfabric.data.ExtendedInventory;
 
 public class PersistentPlayerData {
     public static final int INV_SIZE = 8;
-    public Inventory extraInventory = new SimpleInventory(INV_SIZE);
+    public ExtendedInventory extraInventory = new ExtendedInventory(INV_SIZE);
     public PersistentPlayerData() {
-        this.extraInventory = new SimpleInventory(INV_SIZE);
+        this.extraInventory = new ExtendedInventory(INV_SIZE);
     }
-    public PersistentPlayerData(Inventory inventory) {
+    public PersistentPlayerData(ExtendedInventory inventory) {
         this.extraInventory = inventory;
     }
 

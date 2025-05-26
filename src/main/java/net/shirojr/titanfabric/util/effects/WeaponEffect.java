@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
@@ -14,8 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static net.shirojr.titanfabric.util.effects.WeaponEffectData.EFFECT_NBT_KEY;
 
 public enum WeaponEffect {
     BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS, 0x23307C),
@@ -89,22 +86,6 @@ public enum WeaponEffect {
      */
     @Nullable
     public static WeaponEffect getEffect(String id) {
-        for (WeaponEffect entry : WeaponEffect.values()) {
-            if (entry.id.equals(id)) return entry;
-        }
-        return null;
-    }
-
-    /**
-     * Get WeaponEffect from an ItemStack
-     *
-     * @param nbtCompound nbt containing the Weapon Effect
-     * @return Weapon Effect
-     */
-    @Nullable
-    public static WeaponEffect getEffect(NbtCompound nbtCompound) {
-        if (EffectHelper.stackHasNoWeaponEffectData(nbtCompound)) return null;
-        String id = nbtCompound.getString(EFFECT_NBT_KEY);
         for (WeaponEffect entry : WeaponEffect.values()) {
             if (entry.id.equals(id)) return entry;
         }

@@ -7,8 +7,6 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -19,10 +17,7 @@ import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class TargetedInventoryCommand {
@@ -45,7 +40,7 @@ public class TargetedInventoryCommand {
         PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(target);
         if (playerData == null) return -1;
         if (target.getDisplayName() != null) {
-            openInventory(user, target.getDisplayName().getString(), target.getUuidAsString(), playerData);
+            openInventory(user, playerData);
         }
         return 1;
     }
@@ -55,18 +50,16 @@ public class TargetedInventoryCommand {
         if (!(user.getWorld() instanceof ServerWorld serverWorld)) return 0;
         PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(serverWorld, uuid);
         if (playerData == null) return -1;
-        openInventory(user, null, String.valueOf(uuid), playerData);
+        openInventory(user, playerData);
         return 1;
     }
 
-    private static void openInventory(PlayerEntity user, @Nullable String targetName, @Nullable String targetUuid, PersistentPlayerData playerData) {
-        List<String> description = new ArrayList<>();
-        if (targetName != null) description.add(targetName);
-        if (targetUuid != null) description.add(targetUuid);
+    private static void openInventory(PlayerEntity user, PersistentPlayerData playerData) {
+        ExtendedInventoryOpenPacket packet = new ExtendedInventoryOpenPacket(user.getId(), playerData.extraInventory);
         user.openHandledScreen(new ExtendedScreenHandlerFactory<ExtendedInventoryOpenPacket>() {
             @Override
             public ExtendedInventoryOpenPacket getScreenOpeningData(ServerPlayerEntity player) {
-                return new ExtendedInventoryOpenPacket(description, playerData.extraInventory);
+                return packet;
             }
 
             @Override
@@ -76,9 +69,6 @@ public class TargetedInventoryCommand {
 
             @Override
             public ScreenHandler createMenu(int syncId, PlayerInventory userInventory, PlayerEntity player) {
-                Inventory extendedInventory = new SimpleInventory(8);
-                if (playerData == null) return null;
-                ExtendedInventoryOpenPacket packet = new ExtendedInventoryOpenPacket(List.of(), extendedInventory);
                 return new ExtendedInventoryScreenHandler(syncId, userInventory, packet);
             }
         });

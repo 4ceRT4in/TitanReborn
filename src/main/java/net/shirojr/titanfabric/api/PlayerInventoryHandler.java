@@ -1,12 +1,11 @@
 package net.shirojr.titanfabric.api;
 
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ItemScatterer;
+import net.shirojr.titanfabric.data.ExtendedInventory;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
 
@@ -30,7 +29,7 @@ public class PlayerInventoryHandler {
      * @param player Player instance for the Inventory which should be dropped
      * @return Will be empty if the player doesn't have an inventory yet.
      */
-    public static Optional<Inventory> getExtendedInventory(ServerWorld world, ServerPlayerEntity player) {
+    public static Optional<ExtendedInventory> getExtendedInventory(ServerWorld world, ServerPlayerEntity player) {
         if (world.isClient()) return Optional.empty();
         PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(player);
         if (playerData == null) {
@@ -48,19 +47,10 @@ public class PlayerInventoryHandler {
      * @param serverPlayer target player for changing the inventory
      * @param inventory    inventory which the player will get.
      */
-    public static void setExtendedInventory(ServerPlayerEntity serverPlayer, Inventory inventory) {
-        ItemStack[] inventoryStacks = new ItemStack[PersistentPlayerData.INV_SIZE];
-        for (int i = 0; i < PersistentPlayerData.INV_SIZE; i++) {
-            ItemStack stack = ItemStack.EMPTY;
-            if (inventory.size() > i) {
-                stack = inventory.getStack(i);
-            }
-            inventoryStacks[i] = (stack);
-        }
-        Inventory newInventory = new SimpleInventory(inventoryStacks);
+    public static void setExtendedInventory(ServerPlayerEntity serverPlayer, ExtendedInventory inventory) {
         PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(serverPlayer);
         if (playerData == null) return;
-        playerData.extraInventory = newInventory;
+        playerData.extraInventory = inventory;
     }
 
 
@@ -73,10 +63,10 @@ public class PlayerInventoryHandler {
      * The return value can be ignored if this information is not needed.
      */
     public static boolean dropExtendedInventory(ServerPlayerEntity serverPlayer) {
-        Optional<Inventory> inventory = getExtendedInventory(serverPlayer.getServerWorld(), serverPlayer);
+        Optional<ExtendedInventory> inventory = getExtendedInventory(serverPlayer.getServerWorld(), serverPlayer);
         if (inventory.isEmpty()) return false;
-        ItemScatterer.spawn(serverPlayer.getWorld(), serverPlayer.getBlockPos(), inventory.get());
-        setExtendedInventory(serverPlayer, new SimpleInventory(PersistentPlayerData.INV_SIZE));
+        ItemScatterer.spawn(serverPlayer.getWorld(), serverPlayer.getBlockPos(), inventory.get().asInventory());
+        setExtendedInventory(serverPlayer, new ExtendedInventory(PersistentPlayerData.INV_SIZE));
         return true;
     }
 
@@ -87,7 +77,7 @@ public class PlayerInventoryHandler {
      * @param server   Minecraft server instance
      * @return Will be empty if the team doesn't have an inventory yet.
      */
-    public static Optional<Inventory> getTeamInventory(String teamName, MinecraftServer server) {
+    public static Optional<ExtendedInventory> getTeamInventory(String teamName, MinecraftServer server) {
         PersistentPlayerData teamData = PersistentWorldData.getPersistentPlayerDataForTeam(teamName, server);
         if (teamData == null) {
             return Optional.empty();
@@ -105,19 +95,10 @@ public class PlayerInventoryHandler {
      * @param inventory inventory which the team will get.
      * @param server    Minecraft server instance
      */
-    public static void setTeamInventory(String teamName, Inventory inventory, MinecraftServer server) {
-        ItemStack[] inventoryStacks = new ItemStack[PersistentPlayerData.INV_SIZE];
-        for (int i = 0; i < PersistentPlayerData.INV_SIZE; i++) {
-            ItemStack stack = ItemStack.EMPTY;
-            if (inventory.size() > i) {
-                stack = inventory.getStack(i);
-            }
-            inventoryStacks[i] = (stack);
-        }
-        Inventory newInventory = new SimpleInventory(inventoryStacks);
+    public static void setTeamInventory(String teamName, ExtendedInventory inventory, MinecraftServer server) {
         PersistentPlayerData teamData = PersistentWorldData.getPersistentPlayerDataForTeam(teamName, server);
         if (teamData == null) return;
-        teamData.extraInventory = newInventory;
+        teamData.extraInventory = inventory;
     }
 
     /**
@@ -130,14 +111,14 @@ public class PlayerInventoryHandler {
      * The return value can be ignored if this information is not needed.
      */
     public static boolean dropTeamInventory(String teamName, MinecraftServer server) {
-        Optional<Inventory> inventory = getTeamInventory(teamName, server);
+        Optional<ExtendedInventory> inventory = getTeamInventory(teamName, server);
         if (inventory.isEmpty()) return false;
         // Assuming you want to drop items at the position of each team member or a specific position
         // For simplicity, let's drop it at the first player in the team's location
         server.getPlayerManager().getPlayerList().stream()
                 .filter(p -> teamName.equals(p.getScoreboardTeam() != null ? p.getScoreboardTeam().getName() : null))
-                .findFirst().ifPresent(player -> ItemScatterer.spawn(player.getWorld(), player.getBlockPos(), inventory.get()));
-        setTeamInventory(teamName, new SimpleInventory(PersistentPlayerData.INV_SIZE), server);
+                .findFirst().ifPresent(player -> ItemScatterer.spawn(player.getWorld(), player.getBlockPos(), inventory.get().asInventory()));
+        setTeamInventory(teamName, new ExtendedInventory(PersistentPlayerData.INV_SIZE), server);
         return true;
     }
 

@@ -2,7 +2,7 @@ package net.shirojr.titanfabric.item.custom.misc;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FlintAndSteelItem;
 import net.minecraft.item.ItemStack;
@@ -35,26 +35,28 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
             world.setBlockState(blockPos, blockState.with(Properties.LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
             world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, blockPos);
             if (playerEntity != null) {
-                itemStack.damage(1, playerEntity, p -> p.sendToolBreakStatus(context.getHand()));
+                itemStack.damage(1, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
             }
             return ActionResult.success(world.isClient());
         }
 
         BlockPos blockPos2 = blockPos.offset(context.getSide());
-        if (AbstractFireBlock.canPlaceAt(world, blockPos2, context.getPlayerFacing())) {
+        if (AbstractFireBlock.canPlaceAt(world, blockPos2, context.getHorizontalPlayerFacing())) {
             world.playSound(playerEntity, blockPos2, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, (world.getRandom().nextFloat() * 0.4f + 0.8f));
             if (itemStack.getDamage() < itemStack.getMaxDamage() - 28) {
                 for (int x = -1; x <= 1; x++) {
                     for (int z = -1; z <= 1; z++) {
                         BlockPos firePos = blockPos2.add(x, 0, z);
-                        if (world.getBlockState(firePos).isAir() && AbstractFireBlock.canPlaceAt(world, firePos, context.getPlayerFacing())) {
+                        if (world.getBlockState(firePos).isAir() && AbstractFireBlock.canPlaceAt(world, firePos, context.getHorizontalPlayerFacing())) {
                             world.setBlockState(firePos, Blocks.SOUL_FIRE.getDefaultState(), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
                             world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, firePos);
                         }
                     }
                 }
-                playerEntity.getItemCooldownManager().set(itemStack.getItem(), 30);
-                itemStack.damage(9, playerEntity, p -> p.sendToolBreakStatus(context.getHand()));
+                if (playerEntity != null) {
+                    playerEntity.getItemCooldownManager().set(itemStack.getItem(), 30);
+                    itemStack.damage(1, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
+                }
             } else if (itemStack.getDamage() < itemStack.getMaxDamage() - 8) {
                 BlockPos[] firePositions = {
                         blockPos2,
@@ -69,13 +71,17 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
                         world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, firePos);
                     }
                 }
-                playerEntity.getItemCooldownManager().set(itemStack.getItem(), 20);
-                itemStack.damage(5, playerEntity, p -> p.sendToolBreakStatus(context.getHand()));
+                if (playerEntity != null) {
+                    playerEntity.getItemCooldownManager().set(itemStack.getItem(), 20);
+                    itemStack.damage(5, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
+                }
             } else {
                 world.setBlockState(blockPos2, Blocks.SOUL_FIRE.getDefaultState(), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
                 world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, blockPos2);
-                playerEntity.getItemCooldownManager().set(itemStack.getItem(), 10);
-                itemStack.damage(1, playerEntity, p -> p.sendToolBreakStatus(context.getHand()));
+                if (playerEntity != null) {
+                    playerEntity.getItemCooldownManager().set(itemStack.getItem(), 10);
+                    itemStack.damage(1, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
+                }
             }
 
             if (playerEntity instanceof ServerPlayerEntity) {

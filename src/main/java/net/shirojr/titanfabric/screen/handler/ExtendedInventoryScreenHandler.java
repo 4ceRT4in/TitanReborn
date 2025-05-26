@@ -34,7 +34,7 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         addInventorySlots(playerInventory);
         addHotbarSlots(playerInventory);
         addEquipmentSlots(playerInventory);
-        addExtendedInventorySlots(data.getInventory());
+        addExtendedInventorySlots(data.inventory().asInventory());
         this.baseInventory = playerInventory;
         this.data = data;
     }

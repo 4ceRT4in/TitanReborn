@@ -1,11 +1,7 @@
 package net.shirojr.titanfabric.persistent;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
@@ -14,6 +10,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.data.ExtendedInventory;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class PersistentWorldData extends PersistentState {
-    private Inventory worldInventory = new SimpleInventory(PersistentPlayerData.INV_SIZE);
+    private ExtendedInventory worldInventory = new ExtendedInventory(PersistentPlayerData.INV_SIZE);
     public HashMap<UUID, PersistentPlayerData> players = new HashMap<>();
     public HashMap<String, PersistentPlayerData> teamData = new HashMap<>();
     public static final String WORLD_ITEMS_NBT_KEY = TitanFabric.MOD_ID + ".worldInventory";
@@ -83,15 +80,17 @@ public class PersistentWorldData extends PersistentState {
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        addInventoryToNbt(worldInventory, nbt, WORLD_ITEMS_NBT_KEY);
+        NbtCompound worldNbt = new NbtCompound();
+        addInventoryToNbt(worldInventory, worldNbt);
+        nbt.put(WORLD_ITEMS_NBT_KEY, worldNbt);
         NbtCompound playersNbt = new NbtCompound();
         players.forEach((uuid, persistentPlayerData) ->
-                addInventoryToNbt(persistentPlayerData.extraInventory, playersNbt, uuid.toString()));
+                addInventoryToNbt(persistentPlayerData.extraInventory, playersNbt));
         nbt.put(PLAYER_ITEMS_NBT_KEY, playersNbt);
 
         NbtCompound teamsNbt = new NbtCompound();
         teamData.forEach((teamName, persistentPlayerData) ->
-                addInventoryToNbt(persistentPlayerData.extraInventory, teamsNbt, teamName));
+                addInventoryToNbt(persistentPlayerData.extraInventory, teamsNbt));
         nbt.put(TEAM_ITEMS_NBT_KEY, teamsNbt);
 
         return nbt;
@@ -101,20 +100,23 @@ public class PersistentWorldData extends PersistentState {
         PersistentWorldData worldData = new PersistentWorldData();
 
         NbtCompound worldInventoryCompound = nbt.getCompound(WORLD_ITEMS_NBT_KEY);
-        worldData.worldInventory = getInventoryFromNbt(worldInventoryCompound, lookup);
+        worldData.worldInventory = getInventoryFromNbt(worldInventoryCompound, lookup)
+                .orElse(new ExtendedInventory(PersistentPlayerData.INV_SIZE));
 
         NbtCompound playersNbt = nbt.getCompound(PLAYER_ITEMS_NBT_KEY);
         for (String playerUuid : playersNbt.getKeys()) {
             PersistentPlayerData playerData = new PersistentPlayerData();
             NbtCompound playerInventoryCompound = playersNbt.getCompound(playerUuid);
-            playerData.extraInventory = getInventoryFromNbt(playerInventoryCompound, lookup);
+            playerData.extraInventory = getInventoryFromNbt(playerInventoryCompound, lookup)
+                    .orElse(new ExtendedInventory(PersistentPlayerData.INV_SIZE));
             worldData.players.put(UUID.fromString(playerUuid), playerData);
         }
 
         NbtCompound teamsNbt = nbt.getCompound(TEAM_ITEMS_NBT_KEY);
         for (String teamName : teamsNbt.getKeys()) {
             NbtCompound teamInventoryCompound = teamsNbt.getCompound(teamName);
-            PersistentPlayerData teamData = new PersistentPlayerData(getInventoryFromNbt(teamInventoryCompound, lookup));
+            PersistentPlayerData teamData = new PersistentPlayerData(getInventoryFromNbt(teamInventoryCompound, lookup)
+                    .orElse(new ExtendedInventory(PersistentPlayerData.INV_SIZE)));
             worldData.teamData.put(teamName, teamData);
         }
 
@@ -128,26 +130,12 @@ public class PersistentWorldData extends PersistentState {
         return state;
     }
 
-    private static void addInventoryToNbt(Inventory inventory, NbtCompound nbt, String inventoryNbtKey) {
-        NbtCompound inventoryCompound = new NbtCompound();
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = inventory.getStack(i).copy();
-            Optional<NbtElement> dataResult = ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, stack).result();
-            if (dataResult.isEmpty()) continue;
-            inventoryCompound.put("slot:" + i, dataResult.get());
-        }
-        nbt.put(inventoryNbtKey, inventoryCompound);
+    private static void addInventoryToNbt(ExtendedInventory inventory, NbtCompound nbt) {
+        ExtendedInventory.CODEC.encodeStart(NbtOps.INSTANCE, inventory).result()
+                .ifPresent(nbtElement -> nbt.put("extended_inventory", nbtElement));
     }
 
-    private static Inventory getInventoryFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
-        Inventory inventory = new SimpleInventory(PersistentPlayerData.INV_SIZE);
-        for (int i = 0; i < inventory.size(); i++) {
-            NbtCompound stackCompound = nbt.getCompound("slot:" + i);
-            if (stackCompound.isEmpty()) continue;
-            Optional<ItemStack> stack = ItemStack.fromNbt(lookup, stackCompound);
-            if (stack.isEmpty()) continue;
-            inventory.setStack(i, stack.get());
-        }
-        return inventory;
+    private static Optional<ExtendedInventory> getInventoryFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup) {
+        return ExtendedInventory.CODEC.parse(NbtOps.INSTANCE, nbt).result();
     }
 }

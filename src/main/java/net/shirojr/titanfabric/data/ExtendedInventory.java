@@ -2,34 +2,52 @@ package net.shirojr.titanfabric.data;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-public record ExtendedInventory(LinkedHashSet<Slot> stacks) {
-    public static final PacketCodec<RegistryByteBuf, ExtendedInventory> PACKET_CODEC =
-            Slot.PACKET_CODEC.collect(PacketCodecs.toCollection(LinkedHashSet::new)).xmap(
-                    ExtendedInventory::new,
-                    extendedInventory -> new LinkedHashSet<>(extendedInventory.stacks)
-            );
-
-    public static final Codec<ExtendedInventory> CODEC = Codec.list(Slot.CODEC).xmap(
-            slots -> new ExtendedInventory(new LinkedHashSet<>(slots)),
-            extendedInventory -> new ArrayList<>(extendedInventory.stacks)
+public record ExtendedInventory(int size, LinkedHashSet<Slot> stacks) {
+    public static final PacketCodec<RegistryByteBuf, ExtendedInventory> PACKET_CODEC = PacketCodec.tuple(
+            PacketCodecs.VAR_INT, ExtendedInventory::size,
+            Slot.PACKET_CODEC.collect(PacketCodecs.toCollection(LinkedHashSet::new)), ExtendedInventory::stacks,
+            ExtendedInventory::new
     );
 
-    public ExtendedInventory(List<ItemStack> stacks) {
-        this(listToSet(stacks));
+
+    public static final Codec<ExtendedInventory> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.INT.fieldOf("size").forGetter(ExtendedInventory::size),
+                    Codec.list(Slot.CODEC).fieldOf("stacks").forGetter(inventory -> inventory.stacks.stream().toList()))
+            .apply(instance, (integer, slots) -> new ExtendedInventory(integer, slots.stream().map(slot -> slot.stack).toList())));
+
+    public ExtendedInventory(int size, List<ItemStack> stacks) {
+        this(size, listToSet(stacks));
     }
 
     public ExtendedInventory(SimpleInventory inventory) {
-        this(inventory.getHeldStacks());
+        this(inventory.size(), inventory.getHeldStacks());
+    }
+
+    public ExtendedInventory(int size) {
+        this(size, new LinkedHashSet<>(size));
+    }
+
+    public Inventory asInventory() {
+        SimpleInventory inventory = new SimpleInventory(this.stacks.size());
+        for (int i = 0; i < this.stacks.size(); i++) {
+            ItemStack stack = ItemStack.EMPTY;
+            for (Slot slot : this.stacks) {
+                if (slot.index != i) continue;
+                stack = slot.stack;
+            }
+            inventory.addStack(stack);
+        }
+        return inventory;
     }
 
     private static LinkedHashSet<Slot> listToSet(List<ItemStack> stacks) {
