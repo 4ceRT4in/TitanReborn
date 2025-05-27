@@ -13,6 +13,7 @@
     "CrossbowItemMixin",
     "EntityMixin",
     "HungerManagerMixin",
+    "InstantHealthOrDamageStatusEffectMixin",
     "ItemMixin",
     "ItemsMixin",
     "ItemStackMixin",
@@ -24,7 +25,6 @@
     "SoulFireBlockMixin",
     "SplashPotionItemMixin",
     "StatusEffectInstanceMixin",
-    "StatusEffectMixin",
     "StatusEffectsMixin"
   ],
   "injectors": {

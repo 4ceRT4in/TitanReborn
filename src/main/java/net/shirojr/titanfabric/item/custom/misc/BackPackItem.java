@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.item.custom.misc;
 
 import com.mojang.serialization.Codec;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,11 +13,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.data.BackPackContent;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
-import net.shirojr.titanfabric.data.BackPackContent;
-
-import java.util.Map;
 
 public class BackPackItem extends Item {
     public BackPackItem(Settings settings) {
@@ -76,8 +73,7 @@ public class BackPackItem extends Item {
         MEDIUM("medium", 12, Rarity.RARE, "textures/gui/backpack_medium.png"),
         BIG("big", 18, Rarity.EPIC, "textures/gui/backpack_big.png");
 
-        private static final Map<String, Type> TYPES = new Object2ObjectArrayMap<>();
-        public static final Codec<Type> CODEC = Codec.stringResolver(StringIdentifiable::asString, TYPES::get);
+        public static final Codec<Type> CODEC = Codec.BYTE.xmap(index -> Type.values()[index], type -> (byte) type.ordinal());
 
         private final String id;
         private final int size;
@@ -89,11 +85,6 @@ public class BackPackItem extends Item {
             this.size = size;
             this.rarity = rarity;
             this.screenTexture = TitanFabric.getId(screenTexture);
-            addType();
-        }
-
-        private void addType() {
-            TYPES.put(id, this);
         }
 
         public String getId() {
@@ -110,6 +101,13 @@ public class BackPackItem extends Item {
 
         public Identifier getScreenTexture() {
             return screenTexture;
+        }
+
+        public static Type get(String id) {
+            for (Type entry : Type.values()) {
+                if (entry.getId().equals(id)) return entry;
+            }
+            throw new IllegalArgumentException("Unknown Backpack type");
         }
 
         @Override

@@ -1,26 +1,24 @@
 package net.shirojr.titanfabric.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.InstantHealthOrDamageStatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
-@Mixin(StatusEffect.class)
-public class StatusEffectMixin {
-    @Redirect(method = "applyInstantEffect",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z")
-    )
-    private boolean test(LivingEntity instance, DamageSource source, float amount) {
+@Mixin(InstantHealthOrDamageStatusEffect.class)
+public class InstantHealthOrDamageStatusEffectMixin {
+    @WrapOperation(method = "applyInstantEffect", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
+    private boolean adjustDamage(LivingEntity instance, DamageSource source, float amount, Operation<Boolean> original) {
         float newAmount = amount;
 
         if (instance instanceof PlayerEntity player) {
@@ -40,6 +38,6 @@ public class StatusEffectMixin {
             }
         }
 
-        return instance.damage(source, newAmount);
+        return original.call(instance, source, newAmount);
     }
 }

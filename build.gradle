@@ -51,6 +51,11 @@ dependencies {
 	modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/titanfabric.accesswidener")
+}
+
+
 processResources {
 	inputs.property "version", project.version
 

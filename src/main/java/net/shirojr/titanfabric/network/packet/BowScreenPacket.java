@@ -13,7 +13,7 @@ import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 
 public record BowScreenPacket(ItemStack selectedStack) implements CustomPayload {
     public static final Id<BowScreenPacket> IDENTIFIER =
-            new Id<>(TitanFabric.getId("armor_life"));
+            new Id<>(TitanFabric.getId("bow_screen"));
 
     public static final PacketCodec<RegistryByteBuf, BowScreenPacket> CODEC = PacketCodec.tuple(
             ItemStack.PACKET_CODEC, BowScreenPacket::selectedStack,
