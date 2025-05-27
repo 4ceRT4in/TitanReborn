@@ -9,10 +9,10 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
-import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.entity.client.ArrowItemRenderer;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.network.TitanFabricS2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
@@ -31,9 +31,7 @@ public class TitanFabricClient implements ClientModInitializer {
         ModelPredicateProviders.register();
         TitanFabricS2CNetworking.initialize();
 
-        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, BackPackItemScreen::new);
-        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER, BackPackItemScreen::new);
-        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, BackPackItemScreen::new);
+        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, ExtendedInventoryScreen::new);
 
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());

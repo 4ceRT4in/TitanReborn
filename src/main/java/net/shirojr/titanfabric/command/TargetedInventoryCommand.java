@@ -13,6 +13,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.shirojr.titanfabric.data.ExtendedInventory;
 import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
 import net.shirojr.titanfabric.persistent.PersistentWorldData;
@@ -55,7 +56,12 @@ public class TargetedInventoryCommand {
     }
 
     private static void openInventory(PlayerEntity user, PersistentPlayerData playerData) {
-        ExtendedInventoryOpenPacket packet = new ExtendedInventoryOpenPacket(user.getId(), playerData.extraInventory);
+        if (!(user.getWorld() instanceof ServerWorld serverWorld)) {
+            throw new IllegalStateException("Open inventory command is not possible on client side");
+        }
+        ExtendedInventoryOpenPacket packet = new ExtendedInventoryOpenPacket(user.getId());
+        ExtendedInventory inventory = packet.getExtendedInventory(serverWorld);
+        if (inventory == null) return;
         user.openHandledScreen(new ExtendedScreenHandlerFactory<ExtendedInventoryOpenPacket>() {
             @Override
             public ExtendedInventoryOpenPacket getScreenOpeningData(ServerPlayerEntity player) {
@@ -69,7 +75,7 @@ public class TargetedInventoryCommand {
 
             @Override
             public ScreenHandler createMenu(int syncId, PlayerInventory userInventory, PlayerEntity player) {
-                return new ExtendedInventoryScreenHandler(syncId, userInventory, packet);
+                return new ExtendedInventoryScreenHandler(syncId, userInventory, inventory);
             }
         });
     }

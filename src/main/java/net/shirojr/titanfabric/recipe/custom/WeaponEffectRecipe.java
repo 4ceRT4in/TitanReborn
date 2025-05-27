@@ -59,7 +59,7 @@ public class WeaponEffectRecipe implements SmithingRecipe {
     @Override
     public ItemStack getResult(RegistryWrapper.WrapperLookup registriesLookup) {
         ItemStack resultStack = TitanFabricItems.LEGEND_SWORD.getDefaultStack();
-        WeaponEffect weaponEffect = TitanFabricItems.LEGEND_SWORD.supportedEffects().getFirst();
+        WeaponEffect weaponEffect = TitanFabricItems.LEGEND_SWORD.supportedEffects().get(0);
         HashSet<WeaponEffectData> weaponEffectData = new HashSet<>();
         weaponEffectData.add(new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, weaponEffect, 2));
         resultStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, weaponEffectData);

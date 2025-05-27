@@ -131,7 +131,7 @@ public class ModelPredicateProviders {
                     if (!(itemStack.getItem() instanceof TitanCrossBowItem)) return 0.0f;
                     List<ItemStack> loadedProjectiles = TitanCrossBowItem.getLoadedProjectiles(itemStack);
                     if (loadedProjectiles.isEmpty()) return 0;
-                    ItemStack firstProjectileStack = loadedProjectiles.getFirst();
+                    ItemStack firstProjectileStack = loadedProjectiles.get(0);
                     if (firstProjectileStack.isOf(Items.SPECTRAL_ARROW)) return 0.1f;
                     if (firstProjectileStack.getItem() instanceof PotionItem) return 0.2f;
                     return 1.0f;

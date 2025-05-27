@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.persistent;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtOps;
@@ -33,7 +34,7 @@ public class PersistentWorldData extends PersistentState {
     );
 
     @Nullable
-    public static PersistentPlayerData getPersistentPlayerData(LivingEntity entity) {
+    public static PersistentPlayerData getPersistentPlayerData(Entity entity) {
         if (entity.getWorld().getServer() == null) {
             LoggerUtil.devLogger("given LivingEntity doesn't supply a server", true, null);
             return null;

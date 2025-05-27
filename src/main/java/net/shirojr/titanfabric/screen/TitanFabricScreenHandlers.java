@@ -12,7 +12,7 @@ import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
 public class TitanFabricScreenHandlers {
-    public static ScreenHandlerType<BackPackItemScreenHandler> BACKPACK_ITEM_BIG_SCREEN_HANDLER =
+    public static ScreenHandlerType<BackPackItemScreenHandler> BACKPACK_ITEM_SCREEN_HANDLER =
             registerScreenHandler("backpack_item_big", new ExtendedScreenHandlerType<>(BackPackItemScreenHandler::new, BackPackScreenPacket.CODEC));
     public static ScreenHandlerType<ExtendedInventoryScreenHandler> EXTENDED_INVENTORY_SCREEN_HANDLER =
             registerScreenHandler("extended_inventory", new ExtendedScreenHandlerType<>(ExtendedInventoryScreenHandler::new, ExtendedInventoryOpenPacket.CODEC));

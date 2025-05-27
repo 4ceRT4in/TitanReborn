@@ -11,11 +11,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.shirojr.titanfabric.data.ExtendedInventory;
 import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
-import net.shirojr.titanfabric.persistent.PersistentWorldData;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class ExtendedInventoryScreenHandler extends ScreenHandler {
     public static final Identifier BLOCK_ATLAS_TEXTURE = Identifier.ofVanilla("textures/atlas/blocks.png");
@@ -27,16 +31,28 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     private final PlayerInventory baseInventory;
-    private final ExtendedInventoryOpenPacket data;
+    private final ExtendedInventory data;
 
-    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory playerInventory, ExtendedInventoryOpenPacket data) {
+    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable ExtendedInventory extendedInventory) {
         super(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, syncId);
         addInventorySlots(playerInventory);
         addHotbarSlots(playerInventory);
         addEquipmentSlots(playerInventory);
-        addExtendedInventorySlots(data.inventory().asInventory());
+        ExtendedInventory inventory = Optional.ofNullable(extendedInventory)
+                .orElse(new ExtendedInventory(PersistentPlayerData.INV_SIZE));
+        addExtendedInventorySlots(inventory.asInventory());
         this.baseInventory = playerInventory;
-        this.data = data;
+        this.data = extendedInventory;
+    }
+
+    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory playerInventory, ExtendedInventoryOpenPacket packet) {
+        this(syncId, playerInventory, getInventory(playerInventory.player, packet));
+    }
+
+    @Nullable
+    private static ExtendedInventory getInventory(PlayerEntity player, ExtendedInventoryOpenPacket packet) {
+        if (!(player.getWorld() instanceof ServerWorld serverWorld)) return null;
+        return packet.getExtendedInventory(serverWorld);
     }
 
     @Override

@@ -57,7 +57,7 @@ public class AdvancedAnvilBlock extends FallingBlock {
     }
 
     @Override
-    public BlockState rotate(BlockState state, BlockRotation rotation) {
+    protected BlockState rotate(BlockState state, BlockRotation rotation) {
         return state.with(FACING, rotation.rotate(state.get(FACING)));
     }
 

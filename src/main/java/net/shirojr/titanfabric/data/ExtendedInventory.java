@@ -8,6 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.shirojr.titanfabric.persistent.PersistentPlayerData;
+import net.shirojr.titanfabric.persistent.PersistentWorldData;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -58,6 +61,17 @@ public record ExtendedInventory(int size, LinkedHashSet<Slot> stacks) {
             slots.add(new Slot(i, entry));
         }
         return slots;
+    }
+
+    public void savePersistent(ServerPlayerEntity player) {
+        if (player == null || player.getServer() == null) return;
+        PersistentPlayerData persistentPlayerData = PersistentWorldData.getPersistentPlayerData(player);
+        if (persistentPlayerData == null) {
+            PersistentWorldData.getServerState(player.getServer()).players.put(player.getUuid(), new PersistentPlayerData());
+        }
+        if (persistentPlayerData != null) {
+            persistentPlayerData.extraInventory = this;
+        }
     }
 
     public record Slot(int index, ItemStack stack) {
