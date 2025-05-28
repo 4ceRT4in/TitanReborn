@@ -27,7 +27,7 @@ public class EntityRenderDispatcherMixin {
 
     @Redirect(method = "renderFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;", ordinal = 0))
     private Sprite getSprite0(SpriteIdentifier obj, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity) {
-        if (TitanFabricClient.soulFireEntities.contains(entity.getUuid())) {
+        if (TitanFabricClient.SOUL_FIRE_ENTITIES.contains(entity.getUuid())) {
             return TEXTURE_0.getSprite();
         }
         return obj.getSprite();
@@ -37,7 +37,7 @@ public class EntityRenderDispatcherMixin {
 
     @Redirect(method = "renderFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;", ordinal = 1))
     private Sprite getSprite1(SpriteIdentifier obj, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity) {
-        if (TitanFabricClient.soulFireEntities.contains(entity.getUuid())) {
+        if (TitanFabricClient.SOUL_FIRE_ENTITIES.contains(entity.getUuid())) {
             return TEXTURE_1.getSprite();
         }
         return obj.getSprite();

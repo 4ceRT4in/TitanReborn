@@ -1,18 +1,15 @@
 package net.shirojr.titanfabric.event.custom;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.shirojr.titanfabric.TitanFabricClient;
@@ -20,8 +17,6 @@ import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 import net.shirojr.titanfabric.registry.KeyBindRegistry;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
-import net.shirojr.titanfabric.util.effects.ArmorPlateType;
-import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -56,7 +51,7 @@ public class TitanFabricClientTickEvents {
         if (client.world != null) {
             client.world.getEntities().forEach(entity -> {
                 if (entity.isInLava()) {
-                    TitanFabricClient.soulFireEntities.remove(entity.getUuid());
+                    TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
                     return;
                 }
                 Box box = entity.getBoundingBox();
@@ -69,11 +64,11 @@ public class TitanFabricClientTickEvents {
                         for (int k = blockPos.getZ(); k <= blockPos2.getZ(); ++k) {
                             mutable.set(i, j, k);
                             if (client.world.getBlockState(mutable).getBlock() == Blocks.SOUL_FIRE) {
-                                TitanFabricClient.soulFireEntities.add(entity.getUuid());
+                                TitanFabricClient.SOUL_FIRE_ENTITIES.add(entity.getUuid());
                                 return;
                             }
                             if (client.world.getBlockState(mutable).getBlock() == Blocks.FIRE) {
-                                TitanFabricClient.soulFireEntities.remove(entity.getUuid());
+                                TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
                                 return;
                             }
                         }

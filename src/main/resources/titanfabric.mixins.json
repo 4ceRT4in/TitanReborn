@@ -17,6 +17,7 @@
     "CrossbowItemMixin",
     "DamageEnchantmentMixin",
     "EnchantmentHelperMixin",
+    "FireworkRocketItemMixin",
     "HungerManagerMixin",
     "ItemMixin",
     "ItemsMixin",

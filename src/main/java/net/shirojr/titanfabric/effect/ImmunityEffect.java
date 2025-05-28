@@ -62,7 +62,7 @@ public class ImmunityEffect extends StatusEffect {
     @Override
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         UUID uuid = entity.getUuid();
-        if (!entity.hasStatusEffect(TitanFabricStatusEffects.IMMUNITY)) {
+        if (!entity.hasStatusEffect(TitanFabricStatusEffects.IMMUNITY)) { // We HAVE to do this workaround and resetting the Immunity manually because when the duration is extended, it actually removes and re-applies the effect in the vanilla logic
             entityBlockedEffect.remove(uuid);
             //LoggerUtil.devLogger("Immunity expired for " + uuid + ". Cleared immunity effect");
         }

@@ -4,6 +4,9 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +16,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.items.Anvilable;
@@ -46,6 +50,13 @@ public class ItemMixin {
                     break;
                 }
             }
+        }
+    }
+
+    @Inject(method = "finishUsing", at = @At("HEAD"))
+    public void finishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
+        if(!world.isClient && stack.getItem() == Items.MILK_BUCKET) {
+            ImmunityEffect.resetImmunity(user);
         }
     }
 

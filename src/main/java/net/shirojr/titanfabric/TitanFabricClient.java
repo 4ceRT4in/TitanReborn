@@ -4,13 +4,9 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.shirojr.titanfabric.block.TitanFabricBlocks;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
 import net.shirojr.titanfabric.entity.TitanFabricEntities;
@@ -22,21 +18,23 @@ import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
 import net.shirojr.titanfabric.screen.custom.DiamondFurnaceScreen;
 import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
+import net.shirojr.titanfabric.util.ImageAnimation;
 import net.shirojr.titanfabric.util.ModelPredicateProviders;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Environment(EnvType.CLIENT)
 public class TitanFabricClient implements ClientModInitializer {
 
-    public static Set<UUID> soulFireEntities = new HashSet<UUID>();
+    public static Set<UUID> SOUL_FIRE_ENTITIES = new HashSet<UUID>();
+    public static List<ImageAnimation> ANIMATIONS;
+
 
     @Override
     public void onInitializeClient() {
-        soulFireEntities.clear();
+        SOUL_FIRE_ENTITIES.clear();
+        ANIMATIONS = new ArrayList<>();
         TitanFabricEvents.registerClientEvents();
         TitanFabricKeyBinds.register();
         TitanFabricColorProviders.register();

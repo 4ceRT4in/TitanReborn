@@ -19,6 +19,7 @@ import net.shirojr.titanfabric.particles.GasParticleEffect;
 import net.shirojr.titanfabric.potion.TitanFabricPotions;
 import net.shirojr.titanfabric.recipe.TitanFabricRecipes;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.sound.TitanFabricSoundEvents;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
 import net.shirojr.titanfabric.world.gen.TitanFabricWorldGen;
@@ -50,6 +51,7 @@ public class TitanFabric implements ModInitializer {
         TitanFabricWorldGen.generateWorldGen();
         C2SNetworking.registerServerReceivers();
         TitanFabricGamerules.register();
+        TitanFabricSoundEvents.registerModSounds();
         TitanFabricStats.register();
         TitanFabricEvents.registerEvents();
 

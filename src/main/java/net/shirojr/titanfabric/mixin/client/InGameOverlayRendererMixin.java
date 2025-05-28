@@ -38,7 +38,7 @@ public abstract class InGameOverlayRendererMixin {
     }
     @Redirect(method = "renderFireOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;"))
     private static Sprite getSprite(SpriteIdentifier obj, MinecraftClient client) {
-        if (TitanFabricClient.soulFireEntities.contains(client.player.getUuid())) {
+        if (TitanFabricClient.SOUL_FIRE_ENTITIES.contains(client.player.getUuid())) {
             return TEXTURE.getSprite();
         }
         return obj.getSprite();

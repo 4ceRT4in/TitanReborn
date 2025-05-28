@@ -1,0 +1,14 @@
+{
+  "invincible_swoosh_1": {
+    "subtitle": "sounds.titanfabric.invincible_swoosh_1",
+    "sounds": [
+      "titanfabric:invincible_swoosh_1"
+    ]
+  },
+  "invincible_swoosh_2": {
+    "subtitle": "sounds.titanfabric.invincible_swoosh_1",
+    "sounds": [
+      "titanfabric:invincible_swoosh_2"
+    ]
+  }
+}

@@ -46,7 +46,7 @@ public abstract class LivingEntityMixin {
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
 
     @Inject(method = "tickStatusEffects", at = @At("HEAD"))
-    private void onTickStatusEffects(CallbackInfo ci) {
+    private void tickStatusEffects(CallbackInfo ci) {
         LivingEntity self = (LivingEntity)(Object)this;
         for (StatusEffectInstance effectInstance : new ArrayList<>(self.getStatusEffects())) {
             StatusEffect effect = effectInstance.getEffectType();
@@ -59,10 +59,8 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "damage", at = @At("HEAD"))
     public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if(source != null && source.getAttacker() != null && !source.isProjectile()) {
-            Entity attacker = source.getAttacker();
+        if (source != null && source.getAttacker() instanceof LivingEntity attacker && !source.isProjectile()) {
             LivingEntity self = (LivingEntity) (Object) this;
-            if (!(attacker instanceof LivingEntity attackingEntity)) return;
 
             if (self.isBlocking() && self.getActiveItem().getItem() == TitanFabricItems.NETHERITE_SHIELD) {
                 Vec3d vec1 = attacker.getPos().subtract(self.getPos()).normalize();
@@ -71,13 +69,12 @@ public abstract class LivingEntityMixin {
                 double d = vec2.dotProduct(vec1);
 
                 if (d > 0.5) {
-                    attackingEntity.addVelocity(vec1.x , 0.5, vec1.z);
-                    attackingEntity.velocityDirty = true;
+                    attacker.setVelocity(vec1.x * 0.5, 0.1, vec1.z * 0.5);
+                    attacker.velocityModified = true;
                 }
             }
         }
     }
-
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", cancellable = true, at = @At("HEAD"))
     private void titanfabric$addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (LivingEntity) (Object) this;
