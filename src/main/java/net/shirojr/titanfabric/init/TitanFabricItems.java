@@ -34,7 +34,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public interface TitanFabricItems {
-    List<ItemStack> ALL_ITEMS = new ArrayList<>();
+    List<Item> ALL_ITEMS = new ArrayList<>();
 
     CitrinStarItem CITRIN_STAR = registerItem("citrin_star",
             new CitrinStarItem(new Item.Settings().maxCount(4)));
@@ -151,7 +151,7 @@ public interface TitanFabricItems {
     
     private static <T extends Item> T registerItem(String name, T item) {
         T registeredEntry = Registry.register(Registries.ITEM, TitanFabric.getId(name), item);
-        ALL_ITEMS.add(registeredEntry.getDefaultStack());
+        ALL_ITEMS.add(registeredEntry);
         return registeredEntry;
     }
 

@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.init;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -9,6 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.util.VariationHolder;
 
 public class TitanFabricItemGroups {
     public static final RegistryKey<ItemGroup> TITAN = register("titan",
@@ -19,8 +21,13 @@ public class TitanFabricItemGroups {
 
     static {
         ItemGroupEvents.modifyEntriesEvent(TITAN).register(entries -> {
-            entries.addAll(TitanFabricItems.ALL_ITEMS);
-            //TODO: add special variants with different versions, e.g. multi bow
+            for (Item registeredItem : TitanFabricItems.ALL_ITEMS) {
+                if (!(registeredItem instanceof VariationHolder holder)) {
+                    entries.add(registeredItem);
+                    continue;
+                }
+                entries.addAll(holder.getVariations());
+            }
         });
     }
 

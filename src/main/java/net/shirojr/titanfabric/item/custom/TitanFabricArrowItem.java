@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.entity.TitanFabricArrowEntity;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.util.LoggerUtil;
+import net.shirojr.titanfabric.util.VariationHolder;
+import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
@@ -21,7 +23,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCrafting {
+public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCrafting, VariationHolder {
 
     public TitanFabricArrowItem(Item.Settings settings) {
         super(settings);
@@ -86,5 +88,10 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
     @Override
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter, @Nullable ItemStack shotFrom) {
         return new TitanFabricArrowEntity(world, shooter, stack);
+    }
+
+    @Override
+    public List<ItemStack> getVariations() {
+        return EffectHelper.generateArrowStacks(this, false);
     }
 }

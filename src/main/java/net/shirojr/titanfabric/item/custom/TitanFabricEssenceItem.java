@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
+import net.shirojr.titanfabric.util.VariationHolder;
+import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
@@ -12,7 +14,7 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import java.util.List;
 import java.util.Optional;
 
-public class TitanFabricEssenceItem extends Item {
+public class TitanFabricEssenceItem extends Item implements VariationHolder {
     public TitanFabricEssenceItem(Item.Settings settings) {
         super(settings);
     }
@@ -58,5 +60,11 @@ public class TitanFabricEssenceItem extends Item {
             tooltip.add(Text.translatable(tooltipPrefix));
         }
         super.appendTooltip(stack, context, tooltip, type);
+    }
+
+    @Override
+    public List<ItemStack> getVariations() {
+        return EffectHelper.generateEssenceStacks(this, true);
+
     }
 }

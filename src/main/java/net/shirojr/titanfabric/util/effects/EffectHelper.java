@@ -138,10 +138,9 @@ public final class EffectHelper {
         if (!(swordItem instanceof WeaponEffectCrafting weaponEffectHandler)) {
             return List.of(swordItem.getDefaultStack());
         }
-        ItemStack defaultStack = swordItem.getDefaultStack();
         List<ItemStack> stacks = new ArrayList<>();
         if (addBaseItem) {
-            stacks.add(defaultStack);
+            stacks.add(swordItem.getDefaultStack());
         }
 
         for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {

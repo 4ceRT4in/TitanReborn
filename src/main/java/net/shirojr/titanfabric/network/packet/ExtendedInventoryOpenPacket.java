@@ -38,13 +38,6 @@ public record ExtendedInventoryOpenPacket(int entityId/*, ExtendedInventory inve
         return IDENTIFIER;
     }
 
-    public void savePersistent(ServerPlayerEntity player, ExtendedInventory inventory) {
-        PersistentPlayerData persistentPlayerData = PersistentWorldData.getPersistentPlayerData(player);
-        if (persistentPlayerData != null) {
-            persistentPlayerData.extraInventory = inventory;
-        }
-    }
-
     public void sendPacket() {
         ClientPlayNetworking.send(this);
     }

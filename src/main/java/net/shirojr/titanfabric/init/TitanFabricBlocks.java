@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
@@ -15,7 +14,6 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.block.custom.AdvancedAnvilBlock;
 import net.shirojr.titanfabric.block.custom.DiamondFurnaceBlock;
 import net.shirojr.titanfabric.block.custom.TitanFabricOreBlock;
-import net.shirojr.titanfabric.util.LoggerUtil;
 
 @SuppressWarnings("unused")
 public interface TitanFabricBlocks {
@@ -59,7 +57,7 @@ public interface TitanFabricBlocks {
 
     private static void registerBlockItem(String name, Block block) {
         Item registeredEntry = Registry.register(Registries.ITEM, TitanFabric.getId(name), new BlockItem(block, new Item.Settings()));
-        TitanFabricItems.ALL_ITEMS.add(new ItemStack(registeredEntry));
+        TitanFabricItems.ALL_ITEMS.add(registeredEntry);
     }
 
     static void initialize() {
