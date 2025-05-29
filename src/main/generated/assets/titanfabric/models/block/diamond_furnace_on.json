@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "titanfabric:block/diamond_furnace_front_on",
+    "side": "titanfabric:block/diamond_furnace_side",
+    "top": "titanfabric:block/diamond_furnace_top"
+  }
+}

@@ -5,8 +5,8 @@
     "1": "block/netherite_block",
     "4": "block/obsidian",
     "6": "block/chain",
-    "7": "titanfabric:blocks/bedrock_dark",
-    "particle": "titanfabric:blocks/bedrock_dark"
+    "7": "titanfabric:block/bedrock_dark",
+    "particle": "titanfabric:block/bedrock_dark"
   },
   "elements": [
     {

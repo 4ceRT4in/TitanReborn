@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "titanfabric:block/legend_crystal",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "titanfabric:block/legend_crystal",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "titanfabric:block/legend_crystal",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "titanfabric:block/legend_crystal",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "titanfabric:block/legend_crystal"
+    },
+    "facing=west": {
+      "model": "titanfabric:block/legend_crystal",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

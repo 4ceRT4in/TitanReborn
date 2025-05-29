@@ -54,9 +54,9 @@ public class TitanFabricConfiguredFeatures {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static <FC extends FeatureConfig, F extends Feature<FC>> ConfiguredFeature<?, ?> register(
+    private static <FC extends FeatureConfig, F extends Feature<FC>> void register(
             Registerable<ConfiguredFeature<?, ?>> context, RegistryKey<ConfiguredFeature<?, ?>> key, F feature, FC configuration) {
-        return context.register(key, new ConfiguredFeature<>(feature, configuration)).value();
+            context.register(key, new ConfiguredFeature<>(feature, configuration));
     }
 
 

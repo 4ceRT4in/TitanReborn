@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "titanfabric:block/ember_block"
+    }
+  }
+}
