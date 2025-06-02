@@ -72,5 +72,4 @@ public abstract class ItemsMixin {
     private static int onLingeringPotion(int old) {
         return 3;
     }
-
 }
