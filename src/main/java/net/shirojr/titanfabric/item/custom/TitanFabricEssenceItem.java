@@ -10,11 +10,13 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TitanFabricEssenceItem extends Item implements VariationHolder {
+public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting,VariationHolder {
     public TitanFabricEssenceItem(Item.Settings settings) {
         super(settings);
     }
@@ -63,8 +65,14 @@ public class TitanFabricEssenceItem extends Item implements VariationHolder {
     }
 
     @Override
+    public List<WeaponEffect> supportedEffects() {
+        List<WeaponEffect> list = new ArrayList<>(WeaponEffectCrafting.super.supportedEffects());
+        list.remove(WeaponEffect.FIRE);
+        return list;
+    }
+
+    @Override
     public List<ItemStack> getVariations() {
         return EffectHelper.generateEssenceStacks(this, true);
-
     }
 }

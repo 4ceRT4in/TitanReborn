@@ -34,7 +34,7 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
     private final ExtendedInventory data;
 
     public ExtendedInventoryScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable ExtendedInventory extendedInventory) {
-        super(TitanFabricScreenHandlers.EXTENDED_INVENTORY_SCREEN_HANDLER, syncId);
+        super(TitanFabricScreenHandlers.EXTENDED_INVENTORY, syncId);
         addInventorySlots(playerInventory);
         addHotbarSlots(playerInventory);
         addEquipmentSlots(playerInventory);

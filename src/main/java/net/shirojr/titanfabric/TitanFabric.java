@@ -34,9 +34,9 @@ public class TitanFabric implements ModInitializer {
         TitanFabricBlockEntities.initialize();
         TitanFabricEntities.register();
         TitanFabricNetworkingPayloads.initialize();
-        TitanFabricScreenHandlers.register();
+        TitanFabricScreenHandlers.initialize();
         TitanFabricStatusEffects.initialize();
-        TitanFabricPotions.register();
+        TitanFabricPotions.initialize();
         TitanFabricWorldGen.generateWorldGen();
         TitanFabricC2SNetworking.initialize();
         TitanFabricGamerules.register();

@@ -39,7 +39,7 @@ public class WeaponEffectRecipe implements SmithingRecipe {
     public ItemStack craft(SmithingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         ItemStack baseStack = input.base();
         if (!this.base.test(baseStack) || !this.addition.test(input.addition())) return ItemStack.EMPTY;
-        HashSet<WeaponEffectData> weaponEffects = input.addition().get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        HashSet<WeaponEffectData> weaponEffects = input.addition().get(TitanFabricDataComponents.WEAPON_EFFECTS);   // FIXME: essence has no effect
         if (weaponEffects == null) return ItemStack.EMPTY;
         WeaponEffectData innateEffect = null;
         for (WeaponEffectData entry : weaponEffects) {

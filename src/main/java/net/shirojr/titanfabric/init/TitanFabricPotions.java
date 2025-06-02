@@ -34,7 +34,7 @@ public class TitanFabricPotions {
         });
     }
 
-    public static void register() {
-        LoggerUtil.devLogger("initializing potions");
+    public static void initialize() {
+        // static initialisation
     }
 }

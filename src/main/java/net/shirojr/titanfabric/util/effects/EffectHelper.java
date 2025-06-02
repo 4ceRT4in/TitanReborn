@@ -120,16 +120,6 @@ public final class EffectHelper {
         }
     }
 
-    public static boolean hasNoWeaponEffect(ItemStack itemStack) {
-        HashSet<WeaponEffectData> effectList = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
-        if (effectList == null) return true;
-        for (WeaponEffectData entry : effectList) {
-            if (entry.type() == null) continue;
-            return false;
-        }
-        return true;
-    }
-
     public static boolean shouldEffectApply(Random random, int strength) {
         return random.nextInt(100) <= (25 * strength);
     }

@@ -22,7 +22,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     }
 
     public BackPackItemScreenHandler(int syncId, PlayerInventory playerInventory, ItemStack backpackStack) {
-        super(TitanFabricScreenHandlers.BACKPACK_ITEM_SCREEN_HANDLER, syncId);
+        super(TitanFabricScreenHandlers.BACKPACK, syncId);
         this.backpackStack = backpackStack;
         this.content = BackPackContent.getOrThrow(this.backpackStack);
         this.content.onOpen(playerInventory.player);

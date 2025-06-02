@@ -6,6 +6,7 @@ import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.recipe.builder.WeaponEffectRecipeJsonBuilder;
 
@@ -19,9 +20,12 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
     @Override
     public void generate(RecipeExporter exporter) {
         WeaponEffectRecipeJsonBuilder.create(
-                Ingredient.ofItems(TitanFabricItems.CITRIN_SWORD),
-                Ingredient.ofStacks(TitanFabricItems.ESSENCE.getDefaultStack()),
-                RecipeCategory.COMBAT
-        );
+                        Ingredient.ofItems(TitanFabricItems.CITRIN_SWORD),
+                        Ingredient.ofStacks(TitanFabricItems.ESSENCE.getDefaultStack()), RecipeCategory.COMBAT)
+                .criterion(
+                        FabricRecipeProvider.hasItem(TitanFabricItems.CITRIN_SHARD),
+                        FabricRecipeProvider.conditionsFromItem(TitanFabricItems.CITRIN_SHARD)
+                )
+                .offerTo(exporter, TitanFabric.getId("citrin_sword"));
     }
 }
