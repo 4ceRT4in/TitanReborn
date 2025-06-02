@@ -96,7 +96,7 @@ public interface TitanFabricItems {
     TitanFabricSwordItem DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
             new TitanFabricSwordItem(true, TitanFabricToolMaterials.DIAMOND_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings()));
     SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE,
-            new Item.Settings().maxDamage(2031).fireproof().attributeModifiers(SwordItem.createAttributeModifiers(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f)));  // registered in ItemsMixin class
+            new Item.Settings().fireproof().attributeModifiers(SwordItem.createAttributeModifiers(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f)));  // registered in ItemsMixin class
     TitanFabricSwordItem NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings().fireproof()));
 
@@ -148,7 +148,7 @@ public interface TitanFabricItems {
     BackPackItem BACKPACK_BIG = registerItem("backpack_big", new BackPackItem(new Item.Settings().maxCount(1)
             .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.BIG))));
 
-    
+
     private static <T extends Item> T registerItem(String name, T item) {
         T registeredEntry = Registry.register(Registries.ITEM, TitanFabric.getId(name), item);
         ALL_ITEMS.add(registeredEntry);

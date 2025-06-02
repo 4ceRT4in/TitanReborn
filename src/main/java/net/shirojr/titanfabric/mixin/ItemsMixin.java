@@ -2,14 +2,11 @@ package net.shirojr.titanfabric.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Items.class)
@@ -23,14 +20,18 @@ public abstract class ItemsMixin {
         return multiplier;
     }
 
-
-    @Redirect(
+    @WrapOperation(
             method = "<clinit>",
-            slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=netherite_sword")),
-            at = @At(value = "NEW", target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0)
+            at = @At(
+                    value = "NEW",
+                    target = "net/minecraft/item/SwordItem"
+            )
     )
-    private static Item registerNetheriteSword(Item.Settings settings) {
-        return TitanFabricItems.NETHERITE_SWORD;
+    private static SwordItem changeInstance(ToolMaterial toolMaterial, Item.Settings settings, Operation<SwordItem> original) {
+        if (toolMaterial.equals(ToolMaterials.NETHERITE)) {
+            return TitanFabricItems.NETHERITE_SWORD;
+        }
+        return original.call(toolMaterial, settings);
     }
 
     @ModifyArg(

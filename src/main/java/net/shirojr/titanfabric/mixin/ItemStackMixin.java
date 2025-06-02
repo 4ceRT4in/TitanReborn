@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements FabricItemStack {
     @ModifyExpressionValue(method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
-    private boolean titanfabric$ItemStackDamage(boolean original, @Local(argsOnly = true) ServerPlayerEntity player) {
+    private boolean titanfabric$avoidDamage(boolean original, @Local(argsOnly = true) ServerPlayerEntity player) {
         if (player == null) return original;
         if (player.hasStatusEffect(TitanFabricStatusEffects.INDESTRUCTIBILITY)) {
             return false;
