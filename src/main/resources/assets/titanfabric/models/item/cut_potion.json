@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/potion_overlay_fill",
-    "layer1": "titanfabric:items/potion_overlay"
+    "layer0": "titanfabric:item/potion_overlay_fill",
+    "layer1": "titanfabric:item/potion_overlay"
   }
 }

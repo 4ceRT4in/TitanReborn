@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/legend_chestplate"
+    "layer0": "titanfabric:item/legend_chestplate"
   }
 
 }

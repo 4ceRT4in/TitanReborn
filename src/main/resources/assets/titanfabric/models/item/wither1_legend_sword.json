@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "titanfabric:items/wither1_legend_sword"
+    "layer0": "titanfabric:item/wither1_legend_sword"
   }
 
 }

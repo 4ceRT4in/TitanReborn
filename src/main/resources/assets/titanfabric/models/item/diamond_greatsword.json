@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "titanfabric:items/diamond_greatsword"
+    "layer0": "titanfabric:item/diamond_greatsword"
   },
   "overrides": [
     {

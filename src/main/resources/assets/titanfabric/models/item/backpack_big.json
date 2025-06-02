@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/backpack/backpack_big"
+    "layer0": "titanfabric:item/backpack/backpack_big"
   },
   "overrides": [
     {

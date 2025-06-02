@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "titanfabric:items/ember_greatsword"
+    "layer0": "titanfabric:item/ember_greatsword"
   },
   "overrides": [
     {

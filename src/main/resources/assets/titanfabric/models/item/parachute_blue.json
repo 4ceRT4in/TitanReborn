@@ -3,7 +3,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "block/blue_wool",
-		"2": "titanfabric:items/parachute_strings",
+		"2": "titanfabric:item/parachute_strings",
 		"particle": "block/blue_wool"
 	},
 	"elements": [

@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "titanfabric:items/fire1_ember_greatsword"
+    "layer0": "titanfabric:item/fire1_ember_greatsword"
   }
 
 }

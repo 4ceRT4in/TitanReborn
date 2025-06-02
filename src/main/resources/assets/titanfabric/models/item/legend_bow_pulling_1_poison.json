@@ -1,6 +1,6 @@
 {
   "parent": "titanfabric:item/legend_bow_poison",
   "textures": {
-    "layer0": "titanfabric:items/legend_bow_pulling_1_poison"
+    "layer0": "titanfabric:item/legend_bow_pulling_1_poison"
   }
 }

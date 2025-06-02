@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "titanfabric:items/fire2_citrin_sword"
+    "layer0": "titanfabric:item/fire2_citrin_sword"
   }
 
 }

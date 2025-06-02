@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "titanfabric:items/citrin_greatsword"
+    "layer0": "titanfabric:item/citrin_greatsword"
   },
   "overrides": [
     {

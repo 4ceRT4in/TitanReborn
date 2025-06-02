@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/poison_arrow"
+    "layer0": "titanfabric:item/poison_arrow"
   }
 
 }

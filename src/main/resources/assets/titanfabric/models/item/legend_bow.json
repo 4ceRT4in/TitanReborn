@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "titanfabric:items/legend_bow"
+    "layer0": "titanfabric:item/legend_bow"
   },
   "display": {
     "thirdperson_righthand": {

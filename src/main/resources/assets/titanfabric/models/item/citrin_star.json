@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/citrin_star"
+    "layer0": "titanfabric:item/citrin_star"
   }
 
 }

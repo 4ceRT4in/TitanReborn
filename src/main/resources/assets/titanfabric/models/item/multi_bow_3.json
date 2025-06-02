@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/multi_bow_3"
+    "layer0": "titanfabric:item/multi_bow_3"
   },
   "display": {
     "thirdperson_righthand": {

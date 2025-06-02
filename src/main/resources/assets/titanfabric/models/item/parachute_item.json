@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/parachute"
+    "layer0": "titanfabric:item/parachute"
   }
 }

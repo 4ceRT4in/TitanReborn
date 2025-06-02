@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/weakness_essence"
+    "layer0": "titanfabric:item/weakness_essence"
   }
 
 }

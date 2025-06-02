@@ -2,7 +2,7 @@
     "credit": "Made with Blockbench",
     "texture_size": [64, 64],
     "textures": {
-        "0": "titanfabric:items/diamond_shield"
+        "0": "titanfabric:item/diamond_shield"
     },
     "elements": [
         {

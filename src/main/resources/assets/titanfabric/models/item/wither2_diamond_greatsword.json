@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "titanfabric:items/wither2_diamond_greatsword"
+    "layer0": "titanfabric:item/wither2_diamond_greatsword"
   }
 
 }

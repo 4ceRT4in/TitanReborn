@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/ember_ingot"
+    "layer0": "titanfabric:item/ember_ingot"
   }
 
 }
