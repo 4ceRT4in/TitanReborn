@@ -30,8 +30,9 @@ public class BackPackItem extends Item {
 
     public static void openScreen(PlayerEntity user, ItemStack stack) {
         World world = user.getWorld();
-        if (!(stack.getItem() instanceof BackPackItem backPackItem))
+        if (!(stack.getItem() instanceof BackPackItem backPackItem)) {
             return;
+        }
         if (!world.isClient()) {
             user.openHandledScreen(new ExtendedScreenHandlerFactory<BackPackScreenPacket>() {
 

@@ -41,12 +41,6 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
         };
     }
 
-/*    @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        if (!isIn(group)) return;
-        EffectHelper.generateAllEffectVersionStacks(this, stacks, true);
-    }*/
-
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         Optional<WeaponEffectData> data = WeaponEffectData.get(stack, WeaponEffectType.INNATE_EFFECT);
@@ -73,6 +67,6 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
 
     @Override
     public List<ItemStack> getVariations() {
-        return EffectHelper.generateEssenceStacks(this, true);
+        return EffectHelper.generateEssenceStacks(this, false);
     }
 }

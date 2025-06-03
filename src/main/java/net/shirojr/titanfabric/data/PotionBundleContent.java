@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public record PotionBundleContent(List<ItemStack> stacks) implements TooltipData {
+public record PotionBundleContent(List<ItemStack> stacks) {
     public static final int MAX_STORAGE = 64;
     public static final PotionBundleContent DEFAULT = new PotionBundleContent(List.of());
 

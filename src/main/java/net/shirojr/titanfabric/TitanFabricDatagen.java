@@ -4,10 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.registry.RegistryBuilder;
 import net.minecraft.registry.RegistryKeys;
-import net.shirojr.titanfabric.datagen.TitanFabricBlockLootTableProvider;
-import net.shirojr.titanfabric.datagen.TitanFabricModelProvider;
-import net.shirojr.titanfabric.datagen.TitanFabricRecipeProvider;
-import net.shirojr.titanfabric.datagen.TitanFabricRegistryDataGenerator;
+import net.shirojr.titanfabric.datagen.*;
 import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
 import net.shirojr.titanfabric.world.feature.TitanFabricPlacedFeatures;
 
@@ -20,6 +17,7 @@ public class TitanFabricDatagen implements DataGeneratorEntrypoint {
         pack.addProvider(TitanFabricRecipeProvider::new);
         pack.addProvider(TitanFabricBlockLootTableProvider::new);
         pack.addProvider(TitanFabricRegistryDataGenerator::new);
+        TitanFabricTagProviders.addProviders(pack);
     }
 
     @Override

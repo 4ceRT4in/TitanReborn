@@ -1,0 +1,50 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:coal_ores",
+      "required": false
+    },
+    {
+      "id": "#minecraft:copper_ores",
+      "required": false
+    },
+    {
+      "id": "#minecraft:iron_ores",
+      "required": false
+    },
+    {
+      "id": "#minecraft:gold_ores",
+      "required": false
+    },
+    {
+      "id": "#minecraft:redstone_ores",
+      "required": false
+    },
+    {
+      "id": "#minecraft:lapis_ores",
+      "required": false
+    },
+    {
+      "id": "#minecraft:emerald_ores",
+      "required": false
+    },
+    {
+      "id": "#minecraft:diamond_ores",
+      "required": false
+    },
+    {
+      "id": "#c:raw_materials",
+      "required": false
+    },
+    {
+      "id": "#c:ores_in_ground/netherrack",
+      "required": false
+    },
+    "minecraft:ancient_debris",
+    "titanfabric:citrin_ore",
+    "titanfabric:ember_ore",
+    "titanfabric:deepslate_legend_ore",
+    "titanfabric:ember_shard",
+    "titanfabric:legend_powder"
+  ]
+}
