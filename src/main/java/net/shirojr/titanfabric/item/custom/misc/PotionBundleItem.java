@@ -116,9 +116,7 @@ public class PotionBundleItem extends BundleItem {
 
     @Override
     public Optional<TooltipData> getTooltipData(ItemStack bundle) {
-        PotionBundleContent content = PotionBundleContent.get(bundle).orElse(null);
-        if (content == null) return Optional.empty();
-        return Optional.of(new PotionBundleContent.ToolTipData(content));
+        return PotionBundleContent.get(bundle).map(PotionBundleContent.ToolTipData::new);
     }
 
     @Override
