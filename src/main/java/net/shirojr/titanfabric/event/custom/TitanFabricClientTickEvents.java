@@ -13,6 +13,7 @@ import net.shirojr.titanfabric.registry.KeyBindRegistry;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 public class TitanFabricClientTickEvents {
@@ -62,6 +63,17 @@ public class TitanFabricClientTickEvents {
         armorList = currentArmorSet;
         if (!(differenceOld instanceof LegendArmorItem) && !(differenceNew instanceof LegendArmorItem)) return;
         if (differenceOld instanceof LegendArmorItem && differenceNew instanceof LegendArmorItem) return;
-        new ArmorLifePacket(differenceOld.getDefaultStack(), differenceNew.getDefaultStack()).sendPacket();
+
+        if (differenceOld.equals(Items.AIR)) {
+            differenceOld = null;
+        }
+        if (differenceNew.equals(Items.AIR)) {
+            differenceNew = null;
+        }
+
+        new ArmorLifePacket(
+                Optional.ofNullable(differenceOld).map(Item::getDefaultStack),
+                Optional.ofNullable(differenceNew).map(Item::getDefaultStack)
+        ).sendPacket();
     }
 }
