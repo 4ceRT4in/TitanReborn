@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.network.packet;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -16,5 +17,9 @@ public record BackPackScreenPacket(ItemStack backPackStack) implements CustomPay
     @Override
     public Id<? extends CustomPayload> getId() {
         return IDENTIFIER;
+    }
+
+    public void handlePacket(ClientPlayNetworking.Context context) {
+
     }
 }

@@ -59,13 +59,6 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
     }
 
     @Override
-    public List<WeaponEffect> supportedEffects() {
-        List<WeaponEffect> list = new ArrayList<>(List.of(WeaponEffect.values()));
-        list.remove(WeaponEffect.FIRE);
-        return list;
-    }
-
-    @Override
     public List<ItemStack> getVariations() {
         return EffectHelper.generateEssenceStacks(this, false);
     }

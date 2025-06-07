@@ -32,13 +32,13 @@ public class WeaponEffectRecipe implements SmithingRecipe {
 
     @Override
     public boolean matches(SmithingRecipeInput input, World world) {
-        return input.template().isEmpty() && this.base.test(input.base()) && this.addition.test(input.addition());
+        return input.template().isEmpty() && testBase(input.base()) && testAddition(input.addition());
     }
 
     @Override
     public ItemStack craft(SmithingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
         ItemStack baseStack = input.base();
-        if (!this.base.test(baseStack) || !this.addition.test(input.addition())) return ItemStack.EMPTY;
+        if (!testBase(baseStack) || !testAddition(input.addition())) return ItemStack.EMPTY;
         HashSet<WeaponEffectData> weaponEffects = input.addition().get(TitanFabricDataComponents.WEAPON_EFFECTS);
         if (weaponEffects == null) return ItemStack.EMPTY;
         WeaponEffectData innateEffect = null;
