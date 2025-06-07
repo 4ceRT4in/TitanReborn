@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 
 public record BackPackScreenPacket(ItemStack backPackStack) implements CustomPayload {
@@ -20,6 +21,6 @@ public record BackPackScreenPacket(ItemStack backPackStack) implements CustomPay
     }
 
     public void handlePacket(ClientPlayNetworking.Context context) {
-
+        TitanFabric.LOGGER.info("backpack screen packet arrived on client");
     }
 }

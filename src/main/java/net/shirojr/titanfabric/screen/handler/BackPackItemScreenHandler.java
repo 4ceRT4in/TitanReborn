@@ -63,7 +63,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
                 slotPos.y = pos.y + (slotSize * row);
                 slotPos.x = pos.x + (slotSize * column);
 
-                this.addSlot(new Slot(this.content.inventory(), slotIndex, slotPos.x, slotPos.y) {
+                this.addSlot(new Slot(this.content.asInventory(), slotIndex, slotPos.x, slotPos.y) {
                     @Override
                     public boolean canInsert(ItemStack stack) {
                         if (stack.getItem() instanceof BackPackItem) {

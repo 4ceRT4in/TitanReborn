@@ -13,6 +13,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +27,11 @@ public record BackPackContent(SimpleInventory inventory, BackPackItem.Type type)
     );
 
     public BackPackContent(List<ItemStack> stacks, BackPackItem.Type type) {
-        this(toInventory(stacks), type);
+        this(toInventory(stacks, type), type);
     }
 
     public static BackPackContent getDefault(BackPackItem.Type type) {
-        return new BackPackContent(List.of(), type);
+        return new BackPackContent(new ArrayList<>(), type);
     }
 
     public static final Codec<BackPackContent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -99,11 +100,15 @@ public record BackPackContent(SimpleInventory inventory, BackPackItem.Type type)
 
     // ------------------- [ util ] -------------------
 
-    private static SimpleInventory toInventory(List<ItemStack> stacks) {
-        SimpleInventory inventory = new SimpleInventory(stacks.size());
+    private static SimpleInventory toInventory(List<ItemStack> stacks, BackPackItem.Type type) {
+        SimpleInventory inventory = new SimpleInventory(type.getSize());
         for (ItemStack stack : stacks) {
             inventory.addStack(stack);
         }
         return inventory;
+    }
+
+    public SimpleInventory asInventory() {
+        return toInventory(this.getStacks(), this.type);
     }
 }
