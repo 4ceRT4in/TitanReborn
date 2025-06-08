@@ -53,9 +53,10 @@ public final class EffectHelper {
     }
 
     /**
-     * Sets the valid {@linkplain WeaponEffectData TitanFabric WeaponEffectData}
+     * Sets the valid {@linkplain WeaponEffectData TitanFabric WeaponEffectData}. This will overwrite old
+     * {@linkplain WeaponEffectData TitanFabric WeaponEffectData} on the stack!
      */
-    public static ItemStack getStackWithEffects(ItemStack itemStack, List<WeaponEffectData> effectDataList) {
+    public static ItemStack getStackWithEffects(ItemStack itemStack, List<WeaponEffectData> effectDataList, boolean overwrite) {
         if (itemStack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
             if (!titanFabricSwordItem.canHaveWeaponEffects()) return itemStack;
         }
@@ -63,7 +64,14 @@ public final class EffectHelper {
             return itemStack;
         }
         HashSet<WeaponEffectData> validEffects = new HashSet<>(effectDataList);
+        if (!overwrite) {
+            HashSet<WeaponEffectData> originalEffects = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+            if (originalEffects != null) {
+                validEffects.addAll(originalEffects);
+            }
+        }
         for (WeaponEffectData entry : effectDataList) {
+            if (entry == null || entry.weaponEffect() == null) continue;
             if (!weaponEffectHandler.supportedEffects().contains(entry.weaponEffect())) continue;
             validEffects.add(entry);
         }
@@ -71,8 +79,8 @@ public final class EffectHelper {
         return itemStack;
     }
 
-    public static ItemStack applyEffectToStack(ItemStack itemStack, WeaponEffectData effectData) {
-        return getStackWithEffects(itemStack, List.of(effectData));
+    public static ItemStack applyEffectToStack(ItemStack itemStack, WeaponEffectData effectData, boolean overwrite) {
+        return getStackWithEffects(itemStack, List.of(effectData), overwrite);
     }
 
     public static void removeEffectsFromStack(ItemStack itemStack) {
@@ -132,12 +140,15 @@ public final class EffectHelper {
         if (addBaseItem) {
             stacks.add(swordItem.getDefaultStack());
         }
-
         for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
             for (int effectStrength = 1; effectStrength < 3; effectStrength++) {
+                ItemStack swordStack = swordItem.getDefaultStack();
+                if (weaponEffectHandler.getBaseEffect() != null) {
+                    EffectHelper.applyEffectToStack(swordStack, weaponEffectHandler.getBaseEffect(), false);
+                }
                 WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, weaponEffect, effectStrength);
-                ItemStack effectItemStack = EffectHelper.applyEffectToStack(swordItem.getDefaultStack(), additionalEffectData);
-                stacks.add(effectItemStack);
+                EffectHelper.applyEffectToStack(swordStack, additionalEffectData, false);
+                stacks.add(swordStack);
             }
         }
         return stacks;
@@ -155,7 +166,7 @@ public final class EffectHelper {
 
         for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
             WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 2);
-            ItemStack effectItemStack = EffectHelper.applyEffectToStack(arrowItem.getDefaultStack(), additionalEffectData);
+            ItemStack effectItemStack = EffectHelper.applyEffectToStack(arrowItem.getDefaultStack(), additionalEffectData, false);
             stacks.add(effectItemStack);
         }
         return stacks;
@@ -173,7 +184,7 @@ public final class EffectHelper {
 
         for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
             WeaponEffectData additionalEffectData = new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, weaponEffect, 1);
-            ItemStack effectItemStack = EffectHelper.applyEffectToStack(essenceStack.getDefaultStack(), additionalEffectData);
+            ItemStack effectItemStack = EffectHelper.applyEffectToStack(essenceStack.getDefaultStack(), additionalEffectData, false);
             stacks.add(effectItemStack);
         }
         return stacks;

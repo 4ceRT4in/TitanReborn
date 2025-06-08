@@ -6,6 +6,7 @@ import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class ToolTipHelper {
     public static void appendSwordToolTip(List<Text> tooltip, ItemStack stack) {
         HashSet<WeaponEffectData> effectData = stack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
         if (effectData == null || effectData.isEmpty()) return;
-        //FIXME: not sorted by weapon effect type!
-        for (WeaponEffectData entry : effectData) {
+        for (WeaponEffectData entry : effectData.stream().sorted(Comparator.comparing(WeaponEffectData::type)).toList()) {
+            if (entry == null || entry.weaponEffect() == null) continue;
             String translation = "tooltip.titanfabric." + EffectHelper.getEffectStrength(stack, entry.type());
             switch (entry.weaponEffect()) {
                 case BLIND -> translation += "Blind";

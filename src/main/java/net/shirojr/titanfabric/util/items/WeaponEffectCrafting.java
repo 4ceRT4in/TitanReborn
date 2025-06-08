@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.util.items;
 
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface WeaponEffectCrafting {
     }
 
     @Nullable
-    default WeaponEffect getBaseEffect() {
+    default WeaponEffectData getBaseEffect() {
         return null;
     }
 

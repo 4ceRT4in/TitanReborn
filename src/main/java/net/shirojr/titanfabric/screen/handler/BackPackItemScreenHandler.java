@@ -48,8 +48,8 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public void onClosed(PlayerEntity player) {
-        super.onClosed(player);
         content.savePersistent(this.backpackStack);
+        super.onClosed(player);
     }
 
     private void addStorageSlots(BackPackContent content, Point pos) {

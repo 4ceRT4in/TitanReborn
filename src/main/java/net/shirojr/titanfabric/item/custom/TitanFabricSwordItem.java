@@ -15,6 +15,7 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.ToolTipHelper;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     public ItemStack getDefaultStack() {
         ItemStack stack = super.getDefaultStack();
         if (this.getBaseEffect() != null) {
-            EffectHelper.applyEffectToStack(stack, new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, this.getBaseEffect(), 1));
+            EffectHelper.applyEffectToStack(stack, this.getBaseEffect(), false);
         }
         return stack;
     }
@@ -53,8 +54,11 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
         return this.swordType.getCooldownTicks();
     }
 
-    public WeaponEffect getBaseEffect() {
-        return this.baseEffect;
+    @Nullable
+    @Override
+    public WeaponEffectData getBaseEffect() {
+        if (this.baseEffect == null) return null;
+        return new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, this.baseEffect, 1);
     }
 
     @Override
