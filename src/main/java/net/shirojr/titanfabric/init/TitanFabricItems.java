@@ -70,7 +70,7 @@ public interface TitanFabricItems {
             new EmberArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()));
 
     LegendArmorItem LEGEND_HELMET = registerItem("legend_helmet",
-            new LegendArmorItem(ArmorItem.Type.HELMET, new Item.Settings(), 0.0f));
+            new LegendArmorItem(ArmorItem.Type.HELMET, new Item.Settings(), 1.0f));
     LegendArmorItem LEGEND_CHESTPLATE = registerItem("legend_chestplate",
             new LegendArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings(), 4.0f));
     LegendArmorItem LEGEND_LEGGINGS = registerItem("legend_leggings",

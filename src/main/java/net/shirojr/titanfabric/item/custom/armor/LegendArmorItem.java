@@ -9,6 +9,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricArmorMaterials;
@@ -54,7 +55,7 @@ public class LegendArmorItem extends ArmorItem implements Anvilable {
 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.translatable("tooltip.titanfabric.legendArmorHealth", this.getExtraValue()));
+        tooltip.add(Text.translatable("tooltip.titanfabric.legendArmorHealth", this.getExtraValue()).formatted(Formatting.DARK_PURPLE));
         super.appendTooltip(stack, context, tooltip, type);
     }
 }
