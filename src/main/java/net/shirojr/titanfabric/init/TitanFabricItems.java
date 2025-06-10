@@ -119,7 +119,7 @@ public interface TitanFabricItems {
             new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
 
     TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
-            new TitanFabricParachuteItem(new Item.Settings().maxCount(1).maxDamage(250).component(TitanFabricDataComponents.ACTIVATED, false)));
+            new TitanFabricParachuteItem(new Item.Settings().maxCount(1)/*.maxDamage(250)*/.component(TitanFabricDataComponents.ACTIVATED, false)));
 
     FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
             new FlintAndEmberItem(new Item.Settings().maxCount(1).maxDamage(64)));

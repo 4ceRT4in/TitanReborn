@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.item.custom;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -44,9 +43,9 @@ public class TitanFabricParachuteItem extends Item {
                 if (shouldReset) {
                     stack.set(TitanFabricDataComponents.ACTIVATED, false);
                 } else {
-                    if (Math.random() <= 0.05) {
+                    /*if (Math.random() <= 0.05) {
                         stack.damage(1, playerEntity, playerEntity.getActiveHand().equals(Hand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-                    }
+                    }*/
                     Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);
                     Vec3d newVec3d = playerEntity.getVelocity().add(rotationVec3d);
                     playerEntity.setVelocity(new Vec3d(MathHelper.clamp(newVec3d.getX(), -1.5D, 1.5D), newVec3d.getY(), MathHelper.clamp(newVec3d.getZ(), -1.5D, 1.5D)));
