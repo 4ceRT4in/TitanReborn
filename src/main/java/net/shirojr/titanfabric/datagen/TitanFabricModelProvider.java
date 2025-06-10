@@ -3,8 +3,10 @@ package net.shirojr.titanfabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.block.Block;
-import net.minecraft.data.client.*;
+import net.minecraft.data.client.BlockStateModelGenerator;
+import net.minecraft.data.client.ItemModelGenerator;
+import net.minecraft.data.client.Models;
+import net.minecraft.data.client.TexturedModel;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
 
@@ -26,7 +28,8 @@ public class TitanFabricModelProvider extends FabricModelProvider {
         generator.registerSimpleCubeAll(TitanFabricBlocks.DEEPSTALE_LEGEND_ORE);
         generator.registerSimpleCubeAll(TitanFabricBlocks.LEGEND_BLOCK);
 
-        registerAmethystWithItem(generator, TitanFabricBlocks.LEGEND_CRYSTAL);
+        generator.registerAmethyst(TitanFabricBlocks.LEGEND_CRYSTAL);
+        // registerAmethystWithItem(generator, TitanFabricBlocks.LEGEND_CRYSTAL);
 
         generator.blockStateCollector.accept(BlockStateModelGenerator
                 .createSingletonBlockState(TitanFabricBlocks.NETHERITE_ANVIL, TitanFabric.getId("block/netherite_anvil"))
@@ -37,14 +40,7 @@ public class TitanFabricModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-
-    }
-
-    private static void registerAmethystWithItem(BlockStateModelGenerator generator, Block block) {
-        generator.blockStateCollector.accept(VariantsBlockStateSupplier.create(block, BlockStateVariant.create().put(
-                        VariantSettings.MODEL, Models.CROSS.upload(block, TextureMap.cross(block), generator.modelCollector))
-                ).coordinate(generator.createUpDefaultFacingVariantMap())
-        );
+    public void generateItemModels(ItemModelGenerator generator) {
+        generator.register(TitanFabricBlocks.LEGEND_CRYSTAL.asItem(), Models.GENERATED);
     }
 }
