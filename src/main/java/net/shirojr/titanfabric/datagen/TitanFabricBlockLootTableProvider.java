@@ -26,13 +26,13 @@ public class TitanFabricBlockLootTableProvider extends FabricBlockLootTableProvi
     @Override
     public void generate() {
         addDrop(TitanFabricBlocks.CITRIN_BLOCK);
-        addDrop(TitanFabricBlocks.CITRIN_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.CITRIN_ORE, 4f, 5f));
+        addDrop(TitanFabricBlocks.CITRIN_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.CITRIN_ORE, 1f, 1f));
         addDrop(TitanFabricBlocks.DEEPSTALE_LEGEND_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.DEEPSTALE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL.asItem(), 4f, 5f));
         addDrop(TitanFabricBlocks.DIAMOND_FURNACE);
         addDrop(TitanFabricBlocks.EMBER_BLOCK);
-        addDrop(TitanFabricBlocks.EMBER_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.EMBER_ORE, TitanFabricItems.EMBER_SHARD, 4f, 5f));
+        addDrop(TitanFabricBlocks.EMBER_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.EMBER_ORE, TitanFabricItems.EMBER_SHARD, 1f, 1f));
         addDrop(TitanFabricBlocks.LEGEND_BLOCK);
-        addDrop(TitanFabricBlocks.LEGEND_CRYSTAL, addDropWithSilkAndFortune(TitanFabricBlocks.LEGEND_CRYSTAL, 4f, 5f));
+        addDrop(TitanFabricBlocks.LEGEND_CRYSTAL, addDropWithSilkAndFortune(TitanFabricBlocks.LEGEND_CRYSTAL, 1f, 1f));
         addDrop(TitanFabricBlocks.NETHERITE_ANVIL);
     }
 
