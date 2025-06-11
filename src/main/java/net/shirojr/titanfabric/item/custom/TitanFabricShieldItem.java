@@ -10,8 +10,8 @@ public class TitanFabricShieldItem extends ShieldItem implements Anvilable {
 
     private final Item[] repairItems;
 
-    public TitanFabricShieldItem(int maxDamage, int cooldownTicks, int enchantability, Item... repairItems) {
-        super(new Item.Settings().maxDamage(maxDamage));
+    public TitanFabricShieldItem(Item.Settings settings, Item... repairItems) {
+        super(settings);
         this.repairItems = repairItems;
     }
 

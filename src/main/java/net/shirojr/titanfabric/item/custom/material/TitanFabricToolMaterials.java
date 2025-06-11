@@ -31,7 +31,7 @@ public enum TitanFabricToolMaterials implements ToolMaterial {
             Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
     EMBER(BlockTags.INCORRECT_FOR_IRON_TOOL, 375, 3.0f, 0.0f, 18,
             Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
-    LEGEND(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, -1, 4.0f, 0.0f, 22,
+    LEGEND(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 0, 4.0f, 0.0f, 22,
             Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
 
     CITRIN_GREAT(BlockTags.INCORRECT_FOR_IRON_TOOL, 1000, 3.0f, 0.0f, 10,
@@ -42,7 +42,7 @@ public enum TitanFabricToolMaterials implements ToolMaterial {
             Ingredient.ofItems(Items.DIAMOND)),
     NETHERITE_GREAT(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2500, 5.0f, 0.0f, 15,
             Ingredient.ofItems(Items.NETHERITE_INGOT)),
-    LEGEND_GREAT(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, -1, 5.0f, 0.0f, 18,
+    LEGEND_GREAT(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 0, 5.0f, 0.0f, 18,
             Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT));
 
     private final TagKey<Block> inverseTag;

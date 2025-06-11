@@ -16,7 +16,6 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.sound.TitanFabricSoundHandler;
@@ -34,13 +33,12 @@ public class TitanFabricParachuteItem extends Item {
         super.inventoryTick(stack, world, entity, slot, selected);
         boolean isActive = stack.getOrDefault(TitanFabricDataComponents.ACTIVATED, false);
         if (entity instanceof PlayerEntity playerEntity) {
-            boolean shouldReset = playerEntity.isOnGround() || playerEntity.getVelocity().getY() > 0 ||
-                    playerEntity.isFallFlying() || playerEntity.isTouchingWater() || playerEntity.isInLava();
+            boolean shouldReset = playerEntity.isOnGround() || playerEntity.isFallFlying() || playerEntity.isTouchingWater() || playerEntity.isInLava();
+            if (shouldReset && playerEntity.getItemCooldownManager().isCoolingDown(this)) {
+                playerEntity.getItemCooldownManager().remove(this);
+                return;
+            }
             if (isActive) {
-                if (playerEntity.isOnGround()) {
-                    playerEntity.getItemCooldownManager().remove(this);
-                    return;
-                }
                 if (!selected && !playerEntity.getOffHandStack().getItem().equals(this)) {
                     removeParachute(stack, playerEntity);
                 }

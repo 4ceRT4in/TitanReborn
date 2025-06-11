@@ -3,9 +3,13 @@ package net.shirojr.titanfabric.init;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.UnbreakableComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.SwordItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
@@ -88,9 +92,11 @@ public interface TitanFabricItems {
     EmberSwordItem EMBER_GREATSWORD = registerItem("ember_greatsword",
             new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
     LegendSwordItem LEGEND_SWORD = registerItem("legend_sword",
-            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT, new Item.Settings()));
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT,
+                    new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))));
     LegendSwordItem LEGEND_GREATSWORD = registerItem("legend_greatsword",
-            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f, SwordType.GREAT_SWORD,
+                    new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))));
     DiamondSwordItem DIAMOND_SWORD = registerItem("diamond_sword",
             new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 6, -2.4f, SwordType.DEFAULT, null, new Item.Settings(), false));
     DiamondSwordItem DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
@@ -100,8 +106,13 @@ public interface TitanFabricItems {
     TitanFabricSwordItem NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings().fireproof()));
 
-    TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1).maxDamage(-1).component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)));
-    LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem(new Item.Settings().maxCount(1).maxDamage(-1)));
+    TitanCrossBowItem TITAN_CROSSBOW = registerItem("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1)
+            .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
+            .component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))
+    ));
+    LegendBowItem LEGEND_BOW = registerItem("legend_bow", new LegendBowItem(new Item.Settings().maxCount(1)
+            .component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)))
+    );
     MultiBowItem MULTI_BOW_1 = registerItem("multi_bow_1", new MultiBowItem(
             new Item.Settings().maxCount(1).maxDamage(500), 1, 10));
     MultiBowItem MULTI_BOW_2 = registerItem("multi_bow_2", new MultiBowItem(
@@ -114,9 +125,9 @@ public interface TitanFabricItems {
             new TitanFabricArrowItem(new Item.Settings().maxCount(32)));
 
     TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
-            new TitanFabricShieldItem(1685, 60, 14, Items.DIAMOND));
+            new TitanFabricShieldItem(new Item.Settings(), Items.DIAMOND));
     TitanFabricShieldItem LEGEND_SHIELD = registerItem("legend_shield",
-            new TitanFabricShieldItem(-1, 40, 24, TitanFabricItems.LEGEND_INGOT));
+            new TitanFabricShieldItem(new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)), TitanFabricItems.LEGEND_INGOT));
 
     TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
             new TitanFabricParachuteItem(new Item.Settings().maxCount(1)/*.maxDamage(250)*/.component(TitanFabricDataComponents.ACTIVATED, false)));
