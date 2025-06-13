@@ -41,7 +41,7 @@ public class TitanFabricPlacedFeatures {
                 TitanFabricOrePlacement.modifiersWithCount(8,
                         HeightRangePlacementModifier.trapezoid(
                                 YOffset.aboveBottom(0),
-                                YOffset.aboveBottom(56)
+                                YOffset.aboveBottom(48)
                         )
                 )
         );
@@ -49,7 +49,7 @@ public class TitanFabricPlacedFeatures {
                 TitanFabricOrePlacement.modifiersWithCount(8,
                         HeightRangePlacementModifier.trapezoid(
                                 YOffset.fixed(0),
-                                YOffset.fixed(72)
+                                YOffset.fixed(64)
                         )
                 )
         );
