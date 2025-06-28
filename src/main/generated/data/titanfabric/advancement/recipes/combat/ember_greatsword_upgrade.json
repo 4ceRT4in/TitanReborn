@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ember_greatsword": {
+      "conditions": {
+        "items": [
+          {
+            "items": "titanfabric:ember_greatsword"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "titanfabric:ember_greatsword_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ember_greatsword"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "titanfabric:ember_greatsword_upgrade"
+    ]
+  }
+}
