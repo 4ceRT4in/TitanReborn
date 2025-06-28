@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "blocks",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "group": "legend_crystal",
+  "ingredient": {
+    "item": "titanfabric:deepslate_legend_ore"
+  },
+  "result": {
+    "id": "titanfabric:legend_crystal"
+  }
+}

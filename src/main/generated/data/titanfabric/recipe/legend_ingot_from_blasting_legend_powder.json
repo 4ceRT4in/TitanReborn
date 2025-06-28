@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.1,
+  "group": "legend_ingot",
+  "ingredient": {
+    "item": "titanfabric:legend_powder"
+  },
+  "result": {
+    "id": "titanfabric:legend_ingot"
+  }
+}

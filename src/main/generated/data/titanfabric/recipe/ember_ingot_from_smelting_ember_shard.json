@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "group": "ember_ingot",
+  "ingredient": {
+    "item": "titanfabric:ember_shard"
+  },
+  "result": {
+    "id": "titanfabric:ember_ingot"
+  }
+}

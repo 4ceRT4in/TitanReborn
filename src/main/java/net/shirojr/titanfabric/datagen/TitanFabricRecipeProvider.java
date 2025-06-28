@@ -23,6 +23,7 @@ import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.recipe.builder.WeaponEffectRecipeJsonBuilder;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class TitanFabricRecipeProvider extends FabricRecipeProvider {
@@ -32,14 +33,20 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
-        for (SwordItem effectSword : TitanFabricItems.EFFECT_SWORDS) {
-            Identifier id = Registries.ITEM.getId(effectSword);
-            offerEssenceUpgrade(id.getPath() + "_upgrade", effectSword, exporter);
-        }
         offerBackpack(TitanFabricItems.BACKPACK_BIG, Items.DIAMOND, exporter);
         offerBackpack(TitanFabricItems.BACKPACK_MEDIUM, Items.GOLD_INGOT, exporter);
         offerBackpack(TitanFabricItems.BACKPACK_SMALL, Items.IRON_INGOT, exporter);
-        offerReversibleCompactingRecipes(exporter, RecipeCategory.MISC, TitanFabricItems.CITRIN_SHARD, RecipeCategory.BUILDING_BLOCKS, TitanFabricBlocks.CITRIN_BLOCK);
+
+        offerReversibleCompactingRecipes(exporter,
+                RecipeCategory.MISC, TitanFabricItems.CITRIN_SHARD,
+                RecipeCategory.BUILDING_BLOCKS, TitanFabricBlocks.CITRIN_BLOCK
+        );
+
+        offerHeatTreatment(exporter, TitanFabricBlocks.CITRIN_ORE.asItem(), TitanFabricItems.CITRIN_SHARD);
+        offerHeatTreatment(exporter, TitanFabricItems.EMBER_SHARD, TitanFabricItems.EMBER_INGOT);
+        offerHeatTreatment(exporter, TitanFabricBlocks.EMBER_ORE.asItem(), TitanFabricItems.EMBER_SHARD);
+        offerHeatTreatment(exporter, TitanFabricBlocks.DEEPSTALE_LEGEND_ORE.asItem(), TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
+        offerHeatTreatment(exporter, TitanFabricItems.LEGEND_POWDER, TitanFabricItems.LEGEND_INGOT);
 
         for (CitrinArmorItem entry : TitanFabricItems.CITRIN_ARMOR_ITEMS) {
             offerCitrinArmor(exporter, entry);
@@ -49,6 +56,10 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         }
         for (LegendArmorItem entry : TitanFabricItems.LEGEND_ARMOR_ITEMS) {
             offerSpecialArmor(exporter, entry, TitanFabricItems.LEGEND_INGOT, TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
+        }
+        for (SwordItem effectSword : TitanFabricItems.EFFECT_SWORDS) {
+            Identifier id = Registries.ITEM.getId(effectSword);
+            offerEssenceUpgrade(id.getPath() + "_upgrade", effectSword, exporter);
         }
     }
 
@@ -106,5 +117,11 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                 FabricRecipeProvider.hasItem(extraItem),
                 FabricRecipeProvider.conditionsFromItem(extraItem)
         ).offerTo(exporter, name);
+    }
+
+    private static void offerHeatTreatment(RecipeExporter exporter, Item input, Item output) {
+        String name = Registries.ITEM.getId(output).getPath();
+        offerBlasting(exporter, List.of(input), RecipeCategory.MISC, output, 0.1f, 100, name);
+        offerSmelting(exporter, List.of(input), RecipeCategory.MISC, output, 0.1f, 200, name);
     }
 }
