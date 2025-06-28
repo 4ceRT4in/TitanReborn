@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "minecraft:gold_ingot"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    },
+    "s": {
+      "item": "minecraft:string"
+    },
+    "w": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "pattern": [
+    "sws",
+    "wcw",
+    "lwl"
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:backpack_medium"
+  }
+}

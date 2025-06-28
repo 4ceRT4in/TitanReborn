@@ -32,14 +32,17 @@ import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
+import net.shirojr.titanfabric.util.UnorderedPair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused"})
 public interface TitanFabricItems {
     List<Item> ALL_ITEMS = new ArrayList<>();
     List<SwordItem> EFFECT_SWORDS = new ArrayList<>();
+    HashMap<ArmorItem, UnorderedPair<Item>> ARMOR_ITEMS = new HashMap<>();
 
     CitrinStarItem CITRIN_STAR = register("citrin_star",
             new CitrinStarItem(new Item.Settings().maxCount(4)));
@@ -56,32 +59,35 @@ public interface TitanFabricItems {
             new Item(new Item.Settings().maxCount(64)));
 
     //region armor
-    CitrinArmorItem CITRIN_HELMET = register("citrin_helmet",
-            new CitrinArmorItem(ArmorItem.Type.HELMET, new Item.Settings()));
-    CitrinArmorItem CITRIN_CHESTPLATE = register("citrin_chestplate",
-            new CitrinArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings()));
-    CitrinArmorItem CITRIN_LEGGINGS = register("citrin_leggings",
-            new CitrinArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings()));
-    CitrinArmorItem CITRIN_BOOTS = register("citrin_boots",
-            new CitrinArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()));
+    List<CitrinArmorItem> CITRIN_ARMOR_ITEMS = new ArrayList<>();
+    CitrinArmorItem CITRIN_HELMET = registerArmor("citrin_helmet",
+            new CitrinArmorItem(ArmorItem.Type.HELMET, new Item.Settings()), CITRIN_ARMOR_ITEMS);
+    CitrinArmorItem CITRIN_CHESTPLATE = registerArmor("citrin_chestplate",
+            new CitrinArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings()), CITRIN_ARMOR_ITEMS);
+    CitrinArmorItem CITRIN_LEGGINGS = registerArmor("citrin_leggings",
+            new CitrinArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings()), CITRIN_ARMOR_ITEMS);
+    CitrinArmorItem CITRIN_BOOTS = registerArmor("citrin_boots",
+            new CitrinArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()), CITRIN_ARMOR_ITEMS);
 
-    EmberArmorItem EMBER_HELMET = register("ember_helmet",
-            new EmberArmorItem(ArmorItem.Type.HELMET, new Item.Settings()));
-    EmberArmorItem EMBER_CHESTPLATE = register("ember_chestplate",
-            new EmberArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings()));
-    EmberArmorItem EMBER_LEGGINGS = register("ember_leggings",
-            new EmberArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings()));
-    EmberArmorItem EMBER_BOOTS = register("ember_boots",
-            new EmberArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()));
+    List<EmberArmorItem> EMBER_ARMOR_ITEMS = new ArrayList<>();
+    EmberArmorItem EMBER_HELMET = registerArmor("ember_helmet",
+            new EmberArmorItem(ArmorItem.Type.HELMET, new Item.Settings()), EMBER_ARMOR_ITEMS);
+    EmberArmorItem EMBER_CHESTPLATE = registerArmor("ember_chestplate",
+            new EmberArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings()), EMBER_ARMOR_ITEMS);
+    EmberArmorItem EMBER_LEGGINGS = registerArmor("ember_leggings",
+            new EmberArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings()), EMBER_ARMOR_ITEMS);
+    EmberArmorItem EMBER_BOOTS = registerArmor("ember_boots",
+            new EmberArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()), EMBER_ARMOR_ITEMS);
 
-    LegendArmorItem LEGEND_HELMET = register("legend_helmet",
-            new LegendArmorItem(ArmorItem.Type.HELMET, new Item.Settings(), 2.0f));
-    LegendArmorItem LEGEND_CHESTPLATE = register("legend_chestplate",
-            new LegendArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings(), 4.0f));
-    LegendArmorItem LEGEND_LEGGINGS = register("legend_leggings",
-            new LegendArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings(), 3.0f));
-    LegendArmorItem LEGEND_BOOTS = register("legend_boots",
-            new LegendArmorItem(ArmorItem.Type.BOOTS, new Item.Settings(), 1.0f));
+    List<LegendArmorItem> LEGEND_ARMOR_ITEMS = new ArrayList<>();
+    LegendArmorItem LEGEND_HELMET = registerArmor("legend_helmet",
+            new LegendArmorItem(ArmorItem.Type.HELMET, new Item.Settings(), 2.0f), LEGEND_ARMOR_ITEMS);
+    LegendArmorItem LEGEND_CHESTPLATE = registerArmor("legend_chestplate",
+            new LegendArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings(), 4.0f), LEGEND_ARMOR_ITEMS);
+    LegendArmorItem LEGEND_LEGGINGS = registerArmor("legend_leggings",
+            new LegendArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings(), 3.0f), LEGEND_ARMOR_ITEMS);
+    LegendArmorItem LEGEND_BOOTS = registerArmor("legend_boots",
+            new LegendArmorItem(ArmorItem.Type.BOOTS, new Item.Settings(), 1.0f), LEGEND_ARMOR_ITEMS);
     //endregion
 
     CitrinSwordItem CITRIN_SWORD = registerEffectSword("citrin_sword",
@@ -98,7 +104,7 @@ public interface TitanFabricItems {
     LegendSwordItem LEGEND_GREATSWORD = registerEffectSword("legend_greatsword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f, SwordType.GREAT_SWORD,
                     new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))));
-    DiamondSwordItem DIAMOND_SWORD = register("diamond_sword",
+    DiamondSwordItem DIAMOND_SWORD = registerEffectSword("diamond_sword",
             new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 6, -2.4f, SwordType.DEFAULT, null, new Item.Settings(), false));
     DiamondSwordItem DIAMOND_GREATSWORD = registerEffectSword("diamond_greatsword",
             new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings(), true));
@@ -173,8 +179,14 @@ public interface TitanFabricItems {
         return item;
     }
 
+    private static <T extends ArmorItem> T registerArmor(String name, T item, List<T> list) {
+        register(name, item);
+        list.add(item);
+        return item;
+    }
 
-        static void initialize() {
+
+    static void initialize() {
         // static initialisation
     }
 
