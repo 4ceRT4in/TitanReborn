@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "titanfabric:legend_crystal"
+    },
+    "X": {
+      "item": "titanfabric:legend_ingot"
+    }
+  },
+  "pattern": [
+    "X X",
+    "XEX",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:legend_chestplate"
+  }
+}

@@ -18,6 +18,8 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
+import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
+import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.recipe.builder.WeaponEffectRecipeJsonBuilder;
 
@@ -41,6 +43,12 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
 
         for (CitrinArmorItem entry : TitanFabricItems.CITRIN_ARMOR_ITEMS) {
             offerCitrinArmor(exporter, entry);
+        }
+        for (EmberArmorItem entry : TitanFabricItems.EMBER_ARMOR_ITEMS) {
+            offerSpecialArmor(exporter, entry, TitanFabricItems.EMBER_INGOT, Items.FIRE_CHARGE);
+        }
+        for (LegendArmorItem entry : TitanFabricItems.LEGEND_ARMOR_ITEMS) {
+            offerSpecialArmor(exporter, entry, TitanFabricItems.LEGEND_INGOT, TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
         }
     }
 
@@ -78,6 +86,25 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         builder.criterion(
                 FabricRecipeProvider.hasItem(TitanFabricItems.CITRIN_SHARD),
                 FabricRecipeProvider.conditionsFromItem(TitanFabricItems.CITRIN_SHARD)
+        ).offerTo(exporter, name);
+    }
+
+    private static void offerSpecialArmor(RecipeExporter exporter, ArmorItem output, Item baseMaterial, Item extraItem) {
+        String name = Registries.ITEM.getId(output).getPath();
+        ShapedRecipeJsonBuilder builder = ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output);
+        builder = builder.input('X', baseMaterial).input('E', extraItem);
+        switch (output.getType()) {
+            case BOOTS -> builder = builder.pattern("X X").pattern("XEX");
+            case CHESTPLATE -> builder = builder.pattern("X X").pattern("XEX").pattern("XXX");
+            case HELMET -> builder = builder.pattern("XXX").pattern("XEX");
+            case LEGGINGS -> builder = builder.pattern("XXX").pattern("XEX").pattern("X X");
+        }
+        builder.criterion(
+                FabricRecipeProvider.hasItem(baseMaterial),
+                FabricRecipeProvider.conditionsFromItem(baseMaterial)
+        ).criterion(
+                FabricRecipeProvider.hasItem(extraItem),
+                FabricRecipeProvider.conditionsFromItem(extraItem)
         ).offerTo(exporter, name);
     }
 }

@@ -32,20 +32,18 @@ import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
-import net.shirojr.titanfabric.util.UnorderedPair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings({"unused"})
 public interface TitanFabricItems {
     List<Item> ALL_ITEMS = new ArrayList<>();
-    List<SwordItem> EFFECT_SWORDS = new ArrayList<>();
-    HashMap<ArmorItem, UnorderedPair<Item>> ARMOR_ITEMS = new HashMap<>();
 
-    CitrinStarItem CITRIN_STAR = register("citrin_star",
-            new CitrinStarItem(new Item.Settings().maxCount(4)));
+    List<SwordItem> EFFECT_SWORDS = new ArrayList<>();
+    List<CitrinArmorItem> CITRIN_ARMOR_ITEMS = new ArrayList<>();
+    List<EmberArmorItem> EMBER_ARMOR_ITEMS = new ArrayList<>();
+    List<LegendArmorItem> LEGEND_ARMOR_ITEMS = new ArrayList<>();
 
     Item CITRIN_SHARD = register("citrin_shard",
             new Item(new Item.Settings().maxCount(64)));
@@ -59,7 +57,6 @@ public interface TitanFabricItems {
             new Item(new Item.Settings().maxCount(64)));
 
     //region armor
-    List<CitrinArmorItem> CITRIN_ARMOR_ITEMS = new ArrayList<>();
     CitrinArmorItem CITRIN_HELMET = registerArmor("citrin_helmet",
             new CitrinArmorItem(ArmorItem.Type.HELMET, new Item.Settings()), CITRIN_ARMOR_ITEMS);
     CitrinArmorItem CITRIN_CHESTPLATE = registerArmor("citrin_chestplate",
@@ -69,7 +66,6 @@ public interface TitanFabricItems {
     CitrinArmorItem CITRIN_BOOTS = registerArmor("citrin_boots",
             new CitrinArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()), CITRIN_ARMOR_ITEMS);
 
-    List<EmberArmorItem> EMBER_ARMOR_ITEMS = new ArrayList<>();
     EmberArmorItem EMBER_HELMET = registerArmor("ember_helmet",
             new EmberArmorItem(ArmorItem.Type.HELMET, new Item.Settings()), EMBER_ARMOR_ITEMS);
     EmberArmorItem EMBER_CHESTPLATE = registerArmor("ember_chestplate",
@@ -79,7 +75,6 @@ public interface TitanFabricItems {
     EmberArmorItem EMBER_BOOTS = registerArmor("ember_boots",
             new EmberArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()), EMBER_ARMOR_ITEMS);
 
-    List<LegendArmorItem> LEGEND_ARMOR_ITEMS = new ArrayList<>();
     LegendArmorItem LEGEND_HELMET = registerArmor("legend_helmet",
             new LegendArmorItem(ArmorItem.Type.HELMET, new Item.Settings(), 2.0f), LEGEND_ARMOR_ITEMS);
     LegendArmorItem LEGEND_CHESTPLATE = registerArmor("legend_chestplate",
@@ -138,6 +133,9 @@ public interface TitanFabricItems {
 
     TitanFabricParachuteItem PARACHUTE = register("parachute",
             new TitanFabricParachuteItem(new Item.Settings().maxCount(1)/*.maxDamage(250)*/.component(TitanFabricDataComponents.ACTIVATED, false)));
+
+    CitrinStarItem CITRIN_STAR = register("citrin_star",
+            new CitrinStarItem(new Item.Settings().maxCount(4)));
 
     FlintAndEmberItem FLINT_AND_EMBER = register("flint_and_ember",
             new FlintAndEmberItem(new Item.Settings().maxCount(1).maxDamage(64)));
