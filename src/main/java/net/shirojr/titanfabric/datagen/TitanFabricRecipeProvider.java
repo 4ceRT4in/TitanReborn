@@ -22,6 +22,7 @@ import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.recipe.builder.WeaponEffectRecipeJsonBuilder;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -40,6 +41,14 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         offerReversibleCompactingRecipes(exporter,
                 RecipeCategory.MISC, TitanFabricItems.CITRIN_SHARD,
                 RecipeCategory.BUILDING_BLOCKS, TitanFabricBlocks.CITRIN_BLOCK
+        );
+        offerReversibleCompactingRecipes(exporter,
+                RecipeCategory.MISC, TitanFabricItems.LEGEND_INGOT,
+                RecipeCategory.BUILDING_BLOCKS, TitanFabricBlocks.LEGEND_BLOCK
+        );
+        offerReversibleCompactingRecipes(exporter,
+                RecipeCategory.MISC, TitanFabricItems.EMBER_INGOT,
+                RecipeCategory.BUILDING_BLOCKS, TitanFabricBlocks.EMBER_BLOCK
         );
 
         offerHeatTreatment(exporter, TitanFabricBlocks.CITRIN_ORE.asItem(), TitanFabricItems.CITRIN_SHARD);
@@ -61,6 +70,12 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
             Identifier id = Registries.ITEM.getId(effectSword);
             offerEssenceUpgrade(id.getPath() + "_upgrade", effectSword, exporter);
         }
+
+        offerSwords(exporter, TitanFabricItems.CITRIN_SWORD, TitanFabricItems.CITRIN_GREATSWORD, TitanFabricItems.CITRIN_SHARD);
+        offerSwords(exporter, TitanFabricItems.EMBER_SWORD, TitanFabricItems.EMBER_GREATSWORD, TitanFabricItems.EMBER_INGOT);
+        offerSwords(exporter, TitanFabricItems.LEGEND_SWORD, TitanFabricItems.LEGEND_GREATSWORD, TitanFabricItems.LEGEND_INGOT);
+        offerSwords(exporter, null, TitanFabricItems.DIAMOND_GREATSWORD, Items.DIAMOND);
+        offerNetheriteUpgradeRecipe(exporter, TitanFabricItems.EMBER_GREATSWORD, RecipeCategory.COMBAT, TitanFabricItems.NETHERITE_GREATSWORD);
     }
 
     private static void offerEssenceUpgrade(String name, Item base, RecipeExporter exporter) {
@@ -89,10 +104,20 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         ShapedRecipeJsonBuilder builder = ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output);
         builder = builder.input('X', TitanFabricItems.CITRIN_SHARD);
         switch (output.getType()) {
-            case BOOTS -> builder = builder.pattern("X X").pattern("X X");
-            case CHESTPLATE -> builder = builder.pattern("X X").pattern("XXX").pattern("XXX");
-            case HELMET -> builder = builder.pattern("XXX").pattern("X X");
-            case LEGGINGS -> builder = builder.pattern("XXX").pattern("X X").pattern("X X");
+            case BOOTS -> builder = builder
+                    .pattern("X X")
+                    .pattern("X X");
+            case CHESTPLATE -> builder = builder
+                    .pattern("X X")
+                    .pattern("XXX")
+                    .pattern("XXX");
+            case HELMET -> builder = builder
+                    .pattern("XXX")
+                    .pattern("X X");
+            case LEGGINGS -> builder = builder
+                    .pattern("XXX")
+                    .pattern("X X")
+                    .pattern("X X");
         }
         builder.criterion(
                 FabricRecipeProvider.hasItem(TitanFabricItems.CITRIN_SHARD),
@@ -105,10 +130,20 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         ShapedRecipeJsonBuilder builder = ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output);
         builder = builder.input('X', baseMaterial).input('E', extraItem);
         switch (output.getType()) {
-            case BOOTS -> builder = builder.pattern("X X").pattern("XEX");
-            case CHESTPLATE -> builder = builder.pattern("X X").pattern("XEX").pattern("XXX");
-            case HELMET -> builder = builder.pattern("XXX").pattern("XEX");
-            case LEGGINGS -> builder = builder.pattern("XXX").pattern("XEX").pattern("X X");
+            case BOOTS -> builder = builder
+                    .pattern("X X")
+                    .pattern("XEX");
+            case CHESTPLATE -> builder = builder
+                    .pattern("X X")
+                    .pattern("XEX")
+                    .pattern("XXX");
+            case HELMET -> builder = builder
+                    .pattern("XXX")
+                    .pattern("XEX");
+            case LEGGINGS -> builder = builder
+                    .pattern("XXX")
+                    .pattern("XEX")
+                    .pattern("X X");
         }
         builder.criterion(
                 FabricRecipeProvider.hasItem(baseMaterial),
@@ -123,5 +158,28 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         String name = Registries.ITEM.getId(output).getPath();
         offerBlasting(exporter, List.of(input), RecipeCategory.MISC, output, 0.1f, 100, name);
         offerSmelting(exporter, List.of(input), RecipeCategory.MISC, output, 0.1f, 200, name);
+    }
+
+    private static void offerSwords(RecipeExporter exporter, @Nullable Item outputSword, @Nullable Item outputGreatsword, Item material) {
+        if (outputGreatsword != null) {
+            ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, outputGreatsword)
+                    .input('X', Ingredient.ofItems(material))
+                    .input('#', Ingredient.ofItems(TitanFabricItems.SWORD_HANDLE))
+                    .pattern(" XX")
+                    .pattern("XXX")
+                    .pattern("#X ")
+                    .criterion(hasItem(material), conditionsFromItem(material))
+                    .offerTo(exporter, Registries.ITEM.getId(outputGreatsword).getPath());
+        }
+        if (outputSword != null) {
+            ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, outputSword)
+                    .input('#', TitanFabricItems.SWORD_HANDLE)
+                    .input('X', material)
+                    .pattern("X")
+                    .pattern("X")
+                    .pattern("#")
+                    .criterion(hasItem(material), conditionsFromItem(material))
+                    .offerTo(exporter, Registries.ITEM.getId(outputSword).getPath());
+        }
     }
 }

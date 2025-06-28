@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ember_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "titanfabric:ember_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:ember_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ember_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:ember_ingot"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "titanfabric:ember_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "titanfabric:ember_ingot"
+  }
+}
