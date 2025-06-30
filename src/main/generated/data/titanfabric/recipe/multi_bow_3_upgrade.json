@@ -1,12 +1,13 @@
 {
   "type": "titanfabric:multi_bow_upgrade",
-  "base": {
-    "item": "titanfabric:multi_bow_2"
-  },
   "addition": {
     "item": "titanfabric:multi_bow_2"
   },
+  "base": {
+    "item": "titanfabric:multi_bow_2"
+  },
   "result": {
-    "item": "titanfabric:multi_bow_3"
+    "count": 1,
+    "id": "titanfabric:multi_bow_3"
   }
 }

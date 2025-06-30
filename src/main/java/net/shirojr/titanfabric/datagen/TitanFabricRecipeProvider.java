@@ -4,10 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.Registries;
@@ -23,6 +20,7 @@ import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.recipe.builder.EffectRecipeJsonBuilder;
 import net.shirojr.titanfabric.recipe.builder.EffectUpgradeRecipeJsonBuilder;
+import net.shirojr.titanfabric.recipe.builder.MultiBowUpgradeRecipeJsonBuilder;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.IngredientModule;
 import org.jetbrains.annotations.Nullable;
@@ -82,6 +80,16 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
 
         offerEffectItems(exporter, Items.BLAZE_POWDER, List.of(4), Items.POTION, List.of(1, 3, 5, 7), TitanFabricItems.ESSENCE, 2);
         offerEffectItems(exporter, Items.ARROW, List.of(1, 3, 5, 7), Items.POTION, List.of(4), TitanFabricItems.EFFECT_ARROW, 2);
+
+        offerMultiBowUpgrade(exporter, TitanFabricItems.MULTI_BOW_1, TitanFabricItems.MULTI_BOW_2);
+        offerMultiBowUpgrade(exporter, TitanFabricItems.MULTI_BOW_2, TitanFabricItems.MULTI_BOW_3);
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, TitanFabricItems.MULTI_BOW_1)
+                .input('s', Items.STRING).input('e', TitanFabricItems.EMBER_INGOT).input('#', Items.STICK)
+                .pattern(" #s")
+                .pattern("e s")
+                .pattern(" #s")
+                .criterion(hasItem(TitanFabricItems.EMBER_INGOT), conditionsFromItem(TitanFabricItems.EMBER_INGOT))
+                .offerTo(exporter);
     }
 
     private static void offerEssenceUpgrade(String name, Item base, RecipeExporter exporter) {
@@ -192,5 +200,12 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.BLAZE_POWDER), conditionsFromItem(Items.BLAZE_POWDER))
                 .criterion(hasItem(Items.POTION), conditionsFromItem(Items.POTION))
                 .offerTo(exporter, TitanFabric.getId(name));
+    }
+
+    private static void offerMultiBowUpgrade(RecipeExporter exporter, Item base, Item result) {
+        String name = Registries.ITEM.getId(result).getPath();
+        MultiBowUpgradeRecipeJsonBuilder.create(Ingredient.ofItems(base), result.getDefaultStack())
+                .criterion(hasItem(base), conditionsFromItem(base))
+                .offerTo(exporter, TitanFabric.getId(name + "_upgrade"));
     }
 }

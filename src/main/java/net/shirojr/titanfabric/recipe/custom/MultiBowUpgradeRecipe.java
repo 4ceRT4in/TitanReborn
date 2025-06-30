@@ -11,16 +11,18 @@ import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.recipe.input.SmithingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
-public class MultiBowRecipe implements SmithingRecipe {
+public class MultiBowUpgradeRecipe implements SmithingRecipe {
     final Ingredient base;
     final Ingredient addition;
     final ItemStack result;
 
-    public MultiBowRecipe(Ingredient base, Ingredient addition, ItemStack result) {
+    public MultiBowUpgradeRecipe(Ingredient base, Ingredient addition, ItemStack result) {
         this.base = base;
         this.addition = addition;
         this.result = result;
@@ -29,12 +31,16 @@ public class MultiBowRecipe implements SmithingRecipe {
 
     @Override
     public boolean matches(SmithingRecipeInput input, World world) {
+        if (getValidLevel(input.base(), input.addition()).isEmpty()) return false;
         return input.template().isEmpty() && this.base.test(input.base()) && this.addition.test(input.addition());
     }
 
     @Override
     public ItemStack craft(SmithingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        ItemStack itemStack = input.addition().copyComponentsToNewStack(this.result.getItem(), this.result.getCount());
+        Optional<Integer> level = getValidLevel(input.base(), input.addition());
+        if (level.isEmpty()) return ItemStack.EMPTY;
+        ItemStack itemStack = input.base().copyComponentsToNewStack(this.result.getItem(), this.result.getCount());
+        itemStack.set(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, level.get() + 1);
         itemStack.applyUnvalidatedChanges(this.result.getComponentChanges());
         return itemStack;
     }
@@ -44,9 +50,17 @@ public class MultiBowRecipe implements SmithingRecipe {
         return this.result;
     }
 
+    private static Optional<Integer> getValidLevel(ItemStack base, ItemStack addition) {
+        int baseLevel = base.getOrDefault(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, -1);
+        int additionLevel = addition.getOrDefault(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, -1);
+        if (baseLevel != additionLevel) return Optional.empty();
+        if (baseLevel < 0/* || baseLevel >= MAX_ALLOWED_LEVEL*/) return Optional.empty();
+        return Optional.of(baseLevel);
+    }
+
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TitanFabricRecipeSerializers.EFFECT_UPGRADE;
+        return TitanFabricRecipeSerializers.MULTI_BOW_UPGRADE;
     }
 
     @Override
@@ -66,40 +80,40 @@ public class MultiBowRecipe implements SmithingRecipe {
 
     @Override
     public boolean isEmpty() {
-        return  Stream.of(this.base, this.addition).anyMatch(Ingredient::isEmpty);
+        return Stream.of(this.base, this.addition).anyMatch(Ingredient::isEmpty);
     }
 
-    public static class Serializer implements RecipeSerializer<MultiBowRecipe> {
-        private static final MapCodec<MultiBowRecipe> CODEC = RecordCodecBuilder.mapCodec(
+    public static class Serializer implements RecipeSerializer<MultiBowUpgradeRecipe> {
+        private static final MapCodec<MultiBowUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                                 Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter(recipe -> recipe.base),
                                 Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter(recipe -> recipe.addition),
                                 ItemStack.VALIDATED_CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
                         )
-                        .apply(instance, MultiBowRecipe::new)
+                        .apply(instance, MultiBowUpgradeRecipe::new)
         );
-        public static final PacketCodec<RegistryByteBuf, MultiBowRecipe> PACKET_CODEC = PacketCodec.ofStatic(
-                MultiBowRecipe.Serializer::write, MultiBowRecipe.Serializer::read
+        public static final PacketCodec<RegistryByteBuf, MultiBowUpgradeRecipe> PACKET_CODEC = PacketCodec.ofStatic(
+                MultiBowUpgradeRecipe.Serializer::write, MultiBowUpgradeRecipe.Serializer::read
         );
 
         @Override
-        public MapCodec<MultiBowRecipe> codec() {
+        public MapCodec<MultiBowUpgradeRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, MultiBowRecipe> packetCodec() {
+        public PacketCodec<RegistryByteBuf, MultiBowUpgradeRecipe> packetCodec() {
             return PACKET_CODEC;
         }
 
-        private static MultiBowRecipe read(RegistryByteBuf buf) {
+        private static MultiBowUpgradeRecipe read(RegistryByteBuf buf) {
             Ingredient ingredient2 = Ingredient.PACKET_CODEC.decode(buf);
             Ingredient ingredient3 = Ingredient.PACKET_CODEC.decode(buf);
             ItemStack itemStack = ItemStack.PACKET_CODEC.decode(buf);
-            return new MultiBowRecipe(ingredient2, ingredient3, itemStack);
+            return new MultiBowUpgradeRecipe(ingredient2, ingredient3, itemStack);
         }
 
-        private static void write(RegistryByteBuf buf, MultiBowRecipe recipe) {
+        private static void write(RegistryByteBuf buf, MultiBowUpgradeRecipe recipe) {
             Ingredient.PACKET_CODEC.encode(buf, recipe.base);
             Ingredient.PACKET_CODEC.encode(buf, recipe.addition);
             ItemStack.PACKET_CODEC.encode(buf, recipe.result);

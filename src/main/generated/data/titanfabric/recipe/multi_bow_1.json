@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "e": {
+      "item": "titanfabric:ember_ingot"
+    },
+    "s": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    " #s",
+    "e s",
+    " #s"
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:multi_bow_1"
+  }
+}

@@ -22,19 +22,24 @@ import net.shirojr.titanfabric.util.items.SelectableArrows;
 import java.util.List;
 
 public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows {
+    private final int maxArrowCount;
     private final int coolDownTicks;
     private float pullProgress;
 
     public MultiBowItem(Item.Settings settings, int maxArrowCount, int tickCooldown) {
-        super(settings
-                .component(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, maxArrowCount)
+        super(settings.component(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, maxArrowCount)
                 .component(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT, 0)
         );
+        this.maxArrowCount = maxArrowCount;
         this.coolDownTicks = tickCooldown;
     }
 
-    public int getFullArrowCount(ItemStack stack) {
-        return stack.getOrDefault(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, 0);
+    @Override
+    public ItemStack getDefaultStack() {
+        ItemStack defaultStack = super.getDefaultStack();
+        defaultStack.set(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, this.maxArrowCount);
+        defaultStack.set(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT, 0);
+        return defaultStack;
     }
 
     @Override

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_multi_bow_1": {
+      "conditions": {
+        "items": [
+          {
+            "items": "titanfabric:multi_bow_1"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "titanfabric:multi_bow_2_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_multi_bow_1"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "titanfabric:multi_bow_2_upgrade"
+    ]
+  }
+}
