@@ -78,7 +78,7 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         offerSwords(exporter, null, TitanFabricItems.DIAMOND_GREATSWORD, Items.DIAMOND);
         offerNetheriteUpgradeRecipe(exporter, TitanFabricItems.EMBER_GREATSWORD, RecipeCategory.COMBAT, TitanFabricItems.NETHERITE_GREATSWORD);
 
-        offerEffectItems(exporter, Items.BLAZE_POWDER, List.of(4), Items.POTION, List.of(1, 3, 5, 7), TitanFabricItems.ESSENCE, 2);
+        offerEffectItems(exporter, Items.BLAZE_POWDER, List.of(4), Items.POTION, List.of(1, 3, 5, 7), TitanFabricItems.ESSENCE, 1);
         offerEffectItems(exporter, Items.ARROW, List.of(1, 3, 5, 7), Items.POTION, List.of(4), TitanFabricItems.EFFECT_ARROW, 2);
 
         offerMultiBowUpgrade(exporter, TitanFabricItems.MULTI_BOW_1, TitanFabricItems.MULTI_BOW_2);
