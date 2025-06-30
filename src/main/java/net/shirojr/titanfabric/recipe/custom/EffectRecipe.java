@@ -53,6 +53,7 @@ public class EffectRecipe extends SpecialCraftingRecipe {
     @Override
     public boolean matches(CraftingRecipeInput input, World world) {
         int matchingStacks = 0;
+        this.effectData = null;
         for (int i = 0; i < input.getStacks().size(); i++) {
             ItemStack stack = input.getStackInSlot(i);
             if (base.test(stack, i)) {
