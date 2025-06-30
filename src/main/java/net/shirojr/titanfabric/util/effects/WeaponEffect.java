@@ -21,6 +21,8 @@ public enum WeaponEffect {
     WEAK("weak", StatusEffects.WEAKNESS, new PotionContentsComponent(Potions.WEAKNESS).getColor()),
     WITHER("wither", StatusEffects.INSTANT_DAMAGE, StatusEffects.WITHER, 0x0D0D0D);
 
+    public static final int MAX_LEVEL = 2;
+
     private final String id;
     private final RegistryEntry<StatusEffect> ingredientEffect;
     private final RegistryEntry<StatusEffect> outputEffect;

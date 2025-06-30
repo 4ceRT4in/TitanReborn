@@ -17,6 +17,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
 import net.shirojr.titanfabric.util.IngredientModule;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
@@ -49,25 +50,17 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         return CATEGORY;
     }
 
-    @Nullable
-    public WeaponEffectData getEffectData() {
-        return effectData;
-    }
-
     @Override
     public boolean matches(CraftingRecipeInput input, World world) {
-        WeaponEffect weaponEffect = null;
         int matchingStacks = 0;
         for (int i = 0; i < input.getStacks().size(); i++) {
             ItemStack stack = input.getStackInSlot(i);
             if (base.test(stack, i)) {
                 matchingStacks++;
-            }
-            else if (modifier.test(stack, i)) {
+            } else if (modifier.test(stack, i)) {
                 matchingStacks++;
                 this.getWeaponEffectIfMissing(stack);
-            }
-            else if (stack.isEmpty() && !base.contains(i) && !modifier.contains(i)) {
+            } else if (stack.isEmpty() && !base.contains(i) && !modifier.contains(i)) {
                 matchingStacks++;
             }
         }
@@ -109,7 +102,8 @@ public class EffectRecipe extends SpecialCraftingRecipe {
 
     private ItemStack getResultStack() {
         if (this.effectData == null) {
-            throw new NullPointerException("No Effect Data available");
+            TitanFabric.LOGGER.warn("No Effect Data available", new NullPointerException());
+            return ItemStack.EMPTY;
         }
         ItemStack stack = EffectHelper.applyEffectToStack(this.result.item.getDefaultStack().copyWithCount(this.result.count), this.effectData, false);
         return Optional.of(stack).orElseThrow();
