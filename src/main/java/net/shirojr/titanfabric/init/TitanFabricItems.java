@@ -123,7 +123,7 @@ public interface TitanFabricItems {
             new Item.Settings().maxCount(1).maxDamage(1500), 3, 30));
 
 
-    TitanFabricArrowItem ARROW = register("effect_arrow",
+    TitanFabricArrowItem EFFECT_ARROW = register("effect_arrow",
             new TitanFabricArrowItem(new Item.Settings().maxCount(32)));
 
     TitanFabricShieldItem DIAMOND_SHIELD = register("diamond_shield",

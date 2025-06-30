@@ -1,5 +1,5 @@
 {
-  "type": "titanfabric:weapon_effect",
+  "type": "titanfabric:effect_upgrade",
   "addition": {
     "item": "titanfabric:essence"
   },

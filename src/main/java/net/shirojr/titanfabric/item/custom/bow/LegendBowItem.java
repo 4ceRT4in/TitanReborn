@@ -3,7 +3,6 @@ package net.shirojr.titanfabric.item.custom.bow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.shirojr.titanfabric.init.TitanFabricItemGroups;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.TitanFabricTags;
@@ -21,6 +20,6 @@ public class LegendBowItem extends TitanFabricBowItem implements Anvilable {
 
     @Override
     public List<Item> titanFabric$supportedArrows() {
-        return List.of(Items.ARROW, Items.SPECTRAL_ARROW, TitanFabricItems.ARROW);
+        return List.of(Items.ARROW, Items.SPECTRAL_ARROW, TitanFabricItems.EFFECT_ARROW);
     }
 }

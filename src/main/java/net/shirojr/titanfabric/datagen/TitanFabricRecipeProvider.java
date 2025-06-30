@@ -21,7 +21,10 @@ import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
-import net.shirojr.titanfabric.recipe.builder.WeaponEffectRecipeJsonBuilder;
+import net.shirojr.titanfabric.recipe.builder.EffectRecipeJsonBuilder;
+import net.shirojr.titanfabric.recipe.builder.EffectUpgradeRecipeJsonBuilder;
+import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
+import net.shirojr.titanfabric.util.IngredientModule;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -76,18 +79,14 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         offerSwords(exporter, TitanFabricItems.LEGEND_SWORD, TitanFabricItems.LEGEND_GREATSWORD, TitanFabricItems.LEGEND_INGOT);
         offerSwords(exporter, null, TitanFabricItems.DIAMOND_GREATSWORD, Items.DIAMOND);
         offerNetheriteUpgradeRecipe(exporter, TitanFabricItems.EMBER_GREATSWORD, RecipeCategory.COMBAT, TitanFabricItems.NETHERITE_GREATSWORD);
+
+        offerEffectItems(exporter, Items.BLAZE_POWDER, List.of(4), Items.POTION, List.of(1, 3, 5, 7), TitanFabricItems.ESSENCE, 2);
+        offerEffectItems(exporter, Items.ARROW, List.of(1, 3, 5, 7), Items.POTION, List.of(4), TitanFabricItems.EFFECT_ARROW, 2);
     }
 
     private static void offerEssenceUpgrade(String name, Item base, RecipeExporter exporter) {
-        WeaponEffectRecipeJsonBuilder.create(
-                        Ingredient.ofItems(base),
-                        Ingredient.ofItems(TitanFabricItems.ESSENCE),
-                        RecipeCategory.COMBAT)
-                .criterion(
-                        FabricRecipeProvider.hasItem(base),
-                        FabricRecipeProvider.conditionsFromItem(base)
-                )
-                .offerTo(exporter, TitanFabric.getId(name));
+        EffectUpgradeRecipeJsonBuilder.create(Ingredient.ofItems(base), Ingredient.ofItems(TitanFabricItems.ESSENCE), RecipeCategory.COMBAT)
+                .criterion(hasItem(base), conditionsFromItem(base)).offerTo(exporter, TitanFabric.getId(name));
     }
 
     private static void offerBackpack(BackPackItem item, Item centerPiece, RecipeExporter exporter) {
@@ -95,7 +94,7 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, item)
                 .pattern("sws").pattern("wcw").pattern("lwl")
                 .input('s', Items.STRING).input('w', ItemTags.WOOL).input('c', centerPiece).input('l', Items.LEATHER)
-                .criterion(FabricRecipeProvider.hasItem(centerPiece), FabricRecipeProvider.conditionsFromItem(centerPiece))
+                .criterion(hasItem(centerPiece), conditionsFromItem(centerPiece))
                 .offerTo(exporter, TitanFabric.getId(name));
     }
 
@@ -120,8 +119,8 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                     .pattern("X X");
         }
         builder.criterion(
-                FabricRecipeProvider.hasItem(TitanFabricItems.CITRIN_SHARD),
-                FabricRecipeProvider.conditionsFromItem(TitanFabricItems.CITRIN_SHARD)
+                hasItem(TitanFabricItems.CITRIN_SHARD),
+                conditionsFromItem(TitanFabricItems.CITRIN_SHARD)
         ).offerTo(exporter, name);
     }
 
@@ -146,11 +145,11 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                     .pattern("X X");
         }
         builder.criterion(
-                FabricRecipeProvider.hasItem(baseMaterial),
-                FabricRecipeProvider.conditionsFromItem(baseMaterial)
+                hasItem(baseMaterial),
+                conditionsFromItem(baseMaterial)
         ).criterion(
-                FabricRecipeProvider.hasItem(extraItem),
-                FabricRecipeProvider.conditionsFromItem(extraItem)
+                hasItem(extraItem),
+                conditionsFromItem(extraItem)
         ).offerTo(exporter, name);
     }
 
@@ -181,5 +180,17 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                     .criterion(hasItem(material), conditionsFromItem(material))
                     .offerTo(exporter, Registries.ITEM.getId(outputSword).getPath());
         }
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static void offerEffectItems(RecipeExporter exporter, Item base, List<Integer> baseSlots, Item modifier, List<Integer> modifierSlots, Item result, int resultCount) {
+        IngredientModule baseModule = new IngredientModule(Ingredient.ofItems(base), baseSlots.stream().mapToInt(Integer::intValue).toArray());
+        IngredientModule modifierModule = new IngredientModule(Ingredient.ofItems(modifier), modifierSlots.stream().mapToInt(Integer::intValue).toArray());
+        String name = Registries.ITEM.getId(result).getPath();
+
+        EffectRecipeJsonBuilder.create(baseModule, modifierModule, new EffectRecipe.Result(result, resultCount))
+                .criterion(hasItem(Items.BLAZE_POWDER), conditionsFromItem(Items.BLAZE_POWDER))
+                .criterion(hasItem(Items.POTION), conditionsFromItem(Items.POTION))
+                .offerTo(exporter, TitanFabric.getId(name));
     }
 }

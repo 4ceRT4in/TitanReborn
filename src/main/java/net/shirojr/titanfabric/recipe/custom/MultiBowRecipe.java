@@ -46,7 +46,7 @@ public class MultiBowRecipe implements SmithingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TitanFabricRecipeSerializers.WEAPON_EFFECT;
+        return TitanFabricRecipeSerializers.EFFECT_UPGRADE;
     }
 
     @Override

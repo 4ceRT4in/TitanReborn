@@ -21,11 +21,11 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import java.util.HashSet;
 import java.util.stream.Stream;
 
-public class WeaponEffectRecipe implements SmithingRecipe {
+public class EffectUpgradeRecipe implements SmithingRecipe {
     final Ingredient base;
     final Ingredient addition;
 
-    public WeaponEffectRecipe(Ingredient base, Ingredient addition) {
+    public EffectUpgradeRecipe(Ingredient base, Ingredient addition) {
         this.base = base;
         this.addition = addition;
     }
@@ -68,7 +68,7 @@ public class WeaponEffectRecipe implements SmithingRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return TitanFabricRecipeSerializers.WEAPON_EFFECT;
+        return TitanFabricRecipeSerializers.EFFECT_UPGRADE;
     }
 
     @Override
@@ -91,35 +91,35 @@ public class WeaponEffectRecipe implements SmithingRecipe {
         return Stream.of(this.base, this.addition).anyMatch(Ingredient::isEmpty);
     }
 
-    public static class Serializer implements RecipeSerializer<WeaponEffectRecipe> {
-        private static final MapCodec<WeaponEffectRecipe> CODEC = RecordCodecBuilder.mapCodec(
+    public static class Serializer implements RecipeSerializer<EffectUpgradeRecipe> {
+        private static final MapCodec<EffectUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(
                 instance -> instance.group(
                                 Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter(recipe -> recipe.base),
                                 Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter(recipe -> recipe.addition)
                         )
-                        .apply(instance, WeaponEffectRecipe::new)
+                        .apply(instance, EffectUpgradeRecipe::new)
         );
-        public static final PacketCodec<RegistryByteBuf, WeaponEffectRecipe> PACKET_CODEC = PacketCodec.ofStatic(
-                WeaponEffectRecipe.Serializer::write, WeaponEffectRecipe.Serializer::read
+        public static final PacketCodec<RegistryByteBuf, EffectUpgradeRecipe> PACKET_CODEC = PacketCodec.ofStatic(
+                EffectUpgradeRecipe.Serializer::write, EffectUpgradeRecipe.Serializer::read
         );
 
         @Override
-        public MapCodec<WeaponEffectRecipe> codec() {
+        public MapCodec<EffectUpgradeRecipe> codec() {
             return CODEC;
         }
 
         @Override
-        public PacketCodec<RegistryByteBuf, WeaponEffectRecipe> packetCodec() {
+        public PacketCodec<RegistryByteBuf, EffectUpgradeRecipe> packetCodec() {
             return PACKET_CODEC;
         }
 
-        private static WeaponEffectRecipe read(RegistryByteBuf buf) {
+        private static EffectUpgradeRecipe read(RegistryByteBuf buf) {
             Ingredient ingredient2 = Ingredient.PACKET_CODEC.decode(buf);
             Ingredient ingredient3 = Ingredient.PACKET_CODEC.decode(buf);
-            return new WeaponEffectRecipe(ingredient2, ingredient3);
+            return new EffectUpgradeRecipe(ingredient2, ingredient3);
         }
 
-        private static void write(RegistryByteBuf buf, WeaponEffectRecipe recipe) {
+        private static void write(RegistryByteBuf buf, EffectUpgradeRecipe recipe) {
             Ingredient.PACKET_CODEC.encode(buf, recipe.base);
             Ingredient.PACKET_CODEC.encode(buf, recipe.addition);
         }

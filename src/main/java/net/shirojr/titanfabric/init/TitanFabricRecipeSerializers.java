@@ -5,10 +5,12 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.recipe.custom.WeaponEffectRecipe;
+import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
+import net.shirojr.titanfabric.recipe.custom.EffectUpgradeRecipe;
 
 public interface TitanFabricRecipeSerializers {
-    RecipeSerializer<WeaponEffectRecipe> WEAPON_EFFECT = register("weapon_effect", new WeaponEffectRecipe.Serializer());
+    RecipeSerializer<EffectRecipe> EFFECT = register("effect", new EffectRecipe.Serializer());
+    RecipeSerializer<EffectUpgradeRecipe> EFFECT_UPGRADE = register("effect_upgrade", new EffectUpgradeRecipe.Serializer());
 
 
     private static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(String name, S serializer) {

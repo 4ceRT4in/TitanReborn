@@ -40,7 +40,7 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.DIAMOND_SWORD);
 
         registerBasicInnateItemsProvider(TitanFabricItems.ESSENCE);
-        registerBasicInnateItemsProvider(TitanFabricItems.ARROW);
+        registerBasicInnateItemsProvider(TitanFabricItems.EFFECT_ARROW);
 
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);

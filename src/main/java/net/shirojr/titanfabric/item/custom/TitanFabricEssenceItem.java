@@ -12,7 +12,7 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +26,14 @@ public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting
         ItemStack stack = super.getDefaultStack();
         stack.set(TitanFabricDataComponents.WEAPON_EFFECT, WeaponEffect.POISON);
         return stack;
+    }
+
+    public ItemStack withEffect(WeaponEffect effect) {
+        ItemStack defaultStack = getDefaultStack();
+        HashSet<WeaponEffectData> effects = new HashSet<>();
+        effects.add(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, effect, 1));
+        defaultStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, effects);
+        return defaultStack;
     }
 
     @Override
