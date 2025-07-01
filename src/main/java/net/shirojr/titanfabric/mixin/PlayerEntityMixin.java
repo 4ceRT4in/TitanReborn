@@ -44,8 +44,6 @@ import java.util.Optional;
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements ArrowShootingHandler {
     @Unique
-    private static final TrackedData<Integer> SELECTED_ARROW = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
-    @Unique
     private static final TrackedData<Boolean> SHOOTING_ARROWS = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BOOLEAN);
 
 
@@ -70,7 +68,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void titanfabric$appendSelectedArrowDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
-        builder.add(SELECTED_ARROW, -1);
         builder.add(SHOOTING_ARROWS, false);
     }
 
@@ -194,7 +191,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         else this.equipStack(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
         this.activeItemStack = ItemStack.EMPTY;
         this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + getWorld().random.nextFloat() * 0.4F);
-
     }
 
     @Inject(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))

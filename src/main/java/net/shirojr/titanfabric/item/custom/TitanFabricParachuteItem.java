@@ -32,33 +32,31 @@ public class TitanFabricParachuteItem extends Item {
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, world, entity, slot, selected);
         boolean isActive = stack.getOrDefault(TitanFabricDataComponents.ACTIVATED, false);
-        if (entity instanceof PlayerEntity playerEntity) {
-            boolean shouldReset = playerEntity.isOnGround() || playerEntity.isFallFlying() || playerEntity.isTouchingWater() || playerEntity.isInLava();
-            if (shouldReset && playerEntity.getItemCooldownManager().isCoolingDown(this)) {
+        if (!(entity instanceof PlayerEntity playerEntity)) return;
+        boolean shouldReset = playerEntity.isOnGround() || playerEntity.isFallFlying() || playerEntity.isTouchingWater() || playerEntity.isInLava();
+        if (shouldReset) {
+            stack.set(TitanFabricDataComponents.ACTIVATED, false);
+            if (playerEntity.getItemCooldownManager().isCoolingDown(this)) {
                 playerEntity.getItemCooldownManager().remove(this);
                 return;
             }
-            if (isActive) {
-                if (!selected && !playerEntity.getOffHandStack().getItem().equals(this)) {
-                    removeParachute(stack, playerEntity);
-                }
-                if (shouldReset) {
-                    stack.set(TitanFabricDataComponents.ACTIVATED, false);
-                } else {
-                    /*if (Math.random() <= 0.05) {
-                        stack.damage(1, playerEntity, playerEntity.getActiveHand().equals(Hand.MAIN_HAND) ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
-                    }*/
-                    Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);
-                    Vec3d newVec3d = playerEntity.getVelocity().add(rotationVec3d);
-                    playerEntity.setVelocity(
-                            new Vec3d(
-                                    MathHelper.clamp(newVec3d.getX(), -1.5, 1.5),
-                                    newVec3d.getY(),
-                                    MathHelper.clamp(newVec3d.getZ(), -1.5, 1.5)
-                            )
-                    );
-                }
-            }
+        }
+        if (!isActive) return;
+        if (!selected && !playerEntity.getOffHandStack().getItem().equals(this)) {
+            removeParachute(stack, playerEntity);
+        }
+        if (shouldReset) {
+            stack.set(TitanFabricDataComponents.ACTIVATED, false);
+        } else {
+            Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);
+            Vec3d newVec3d = playerEntity.getVelocity().add(rotationVec3d);
+            playerEntity.setVelocity(
+                    new Vec3d(
+                            MathHelper.clamp(newVec3d.getX(), -1.5, 1.5),
+                            newVec3d.getY(),
+                            MathHelper.clamp(newVec3d.getZ(), -1.5, 1.5)
+                    )
+            );
         }
     }
 
@@ -77,7 +75,6 @@ public class TitanFabricParachuteItem extends Item {
             user.setVelocity(velocity);
             ItemStack stack = user.getStackInHand(hand);
             stack.set(TitanFabricDataComponents.ACTIVATED, true);
-            user.getItemCooldownManager().set(this, 30);
             if (world.isClient()) {
                 TitanFabricSoundHandler.playParachuteSoundInstance((ClientPlayerEntity) user);
             } else {
