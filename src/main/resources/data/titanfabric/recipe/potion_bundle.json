@@ -20,7 +20,7 @@
         }
     },
     "result": {
-        "item": "titanfabric:potion_bundle",
+        "id": "titanfabric:potion_bundle",
         "count": 1
     }
 }

@@ -1,12 +1,13 @@
 {
-    "type": "minecraft:smithing",
+    "type": "minecraft:smithing_transform",
     "base": {
         "item": "minecraft:shield"
     },
     "addition": {
         "item": "minecraft:diamond"
     },
+    "template": [],
     "result": {
-        "item": "titanfabric:diamond_shield"
+        "id": "titanfabric:diamond_shield"
     }
 }

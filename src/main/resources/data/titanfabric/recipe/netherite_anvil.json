@@ -17,7 +17,7 @@
         }
     },
     "result": {
-        "item": "titanfabric:netherite_anvil",
+        "id": "titanfabric:netherite_anvil",
         "count": 1
     }
 }

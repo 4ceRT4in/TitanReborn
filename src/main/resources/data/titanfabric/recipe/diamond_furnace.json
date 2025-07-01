@@ -17,7 +17,7 @@
         }
     },
     "result": {
-        "item": "titanfabric:diamond_furnace",
+        "id": "titanfabric:diamond_furnace",
         "count": 1
     }
 }
