@@ -17,11 +17,11 @@ import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 
 import java.util.List;
 
-public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows {
+public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow {
     private final int maxArrowCount;
     private final int coolDownTicks;
     private float pullProgress;
@@ -57,7 +57,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (pullProgress < 0.2f) return;
 
         player.getItemCooldownManager().set(stack.getItem(), this.coolDownTicks);
-        int possibleArrowCount = Math.min(MultiBowHelper.searchValidArrowStack(player, this).getCount(), MultiBowHelper.getFullArrowCount(stack));
+        int possibleArrowCount = Math.min(MultiBowHelper.searchValidArrowStack(player, stack).getCount(), MultiBowHelper.getFullArrowCount(stack));
         if (player.isCreative()) possibleArrowCount = MultiBowHelper.getFullArrowCount(stack);
 
         MultiBowHelper.setArrowsLeft(stack, possibleArrowCount);
@@ -80,7 +80,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         stack.set(TitanFabricDataComponents.MULTI_BOW_PROJECTILE_TICK, projectileTick - 1);
         if (!validTick(projectileTick + 1)) return;
         ((ArrowShootingHandler) player).titanfabric$shootsArrows(true);
-        handleArrowShots(player, MultiBowHelper.searchValidArrowStack(player, this), this.pullProgress);
+        handleArrowShots(player, MultiBowHelper.searchValidArrowStack(player, stack), this.pullProgress);
         handleAfterShotValues(stack, player);
     }
 

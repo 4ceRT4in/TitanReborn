@@ -10,7 +10,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.TitanFabricTags;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,10 +19,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(CrossbowItem.class)
-public class CrossbowItemMixin implements SelectableArrows {
+public class CrossbowItemMixin implements SelectableArrow {
     @Inject(method = "use", at = @At("HEAD"))
     private void titanFabric$use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if (!world.isClient()) ArrowSelectionHelper.cleanUpProjectileSelection(user, this);
+        if (!world.isClient()) ArrowSelectionHelper.cleanUpProjectileSelection(user, user.getStackInHand(hand));
     }
 
     @Override

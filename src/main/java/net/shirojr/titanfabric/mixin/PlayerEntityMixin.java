@@ -12,13 +12,10 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
@@ -30,24 +27,22 @@ import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
-import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
-import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.*;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
+import org.spongepowered.asm.mixin.Debug;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @Debug(export = true)
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSelectionHandler, ArrowShootingHandler {
+public abstract class PlayerEntityMixin extends LivingEntity implements ArrowShootingHandler {
     @Unique
     private static final TrackedData<Integer> SELECTED_ARROW = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.INTEGER);
     @Unique
@@ -68,11 +63,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     public abstract ItemCooldownManager getItemCooldownManager();
 
     @Shadow
-    @Final
-    PlayerInventory inventory;
+    public abstract void remove(RemovalReason reason);
 
     @Shadow
-    public abstract void remove(RemovalReason reason);
+    public abstract PlayerInventory getInventory();
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void titanfabric$appendSelectedArrowDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
@@ -91,25 +85,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     }
 
     @Override
-    public Optional<Integer> titanfabric$getSelectedArrowIndex() {
-        int selectedArrowStackIndex = this.dataTracker.get(SELECTED_ARROW);
-        if (selectedArrowStackIndex == -1) return Optional.empty();
-        return Optional.of(selectedArrowStackIndex);
-    }
-
-    @Override
-    public void titanfabric$setSelectedArrowIndex(@Nullable ItemStack selectedArrowStack) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
-        ItemStack stack = null;
-        if (selectedArrowStack != null) stack = selectedArrowStack;
-        boolean isInMainHand = player.getMainHandStack().getItem() instanceof SelectableArrows;
-        boolean isInOffHand = player.getOffHandStack().getItem() instanceof SelectableArrows;
-        if (!isInMainHand && !isInOffHand) stack = null;
-        int newArrowStackIndex = getIndexOfArrowStack(player.getInventory(), stack);
-        this.dataTracker.set(SELECTED_ARROW, newArrowStackIndex);
-    }
-
-    @Override
     public boolean titanfabric$isShootingArrows() {
         return this.dataTracker.get(SHOOTING_ARROWS);
     }
@@ -121,33 +96,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
 
     @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        if (!(stack.getItem() instanceof SelectableArrows bowItem)) return;
-        PlayerEntity player = (PlayerEntity) (Object) this;
-        ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
-
-        arrowSelection.titanfabric$getSelectedArrowIndex().ifPresentOrElse(itemStackIndex ->
-                cir.setReturnValue(player.getInventory().getStack(itemStackIndex)), () -> {
-            List<ItemStack> possibleArrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(player.getInventory(), bowItem);
-            ItemStack backupStack = ItemStack.EMPTY;
-            if (!possibleArrowStacks.isEmpty()) {
-                backupStack = possibleArrowStacks.get(0);
-                arrowSelection.titanfabric$setSelectedArrowIndex(backupStack);
-            } else {
-                arrowSelection.titanfabric$setSelectedArrowIndex(null);
-            }
-            cir.setReturnValue(backupStack);
-        });
-    }
-
-    @Unique
-    private static int getIndexOfArrowStack(Inventory inventory, ItemStack stack) {
-        if (stack == null) return -1;
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stackInList = inventory.getStack(i);
-            if (!stackInList.equals(stack)) continue;
-            return i;
-        }
-        return -1;
+        if (!(stack.getItem() instanceof SelectableArrow selectionHandler)) return;
+        Optional<ItemStack> selection = Optional.ofNullable(selectionHandler.getSelectedIndex(stack)).map(index -> getInventory().getStack(index));
+        if (selection.isEmpty()) return;
+        cir.setReturnValue(selection.get());
     }
 
     @Inject(method = "damage", at = @At(value = "TAIL"), cancellable = true)
@@ -249,23 +201,5 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
     public void titanfabric$disableNeMuelchShield(CallbackInfo ci) {
         this.getItemCooldownManager().set(TitanFabricItems.DIAMOND_SHIELD.asItem(), 90);
         this.getItemCooldownManager().set(TitanFabricItems.LEGEND_SHIELD.asItem(), 90);
-    }
-
-    @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
-    private void titanfabric$arrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        if (!((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayerEntity)) return;
-        if (serverPlayerEntity.getAbilities().creativeMode) return;
-        if (!(stack.getItem() instanceof SelectableArrows weaponWithSelectableArrows)) return;
-
-        Predicate<ItemStack> predicate = possibleArrowStack -> weaponWithSelectableArrows.titanFabric$supportedArrows().contains(possibleArrowStack.getItem());
-        ItemStack itemStack = RangedWeaponItem.getHeldProjectile(serverPlayerEntity, predicate);
-        if (!itemStack.isEmpty()) {
-            cir.setReturnValue(itemStack);
-            return;
-        }
-
-        for (int i = 0; i < inventory.size(); i++) {
-
-        }
     }
 }

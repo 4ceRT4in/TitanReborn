@@ -11,7 +11,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.util.TitanFabricTags;
-import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 
 import java.util.function.Predicate;
 
@@ -86,22 +85,30 @@ public final class MultiBowHelper {
      * @param player used to get access to the inventory
      * @return returns either an Empty ItemStack or the first possible Arrow ItemStack
      */
-    public static ItemStack searchValidArrowStack(PlayerEntity player, SelectableArrows selectableArrows) {
-        Predicate<ItemStack> isSelectableArrow = itemStack -> selectableArrows.titanFabric$supportedArrows().contains(itemStack.getItem());
-        ArrowSelectionHelper.cleanUpProjectileSelection(player, selectableArrows);
-        ArrowSelectionHandler handler = (ArrowSelectionHandler) player;
+    public static ItemStack searchValidArrowStack(PlayerEntity player, ItemStack weaponStack) {
+        if (!(weaponStack.getItem() instanceof SelectableArrow selectionHandler)) {
+            throw new IllegalArgumentException("Weapon ItemStack is not allowed to choose Projectile Stacks");
+        }
+        Predicate<ItemStack> isSelectableArrow = itemStack -> selectionHandler.titanFabric$supportedArrows().contains(itemStack.getItem());
 
         ItemStack outputStack = ItemStack.EMPTY;
-        if (handler.titanfabric$getSelectedArrowIndex().isPresent()) {
-            ItemStack stack = player.getInventory().getStack(handler.titanfabric$getSelectedArrowIndex().get());
-            if (isSelectableArrow.test(stack)) outputStack = stack;
+        Integer selectedIndex = selectionHandler.getSelectedIndex(weaponStack);
+        if (selectedIndex != null) {
+            ItemStack selectedStack = player.getInventory().getStack(selectedIndex);
+            if (isSelectableArrow.test(selectedStack)) {
+                outputStack = selectedStack;
+            }
         }
         if (outputStack.isEmpty()) {
             for (ItemStack stack : player.getInventory().main) {
-                if (isSelectableArrow.test(stack)) return stack;
+                if (!isSelectableArrow.test(stack)) continue;
+                outputStack = stack;
+                break;
             }
         }
-        if (player.isCreative()) new ItemStack(Items.ARROW);
+        if (player.isCreative()) {
+            outputStack = new ItemStack(Items.ARROW);
+        }
         return outputStack;
     }
 

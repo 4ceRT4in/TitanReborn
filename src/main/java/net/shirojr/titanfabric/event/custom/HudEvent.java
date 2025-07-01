@@ -6,8 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.item.ItemStack;
-import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 
 public class HudEvent {
     public static void register() {
@@ -17,12 +16,20 @@ public class HudEvent {
     private static void renderArrowSelection(DrawContext context, RenderTickCounter tickCounter) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null || player.isSpectator()) return;
-        boolean isNotInMainHand = !(player.getMainHandStack().getItem() instanceof SelectableArrows);
-        boolean isNotInOffHand = !(player.getOffHandStack().getItem() instanceof SelectableArrows);
-        if (isNotInMainHand && isNotInOffHand) return;
-        ArrowSelectionHandler arrowSelection = (ArrowSelectionHandler) player;
-        if (arrowSelection.titanfabric$getSelectedArrowIndex().isEmpty()) return;
-        ItemStack selectedArrowStack = player.getInventory().getStack(arrowSelection.titanfabric$getSelectedArrowIndex().get());
+        SelectableArrow selectionHandler;
+        ItemStack weaponStack;
+        if (player.getMainHandStack().getItem() instanceof SelectableArrow selectableArrow) {
+            selectionHandler = selectableArrow;
+            weaponStack = player.getMainHandStack();
+        } else if (player.getOffHandStack().getItem() instanceof SelectableArrow selectableArrow) {
+            selectionHandler = selectableArrow;
+            weaponStack = player.getOffHandStack();
+        } else {
+            return;
+        }
+        Integer selectedIndex = selectionHandler.getSelectedIndex(weaponStack);
+        if (selectedIndex == null) return;
+        ItemStack selectedArrowStack = player.getInventory().getStack(selectedIndex);
         int x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - 118;
         int y = MinecraftClient.getInstance().getWindow().getScaledHeight() - 19;
         if (!player.getOffHandStack().isEmpty()) {

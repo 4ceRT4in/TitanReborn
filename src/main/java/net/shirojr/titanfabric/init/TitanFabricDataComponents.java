@@ -50,6 +50,10 @@ public interface TitanFabricDataComponents {
     ComponentType<ExtendedInventory> EXTENDED_INVENTORY = register("extended_inventory",
             builder -> builder.codec(ExtendedInventory.CODEC).packetCodec(ExtendedInventory.PACKET_CODEC));
 
+    ComponentType<Integer> SELECTED_PROJECTILE = register("selected_projectile",
+            builder -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+
+
     @SuppressWarnings("SameParameterValue")
     private static <T> ComponentType<T> register(String name, Consumer<ComponentType.Builder<T>> componentTypeConsumer) {
         ComponentType.Builder<T> builder = ComponentType.builder();
