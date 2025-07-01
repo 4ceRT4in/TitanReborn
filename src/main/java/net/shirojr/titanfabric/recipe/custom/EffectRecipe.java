@@ -60,7 +60,11 @@ public class EffectRecipe extends SpecialCraftingRecipe {
                 matchingStacks++;
             } else if (modifier.test(stack, i)) {
                 matchingStacks++;
-                this.getWeaponEffectIfMissing(stack);
+                try {
+                    this.getWeaponEffectIfMissing(stack);
+                } catch (IllegalArgumentException e) {
+                    return false;
+                }
             } else if (stack.isEmpty() && !base.contains(i) && !modifier.contains(i)) {
                 matchingStacks++;
             }
@@ -68,7 +72,7 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         return matchingStacks == 9;
     }
 
-    private void getWeaponEffectIfMissing(ItemStack modifierStack) {
+    private void getWeaponEffectIfMissing(ItemStack modifierStack) throws IllegalArgumentException {
         WeaponEffect weaponEffect = null;
         if (this.effectData != null) return;
         if (modifierStack.getItem() instanceof PotionItem) {
@@ -76,8 +80,8 @@ public class EffectRecipe extends SpecialCraftingRecipe {
         } else if (modifierStack.getItem() instanceof WeaponEffectCrafting) {
             weaponEffect = WeaponEffectData.get(modifierStack, WeaponEffectType.INNATE_EFFECT).map(WeaponEffectData::weaponEffect).orElse(null);
         }
-        if (weaponEffect == null) {
-            throw new NullPointerException("Modifier Stack didn't have any WeaponEffect");
+        if (weaponEffect == null || !EffectHelper.getAllPossibleEffects(this.result.item).contains(weaponEffect)) {
+            throw new IllegalArgumentException();
         }
         this.effectData = new WeaponEffectData(
                 WeaponEffectType.INNATE_EFFECT,
