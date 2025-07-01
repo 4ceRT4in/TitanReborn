@@ -47,17 +47,14 @@ public class TitanFabricParachuteItem extends Item {
         }
         if (shouldReset) {
             stack.set(TitanFabricDataComponents.ACTIVATED, false);
-        } else {
-            Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);
-            Vec3d newVec3d = playerEntity.getVelocity().add(rotationVec3d);
-            playerEntity.setVelocity(
-                    new Vec3d(
-                            MathHelper.clamp(newVec3d.getX(), -1.5, 1.5),
-                            newVec3d.getY(),
-                            MathHelper.clamp(newVec3d.getZ(), -1.5, 1.5)
-                    )
-            );
+            return;
         }
+        Vec3d rotationVec3d = playerEntity.getRotationVector().multiply(0.01, 0, 0.01);
+        Vec3d newVec3d = playerEntity.getVelocity().add(rotationVec3d);
+        double x = MathHelper.clamp(newVec3d.getX(), -1.5, 1.5);
+        double y = newVec3d.getY();
+        double z = MathHelper.clamp(newVec3d.getZ(), -1.5, 1.5);
+        playerEntity.setVelocity(new Vec3d(x, y, z));
     }
 
     @Override
