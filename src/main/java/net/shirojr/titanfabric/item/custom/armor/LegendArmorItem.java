@@ -1,8 +1,10 @@
 package net.shirojr.titanfabric.item.custom.armor;
 
 import com.google.common.base.Suppliers;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.type.UnbreakableComponent;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ArmorItem;
@@ -24,7 +26,9 @@ public class LegendArmorItem extends ArmorItem implements Anvilable {
 
     public LegendArmorItem(Type type, Settings settings, float extraHealth) {
         super(TitanFabricArmorMaterials.LEGEND.getRegistryEntry(), type,
-                settings.maxDamage(TitanFabricArmorMaterials.LEGEND.getDurability(type)));
+                settings.maxDamage(TitanFabricArmorMaterials.LEGEND.getDurability(type))
+                        .component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))
+        );
         this.extraHealth = extraHealth;
 
         this.attributeModifiers = Suppliers.memoize(() -> {

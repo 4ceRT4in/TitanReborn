@@ -77,13 +77,13 @@ public record ArrowSelectionPacket(int weaponStackIndex) implements CustomPayloa
         if (filteredArrowStacks.isEmpty()) return;
         ItemStack newSelectedArrowStack;
 
-        Integer arrowStackIndex = selectionHandler.getSelectedIndex(weaponStack);
-        if (arrowStackIndex == null) {
+        Integer oldArrowStackIndex = selectionHandler.getSelectedIndex(weaponStack);
+        if (oldArrowStackIndex == null) {
             newSelectedArrowStack = filteredArrowStacks.get(0);
         } else {
-            ItemStack selectedArrowStack = inventory.getStack(arrowStackIndex);
-            if (filteredArrowStacks.contains(selectedArrowStack)) {
-                int newIndexInArrowList = filteredArrowStacks.indexOf(selectedArrowStack) + 1;
+            ItemStack oldSelectedArrowStack = inventory.getStack(oldArrowStackIndex);
+            if (filteredArrowStacks.contains(oldSelectedArrowStack)) {
+                int newIndexInArrowList = filteredArrowStacks.indexOf(oldSelectedArrowStack) + 1;
                 if (newIndexInArrowList > filteredArrowStacks.size() - 1) newIndexInArrowList = 0;
                 newSelectedArrowStack = filteredArrowStacks.get(newIndexInArrowList);
             } else {
@@ -93,7 +93,7 @@ public record ArrowSelectionPacket(int weaponStackIndex) implements CustomPayloa
 
         Text arrowStackName = newSelectedArrowStack.getItem().getName(newSelectedArrowStack);
         player.sendMessage(Text.translatable("actionbar.titanfabric.arrow_selection").append(arrowStackName), true);
-        boolean changedComponent = selectionHandler.setSelectedIndex(inventory, weaponStack, inventory.indexOf(newSelectedArrowStack));
+        boolean changedComponent = selectionHandler.setSelectedIndex(inventory, weaponStack, inventory.main.indexOf(newSelectedArrowStack));
         LoggerUtil.devLogger("SelectedStack: %s | Changed final Stack Component: %s".formatted(newSelectedArrowStack.getName(), changedComponent));
     }
 }

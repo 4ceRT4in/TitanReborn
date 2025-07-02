@@ -58,7 +58,9 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
 
         player.getItemCooldownManager().set(stack.getItem(), this.coolDownTicks);
         int possibleArrowCount = Math.min(MultiBowHelper.searchValidArrowStack(player, stack).getCount(), MultiBowHelper.getFullArrowCount(stack));
-        if (player.isCreative()) possibleArrowCount = MultiBowHelper.getFullArrowCount(stack);
+        if (player.isCreative()) {
+            possibleArrowCount = MultiBowHelper.getFullArrowCount(stack);
+        }
 
         MultiBowHelper.setArrowsLeft(stack, possibleArrowCount);
         ((ArrowShootingHandler) player).titanfabric$shootsArrows(true);
@@ -80,7 +82,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
         stack.set(TitanFabricDataComponents.MULTI_BOW_PROJECTILE_TICK, projectileTick - 1);
         if (!validTick(projectileTick + 1)) return;
         ((ArrowShootingHandler) player).titanfabric$shootsArrows(true);
-        handleArrowShots(player, MultiBowHelper.searchValidArrowStack(player, stack), this.pullProgress);
+        handleArrowShots(player, stack, MultiBowHelper.searchValidArrowStack(player, stack), this.pullProgress);
         handleAfterShotValues(stack, player);
     }
 
@@ -102,16 +104,16 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
         }
     }
 
-    private static void handleArrowShots(PlayerEntity player, ItemStack arrowStack, double pullProgress) {
+    private static void handleArrowShots(PlayerEntity player, ItemStack weaponStack, ItemStack arrowStack, double pullProgress) {
         World world = player.getWorld();
-        ItemStack bowStack = player.getStackInHand(Hand.MAIN_HAND);
-        if (!MultiBowHelper.handleArrowConsumption(player, bowStack, arrowStack)) return;
+
+        if (!MultiBowHelper.handleArrowConsumption(player, weaponStack, arrowStack)) return;
 
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,
                 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + (float) pullProgress * 0.5f);
         PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, arrowStack,
-                player.getPitch(), player.getYaw(), pullProgress, bowStack);
+                player.getPitch(), player.getYaw(), pullProgress, weaponStack);
         world.spawnEntity(projectile);
     }
 }

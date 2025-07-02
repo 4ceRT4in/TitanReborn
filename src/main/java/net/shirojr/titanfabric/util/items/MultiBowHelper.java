@@ -70,11 +70,12 @@ public final class MultiBowHelper {
      */
     public static boolean handleArrowConsumption(PlayerEntity player, ItemStack bowStack, ItemStack arrowStack) {
         PlayerInventory inventory = player.getInventory();
-        if (player.getWorld() instanceof ServerWorld serverWorld && EnchantmentHelper.getAmmoUse(serverWorld, bowStack, arrowStack, 1) > 0)
+        if (player.getWorld() instanceof ServerWorld serverWorld && EnchantmentHelper.getAmmoUse(serverWorld, bowStack, arrowStack, 1) > 0) {
             return true;
-        if (!inventory.contains(arrowStack) || arrowStack.getCount() < 1)
+        }
+        if (!inventory.contains(arrowStack) || arrowStack.getCount() < 1) {
             return false;
-
+        }
         arrowStack.decrementUnlessCreative(1, player);
         return true;
     }
