@@ -1,25 +1,22 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "nOn",
-        "PtP",
-        "FtF"
+        "nLn",
+        "PSP",
+        "S S"
     ],
     "key": {
         "n": {
             "item": "minecraft:netherite_ingot"
         },
-        "O": {
-            "item": "minecraft:obsidian"
+        "L": {
+            "item": "minecraft:leather"
         },
         "P": {
             "item": "minecraft:phantom_membrane"
         },
-        "t": {
-            "item": "titanfabric:legend_ingot"
-        },
-        "F": {
-            "item": "minecraft:feather"
+        "S": {
+            "item": "minecraft:string"
         }
     },
     "result": {
