@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
@@ -69,14 +68,15 @@ public final class MultiBowHelper {
      * @return false, if not enough arrows were found in the inventory
      */
     public static boolean handleArrowConsumption(PlayerEntity player, ItemStack bowStack, ItemStack arrowStack) {
-        PlayerInventory inventory = player.getInventory();
-        if (player.getWorld() instanceof ServerWorld serverWorld && EnchantmentHelper.getAmmoUse(serverWorld, bowStack, arrowStack, 1) > 0) {
+        if (!(player.getWorld() instanceof ServerWorld serverWorld)) return false;
+        int ammoUseAmount = EnchantmentHelper.getAmmoUse(serverWorld, bowStack, arrowStack, 1);
+        if (ammoUseAmount <= 0 || player.isCreative()) {
             return true;
         }
-        if (!inventory.contains(arrowStack) || arrowStack.getCount() < 1) {
+        if (!player.getInventory().contains(arrowStack) || arrowStack.getCount() < ammoUseAmount) {
             return false;
         }
-        arrowStack.decrementUnlessCreative(1, player);
+        arrowStack.decrementUnlessCreative(ammoUseAmount, player);
         return true;
     }
 

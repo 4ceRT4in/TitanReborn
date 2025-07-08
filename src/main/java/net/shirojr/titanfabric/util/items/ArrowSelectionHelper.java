@@ -39,6 +39,6 @@ public class ArrowSelectionHelper {
         List<ItemStack> selectableArrows = findAllSupportedArrowStacks(user.getInventory(), selectionHandler);
         ItemStack newSelectedStack = null;
         if (!selectableArrows.isEmpty()) newSelectedStack = selectableArrows.get(0);
-        selectionHandler.setSelectedIndex(user.getInventory(), weaponStack, user.getInventory().indexOf(newSelectedStack));
+        selectionHandler.setSelectedIndex(user.getInventory(), weaponStack, newSelectedStack == null ? null : user.getInventory().indexOf(newSelectedStack));
     }
 }

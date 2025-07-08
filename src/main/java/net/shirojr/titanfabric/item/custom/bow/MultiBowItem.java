@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
+import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
 
@@ -96,6 +97,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
             MultiBowHelper.setArrowsLeft(bowStack, newArrowCount);
             if (newArrowCount <= 0) {
                 ((ArrowShootingHandler) player).titanfabric$shootsArrows(false);
+                ArrowSelectionHelper.cleanUpProjectileSelection(player, bowStack);
             }
         }
         if (player instanceof ServerPlayerEntity serverPlayer) {
@@ -106,13 +108,17 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
 
     private static void handleArrowShots(PlayerEntity player, ItemStack weaponStack, ItemStack arrowStack, double pullProgress) {
         World world = player.getWorld();
-
-        if (!MultiBowHelper.handleArrowConsumption(player, weaponStack, arrowStack)) return;
+        ItemStack stackForProjectile = arrowStack.copy();
+        if (!MultiBowHelper.handleArrowConsumption(player, weaponStack, arrowStack)) {
+            MultiBowHelper.setArrowsLeft(weaponStack, 0);
+            ((ArrowShootingHandler)player).titanfabric$shootsArrows(false);
+            return;
+        }
 
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,
                 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + (float) pullProgress * 0.5f);
-        PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, arrowStack,
+        PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, stackForProjectile,
                 player.getPitch(), player.getYaw(), pullProgress, weaponStack);
         world.spawnEntity(projectile);
     }
