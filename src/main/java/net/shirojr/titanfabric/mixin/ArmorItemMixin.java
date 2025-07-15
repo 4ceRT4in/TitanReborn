@@ -35,15 +35,4 @@ public abstract class ArmorItemMixin extends Item {
             }
         }
     }
-
-    @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        super.appendTooltip(stack, context, tooltip, type);
-        if (stack.getItem() == Items.NETHERITE_HELMET ||
-                stack.getItem() == Items.NETHERITE_CHESTPLATE ||
-                stack.getItem() == Items.NETHERITE_LEGGINGS ||
-                stack.getItem() == Items.NETHERITE_BOOTS) {
-            tooltip.add(Text.translatable("tooltip.titanfabric.netherite_effect"));
-        }
-    }
 }

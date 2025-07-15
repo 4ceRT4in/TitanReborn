@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.init;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -10,6 +11,7 @@ import net.shirojr.titanfabric.data.BackPackContent;
 import net.shirojr.titanfabric.data.ExtendedInventory;
 import net.shirojr.titanfabric.data.PotionBundleContent;
 import net.shirojr.titanfabric.util.TitanFabricCodecs;
+import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 
@@ -49,6 +51,9 @@ public interface TitanFabricDataComponents {
 
     ComponentType<ExtendedInventory> EXTENDED_INVENTORY = register("extended_inventory",
             builder -> builder.codec(ExtendedInventory.CODEC).packetCodec(ExtendedInventory.PACKET_CODEC));
+
+    ComponentType<ArmorPlateType> ARMOR_PLATING = register("armor_plating",
+            builder -> builder.codec(ArmorPlateType.CODEC).packetCodec(ArmorPlateType.PACKET_CODEC));
 
     @SuppressWarnings("SameParameterValue")
     private static <T> ComponentType<T> register(String name, Consumer<ComponentType.Builder<T>> componentTypeConsumer) {

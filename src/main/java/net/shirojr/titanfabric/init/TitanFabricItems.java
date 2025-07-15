@@ -147,8 +147,8 @@ public interface TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
 
-    PotionBundleItem POTION_BUNDLE = registerItem("potion_bundle", new PotionBundleItem(new Item.Settings().maxCount(1)
-            .component(TitanFabricDataComponents.POTION_BUNDLE_CONTENT, PotionBundleContent.DEFAULT)));
+    BackPackItem POTION_BUNDLE = registerItem("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1)
+            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.POTION))));
 
     BackPackItem BACKPACK_SMALL = registerItem("backpack_small", new BackPackItem(new Item.Settings().maxCount(1)
             .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.SMALL))));

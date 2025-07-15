@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +15,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
+import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -28,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -46,6 +49,18 @@ public abstract class LivingEntityMixin {
 
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
+
+    @Inject(method = "tickStatusEffects", at = @At("HEAD"))
+    private void tickStatusEffects(CallbackInfo ci) {
+        LivingEntity self = (LivingEntity)(Object)this;
+        for (StatusEffectInstance effectInstance : new ArrayList<>(self.getStatusEffects())) {
+            StatusEffect effect = effectInstance.getEffectType().value();
+
+            if (effect.getCategory() == StatusEffectCategory.HARMFUL) {
+                ImmunityEffect.checkAndBlockNegativeEffect(self, effectInstance);
+            }
+        }
+    }
 
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", cancellable = true, at = @At("HEAD"))
     private void titanfabric$addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {

@@ -13,9 +13,7 @@ import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.item.SwordItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,6 +27,8 @@ import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
+import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
@@ -42,6 +42,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -148,6 +149,37 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
             return i;
         }
         return -1;
+    }
+
+    @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
+    private float damage(float amount, DamageSource source) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if(!player.getWorld().isClient()) {
+            if(source != null && source.getSource() != null && source.getSource() instanceof LivingEntity attacker) {
+                ItemStack mainIs = attacker.getMainHandStack();
+
+                if(mainIs != null && mainIs.getItem() instanceof ToolItem) {
+                    ToolMaterial toolMaterial = ((ToolItem)mainIs.getItem()).getMaterial();
+
+                    Map<ToolMaterial, ArmorPlateType> armorPlateTypes = Map.of(
+                            ToolMaterials.DIAMOND, ArmorPlateType.DIAMOND,
+                            ToolMaterials.NETHERITE, ArmorPlateType.NETHERITE,
+                            TitanFabricToolMaterials.CITRIN, ArmorPlateType.CITRIN,
+                            TitanFabricToolMaterials.EMBER, ArmorPlateType.EMBER,
+                            TitanFabricToolMaterials.LEGEND, ArmorPlateType.LEGEND
+                    );
+                    ArmorPlateType plateType = armorPlateTypes.get(toolMaterial);
+                    if (plateType != null) {
+                        int armorProb = 0;
+                        if(armorProb > 0) {
+                            float damageReduction = 0.025f * armorProb; //2.5%
+                            return amount * (1.0f - damageReduction);
+                        }
+                    }
+                }
+            }
+        }
+        return amount;
     }
 
     @Inject(method = "damage", at = @At(value = "TAIL"), cancellable = true)

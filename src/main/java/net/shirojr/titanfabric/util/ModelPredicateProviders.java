@@ -3,14 +3,24 @@ package net.shirojr.titanfabric.util;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
+import net.minecraft.item.*;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
@@ -20,6 +30,7 @@ import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static net.shirojr.titanfabric.util.effects.WeaponEffectType.ADDITIONAL_EFFECT;
@@ -60,6 +71,11 @@ public class ModelPredicateProviders {
         registerColorItemProvider(TitanFabricItems.PARACHUTE);
 
         registerBundleItemProvider(TitanFabricItems.POTION_BUNDLE);
+
+        registerOverpoweredEnchantedBookPredicate(Items.ENCHANTED_BOOK);
+        registerCustomPotionPredicate(Items.POTION);
+        registerCustomPotionPredicate(Items.SPLASH_POTION);
+        registerCustomPotionPredicate(Items.LINGERING_POTION);
     }
 
     private static void registerWeaponEffects(Item item) {
@@ -155,7 +171,67 @@ public class ModelPredicateProviders {
     }
 
     private static void registerColorItemProvider(Item item) {
-        //TODO: add color provider impl, mby with interface too?
+        if (item == null) return;
+        for (DyeColor colors : DyeColor.values()) {
+            ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla(colors.getName()),
+                    (stack, world, entity, seed) ->
+                            stack.get(DataComponentTypes.BASE_COLOR) != null && Objects.requireNonNull(stack.get(DataComponentTypes.BASE_COLOR)).getName().equals(colors.getName()) ? 1.0F : 0.0F);
+        }
+    }
+
+    private static void registerCustomPotionPredicate(Item item) {
+        if(item == null) return;
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("frostburn"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+                        PotionContentsComponent contents = stack.get(DataComponentTypes.POTION_CONTENTS);
+                        if (contents != null) {
+                            for (StatusEffectInstance effect : contents.getEffects()) {
+                                if (effect.getEffectType() == TitanFabricStatusEffects.FROSTBURN) {
+                                    return 1.0f;
+                                }
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("immunity"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+                        PotionContentsComponent contents = stack.get(DataComponentTypes.POTION_CONTENTS);
+                        if (contents != null) {
+                            for (StatusEffectInstance effect : contents.getEffects()) {
+                                if (effect.getEffectType() == TitanFabricStatusEffects.IMMUNITY) {
+                                    return 1.0f;
+                                }
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("indestructible"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+                        PotionContentsComponent contents = stack.get(DataComponentTypes.POTION_CONTENTS);
+                        if (contents != null) {
+                            for (StatusEffectInstance effect : contents.getEffects()) {
+                                if (effect.getEffectType() == TitanFabricStatusEffects.INDESTRUCTIBILITY) {
+                                    return 1.0f;
+                                }
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
+    }
+
+    private static void registerOverpoweredEnchantedBookPredicate(Item item) {
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("overpowered"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof EnchantedBookItem) {
+                    }
+                    return 0.0f;
+                });
     }
 
     private static void registerBundleItemProvider(Item item) {

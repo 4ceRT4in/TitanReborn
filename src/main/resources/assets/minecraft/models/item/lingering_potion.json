@@ -1,0 +1,21 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "item/potion_overlay",
+        "layer1": "item/lingering_potion"
+    },
+    "overrides": [
+        {
+            "predicate": { "frostburn": 1.0 },
+            "model": "titanfabric:item/frostburn_lingering_potion"
+        },
+        {
+            "predicate": { "immunity": 1.0 },
+            "model": "titanfabric:item/immunity_lingering_potion"
+        },
+        {
+            "predicate": { "indestructible": 1.0 },
+            "model": "titanfabric:item/indestructible_lingering_potion"
+        }
+    ]
+}

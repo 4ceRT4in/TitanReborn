@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "titanfabric:legend_sword",
+    "titanfabric:diamond_sword",
+    "titanfabric:ember_sword",
+    "titanfabric:citrin_sword",
+    "titanfabric:legend_greatsword",
+    "titanfabric:netherite_greatsword",
+    "titanfabric:diamond_greatsword",
+    "titanfabric:ember_greatsword",
+    "titanfabric:citrin_greatsword"
+  ]
+}

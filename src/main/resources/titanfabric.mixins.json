@@ -32,13 +32,16 @@
   },
   "client": [
     "client.AbstractClientPlayerEntityMixin",
+    "client.ArmorFeatureRendererMixin",
     "client.ArrowEntityRendererMixin",
     "client.BackgroundRendererMixin",
     "client.BipedEntityModelMixin",
+    "client.BufferBuilderStorageMixin",
     "client.ClientPlayerEntityMixin",
     "client.HeldItemRendererMixin",
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",
+    "client.ItemRendererMixin",
     "client.PlayerEntityRendererMixin",
     "client.PlayerHeldItemFeatureRendererMixin"
   ]

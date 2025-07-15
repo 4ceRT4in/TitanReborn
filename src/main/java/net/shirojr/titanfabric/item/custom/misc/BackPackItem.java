@@ -7,15 +7,19 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.data.BackPackContent;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
+
+import java.util.List;
 
 public class BackPackItem extends Item {
     public BackPackItem(Settings settings) {
@@ -68,11 +72,18 @@ public class BackPackItem extends Item {
         return false;
     }
 
+    @Override
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
+        super.appendTooltip(stack, context, tooltip, type);
+        TitanFabricDyeProviders.applyColorTooltip(tooltip, stack);
+    }
+
 
     public enum Type implements StringIdentifiable {
         SMALL("small", 6, Rarity.UNCOMMON, "textures/gui/backpack_small.png"),
         MEDIUM("medium", 12, Rarity.RARE, "textures/gui/backpack_medium.png"),
-        BIG("big", 18, Rarity.EPIC, "textures/gui/backpack_big.png");
+        BIG("big", 18, Rarity.EPIC, "textures/gui/backpack_big.png"),
+        POTION("potion",9, Rarity.RARE, "textures/gui/potion_bundle.png");
 
         public static final Codec<Type> CODEC = Codec.BYTE.xmap(index -> Type.values()[index], type -> (byte) type.ordinal());
 

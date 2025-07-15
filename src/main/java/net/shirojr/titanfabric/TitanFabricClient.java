@@ -16,6 +16,7 @@ import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.network.TitanFabricS2CNetworking;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
+import net.shirojr.titanfabric.screen.custom.DiamondFurnaceScreen;
 import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
 import net.shirojr.titanfabric.util.ModelPredicateProviders;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
@@ -33,6 +34,7 @@ public class TitanFabricClient implements ClientModInitializer {
 
         HandledScreens.register(TitanFabricScreenHandlers.BACKPACK, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.EXTENDED_INVENTORY, ExtendedInventoryScreen::new);
+        HandledScreens.register(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER, DiamondFurnaceScreen::new);
 
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.NETHERITE_ANVIL, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(TitanFabricBlocks.LEGEND_CRYSTAL, RenderLayer.getCutout());
