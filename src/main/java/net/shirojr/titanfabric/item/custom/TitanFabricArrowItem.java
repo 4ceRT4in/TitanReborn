@@ -31,7 +31,7 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
 
     @Override
     public List<WeaponEffect> supportedEffects() {
-        return Arrays.stream(WeaponEffect.values()).filter(weaponEffect -> !weaponEffect.equals(WeaponEffect.FIRE)).toList();
+        return Arrays.stream(WeaponEffect.values()).toList();
     }
 
     @Override
@@ -47,6 +47,7 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
         if (weaponEffect == null) return super.getName(stack);
         return switch (weaponEffect) {
             case BLIND -> Text.translatable("item.titanfabric.blindness_arrow");
+            case FIRE -> Text.translatable("item.titanfabric.fire_arrow");
             case POISON -> Text.translatable("item.titanfabric.poison_arrow");
             case WEAK -> Text.translatable("item.titanfabric.weakness_arrow");
             case WITHER -> Text.translatable("item.titanfabric.wither_arrow");
@@ -77,6 +78,7 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
         String tooltipPrefix = "tooltip.titanfabric.";
         switch (weaponEffect) {
             case BLIND -> tooltipPrefix = tooltipPrefix + "blindnessArrowEffect";
+            case FIRE -> tooltipPrefix = tooltipPrefix + "fireArrowEffect";
             case POISON -> tooltipPrefix = tooltipPrefix + "poisonArrowEffect";
             case WEAK -> tooltipPrefix = tooltipPrefix + "weaknessArrowEffect";
             case WITHER -> tooltipPrefix = tooltipPrefix + "witherArrowEffect";

@@ -91,10 +91,11 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     public Identifier getTexture() {
         if (this.getInateWeaponEffectData() == null) return null;
         return switch (this.getInateWeaponEffectData().weaponEffect()) {
-            case BLIND -> TitanFabric.getId("textures/items/projectiles/blindness_arrow.png");
-            case POISON -> TitanFabric.getId("textures/items/projectiles/poison_arrow.png");
-            case WEAK -> TitanFabric.getId("textures/items/projectiles/weakness_arrow.png");
-            case WITHER -> TitanFabric.getId("textures/items/projectiles/wither_arrow.png");
+            case BLIND -> TitanFabric.getId("textures/item/projectiles/blindness_arrow.png");
+            case FIRE -> TitanFabric.getId("textures/item/projectiles/fire_arrow.png");
+            case POISON -> TitanFabric.getId("textures/item/projectiles/poison_arrow.png");
+            case WEAK -> TitanFabric.getId("textures/item/projectiles/weakness_arrow.png");
+            case WITHER -> TitanFabric.getId("textures/item/projectiles/wither_arrow.png");
             default -> Identifier.ofVanilla("textures/entity/projectiles/arrow.png");
         };
     }

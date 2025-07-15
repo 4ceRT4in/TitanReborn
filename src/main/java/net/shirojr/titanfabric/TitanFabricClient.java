@@ -21,10 +21,19 @@ import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;
 import net.shirojr.titanfabric.util.ModelPredicateProviders;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 @Environment(EnvType.CLIENT)
 public class TitanFabricClient implements ClientModInitializer {
+
+    public static Set<UUID> SOUL_FIRE_ENTITIES = new HashSet<UUID>();
+
     @Override
     public void onInitializeClient() {
+        SOUL_FIRE_ENTITIES.clear();
         TitanFabricEvents.registerClientEvents();
         TitanFabricKeyBinds.register();
         TitanFabricColorProviders.register();

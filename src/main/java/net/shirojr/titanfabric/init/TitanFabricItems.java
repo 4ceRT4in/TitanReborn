@@ -46,13 +46,13 @@ public interface TitanFabricItems {
     Item CITRIN_SHARD = registerItem("citrin_shard",
             new Item(new Item.Settings().maxCount(64)));
     Item EMBER_INGOT = registerItem("ember_ingot",
-            new Item(new Item.Settings().maxCount(64)));
+            new Item(new Item.Settings().fireproof().maxCount(64)));
     Item LEGEND_INGOT = registerItem("legend_ingot",
             new Item(new Item.Settings().maxCount(64)));
     Item LEGEND_POWDER = registerItem("legend_powder",
             new Item(new Item.Settings().maxCount(64)));
     Item EMBER_SHARD = registerItem("ember_shard",
-            new Item(new Item.Settings().maxCount(64)));
+            new Item(new Item.Settings().fireproof().maxCount(64)));
 
     //region armor
     CitrinArmorItem CITRIN_HELMET = registerItem("citrin_helmet",
@@ -65,13 +65,13 @@ public interface TitanFabricItems {
             new CitrinArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()));
 
     EmberArmorItem EMBER_HELMET = registerItem("ember_helmet",
-            new EmberArmorItem(ArmorItem.Type.HELMET, new Item.Settings()));
+            new EmberArmorItem(ArmorItem.Type.HELMET, new Item.Settings().fireproof()));
     EmberArmorItem EMBER_CHESTPLATE = registerItem("ember_chestplate",
-            new EmberArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings()));
+            new EmberArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Settings().fireproof()));
     EmberArmorItem EMBER_LEGGINGS = registerItem("ember_leggings",
-            new EmberArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings()));
+            new EmberArmorItem(ArmorItem.Type.LEGGINGS, new Item.Settings().fireproof()));
     EmberArmorItem EMBER_BOOTS = registerItem("ember_boots",
-            new EmberArmorItem(ArmorItem.Type.BOOTS, new Item.Settings()));
+            new EmberArmorItem(ArmorItem.Type.BOOTS, new Item.Settings().fireproof()));
 
     LegendArmorItem LEGEND_HELMET = registerItem("legend_helmet",
             new LegendArmorItem(ArmorItem.Type.HELMET, new Item.Settings(), 2.0f));
@@ -88,9 +88,9 @@ public interface TitanFabricItems {
     CitrinSwordItem CITRIN_GREATSWORD = registerItem("citrin_greatsword",
             new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
     EmberSwordItem EMBER_SWORD = registerItem("ember_sword",
-            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new Item.Settings()));
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new Item.Settings().fireproof()));
     EmberSwordItem EMBER_GREATSWORD = registerItem("ember_greatsword",
-            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, new Item.Settings().fireproof()));
     LegendSwordItem LEGEND_SWORD = registerItem("legend_sword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT,
                     new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))));
@@ -125,15 +125,17 @@ public interface TitanFabricItems {
             new TitanFabricArrowItem(new Item.Settings().maxCount(32)));
 
     TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
-            new TitanFabricShieldItem(new Item.Settings(), Items.DIAMOND));
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1), Items.DIAMOND));
+    TitanFabricShieldItem NETHERITE_SHIELD = registerItem("netherite_shield",
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1).fireproof(), Items.NETHERITE_INGOT));
     TitanFabricShieldItem LEGEND_SHIELD = registerItem("legend_shield",
-            new TitanFabricShieldItem(new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)), TitanFabricItems.LEGEND_INGOT));
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1).component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)), TitanFabricItems.LEGEND_INGOT));
 
     TitanFabricParachuteItem PARACHUTE = registerItem("parachute",
             new TitanFabricParachuteItem(new Item.Settings().maxCount(1)/*.maxDamage(250)*/.component(TitanFabricDataComponents.ACTIVATED, false)));
 
     FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
-            new FlintAndEmberItem(new Item.Settings().maxCount(1).maxDamage(64)));
+            new FlintAndEmberItem(new Item.Settings().fireproof().maxCount(1).maxDamage(64)));
 
     TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem(
             new Item.Settings().maxCount(64)));

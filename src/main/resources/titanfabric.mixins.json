@@ -25,7 +25,8 @@
     "SoulFireBlockMixin",
     "SplashPotionItemMixin",
     "StatusEffectInstanceMixin",
-    "StatusEffectsMixin"
+    "StatusEffectsMixin",
+    "UnbreakableComponent"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -38,6 +39,7 @@
     "client.BipedEntityModelMixin",
     "client.BufferBuilderStorageMixin",
     "client.ClientPlayerEntityMixin",
+    "client.EntityRenderDispatcherMixin",
     "client.HeldItemRendererMixin",
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",

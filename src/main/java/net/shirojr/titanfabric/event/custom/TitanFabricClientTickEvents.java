@@ -1,11 +1,15 @@
 package net.shirojr.titanfabric.event.custom;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.shirojr.titanfabric.TitanFabricClient;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.network.packet.ArmorLifePacket;
 import net.shirojr.titanfabric.network.packet.ArrowSelectionPacket;
@@ -25,6 +29,7 @@ public class TitanFabricClientTickEvents {
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleKeyBindEvent);
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleArmorTickEvent);
+        ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleSoulFireEvent);
     }
 
     private static void handleKeyBindEvent(MinecraftClient client) {
@@ -38,6 +43,37 @@ public class TitanFabricClientTickEvents {
             }
         } else {
             keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, false);
+        }
+    }
+
+    private static void handleSoulFireEvent(MinecraftClient client) {
+        if (client.world != null) {
+            client.world.getEntities().forEach(entity -> {
+                if (entity.isInLava()) {
+                    TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
+                    return;
+                }
+                Box box = entity.getBoundingBox();
+                BlockPos.Mutable mutable = new BlockPos.Mutable();
+                BlockPos blockPos = new BlockPos((int) (box.minX + 0.001), (int) (box.minY + 0.001), (int) (box.minZ + 0.001));
+                BlockPos blockPos2 = new BlockPos((int) (box.maxX - 0.001), (int) (box.maxY - 0.001), (int) (box.maxZ - 0.001));
+
+                for (int i = blockPos.getX(); i <= blockPos2.getX(); ++i) {
+                    for (int j = blockPos.getY(); j <= blockPos2.getY(); ++j) {
+                        for (int k = blockPos.getZ(); k <= blockPos2.getZ(); ++k) {
+                            mutable.set(i, j, k);
+                            if (client.world.getBlockState(mutable).getBlock() == Blocks.SOUL_FIRE) {
+                                TitanFabricClient.SOUL_FIRE_ENTITIES.add(entity.getUuid());
+                                return;
+                            }
+                            if (client.world.getBlockState(mutable).getBlock() == Blocks.FIRE) {
+                                TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
+                                return;
+                            }
+                        }
+                    }
+                }
+            });
         }
     }
 

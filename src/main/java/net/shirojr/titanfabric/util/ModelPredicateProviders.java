@@ -54,6 +54,7 @@ public class ModelPredicateProviders {
         registerBasicInnateItemsProvider(TitanFabricItems.ARROW);
 
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
+        registerShieldProviders(TitanFabricItems.NETHERITE_SHIELD);
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
 
         registerLegendBowProviders();
@@ -126,6 +127,7 @@ public class ModelPredicateProviders {
                     if (effectData.get().weaponEffect() == null) return 0.0f;
                     return switch (effectData.get().weaponEffect()) {
                         case BLIND -> 0.1f;
+                        case FIRE -> 0.2f;
                         case POISON -> 0.3f;
                         case WEAK -> 0.4f;
                         case WITHER -> 0.5f;

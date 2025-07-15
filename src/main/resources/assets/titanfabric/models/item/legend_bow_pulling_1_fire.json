@@ -1,0 +1,6 @@
+{
+  "parent": "titanfabric:item/legend_bow_fire",
+  "textures": {
+    "layer0": "titanfabric:item/legend_bow_pulling_1_fire"
+  }
+}
