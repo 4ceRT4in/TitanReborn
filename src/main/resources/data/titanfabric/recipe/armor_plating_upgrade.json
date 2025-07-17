@@ -1,0 +1,9 @@
+{
+  "type": "titanfabric:armor_plating",
+  "base": {
+    "tag": "titanfabric:platable_armor"
+  },
+  "addition": {
+    "tag": "titanfabric:armor_plating"
+  }
+}

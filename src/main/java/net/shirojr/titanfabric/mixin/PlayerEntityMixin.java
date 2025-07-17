@@ -28,6 +28,7 @@ import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
@@ -182,7 +183,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
         return amount;
     }
 
-    @Inject(method = "damage", at = @At(value = "TAIL"), cancellable = true)
+    @Inject(method = "damage", at = @At(value = "TAIL", shift = At.Shift.BEFORE) /* leave that in order for ember armor to work */, cancellable = true)
     private void titanfabric$damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (amount > 0.00001f && (this.timeUntilRegen <= 10 || amount > this.lastDamageTaken)) {
             PlayerEntity player = (PlayerEntity) (Object) this;
@@ -259,6 +260,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSel
             cir.setReturnValue(0.00001f);
         }
     }
+
 
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void titanfabric$damageShield(float amount, CallbackInfo ci) {

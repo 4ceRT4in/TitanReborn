@@ -30,55 +30,50 @@ public class DiamondFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
         return index != 1 && index != 2 && index != 3;
     }
 
-    @Override
-    public ItemStack quickMove(PlayerEntity player, int index) {
+    public ItemStack quickMove(PlayerEntity player, int slot) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasStack()) {
-            ItemStack originalStack = slot.getStack();
-            itemStack = originalStack.copy();
-            if (index == 2 || index == 3) {
-                if (!this.insertItem(originalStack, 4, 40, true)) {
+        Slot slot2 = (Slot)this.slots.get(slot);
+        if (slot2 != null && slot2.hasStack()) {
+            ItemStack itemStack2 = slot2.getStack();
+            itemStack = itemStack2.copy();
+            if (slot == 2 || slot == 39) {
+                if (!this.insertItem(itemStack2, 3, 39, true)) {
                     return ItemStack.EMPTY;
                 }
-                slot.onQuickTransfer(originalStack, itemStack);
-            }
-            else if (index < 4) {
-                if (!this.insertItem(originalStack, 4, 40, false)) {
+                slot2.onQuickTransfer(itemStack2, itemStack);
+            } else if (slot != 1 && slot != 0) {
+                if (this.isSmeltable(itemStack2)) {
+                    if (!this.insertItem(itemStack2, 0, 1, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (this.isFuel(itemStack2)) {
+                    if (!this.insertItem(itemStack2, 1, 2, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (slot >= 3 && slot < 30) {
+                    if (!this.insertItem(itemStack2, 30, 39, false)) {
+                        return ItemStack.EMPTY;
+                    }
+                } else if (slot >= 30 && slot < 39 && !this.insertItem(itemStack2, 3, 30, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else {
-                if (this.isSmeltable(originalStack)) {
-                    if (!this.insertItem(originalStack, 0, 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (this.isFuel(originalStack)) {
-                    if (!this.insertItem(originalStack, 1, 2, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 4 && index < 31) {
-                    if (!this.insertItem(originalStack, 31, 40, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 31 && index < 40) {
-                    if (!this.insertItem(originalStack, 4, 31, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                }
-            }
-
-            if (originalStack.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
-            } else {
-                slot.markDirty();
-            }
-
-            if (originalStack.getCount() == itemStack.getCount()) {
+            } else if (!this.insertItem(itemStack2, 3, 39, false)) {
                 return ItemStack.EMPTY;
             }
 
-            slot.onTakeItem(player, originalStack);
+            if (itemStack2.isEmpty()) {
+                slot2.setStack(ItemStack.EMPTY);
+            } else {
+                slot2.markDirty();
+            }
+
+            if (itemStack2.getCount() == itemStack.getCount()) {
+                return ItemStack.EMPTY;
+            }
+
+            slot2.onTakeItem(player, itemStack2);
         }
+
         return itemStack;
     }
 }

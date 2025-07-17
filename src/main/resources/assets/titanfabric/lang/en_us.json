@@ -197,6 +197,8 @@
   "tooltip.titanfabric.legend_armor_plating_equipped": "§3+2.5% Titan Weapon Protection",
   "tooltip.titanfabric.netherite_armor_plating_equipped": "§8+2.5% Netherite Weapon Protection",
 
+  "tooltip.titanfabric.netherite_shield": "§7Applies Knockback to your Enemy when you Block",
+
   "tooltip.titanfabric.1Blind": "§125% Blindness Chance",
   "tooltip.titanfabric.2Blind": "§150% Blindness Chance",
   "tooltip.titanfabric.1Fire": "§625% Fire Chance",

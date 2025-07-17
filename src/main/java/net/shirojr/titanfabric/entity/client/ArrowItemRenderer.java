@@ -15,7 +15,6 @@ public class ArrowItemRenderer extends ProjectileEntityRenderer<TitanFabricArrow
 
     @Override
     public Identifier getTexture(TitanFabricArrowEntity arrowEntity) {
-        if (arrowEntity.getInateWeaponEffectData() != null) return arrowEntity.getTexture();
-        else return Identifier.ofVanilla("textures/entity/projectiles/arrow.png");
+        return arrowEntity.getTexture();
     }
 }

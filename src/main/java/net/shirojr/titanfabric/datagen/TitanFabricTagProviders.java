@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.server.tag.vanilla.VanillaItemTagProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
@@ -51,6 +52,35 @@ public class TitanFabricTagProviders {
                     .setReplace(false);
             getOrCreateTagBuilder(TitanFabricTags.Items.DEFAULT_ARROWS)
                     .add(Items.ARROW, Items.SPECTRAL_ARROW)
+                    .setReplace(false);
+            getOrCreateTagBuilder(TitanFabricTags.Items.ARMOR_PLATING)
+                    .add(TitanFabricItems.LEGEND_ARMOR_PLATING)
+                    .add(TitanFabricItems.EMBER_ARMOR_PLATING)
+                    .add(TitanFabricItems.CITRIN_ARMOR_PLATING)
+                    .add(TitanFabricItems.DIAMOND_ARMOR_PLATING)
+                    .add(TitanFabricItems.NETHERITE_ARMOR_PLATING)
+                    .setReplace(false);
+            getOrCreateTagBuilder(TitanFabricTags.Items.PLATABLE_ARMOR)
+                    .add(TitanFabricItems.CITRIN_HELMET)
+                    .add(TitanFabricItems.CITRIN_CHESTPLATE)
+                    .add(TitanFabricItems.CITRIN_LEGGINGS)
+                    .add(TitanFabricItems.CITRIN_BOOTS)
+                    .add(TitanFabricItems.EMBER_HELMET)
+                    .add(TitanFabricItems.EMBER_CHESTPLATE)
+                    .add(TitanFabricItems.EMBER_LEGGINGS)
+                    .add(TitanFabricItems.EMBER_BOOTS)
+                    .add(TitanFabricItems.LEGEND_HELMET)
+                    .add(TitanFabricItems.LEGEND_CHESTPLATE)
+                    .add(TitanFabricItems.LEGEND_LEGGINGS)
+                    .add(TitanFabricItems.LEGEND_BOOTS)
+                    .add(Items.NETHERITE_HELMET)
+                    .add(Items.NETHERITE_CHESTPLATE)
+                    .add(Items.NETHERITE_LEGGINGS)
+                    .add(Items.NETHERITE_BOOTS)
+                    .add(Items.DIAMOND_HELMET)
+                    .add(Items.DIAMOND_CHESTPLATE)
+                    .add(Items.DIAMOND_LEGGINGS)
+                    .add(Items.DIAMOND_BOOTS)
                     .setReplace(false);
         }
     }

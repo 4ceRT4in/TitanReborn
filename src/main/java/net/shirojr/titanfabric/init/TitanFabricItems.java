@@ -16,6 +16,7 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.data.BackPackContent;
 import net.shirojr.titanfabric.data.PotionBundleContent;
 import net.shirojr.titanfabric.item.custom.*;
+import net.shirojr.titanfabric.item.custom.armor.ArmorPlatingItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
@@ -32,6 +33,7 @@ import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
+import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,21 +88,21 @@ public interface TitanFabricItems {
     CitrinSwordItem CITRIN_SWORD = registerItem("citrin_sword",
             new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, SwordType.DEFAULT, new Item.Settings()));
     CitrinSwordItem CITRIN_GREATSWORD = registerItem("citrin_greatsword",
-            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -2.4f, SwordType.GREAT_SWORD, new Item.Settings()));
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -3.0f, SwordType.GREAT_SWORD, new Item.Settings()));
     EmberSwordItem EMBER_SWORD = registerItem("ember_sword",
             new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new Item.Settings().fireproof()));
     EmberSwordItem EMBER_GREATSWORD = registerItem("ember_greatsword",
-            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, new Item.Settings().fireproof()));
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -3.0f, SwordType.GREAT_SWORD, new Item.Settings().fireproof()));
     LegendSwordItem LEGEND_SWORD = registerItem("legend_sword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT,
                     new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))));
     LegendSwordItem LEGEND_GREATSWORD = registerItem("legend_greatsword",
-            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -2.4f, SwordType.GREAT_SWORD,
+            new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND_GREAT, removeBaseDamage(9), -3.0f, SwordType.GREAT_SWORD,
                     new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))));
     DiamondSwordItem DIAMOND_SWORD = registerItem("diamond_sword",
             new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND, 6, -2.4f, SwordType.DEFAULT, null, new Item.Settings(), false));
     DiamondSwordItem DIAMOND_GREATSWORD = registerItem("diamond_greatsword",
-            new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND_GREAT, removeBaseDamage(8), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings(), true));
+            new DiamondSwordItem(true, TitanFabricToolMaterials.DIAMOND_GREAT, removeBaseDamage(8), -3.0f, SwordType.GREAT_SWORD, null, new Item.Settings(), true));
     SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE,
             new Item.Settings().fireproof().attributeModifiers(SwordItem.createAttributeModifiers(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f)));  // registered in ItemsMixin class
     TitanFabricSwordItem NETHERITE_GREATSWORD = registerItem("netherite_greatsword",
@@ -125,9 +127,9 @@ public interface TitanFabricItems {
             new TitanFabricArrowItem(new Item.Settings().maxCount(32)));
 
     TitanFabricShieldItem DIAMOND_SHIELD = registerItem("diamond_shield",
-            new TitanFabricShieldItem(new Item.Settings().maxCount(1), Items.DIAMOND));
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1).maxDamage(1685), Items.DIAMOND));
     TitanFabricShieldItem NETHERITE_SHIELD = registerItem("netherite_shield",
-            new TitanFabricShieldItem(new Item.Settings().maxCount(1).fireproof(), Items.NETHERITE_INGOT));
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1).maxDamage(1685*2).fireproof(), Items.NETHERITE_INGOT));
     TitanFabricShieldItem LEGEND_SHIELD = registerItem("legend_shield",
             new TitanFabricShieldItem(new Item.Settings().maxCount(1).component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)), TitanFabricItems.LEGEND_INGOT));
 
@@ -136,6 +138,21 @@ public interface TitanFabricItems {
 
     FlintAndEmberItem FLINT_AND_EMBER = registerItem("flint_and_ember",
             new FlintAndEmberItem(new Item.Settings().fireproof().maxCount(1).maxDamage(64)));
+
+    ArmorPlatingItem CITRIN_ARMOR_PLATING = registerItem("citrin_armor_plating",
+            new ArmorPlatingItem(new Item.Settings().maxCount(16), ArmorPlateType.CITRIN));
+
+    ArmorPlatingItem DIAMOND_ARMOR_PLATING = registerItem("diamond_armor_plating",
+            new ArmorPlatingItem(new Item.Settings().maxCount(16), ArmorPlateType.DIAMOND));
+
+    ArmorPlatingItem EMBER_ARMOR_PLATING = registerItem("ember_armor_plating",
+            new ArmorPlatingItem(new Item.Settings().maxCount(16).fireproof(), ArmorPlateType.DIAMOND));
+
+    ArmorPlatingItem NETHERITE_ARMOR_PLATING = registerItem("netherite_armor_plating",
+            new ArmorPlatingItem(new Item.Settings().maxCount(16).fireproof(), ArmorPlateType.NETHERITE));
+
+    ArmorPlatingItem LEGEND_ARMOR_PLATING = registerItem("legend_armor_plating",
+            new ArmorPlatingItem(new Item.Settings().maxCount(16), ArmorPlateType.LEGEND));
 
     TitanFabricEssenceItem ESSENCE = registerItem("essence", new TitanFabricEssenceItem(
             new Item.Settings().maxCount(64)));

@@ -13,12 +13,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -58,6 +61,20 @@ public abstract class LivingEntityMixin {
 
             if (effect.getCategory() == StatusEffectCategory.HARMFUL) {
                 ImmunityEffect.checkAndBlockNegativeEffect(self, effectInstance);
+            }
+        }
+    }
+
+    @Inject(method = "damage", at = @At("HEAD"))
+    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (source != null && source.getAttacker() instanceof LivingEntity attacker && !source.isIn(DamageTypeTags.IS_PROJECTILE)) {
+            LivingEntity self = (LivingEntity) (Object) this;
+
+            if (self.isBlocking() && self.getActiveItem().getItem() == TitanFabricItems.NETHERITE_SHIELD) {
+                DamageSource damageSource = self.getDamageSources().generic();
+                //LoggerUtil.devLogger("works");
+                float k = attacker.getKnockbackAgainst(self, damageSource) + (1.25F);
+                attacker.takeKnockback((double)(k * 0.5F), (double) MathHelper.sin(self.getYaw() * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(self.getYaw() * ((float)Math.PI / 180F))));
             }
         }
     }

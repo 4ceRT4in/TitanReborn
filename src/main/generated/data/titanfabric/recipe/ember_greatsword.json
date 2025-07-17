@@ -1,0 +1,9 @@
+{
+  "type": "titanfabric:weapon_effect",
+  "addition": {
+    "item": "titanfabric:essence"
+  },
+  "base": {
+    "item": "titanfabric:ember_greatsword"
+  }
+}

@@ -107,6 +107,9 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
                 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + (float) pullProgress * 0.5f);
         PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, arrowStack,
                 player.getPitch(), player.getYaw(), pullProgress, bowStack);
+        if (player.getAbilities().creativeMode) {
+            projectile.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+        }
         world.spawnEntity(projectile);
     }
 }

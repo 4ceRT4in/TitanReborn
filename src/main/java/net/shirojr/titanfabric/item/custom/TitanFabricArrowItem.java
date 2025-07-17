@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.item.custom;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.Item;
@@ -89,7 +90,16 @@ public class TitanFabricArrowItem extends ArrowItem implements WeaponEffectCraft
 
     @Override
     public PersistentProjectileEntity createArrow(World world, ItemStack stack, LivingEntity shooter, @Nullable ItemStack shotFrom) {
-        return new TitanFabricArrowEntity(world, shooter, stack);
+        var comp = stack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        if(comp == null) return super.createArrow(world, stack, shooter, shotFrom);
+        WeaponEffect weaponEffect = null;
+        for (WeaponEffectData entry : comp) {
+            if (!entry.type().equals(WeaponEffectType.INNATE_EFFECT)) continue;
+            weaponEffect = entry.weaponEffect();
+            break;
+        }
+        if(weaponEffect == null) return super.createArrow(world, stack, shooter, shotFrom);
+        return new TitanFabricArrowEntity(world, shooter, weaponEffect, stack);
     }
 
     @Override
