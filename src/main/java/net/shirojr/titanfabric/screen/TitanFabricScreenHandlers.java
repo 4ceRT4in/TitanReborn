@@ -1,12 +1,15 @@
 package net.shirojr.titanfabric.screen;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.screen.*;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
@@ -14,8 +17,29 @@ import net.shirojr.titanfabric.screen.handler.DiamondFurnaceScreenHandler;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 
 public class TitanFabricScreenHandlers {
-    public static ScreenHandlerType<BackPackItemScreenHandler> BACKPACK =
-            registerScreenHandler("backpack", new ExtendedScreenHandlerType<>(BackPackItemScreenHandler::new, BackPackScreenPacket.CODEC));
+    public static ScreenHandlerType<BackPackItemScreenHandler> BACKPACK_ITEM_SMALL_SCREEN_HANDLER =
+            registerScreenHandler("backpack_item_small", new ExtendedScreenHandlerType<>(
+                    (syncId, inventory, data) -> new BackPackItemScreenHandler(syncId, inventory, BackPackItem.Type.SMALL, data),
+                    ItemStack.PACKET_CODEC
+            ));
+
+    public static ScreenHandlerType<BackPackItemScreenHandler> BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER =
+            registerScreenHandler("backpack_item_medium", new ExtendedScreenHandlerType<>(
+                    (syncId, inventory, data) -> new BackPackItemScreenHandler(syncId, inventory, BackPackItem.Type.MEDIUM, data),
+                    ItemStack.PACKET_CODEC
+            ));
+
+    public static ScreenHandlerType<BackPackItemScreenHandler> BACKPACK_ITEM_BIG_SCREEN_HANDLER =
+            registerScreenHandler("backpack_item_big", new ExtendedScreenHandlerType<>(
+                    (syncId, inventory, data) -> new BackPackItemScreenHandler(syncId, inventory, BackPackItem.Type.BIG, data),
+                    ItemStack.PACKET_CODEC
+            ));
+
+    public static ScreenHandlerType<BackPackItemScreenHandler> POTION_BUNDLE_SCREEN_HANDLER =
+            registerScreenHandler("potion_bundle", new ExtendedScreenHandlerType<>(
+                    (syncId, inventory, data) -> new BackPackItemScreenHandler(syncId, inventory, BackPackItem.Type.POTION, data),
+                    ItemStack.PACKET_CODEC
+            ));
     public static ScreenHandlerType<ExtendedInventoryScreenHandler> EXTENDED_INVENTORY =
             registerScreenHandler("extended_inventory", new ExtendedScreenHandlerType<>(ExtendedInventoryScreenHandler::new, ExtendedInventoryOpenPacket.CODEC));
     public static final ScreenHandlerType<DiamondFurnaceScreenHandler> DIAMOND_FURNACE_SCREEN_HANDLER = registerAbstract("diamond_furnace", DiamondFurnaceScreenHandler::new);

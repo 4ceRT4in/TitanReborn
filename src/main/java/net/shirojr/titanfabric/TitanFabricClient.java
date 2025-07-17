@@ -41,7 +41,10 @@ public class TitanFabricClient implements ClientModInitializer {
         ModelPredicateProviders.register();
         TitanFabricS2CNetworking.initialize();
 
-        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK, BackPackItemScreen::new);
+        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_SMALL_SCREEN_HANDLER, BackPackItemScreen::new);
+        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_MEDIUM_SCREEN_HANDLER, BackPackItemScreen::new);
+        HandledScreens.register(TitanFabricScreenHandlers.BACKPACK_ITEM_BIG_SCREEN_HANDLER, BackPackItemScreen::new);
+        HandledScreens.register(TitanFabricScreenHandlers.POTION_BUNDLE_SCREEN_HANDLER, BackPackItemScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.EXTENDED_INVENTORY, ExtendedInventoryScreen::new);
         HandledScreens.register(TitanFabricScreenHandlers.DIAMOND_FURNACE_SCREEN_HANDLER, DiamondFurnaceScreen::new);
 

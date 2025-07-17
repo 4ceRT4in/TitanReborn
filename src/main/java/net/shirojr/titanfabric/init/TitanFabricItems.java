@@ -166,17 +166,13 @@ public interface TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
 
-    BackPackItem POTION_BUNDLE = registerItem("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1)
-            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.POTION))));
+    BackPackItem POTION_BUNDLE = registerItem("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.POTION));
 
-    BackPackItem BACKPACK_SMALL = registerItem("backpack_small", new BackPackItem(new Item.Settings().maxCount(1)
-            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.SMALL))));
+    BackPackItem BACKPACK_SMALL = registerItem("backpack_small", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.SMALL));
 
-    BackPackItem BACKPACK_MEDIUM = registerItem("backpack_medium", new BackPackItem(new Item.Settings().maxCount(1)
-            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.MEDIUM))));
+    BackPackItem BACKPACK_MEDIUM = registerItem("backpack_medium", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.MEDIUM));
 
-    BackPackItem BACKPACK_BIG = registerItem("backpack_big", new BackPackItem(new Item.Settings().maxCount(1)
-            .component(TitanFabricDataComponents.BACKPACK_CONTENT, BackPackContent.getDefault(BackPackItem.Type.BIG))));
+    BackPackItem BACKPACK_BIG = registerItem("backpack_big", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.BIG));
 
 
     private static <T extends Item> T registerItem(String name, T item) {

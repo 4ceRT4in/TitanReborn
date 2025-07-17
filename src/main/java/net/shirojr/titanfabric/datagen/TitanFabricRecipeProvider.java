@@ -31,10 +31,10 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
 
     private void generateDiamondFurnaceRecipes(RecipeExporter exporter) {
         CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(TitanFabricItems.LEGEND_POWDER), RecipeCategory.MISC,
-                TitanFabricItems.LEGEND_INGOT, 0.35F, 400)
+                TitanFabricItems.LEGEND_INGOT, 0.7F, 200)
                 .criterion("has_legend_powder", conditionsFromItem(TitanFabricItems.LEGEND_POWDER)).offerTo(exporter); // for what even are the criterions xD?
         CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(TitanFabricItems.EMBER_SHARD), RecipeCategory.MISC,
-                        TitanFabricItems.EMBER_INGOT, 0.35F, 400)
+                        TitanFabricItems.EMBER_INGOT, 0.7F, 200)
                 .criterion("has_ember_shard", conditionsFromItem(TitanFabricItems.EMBER_SHARD)).offerTo(exporter);
     }
 
