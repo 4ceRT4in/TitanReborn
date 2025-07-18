@@ -78,7 +78,7 @@ public class TitanFabricClientTickEvents {
 
         Formatting effectColor = switch (effectData.get().weaponEffect()) {
             case BLIND -> Formatting.DARK_BLUE;
-            case FIRE -> Formatting.RED;
+            case FIRE -> Formatting.GOLD;
             case POISON -> Formatting.DARK_GREEN;
             case WEAK -> Formatting.GRAY;
             case WITHER -> Formatting.DARK_GRAY;

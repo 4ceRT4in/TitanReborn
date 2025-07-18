@@ -1,0 +1,15 @@
+{
+  "type": "titanfabric:dyeable_recipe",
+  "ingredients": [
+    {
+      "item": "titanfabric:backpack_small"
+    },
+    {
+      "tag": "titanfabric:dye"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:backpack_small"
+  }
+}

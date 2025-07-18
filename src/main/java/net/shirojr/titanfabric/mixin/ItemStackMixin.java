@@ -25,6 +25,8 @@ public abstract class ItemStackMixin implements FabricItemStack {
         if (player.hasStatusEffect(TitanFabricStatusEffects.INDESTRUCTIBILITY)) {
             return false;
         }
+        var stack = (ItemStack) (Object) this;
+        if(stack.getMaxDamage() <= 0) return false;
         return original;
     }
 

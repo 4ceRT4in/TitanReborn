@@ -12,6 +12,7 @@
     "BrewingRecipeRegistryMixin",
     "CrossbowItemMixin",
     "EntityMixin",
+    "FireworkRocketItemMixin",
     "HungerManagerMixin",
     "InstantHealthOrDamageStatusEffectMixin",
     "ItemMixin",
@@ -34,6 +35,7 @@
   },
   "client": [
     "client.AbstractClientPlayerEntityMixin",
+    "client.AbstractInventoryScreenMixin",
     "client.ArmorFeatureRendererMixin",
     "client.ArrowEntityRendererMixin",
     "client.BackgroundRendererMixin",
