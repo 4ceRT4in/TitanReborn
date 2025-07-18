@@ -146,7 +146,7 @@ public interface TitanFabricItems {
             new ArmorPlatingItem(new Item.Settings().maxCount(16), ArmorPlateType.DIAMOND));
 
     ArmorPlatingItem EMBER_ARMOR_PLATING = registerItem("ember_armor_plating",
-            new ArmorPlatingItem(new Item.Settings().maxCount(16).fireproof(), ArmorPlateType.DIAMOND));
+            new ArmorPlatingItem(new Item.Settings().maxCount(16).fireproof(), ArmorPlateType.EMBER));
 
     ArmorPlatingItem NETHERITE_ARMOR_PLATING = registerItem("netherite_armor_plating",
             new ArmorPlatingItem(new Item.Settings().maxCount(16).fireproof(), ArmorPlateType.NETHERITE));
