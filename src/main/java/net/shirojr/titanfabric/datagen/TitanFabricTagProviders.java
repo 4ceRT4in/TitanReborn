@@ -82,6 +82,24 @@ public class TitanFabricTagProviders {
                     .add(Items.DIAMOND_LEGGINGS)
                     .add(Items.DIAMOND_BOOTS)
                     .setReplace(false);
+            getOrCreateTagBuilder(TitanFabricTags.Items.DYE)
+                    .add(Items.RED_DYE)
+                    .add(Items.LIME_DYE)
+                    .add(Items.BLACK_DYE)
+                    .add(Items.BROWN_DYE)
+                    .add(Items.BLUE_DYE)
+                    .add(Items.CYAN_DYE)
+                    .add(Items.GRAY_DYE)
+                    .add(Items.GREEN_DYE)
+                    .add(Items.LIGHT_BLUE_DYE)
+                    .add(Items.LIGHT_GRAY_DYE)
+                    .add(Items.MAGENTA_DYE)
+                    .add(Items.ORANGE_DYE)
+                    .add(Items.PINK_DYE)
+                    .add(Items.PURPLE_DYE)
+                    .add(Items.WHITE_DYE)
+                    .add(Items.YELLOW_DYE)
+                    .setReplace(false);
         }
     }
 

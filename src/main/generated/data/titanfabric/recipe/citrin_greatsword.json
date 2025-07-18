@@ -1,9 +1,0 @@
-{
-  "type": "titanfabric:weapon_effect",
-  "addition": {
-    "item": "titanfabric:essence"
-  },
-  "base": {
-    "item": "titanfabric:citrin_greatsword"
-  }
-}

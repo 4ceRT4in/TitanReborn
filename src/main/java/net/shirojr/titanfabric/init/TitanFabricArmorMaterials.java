@@ -31,9 +31,9 @@ public interface TitanFabricArmorMaterials {
             15
     );
 
-    CustomArmorMaterial NETHER = new CustomArmorMaterial(
+    CustomArmorMaterial EMBER = new CustomArmorMaterial(
             register(
-                    "nether",
+                    "ember",
                     Map.of(
                             ArmorItem.Type.HELMET, 3,
                             ArmorItem.Type.CHESTPLATE, 8,

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class EmberArmorItem extends ArmorItem {
     public EmberArmorItem(Type type, Settings settings) {
-        super(TitanFabricArmorMaterials.NETHER.getRegistryEntry(), type,
-                settings.maxDamage(TitanFabricArmorMaterials.NETHER.getDurability(type)));
+        super(TitanFabricArmorMaterials.EMBER.getRegistryEntry(), type,
+                settings.maxDamage(TitanFabricArmorMaterials.EMBER.getDurability(type)));
     }
 
     @Override
