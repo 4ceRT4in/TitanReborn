@@ -1,11 +1,13 @@
 package net.shirojr.titanfabric.item.custom;
 
 
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
+import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.items.Anvilable;
 
@@ -23,7 +25,7 @@ public class TitanFabricShieldItem extends ShieldItem implements Anvilable {
     @Override
     public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         if (stack.getItem() == TitanFabricItems.NETHERITE_SHIELD) {
-            tooltip.add(Text.translatable("tooltip.titanfabric.netherite_shield"));
+            TitanFabricDyeProviders.applyExtendedTooltip(tooltip,"tooltip.titanfabric.netherite_shield");
         }
     }
 

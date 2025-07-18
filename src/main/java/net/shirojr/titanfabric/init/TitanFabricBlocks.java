@@ -1,9 +1,7 @@
 package net.shirojr.titanfabric.init;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.AmethystClusterBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.*;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -42,7 +40,7 @@ public interface TitanFabricBlocks {
                     .hardness(12.0f).strength(6.0f).requiresTool()));
 
     Block DIAMOND_FURNACE = registerBlock("diamond_furnace",
-            new DiamondFurnaceBlock(AbstractBlock.Settings.create().mapColor(DyeColor.CYAN)
+            new DiamondFurnaceBlock(AbstractBlock.Settings.copy(Blocks.FURNACE).mapColor(DyeColor.CYAN)
                     .requiresTool().strength(3.5f)));
 
     Block NETHERITE_ANVIL = registerBlock("netherite_anvil",

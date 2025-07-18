@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.color;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,13 @@ import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import java.util.List;
 
 public class TitanFabricDyeProviders {
+
+    public static void applyExtendedTooltip(List<Text> tooltip, String translateKey) {
+        String key = I18n.translate(translateKey);
+        for (String line : key.split("\\\\n")) {
+            tooltip.add(Text.of(line));
+        }
+    }
 
     public static void applyColorTooltip(List<Text> tooltip, ItemStack stack) {
         var comp = stack.get(DataComponentTypes.BASE_COLOR);

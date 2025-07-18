@@ -58,13 +58,6 @@ public record BackPackContent(List<ItemStack> items) {
         return ItemStack.EMPTY;
     }
 
-    public void setItem(int index, ItemStack stack) {
-        while (items.size() <= index) {
-            items.add(ItemStack.EMPTY);
-        }
-        items.set(index, stack);
-    }
-
     public static BackPackContent empty() {
         return new BackPackContent();
     }

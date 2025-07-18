@@ -14,6 +14,7 @@ import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
@@ -23,6 +24,7 @@ import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
+import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
@@ -71,7 +73,7 @@ public class ModelPredicateProviders {
         registerColorItemProvider(TitanFabricItems.BACKPACK_SMALL);
         registerColorItemProvider(TitanFabricItems.PARACHUTE);
 
-        registerBundleItemProvider(TitanFabricItems.POTION_BUNDLE);
+        registerPotionBundle(TitanFabricItems.POTION_BUNDLE);
 
         registerOverpoweredEnchantedBookPredicate(Items.ENCHANTED_BOOK);
         registerCustomPotionPredicate(Items.POTION);
@@ -139,6 +141,23 @@ public class ModelPredicateProviders {
     private static void registerCrossBowProviders() {
         registerBowProviders(TitanFabricItems.TITAN_CROSSBOW);
         registerCrossBowCharge();
+    }
+
+    private static void registerPotionBundle(Item item) {
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("filled"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof BackPackItem) {
+                        var nbt = stack.get(TitanFabricDataComponents.BACKPACK_CONTENT);
+                        if (nbt != null) {
+                            for (ItemStack key : nbt.getItems()) {
+                                if (!key.isEmpty() && key.getItem() != TitanFabricItems.BACKPACK_BIG) {
+                                    return 1.0F;
+                                }
+                            }
+                        }
+                    }
+                    return 0.0F;
+                });
     }
 
     private static void registerCrossBowCharge() {
@@ -230,7 +249,24 @@ public class ModelPredicateProviders {
     private static void registerOverpoweredEnchantedBookPredicate(Item item) {
         ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("overpowered"),
                 (stack, world, entity, seed) -> {
-                    if (stack.getItem() instanceof EnchantedBookItem) {
+                    if (stack.getItem() instanceof EnchantedBookItem && world != null) {
+                        ItemEnchantmentsComponent enchantments = stack.getOrDefault(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+
+                        var protectionEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.PROTECTION);
+                        var sharpnessEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.SHARPNESS);
+                        var powerEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.POWER);
+
+                        if (protectionEntry.isPresent() && enchantments.getLevel(protectionEntry.get()) >= 5) {
+                            return 1.0f;
+                        }
+
+                        if (sharpnessEntry.isPresent() && enchantments.getLevel(sharpnessEntry.get()) >= 6) {
+                            return 1.0f;
+                        }
+
+                        if (powerEntry.isPresent() && enchantments.getLevel(powerEntry.get()) >= 6) {
+                            return 1.0f;
+                        }
                     }
                     return 0.0f;
                 });

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "titanfabric:items/overpowered_enchanted_book"
+    "layer0": "titanfabric:item/overpowered_enchanted_book"
   }
 }

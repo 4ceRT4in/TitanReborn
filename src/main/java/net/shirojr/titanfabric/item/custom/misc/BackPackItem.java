@@ -1,6 +1,8 @@
 package net.shirojr.titanfabric.item.custom.misc;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -18,6 +20,7 @@ import net.shirojr.titanfabric.data.BackPackContent;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
+import net.shirojr.titanfabric.util.TitanFabricTags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,7 @@ public class BackPackItem extends Item {
 
                 @Override
                 public Text getDisplayName() {
+                    if(backPackItem.getBackpackType() == Type.POTION) return Text.translatable("item.titanfabric.potion_bundle_screen");
                     return Text.translatable(backpackItemStack.getItem().getTranslationKey());
                 }
 
@@ -88,12 +92,13 @@ public class BackPackItem extends Item {
         List<ItemStack> items = new ArrayList<>();
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack stack = inventory.getStack(i);
-            if (!stack.isEmpty() && stack != ItemStack.EMPTY) {
+            if (!stack.isEmpty() && stack != ItemStack.EMPTY && stack.getItem() != Blocks.AIR.asItem()) {
                 items.add(stack);
             } else {
                 items.add(new ItemStack(TitanFabricItems.BACKPACK_BIG)); // the codec doesnt allow empty itemstacks to be saved -> game crash, therefore just this placeholder item since it cannot be placed inside anyway lol
             }
         }
+        if(itemStack.isEmpty() || itemStack == null || itemStack.getItem() == Blocks.AIR.asItem()) return;
 
         BackPackContent content = new BackPackContent(items);
         itemStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, content);
@@ -108,6 +113,9 @@ public class BackPackItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
+        if(getBackpackType() == Type.POTION) {
+            TitanFabricDyeProviders.applyExtendedTooltip(tooltip,"tooltip.titanfabric.potionBundle");
+        }
         TitanFabricDyeProviders.applyColorTooltip(tooltip, stack);
     }
 

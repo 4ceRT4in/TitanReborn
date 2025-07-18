@@ -1,24 +1,34 @@
 package net.shirojr.titanfabric.event.custom;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.shirojr.titanfabric.TitanFabricClient;
+import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
+import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.network.packet.ArmorLifePacket;
 import net.shirojr.titanfabric.network.packet.ArrowSelectionPacket;
 import net.shirojr.titanfabric.registry.KeyBindRegistry;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
+
+import static net.shirojr.titanfabric.util.effects.WeaponEffectType.INNATE_EFFECT;
 
 public class TitanFabricClientTickEvents {
     private static List<Item> armorList = List.of(Items.AIR, Items.AIR, Items.AIR, Items.AIR);
@@ -30,6 +40,54 @@ public class TitanFabricClientTickEvents {
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleKeyBindEvent);
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleArmorTickEvent);
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleSoulFireEvent);
+        ItemTooltipCallback.EVENT.register(TitanFabricClientTickEvents::handleTooltip);
+    }
+
+    private static void handleTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
+        if (!(stack.getItem() instanceof LegendBowItem)) return;
+
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (!(player instanceof ArrowSelectionHandler clientPlayer)) return;
+
+        Optional<Integer> selectedIndex = clientPlayer.titanfabric$getSelectedArrowIndex();
+        if (selectedIndex.isEmpty()) {
+            lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
+            return;
+        }
+
+        ItemStack arrowStack = player.getInventory().getStack(selectedIndex.get());
+        if (!(arrowStack.getItem() instanceof TitanFabricArrowItem)) {
+            lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
+            return;
+        }
+
+        Optional<WeaponEffectData> effectData = WeaponEffectData.get(arrowStack, INNATE_EFFECT);
+        if (effectData.isEmpty() || effectData.get().weaponEffect() == null) {
+            lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
+            return;
+        }
+
+        String effectName = switch (effectData.get().weaponEffect()) {
+            case BLIND -> "Blindness";
+            case FIRE -> "Fire";
+            case POISON -> "Poison";
+            case WEAK -> "Weakness";
+            case WITHER -> "Wither";
+            default -> null;
+        };
+
+        Formatting effectColor = switch (effectData.get().weaponEffect()) {
+            case BLIND -> Formatting.DARK_BLUE;
+            case FIRE -> Formatting.RED;
+            case POISON -> Formatting.DARK_GREEN;
+            case WEAK -> Formatting.GRAY;
+            case WITHER -> Formatting.DARK_GRAY;
+            default -> null;
+        };
+
+        if (effectName != null) {
+            lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", effectName).formatted(effectColor));
+        }
     }
 
     private static void handleKeyBindEvent(MinecraftClient client) {
