@@ -3,7 +3,7 @@ package net.shirojr.titanfabric.network.packet;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.RegistryByteBuf;
@@ -14,22 +14,19 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.data.ExtendedInventory;
-import net.shirojr.titanfabric.persistent.PersistentPlayerData;
-import net.shirojr.titanfabric.persistent.PersistentWorldData;
+import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
-public record ExtendedInventoryOpenPacket(int entityId/*, ExtendedInventory inventory*/) implements CustomPayload {
+public record ExtendedInventoryOpenPacket(int playerEntityId, int targetEntityId) implements CustomPayload {
     public static final Id<ExtendedInventoryOpenPacket> IDENTIFIER =
             new Id<>(TitanFabric.getId("extended_inventory_open"));
 
     public static final PacketCodec<RegistryByteBuf, ExtendedInventoryOpenPacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.VAR_INT, ExtendedInventoryOpenPacket::entityId,
-            /*ExtendedInventory.PACKET_CODEC, ExtendedInventoryOpenPacket::inventory,*/
+            PacketCodecs.VAR_INT, ExtendedInventoryOpenPacket::playerEntityId,
+            PacketCodecs.VAR_INT, ExtendedInventoryOpenPacket::targetEntityId,
             ExtendedInventoryOpenPacket::new
     );
 
@@ -43,44 +40,34 @@ public record ExtendedInventoryOpenPacket(int entityId/*, ExtendedInventory inve
     }
 
     @Nullable
-    public ExtendedInventory getExtendedInventory(ServerWorld world) {
-        if (!(world.getEntityById(this.entityId) instanceof ServerPlayerEntity player)) return null;
-        PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(player);
-        if (playerData == null) {
-            PersistentWorldData serverState = PersistentWorldData.getServerState(world.getServer());
-            serverState.players.put(player.getUuid(), new PersistentPlayerData());
-        }
-        return Optional.ofNullable(playerData).map(data -> data.extraInventory).orElse(null);
+    public ExtendedInventoryComponent getExtendedInventory(World world) {
+        if (!(world.getEntityById(this.targetEntityId) instanceof LivingEntity livingEntity)) return null;
+        return ExtendedInventoryComponent.getTeamOrEntity(livingEntity);
     }
 
     public void handlePacket(ServerPlayNetworking.Context context) {
         ServerWorld world = context.player().getServerWorld();
-        Entity entity = world.getEntityById(this.entityId);
-        if (!(entity instanceof ServerPlayerEntity player)) return;
-        PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(entity);
-        if (playerData == null) {
-            PersistentWorldData serverState = PersistentWorldData.getServerState(context.server());
-            serverState.players.put(entity.getUuid(), new PersistentPlayerData());
-        }
-        ExtendedInventoryOpenPacket packet = new ExtendedInventoryOpenPacket(player.getId());
-        ExtendedInventory extendedInventory = packet.getExtendedInventory(world);
-        if (extendedInventory == null) return;
+        if (!(world.getEntityById(this.playerEntityId) instanceof ServerPlayerEntity player)) return;
+        ExtendedInventoryComponent extendedInventory = ExtendedInventoryOpenPacket.this.getExtendedInventory(player.getServerWorld());
 
         player.openHandledScreen(new ExtendedScreenHandlerFactory<ExtendedInventoryOpenPacket>() {
             @Override
             public ExtendedInventoryOpenPacket getScreenOpeningData(ServerPlayerEntity player) {
-                PersistentPlayerData playerData = PersistentWorldData.getPersistentPlayerData(player);
-                if (playerData == null) return null;
-                return new ExtendedInventoryOpenPacket(player.getId());
+                return new ExtendedInventoryOpenPacket(
+                        ExtendedInventoryOpenPacket.this.playerEntityId,
+                        ExtendedInventoryOpenPacket.this.targetEntityId
+                );
             }
 
             @Override
             public Text getDisplayName() {
-                return player.getDisplayName();
+                if (extendedInventory == null) return Text.empty();
+                return extendedInventory.getHeaderText();
             }
 
             @Override
             public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+                ExtendedInventoryComponent extendedInventory = ExtendedInventoryOpenPacket.this.getExtendedInventory(world);
                 return new ExtendedInventoryScreenHandler(syncId, playerInventory, extendedInventory);
             }
         });
