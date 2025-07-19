@@ -1,14 +1,16 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.SoulFireBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.TitanFabricClient;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,9 +20,26 @@ public abstract class AbstractFireBlockMixin {
 
     @Inject(method = "onEntityCollision", at = @At("HEAD"))
     private void onEntityCollisionMixin(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci) {
-        if (state.isOf(Blocks.SOUL_FIRE) && !entity.isFireImmune()) {
+        boolean soulFire = state.isOf(Blocks.SOUL_FIRE);
+        boolean fire = state.isOf(Blocks.FIRE);
+
+        if (world.isClient) {
+            handleClientSide(soulFire, fire, entity);
+        }
+
+        if (soulFire && !entity.isFireImmune() && !world.isClient) {
             entity.setFireTicks(99999);
             entity.setOnFireFor(99999);
+        }
+    }
+
+    @Unique
+    @Environment(EnvType.CLIENT)
+    private void handleClientSide(boolean soulFire, boolean fire, Entity entity) {
+        if (soulFire) {
+            TitanFabricClient.SOUL_FIRE_ENTITIES.add(entity.getUuid());
+        } else if (fire) {
+            TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
         }
     }
 }

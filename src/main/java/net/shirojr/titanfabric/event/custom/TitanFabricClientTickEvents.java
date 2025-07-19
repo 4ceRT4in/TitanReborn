@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.event.custom;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -11,9 +10,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.shirojr.titanfabric.TitanFabricClient;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
@@ -39,7 +35,6 @@ public class TitanFabricClientTickEvents {
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleKeyBindEvent);
         ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleArmorTickEvent);
-        ClientTickEvents.END_CLIENT_TICK.register(TitanFabricClientTickEvents::handleSoulFireEvent);
         ItemTooltipCallback.EVENT.register(TitanFabricClientTickEvents::handleTooltip);
     }
 
@@ -105,7 +100,7 @@ public class TitanFabricClientTickEvents {
     }
 
     private static void handleSoulFireEvent(MinecraftClient client) {
-        if (client.world != null) {
+        /*if (client.world != null) {
             client.world.getEntities().forEach(entity -> {
                 if (entity.isInLava()) {
                     TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
@@ -133,6 +128,8 @@ public class TitanFabricClientTickEvents {
                 }
             });
         }
+
+         */
     }
 
     private static void handleArmorTickEvent(MinecraftClient client) {

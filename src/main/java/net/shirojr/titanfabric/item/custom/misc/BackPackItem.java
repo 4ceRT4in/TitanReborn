@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.item.custom.misc;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -13,14 +12,15 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.*;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Rarity;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.data.BackPackContent;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
-import net.shirojr.titanfabric.util.TitanFabricTags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,11 +77,10 @@ public class BackPackItem extends Item {
 
         Inventory inventory = new SimpleInventory(type.getSize());
 
-        if (content != null) {
-            for (int i = 0; i < Math.min(content.getItems().size(), type.getSize()); i++) {
-                if(content.getItems().get(i).getItem() != TitanFabricItems.BACKPACK_BIG && content.getItems().get(i) != ItemStack.EMPTY) {
-                    inventory.setStack(i, content.getItems().get(i));
-                }
+        if (content == null) return inventory;
+        for (int i = 0; i < Math.min(content.getItems().size(), type.getSize()); i++) {
+            if(content.getItems().get(i).getItem() != TitanFabricItems.BACKPACK_BIG && content.getItems().get(i) != ItemStack.EMPTY && !content.getItems().isEmpty() && !content.getItems().get(i).getItem().equals(Blocks.AIR.asItem())) {
+                inventory.setStack(i, content.getItems().get(i));
             }
         }
 
@@ -90,6 +89,7 @@ public class BackPackItem extends Item {
 
     public static void writeComponentsFromInventory(ItemStack itemStack, Inventory inventory) {
         List<ItemStack> items = new ArrayList<>();
+        if(itemStack == null || itemStack.isEmpty() || itemStack.getItem() == Blocks.AIR.asItem()) return;
         for (int i = 0; i < inventory.size(); i++) {
             ItemStack stack = inventory.getStack(i);
             if (!stack.isEmpty() && stack != ItemStack.EMPTY && stack.getItem() != Blocks.AIR.asItem()) {
@@ -98,8 +98,6 @@ public class BackPackItem extends Item {
                 items.add(new ItemStack(TitanFabricItems.BACKPACK_BIG)); // the codec doesnt allow empty itemstacks to be saved -> game crash, therefore just this placeholder item since it cannot be placed inside anyway lol
             }
         }
-        if(itemStack.isEmpty() || itemStack == null || itemStack.getItem() == Blocks.AIR.asItem()) return;
-
         BackPackContent content = new BackPackContent(items);
         itemStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, content);
     }

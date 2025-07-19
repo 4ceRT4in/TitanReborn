@@ -1,5 +1,7 @@
 package net.shirojr.titanfabric.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
@@ -23,7 +25,6 @@ import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
@@ -32,18 +33,16 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 public abstract class ArmorFeatureRendererMixin {
 
-    @Redirect(method = "renderGlint", at = @At(value = "INVOKE", target="Lnet/minecraft/client/render/RenderLayer;getArmorEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
-    private RenderLayer getArmorEntityGlint() {
+    @WrapOperation(method = "renderGlint", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    private RenderLayer renderGlint(Operation<RenderLayer> original) {
         DyeColor color = GlintContext.getColor();
         if (color != null) {
             return GlintRenderLayer.armorEntityGlintColor.get(color.getId());
         }
-        return RenderLayer.getArmorEntityGlint();
+        return original.call();
     }
 
-    @Inject(method = "renderArmor",
-            at = @At("HEAD"),
-            cancellable = false)
+    @Inject(method = "renderArmor", at = @At("HEAD"))
     private <T extends LivingEntity, A extends BipedEntityModel<T>> void beforeRenderArmor(
             MatrixStack matrices,
             VertexConsumerProvider vertexConsumers,

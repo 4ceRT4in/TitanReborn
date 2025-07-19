@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.effect;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -10,12 +9,12 @@ import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ImmunityEffect extends StatusEffect {
-    private static final Map<UUID, StatusEffect> entityBlockedEffect = new HashMap<>();
+    private static final Map<UUID, StatusEffect> entityBlockedEffect = new ConcurrentHashMap<>();
 
     public ImmunityEffect(StatusEffectCategory category, int color) {
         super(category, color);

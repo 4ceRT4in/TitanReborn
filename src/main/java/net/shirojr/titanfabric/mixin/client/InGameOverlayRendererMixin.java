@@ -8,16 +8,14 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabricClient;
-import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
@@ -33,11 +31,12 @@ public abstract class InGameOverlayRendererMixin {
         if (ArmorHelper.getEmberArmorCount(minecraftClient.player) >= 4) info.cancel();
     }
 
-    @Redirect(method = "renderFireOverlay", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;"))
-    private static Sprite getSprite(SpriteIdentifier obj, MinecraftClient client) {
+    @ModifyVariable(method = "renderFireOverlay", at = @At("STORE"), ordinal = 0)
+    private static Sprite renderFireOverlay(Sprite original, MinecraftClient client, MatrixStack matrices) {
+        if(client.player == null) return original;
         if (TitanFabricClient.SOUL_FIRE_ENTITIES.contains(client.player.getUuid())) {
             return TEXTURE.getSprite();
         }
-        return obj.getSprite();
+        return original;
     }
 }
