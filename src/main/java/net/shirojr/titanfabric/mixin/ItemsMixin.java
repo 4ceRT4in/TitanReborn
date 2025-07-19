@@ -20,6 +20,26 @@ public abstract class ItemsMixin {
         return multiplier;
     }
 
+    @ModifyArg(
+            method = "<clinit>",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/item/AxeItem;createAttributeModifiers(Lnet/minecraft/item/ToolMaterial;FF)Lnet/minecraft/component/type/AttributeModifiersComponent;"),
+            index = 1
+    )
+    private static float modifyAxeAttackDamage(float attackDamage) {
+        return 2.0f;
+    }
+
+    @ModifyArg(
+            method = "<clinit>",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/item/ShovelItem;createAttributeModifiers(Lnet/minecraft/item/ToolMaterial;FF)Lnet/minecraft/component/type/AttributeModifiersComponent;"),
+            index = 1
+    )
+    private static float modifyShovelAttackDamage(float attackDamage) {
+        return 0.0f;
+    }
+
     @WrapOperation(
             method = "<clinit>",
             at = @At(
