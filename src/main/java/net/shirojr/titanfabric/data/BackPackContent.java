@@ -3,7 +3,6 @@ package net.shirojr.titanfabric.data;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -80,10 +79,6 @@ public record BackPackContent(SimpleInventory inventory, BackPackItem.Type type)
         return true;
     }
 
-    public void onOpen(PlayerEntity player) {
-
-    }
-
     public static Optional<BackPackContent> get(ItemStack stack) {
         return Optional.ofNullable(stack.get(TitanFabricDataComponents.BACKPACK_CONTENT));
     }
@@ -93,10 +88,9 @@ public record BackPackContent(SimpleInventory inventory, BackPackItem.Type type)
     }
 
     public void savePersistent(ItemStack bundleStack) {
-        if (!bundleStack.contains(TitanFabricDataComponents.BACKPACK_CONTENT)) {
-            throw new NullPointerException("Bundle Stack has no Bundle Content data");
+        if (bundleStack.contains(TitanFabricDataComponents.BACKPACK_CONTENT)) {
+            bundleStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, this);
         }
-        bundleStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, this);
     }
 
     // ------------------- [ util ] -------------------
@@ -107,9 +101,5 @@ public record BackPackContent(SimpleInventory inventory, BackPackItem.Type type)
             inventory.addStack(stack);
         }
         return inventory;
-    }
-
-    public SimpleInventory asInventory() {
-        return toInventory(this.getStacks(), this.type);
     }
 }

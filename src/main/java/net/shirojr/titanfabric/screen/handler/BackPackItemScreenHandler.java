@@ -6,10 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.shirojr.titanfabric.data.BackPackContent;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
-import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
-import net.shirojr.titanfabric.data.BackPackContent;
+import net.shirojr.titanfabric.init.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.util.items.BackPackSlot;
 
 import java.awt.*;
 
@@ -25,7 +27,6 @@ public class BackPackItemScreenHandler extends ScreenHandler {
         super(TitanFabricScreenHandlers.BACKPACK, syncId);
         this.backpackStack = backpackStack;
         this.content = BackPackContent.getOrThrow(this.backpackStack);
-        this.content.onOpen(playerInventory.player);
 
         Point location = switch (content.type()) {
             case MEDIUM -> new Point(35, 22);
@@ -35,6 +36,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
         addStorageSlots(content, location);
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
+        this.backpackStack.set(TitanFabricDataComponents.BACKPACK_CONTENT, this.content);
     }
 
     public BackPackItem.Type getBackPackItemType() {
@@ -43,7 +45,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return this.backpackStack.getItem() instanceof BackPackItem;
+        return this.content.inventory().canPlayerUse(player) && this.backpackStack.getItem() instanceof BackPackItem;
     }
 
     @Override
@@ -62,16 +64,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
             for (int column = 0; column < columns; column++) {
                 slotPos.y = pos.y + (slotSize * row);
                 slotPos.x = pos.x + (slotSize * column);
-
-                this.addSlot(new Slot(this.content.asInventory(), slotIndex, slotPos.x, slotPos.y) {
-                    @Override
-                    public boolean canInsert(ItemStack stack) {
-                        if (stack.getItem() instanceof BackPackItem) {
-                            return false;
-                        }
-                        return super.canInsert(stack);
-                    }
-                });
+                this.addSlot(new BackPackSlot(backpackStack, this.content.inventory(), slotIndex, slotPos.x, slotPos.y));
                 slotIndex++;
             }
             slotPos.x = pos.x;
@@ -80,54 +73,41 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public void onSlotClick(int slotId, int button, SlotActionType actionType, PlayerEntity player) {
-        if (player.getMainHandStack().isEmpty()) {
-            super.onSlotClick(slotId, button, actionType, player);
-            return;
-        }
-        if (slotId >= 0) {
+        /*if (slotId >= 0 && slotId < this.slots.size()) {
             Slot slot = this.slots.get(slotId);
-            if (actionType == SlotActionType.SWAP && button >= 0 && button < 9) {
-                ItemStack swappedItem = player.getInventory().getStack(button);
-                if (swappedItem == player.getMainHandStack()) {
+            ItemStack stackInSlot = slot.getStack();
+            if (stackInSlot.equals(this.backpackStack) || this.getCursorStack().equals(this.backpackStack)) {
+                if (slot.inventory.equals(this.content.inventory())) {
                     return;
                 }
             }
-            if (slot.hasStack()) {
-                ItemStack stackInSlot = slot.getStack();
-                if (stackInSlot == player.getMainHandStack() || this.getCursorStack() == player.getMainHandStack()) {
-                    if (actionType == SlotActionType.THROW || actionType == SlotActionType.SWAP || actionType == SlotActionType.QUICK_MOVE ||
-                            actionType == SlotActionType.PICKUP || actionType == SlotActionType.CLONE ||
-                            actionType == SlotActionType.QUICK_CRAFT || actionType == SlotActionType.PICKUP_ALL) {
-                        return;
-                    }
-                }
-            }
-        }
-        if (this.getCursorStack() != player.getMainHandStack()) {
-            super.onSlotClick(slotId, button, actionType, player);
-        }
+        }*/
+        super.onSlotClick(slotId, button, actionType, player);
+        this.content.inventory().markDirty();
     }
 
     @Override
-    public ItemStack quickMove(PlayerEntity player, int index) {
-        ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot.hasStack()) {
-            ItemStack toInsert = slot.getStack();
-            itemStack = toInsert.copy();
-            if (index < this.content.size()) {
-                if (!this.insertItem(toInsert, 0, this.slots.size(), true)) {
-                    return ItemStack.EMPTY;
-                }
+    public ItemStack quickMove(PlayerEntity player, int invSlot) {
+        ItemStack newStack = ItemStack.EMPTY;
+        Slot slot = this.slots.get(invSlot);
+        if (!slot.hasStack()) return newStack;
+
+        ItemStack originalStack = slot.getStack();
+        newStack = originalStack.copy();
+        if (invSlot < this.content.size()) {
+            if (!this.insertItem(originalStack, this.content.size(), this.slots.size(), true)) {
+                return ItemStack.EMPTY;
             }
-            if (toInsert.isEmpty()) {
-                slot.setStack(ItemStack.EMPTY);
-            } else {
-                slot.markDirty();
-            }
+        } else if (!this.insertItem(originalStack, 0, this.content.size(), false)) {
+            return ItemStack.EMPTY;
         }
 
-        return itemStack;
+        if (originalStack.isEmpty()) {
+            slot.setStack(ItemStack.EMPTY);
+        } else {
+            slot.markDirty();
+        }
+        return newStack;
     }
 
     private void addPlayerInventory(PlayerInventory playerInventory) {
@@ -146,9 +126,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
-        if (stack == this.backpackStack)
-            return false;
+        if (stack.equals(this.backpackStack)) return false;
         return super.canInsertIntoSlot(stack, slot);
     }
-
 }
