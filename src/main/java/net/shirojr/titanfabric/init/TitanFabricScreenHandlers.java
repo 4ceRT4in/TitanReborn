@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.screen;
+package net.shirojr.titanfabric.init;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.registry.Registries;

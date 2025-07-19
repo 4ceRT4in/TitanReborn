@@ -11,7 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
+import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.render.model.ParachuteFeatureModel;
 
 public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
@@ -27,7 +27,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity,
                        float limbAngle, float limbDistance, float tickDelta, float animationProgress,
                        float headYaw, float headPitch) {
-        if (!TitanFabricParachuteItem.isParachuteActivated(entity)) {
+        if (!ParachuteItem.isParachuteActivated(entity)) {
             return;
         }
         matrices.push();

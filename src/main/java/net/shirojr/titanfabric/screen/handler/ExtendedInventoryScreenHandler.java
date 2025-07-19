@@ -16,7 +16,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.data.ExtendedInventory;
 import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
 import net.shirojr.titanfabric.persistent.PersistentPlayerData;
-import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.init.TitanFabricScreenHandlers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;

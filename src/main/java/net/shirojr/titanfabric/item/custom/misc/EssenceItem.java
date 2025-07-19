@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.item.custom;
+package net.shirojr.titanfabric.item.custom.misc;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,8 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-public class TitanFabricEssenceItem extends Item implements WeaponEffectCrafting, VariationHolder {
-    public TitanFabricEssenceItem(Item.Settings settings) {
+public class EssenceItem extends Item implements WeaponEffectCrafting, VariationHolder {
+    public EssenceItem(Item.Settings settings) {
         super(settings);
     }
 

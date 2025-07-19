@@ -23,10 +23,7 @@ import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
-import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
-import net.shirojr.titanfabric.item.custom.misc.CitrinStarItem;
-import net.shirojr.titanfabric.item.custom.misc.FlintAndEmberItem;
-import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
+import net.shirojr.titanfabric.item.custom.misc.*;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
@@ -131,8 +128,8 @@ public interface TitanFabricItems {
     TitanFabricShieldItem LEGEND_SHIELD = register("legend_shield",
             new TitanFabricShieldItem(new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)), TitanFabricItems.LEGEND_INGOT));
 
-    TitanFabricParachuteItem PARACHUTE = register("parachute",
-            new TitanFabricParachuteItem(new Item.Settings().maxCount(1)/*.maxDamage(250)*/.component(TitanFabricDataComponents.ACTIVATED, false)));
+    ParachuteItem PARACHUTE = register("parachute",
+            new ParachuteItem(new Item.Settings().maxCount(1)/*.maxDamage(250)*/.component(TitanFabricDataComponents.ACTIVATED, false)));
 
     CitrinStarItem CITRIN_STAR = register("citrin_star",
             new CitrinStarItem(new Item.Settings().maxCount(4)));
@@ -140,7 +137,7 @@ public interface TitanFabricItems {
     FlintAndEmberItem FLINT_AND_EMBER = register("flint_and_ember",
             new FlintAndEmberItem(new Item.Settings().maxCount(1).maxDamage(64)));
 
-    TitanFabricEssenceItem ESSENCE = register("essence", new TitanFabricEssenceItem(
+    EssenceItem ESSENCE = register("essence", new EssenceItem(
             new Item.Settings().maxCount(64)));
 
     Item SWORD_HANDLE = register("sword_handle",

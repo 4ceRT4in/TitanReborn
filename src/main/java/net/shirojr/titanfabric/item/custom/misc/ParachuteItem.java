@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.item.custom;
+package net.shirojr.titanfabric.item.custom.misc;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -22,9 +22,9 @@ import net.shirojr.titanfabric.sound.TitanFabricSoundHandler;
 
 import java.util.List;
 
-public class TitanFabricParachuteItem extends Item {
+public class ParachuteItem extends Item {
 
-    public TitanFabricParachuteItem(Settings settings) {
+    public ParachuteItem(Settings settings) {
         super(settings);
     }
 

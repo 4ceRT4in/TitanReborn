@@ -8,7 +8,7 @@ import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
-import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
+import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 
 @Environment(EnvType.CLIENT)
 public class ParachuteSoundInstance extends MovingSoundInstance {
@@ -26,7 +26,7 @@ public class ParachuteSoundInstance extends MovingSoundInstance {
     @Override
     public void tick() {
         ++this.tickCount;
-        if (this.player.isRemoved() || this.tickCount > 20 && !TitanFabricParachuteItem.isParachuteActivated(player)) {
+        if (this.player.isRemoved() || this.tickCount > 20 && !ParachuteItem.isParachuteActivated(player)) {
             this.setDone();
             return;
         }
