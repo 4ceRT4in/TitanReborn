@@ -7,19 +7,13 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.SplashPotionItem;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
-import net.shirojr.titanfabric.network.packet.BackPackScreenPacket;
 import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
-import net.shirojr.titanfabric.data.BackPackContent;
 
 import java.awt.*;
-import java.util.Optional;
 
 public class BackPackItemScreenHandler extends ScreenHandler {
     private final Inventory inventory;
@@ -68,6 +62,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     @Override
     public void onClosed(PlayerEntity player) {
         super.onClosed(player);
+        if(player == null || player.isDead() || backpackStack == null || inventory == null) return;
         BackPackItem.writeComponentsFromInventory(backpackStack, inventory);
     }
 

@@ -37,23 +37,22 @@ public class ImmunityEffect extends StatusEffect {
 
 
     public static void checkAndBlockNegativeEffect(LivingEntity entity, StatusEffectInstance newEffect) {
-        if (entity.getWorld() != null && !entity.getWorld().isClient) {
-            StatusEffectInstance immunityEffect = entity.getStatusEffect(TitanFabricStatusEffects.IMMUNITY);
+        if (entity.getWorld() == null || entity.getWorld().isClient) return;
+        StatusEffectInstance immunityEffect = entity.getStatusEffect(TitanFabricStatusEffects.IMMUNITY);
 
-            if (immunityEffect != null && newEffect.getEffectType().value().getCategory() == StatusEffectCategory.HARMFUL) {
-                UUID uuid = entity.getUuid();
-                StatusEffect blocked = entityBlockedEffect.get(uuid);
+        if (immunityEffect != null && newEffect.getEffectType().value().getCategory() == StatusEffectCategory.HARMFUL) {
+            UUID uuid = entity.getUuid();
+            StatusEffect blocked = entityBlockedEffect.get(uuid);
 
-                if (blocked != null) {
-                    if (blocked == newEffect.getEffectType().value()) {
-                        entity.removeStatusEffect(newEffect.getEffectType());
-                        LoggerUtil.devLogger("Immunity for " + uuid + " blocked known effect: " + newEffect.getEffectType().value().getTranslationKey());
-                    }
-                } else {
-                    entityBlockedEffect.put(uuid, newEffect.getEffectType().value());
+            if (blocked != null) {
+                if (blocked == newEffect.getEffectType().value()) {
                     entity.removeStatusEffect(newEffect.getEffectType());
-                    LoggerUtil.devLogger("Immunity for " + uuid + " now protects against new effect: " + newEffect.getEffectType().value().getTranslationKey());
+                    LoggerUtil.devLogger("Immunity for " + uuid + " blocked known effect: " + newEffect.getEffectType().value().getTranslationKey());
                 }
+            } else {
+                entityBlockedEffect.put(uuid, newEffect.getEffectType().value());
+                entity.removeStatusEffect(newEffect.getEffectType());
+                LoggerUtil.devLogger("Immunity for " + uuid + " now protects against new effect: " + newEffect.getEffectType().value().getTranslationKey());
             }
         }
     }

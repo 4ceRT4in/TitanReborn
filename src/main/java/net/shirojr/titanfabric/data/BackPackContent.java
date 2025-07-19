@@ -1,25 +1,15 @@
 package net.shirojr.titanfabric.data;
 
-import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.util.collection.DefaultedList;
-import net.shirojr.titanfabric.init.TitanFabricDataComponents;
-import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public record BackPackContent(List<ItemStack> items) {
 
@@ -30,14 +20,15 @@ public record BackPackContent(List<ItemStack> items) {
     public static final PacketCodec<RegistryByteBuf, BackPackContent> PACKET_CODEC =
             PacketCodec.tuple(
                     PacketCodecs.optional(ItemStack.PACKET_CODEC).collect(PacketCodecs.toList()),
-                    items -> items.items().stream().map(Optional::of).toList(),
-                    optionals -> new BackPackContent(
-                            optionals.stream()
+                    items -> items.items().stream()
+                            .map(stack -> stack.isEmpty() ? Optional.<ItemStack>empty() : Optional.of(stack))
+                            .toList(),
+                    list -> new BackPackContent(
+                            list.stream()
                                     .map(opt -> opt.orElse(ItemStack.EMPTY))
                                     .toList()
                     )
             );
-
 
     public BackPackContent() {
         this(new ArrayList<>());
