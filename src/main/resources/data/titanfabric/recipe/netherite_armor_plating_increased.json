@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": {
+    "item": "titanfabric:netherite_armor_plating"
+  },
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "template": [],
+  "result": {
+    "count": 2,
+    "id": "titanfabric:netherite_armor_plating"
+  }
+}
