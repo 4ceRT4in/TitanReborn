@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " t ",
+        "gBg",
+        " t "
+    ],
+    "key": {
+        "t": {
+            "item": "titanfabric:citrin_shard"
+        },
+        "g": {
+            "item": "minecraft:gold_ingot"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        }
+    },
+    "result": {
+        "id": "titanfabric:citrin_star",
+        "count": 2
+    }
+}

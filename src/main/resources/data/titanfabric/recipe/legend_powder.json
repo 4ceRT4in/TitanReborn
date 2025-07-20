@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "minecraft:obsidian"
+        },
+        {
+            "item": "titanfabric:legend_crystal"
+        },
+        {
+            "item": "titanfabric:legend_crystal"
+        },
+        {
+            "item": "minecraft:diamond"
+        }
+    ],
+    "result": {
+        "id": "titanfabric:legend_powder",
+        "count": 1
+    }
+}

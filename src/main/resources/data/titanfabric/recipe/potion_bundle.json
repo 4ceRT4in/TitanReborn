@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#B#",
+        "L L",
+        "eLe"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:string"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        },
+        "L": {
+            "item": "minecraft:leather"
+        },
+        "e": {
+            "item": "titanfabric:ember_ingot"
+        }
+    },
+    "result": {
+        "id": "titanfabric:potion_bundle",
+        "count": 1
+    }
+}

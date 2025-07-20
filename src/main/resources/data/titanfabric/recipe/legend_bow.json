@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " /S",
+        "t S",
+        " /S"
+    ],
+    "key": {
+        "/": {
+            "item": "minecraft:stick"
+        },
+        "S": {
+            "item": "minecraft:string"
+        },
+        "t": {
+            "item": "titanfabric:legend_ingot"
+        }
+    },
+    "result": {
+        "id": "titanfabric:legend_bow",
+        "count": 1
+    }
+}

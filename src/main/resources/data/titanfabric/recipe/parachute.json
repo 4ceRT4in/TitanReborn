@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "www",
+        "l l",
+        "s s"
+    ],
+    "key": {
+        "w": {
+            "tag": "minecraft:wool"
+        },
+        "l": {
+            "item": "minecraft:leather"
+        },
+        "s": {
+            "item": "minecraft:string"
+        }
+    },
+    "result": {
+        "id": "titanfabric:parachute",
+        "count": 1
+    }
+}

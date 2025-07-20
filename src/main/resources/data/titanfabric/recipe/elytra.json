@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "nLn",
+        "PSP",
+        "S S"
+    ],
+    "key": {
+        "n": {
+            "item": "minecraft:netherite_ingot"
+        },
+        "L": {
+            "item": "minecraft:leather"
+        },
+        "P": {
+            "item": "minecraft:phantom_membrane"
+        },
+        "S": {
+            "item": "minecraft:string"
+        }
+    },
+    "result": {
+        "id": "minecraft:elytra",
+        "count": 1
+    }
+}
