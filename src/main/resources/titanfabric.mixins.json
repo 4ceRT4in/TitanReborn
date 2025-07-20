@@ -21,7 +21,6 @@
     "LivingEntityMixin",
     "OreFeatureMixin",
     "PlayerEntityMixin",
-    "ServerPlayerEntityMixin",
     "SoulFireBlockMixin",
     "SplashPotionItemMixin",
     "StatusEffectInstanceMixin",

@@ -7,7 +7,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.data.BackPackContent;
-import net.shirojr.titanfabric.data.ExtendedInventory;
 import net.shirojr.titanfabric.data.PotionBundleContent;
 import net.shirojr.titanfabric.util.TitanFabricCodecs;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -46,9 +45,6 @@ public interface TitanFabricDataComponents {
 
     ComponentType<PotionBundleContent> POTION_BUNDLE_CONTENT = register("potion_bundle_content",
             builder -> builder.codec(PotionBundleContent.CODEC).packetCodec(PotionBundleContent.PACKET_CODEC));
-
-    ComponentType<ExtendedInventory> EXTENDED_INVENTORY = register("extended_inventory",
-            builder -> builder.codec(ExtendedInventory.CODEC).packetCodec(ExtendedInventory.PACKET_CODEC));
 
     ComponentType<Integer> SELECTED_PROJECTILE = register("selected_projectile",
             builder -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
