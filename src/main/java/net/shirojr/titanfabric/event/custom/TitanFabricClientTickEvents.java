@@ -12,13 +12,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
-import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.network.packet.ArmorLifePacket;
 import net.shirojr.titanfabric.network.packet.ArrowSelectionPacket;
 import net.shirojr.titanfabric.registry.KeyBindRegistry;
 import net.shirojr.titanfabric.util.TitanFabricKeyBinds;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
-import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,18 +38,12 @@ public class TitanFabricClientTickEvents {
     }
 
     private static void handleTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
-        if (!(stack.getItem() instanceof LegendBowItem)) return;
-
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        if (!(player instanceof ArrowSelectionHandler clientPlayer)) return;
-
-        Optional<Integer> selectedIndex = clientPlayer.titanfabric$getSelectedArrowIndex();
-        if (selectedIndex.isEmpty()) {
-            lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
-            return;
-        }
-
-        ItemStack arrowStack = player.getInventory().getStack(selectedIndex.get());
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null) return;
+        if (!(stack.getItem() instanceof SelectableArrow selectableArrow)) return;
+        Integer index = selectableArrow.getSelectedIndex(stack);
+        if (index == null) return;
+        ItemStack arrowStack = client.player.getInventory().main.get(index);
         if (!(arrowStack.getItem() instanceof TitanFabricArrowItem)) {
             lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
             return;
@@ -68,7 +61,6 @@ public class TitanFabricClientTickEvents {
             case POISON -> "Poison";
             case WEAK -> "Weakness";
             case WITHER -> "Wither";
-            default -> null;
         };
 
         Formatting effectColor = switch (effectData.get().weaponEffect()) {
@@ -77,12 +69,9 @@ public class TitanFabricClientTickEvents {
             case POISON -> Formatting.DARK_GREEN;
             case WEAK -> Formatting.GRAY;
             case WITHER -> Formatting.DARK_GRAY;
-            default -> null;
         };
 
-        if (effectName != null) {
-            lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", effectName).formatted(effectColor));
-        }
+        lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", effectName).formatted(effectColor));
     }
 
     private static void handleKeyBindEvent(MinecraftClient client) {
@@ -98,39 +87,6 @@ public class TitanFabricClientTickEvents {
         } else {
             keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, false);
         }
-    }
-
-    private static void handleSoulFireEvent(MinecraftClient client) {
-        /*if (client.world != null) {
-            client.world.getEntities().forEach(entity -> {
-                if (entity.isInLava()) {
-                    TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
-                    return;
-                }
-                Box box = entity.getBoundingBox();
-                BlockPos.Mutable mutable = new BlockPos.Mutable();
-                BlockPos blockPos = new BlockPos((int) (box.minX + 0.001), (int) (box.minY + 0.001), (int) (box.minZ + 0.001));
-                BlockPos blockPos2 = new BlockPos((int) (box.maxX - 0.001), (int) (box.maxY - 0.001), (int) (box.maxZ - 0.001));
-
-                for (int i = blockPos.getX(); i <= blockPos2.getX(); ++i) {
-                    for (int j = blockPos.getY(); j <= blockPos2.getY(); ++j) {
-                        for (int k = blockPos.getZ(); k <= blockPos2.getZ(); ++k) {
-                            mutable.set(i, j, k);
-                            if (client.world.getBlockState(mutable).getBlock() == Blocks.SOUL_FIRE) {
-                                TitanFabricClient.SOUL_FIRE_ENTITIES.add(entity.getUuid());
-                                return;
-                            }
-                            if (client.world.getBlockState(mutable).getBlock() == Blocks.FIRE) {
-                                TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
-                                return;
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-         */
     }
 
     private static void handleArmorTickEvent(MinecraftClient client) {

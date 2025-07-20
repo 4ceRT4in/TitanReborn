@@ -5,13 +5,16 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
+import net.shirojr.titanfabric.effect.ImmunityEffect;
 
 public class DeathEvents {
     public static void register() {
-        ServerPlayerEvents.COPY_FROM.register(DeathEvents::afterRespawn);
+        ServerPlayerEvents.COPY_FROM.register(DeathEvents::handleRespawnData);
     }
 
-    private static void afterRespawn(ServerPlayerEntity before, ServerPlayerEntity after, boolean isAlive) {
+    private static void handleRespawnData(ServerPlayerEntity before, ServerPlayerEntity after, boolean isAlive) {
+        ImmunityEffect.resetImmunity(after);
+
         handleExtendedInventories(
                 ExtendedInventoryComponent.getEntity(before),
                 ExtendedInventoryComponent.getEntity(after)

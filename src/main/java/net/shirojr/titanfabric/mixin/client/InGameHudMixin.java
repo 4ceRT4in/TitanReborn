@@ -1,7 +1,5 @@
 package net.shirojr.titanfabric.mixin.client;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,16 +9,9 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.StatusEffectSpriteManager;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import org.spongepowered.asm.mixin.Final;
@@ -32,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,13 +34,16 @@ public abstract class InGameHudMixin {
     private MinecraftClient client;
 
 
-    @Shadow @Final private static Identifier EFFECT_BACKGROUND_TEXTURE;
+    @Shadow
+    @Final
+    private static Identifier EFFECT_BACKGROUND_TEXTURE;
 
     @Inject(method = "render", at = @At("HEAD"))
     public void render(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         renderArmorPlatingOverlay(context, tickCounter);
     }
 
+    @SuppressWarnings("unused")
     @Unique
     private void renderArmorPlatingOverlay(DrawContext context, RenderTickCounter tickCounter) {
         var player = client.player;

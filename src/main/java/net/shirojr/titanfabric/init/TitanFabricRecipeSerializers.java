@@ -5,12 +5,7 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
-import net.shirojr.titanfabric.recipe.custom.EffectUpgradeRecipe;
-import net.shirojr.titanfabric.recipe.custom.MultiBowUpgradeRecipe;
-import net.shirojr.titanfabric.recipe.custom.ArmorPlatingRecipe;
-import net.shirojr.titanfabric.recipe.custom.DyeableRecipe;
-import net.shirojr.titanfabric.recipe.custom.WeaponEffectRecipe;
+import net.shirojr.titanfabric.recipe.custom.*;
 
 public interface TitanFabricRecipeSerializers {
     RecipeSerializer<EffectRecipe> EFFECT = register("effect", new EffectRecipe.Serializer());

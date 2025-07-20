@@ -13,9 +13,9 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.data.BackPackContent;
-import net.shirojr.titanfabric.data.PotionBundleContent;
-import net.shirojr.titanfabric.item.custom.*;
+import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
+import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.ArmorPlatingItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
@@ -169,7 +169,7 @@ public interface TitanFabricItems {
                             .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
                             .build())));
 
-    PotionBundleItem POTION_BUNDLE = register("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.POTION));
+    BackPackItem POTION_BUNDLE = register("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.POTION));
 
     BackPackItem BACKPACK_SMALL = register("backpack_small", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.SMALL));
 

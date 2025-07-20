@@ -1,18 +1,11 @@
 package net.shirojr.titanfabric.color;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
-import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
-import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 
 import java.util.List;
 
@@ -36,7 +29,7 @@ public class TitanFabricDyeProviders {
             }
         }
 
-        if (stack.getItem() instanceof TitanFabricParachuteItem) {
+        if (stack.getItem() instanceof ParachuteItem) {
             tooltip.add(Text.translatable("tooltip.titanfabric.color.white"));
         }
     }

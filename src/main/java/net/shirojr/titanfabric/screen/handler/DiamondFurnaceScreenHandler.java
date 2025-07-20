@@ -12,7 +12,7 @@ import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.slot.FurnaceOutputSlot;
 import net.minecraft.screen.slot.Slot;
-import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.init.TitanFabricScreenHandlers;
 
 public class DiamondFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
@@ -32,8 +32,8 @@ public class DiamondFurnaceScreenHandler extends AbstractFurnaceScreenHandler {
 
     public ItemStack quickMove(PlayerEntity player, int slot) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot2 = (Slot)this.slots.get(slot);
-        if (slot2 != null && slot2.hasStack()) {
+        Slot slot2 = this.slots.get(slot);
+        if (slot2.hasStack()) {
             ItemStack itemStack2 = slot2.getStack();
             itemStack = itemStack2.copy();
             if (slot == 2 || slot == 39) {

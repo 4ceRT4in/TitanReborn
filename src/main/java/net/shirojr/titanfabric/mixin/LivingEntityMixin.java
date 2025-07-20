@@ -15,19 +15,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricItems;
-import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
-import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -62,7 +60,7 @@ public abstract class LivingEntityMixin {
     @Inject(method = "tickStatusEffects", at = @At("HEAD"))
     private void tickStatusEffects(CallbackInfo ci) {
         //FIXME: should try to find a non-ticking solution!
-        LivingEntity self = (LivingEntity)(Object)this;
+        LivingEntity self = (LivingEntity) (Object) this;
         for (StatusEffectInstance effectInstance : new ArrayList<>(self.getStatusEffects())) {
             StatusEffect effect = effectInstance.getEffectType().value();
 
@@ -81,7 +79,7 @@ public abstract class LivingEntityMixin {
                 DamageSource damageSource = self.getDamageSources().generic();
                 //LoggerUtil.devLogger("works");
                 float k = attacker.getKnockbackAgainst(self, damageSource) + (1.25F);
-                attacker.takeKnockback((double)(k * 0.5F), (double) MathHelper.sin(self.getYaw() * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(self.getYaw() * ((float)Math.PI / 180F))));
+                attacker.takeKnockback((double) (k * 0.5F), (double) MathHelper.sin(self.getYaw() * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(self.getYaw() * ((float) Math.PI / 180F))));
             }
         }
     }

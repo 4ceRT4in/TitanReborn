@@ -10,8 +10,8 @@ import net.minecraft.item.SplashPotionItem;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.shirojr.titanfabric.init.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
-import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
 
 import java.awt.*;
 
@@ -108,7 +108,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
             return;
         }
         if (this.backPackType == BackPackItem.Type.POTION && slotId >= 0 && slotId < this.inventory.size()) {
-            ItemStack itemToCheck = ItemStack.EMPTY;
+            ItemStack itemToCheck;
             if (actionType == SlotActionType.SWAP) {
                 itemToCheck = player.getInventory().getStack(button);
             } else {
@@ -146,7 +146,7 @@ public class BackPackItemScreenHandler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
-        if (slot != null && slot.hasStack()) {
+        if (slot.hasStack()) {
             ItemStack itemStack2 = slot.getStack();
             itemStack = itemStack2.copy();
             if (this.backPackType == BackPackItem.Type.POTION) {
