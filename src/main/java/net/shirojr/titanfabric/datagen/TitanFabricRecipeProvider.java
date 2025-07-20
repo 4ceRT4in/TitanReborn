@@ -95,7 +95,7 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter);
 
         offerArmorPlating(exporter, TitanFabricItems.DIAMOND_ARMOR_PLATING, Items.DIAMOND);
-        offerArmorPlating(exporter, TitanFabricItems.NETHERITE_ARMOR_PLATING, Items.NETHERITE_INGOT);
+        // offerArmorPlating(exporter, TitanFabricItems.NETHERITE_ARMOR_PLATING, Items.NETHERITE_INGOT);
         offerArmorPlating(exporter, TitanFabricItems.CITRIN_ARMOR_PLATING, TitanFabricItems.CITRIN_SHARD);
         offerArmorPlating(exporter, TitanFabricItems.EMBER_ARMOR_PLATING, TitanFabricItems.EMBER_INGOT);
         offerArmorPlating(exporter, TitanFabricItems.LEGEND_ARMOR_PLATING, TitanFabricItems.LEGEND_INGOT);
