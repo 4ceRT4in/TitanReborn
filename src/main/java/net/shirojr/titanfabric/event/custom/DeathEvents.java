@@ -12,7 +12,7 @@ import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 
 public class DeathEvents {
     public static void register() {
-        ServerPlayerEvents.AFTER_RESPAWN.register(DeathEvents::afterRespawn);
+        ServerPlayerEvents.COPY_FROM.register(DeathEvents::afterRespawn);
     }
 
     private static void afterRespawn(ServerPlayerEntity before, ServerPlayerEntity after, boolean isAlive) {

@@ -17,6 +17,7 @@ public class GlobalExtendedInventoryImpl extends AbstractExtendedInventoryCompon
         super();
         this.provider = scoreboard;
         this.server = server;
+        this.dropInventory = false;
     }
 
     @Override

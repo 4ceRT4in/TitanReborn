@@ -14,12 +14,12 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public abstract class AbstractExtendedInventoryComponentImpl implements ExtendedInventoryComponent, AutoSyncedComponent {
-    private final SimpleInventory inventory;
-    private boolean dropInventory;
+    protected final SimpleInventory inventory;
+    protected boolean dropInventory;
 
     public AbstractExtendedInventoryComponentImpl() {
         this.inventory = new SimpleInventory(getType().getSize());
-        this.dropInventory = false;
+        this.dropInventory = true;
     }
 
     @Override
