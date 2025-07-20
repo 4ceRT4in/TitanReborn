@@ -13,12 +13,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.items.Anvilable;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TitanCrossBowItem extends CrossbowItem implements SelectableArrows, Anvilable {
+public class TitanCrossBowItem extends CrossbowItem implements SelectableArrow, Anvilable {
     public static final int RANGE = 8;
 
     public TitanCrossBowItem(Item.Settings settings) {

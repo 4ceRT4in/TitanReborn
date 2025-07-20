@@ -28,8 +28,8 @@ import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.item.custom.misc.PotionBundleItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
-import net.shirojr.titanfabric.util.handler.ArrowSelectionHandler;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +53,7 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.DIAMOND_SWORD);
 
         registerBasicInnateItemsProvider(TitanFabricItems.ESSENCE);
-        registerBasicInnateItemsProvider(TitanFabricItems.ARROW);
+        registerBasicInnateItemsProvider(TitanFabricItems.EFFECT_ARROW);
 
         registerShieldProviders(TitanFabricItems.DIAMOND_SHIELD);
         registerShieldProviders(TitanFabricItems.NETHERITE_SHIELD);
@@ -120,9 +120,10 @@ public class ModelPredicateProviders {
         ModelPredicateProviderRegistry.register(TitanFabricItems.LEGEND_BOW, identifier,
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!(livingEntity instanceof PlayerEntity player)) return 0.0f;
-                    if (!(player instanceof ArrowSelectionHandler clientPlayer)) return 0.0f;
-                    if (clientPlayer.titanfabric$getSelectedArrowIndex().isEmpty()) return 0.0f;
-                    ItemStack savedArrowItemStack = player.getInventory().getStack(clientPlayer.titanfabric$getSelectedArrowIndex().get());
+                    if (!(itemStack.getItem() instanceof SelectableArrow selectionHandler)) return 0.0f;
+                    Integer selectedIndex = selectionHandler.getSelectedIndex(itemStack);
+                    if (selectedIndex == null) return 0.0f;
+                    ItemStack savedArrowItemStack = player.getInventory().getStack(selectedIndex);
                     if (!(savedArrowItemStack.getItem() instanceof TitanFabricArrowItem)) return 0.0f;
                     Optional<WeaponEffectData> effectData = WeaponEffectData.get(savedArrowItemStack, INNATE_EFFECT);
                     if (effectData.isEmpty()) return 0.0f;

@@ -15,7 +15,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.TitanFabricTags;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,16 +27,16 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @Mixin(BowItem.class)
-public abstract class BowItemMixin implements SelectableArrows {
+public abstract class BowItemMixin implements SelectableArrow {
 
     @Shadow public abstract int getMaxUseTime(ItemStack stack, LivingEntity user);
 
     @Inject(method = "getProjectiles", at = @At("HEAD"), cancellable = true)
     private void titanfabric$getProjectiles(CallbackInfoReturnable<Predicate<ItemStack>> cir) {
         BowItem bowItem = (BowItem) (Object) this;
-        if (!(bowItem instanceof SelectableArrows weaponWithSelectableArrows)) return;
+        if (!(bowItem instanceof SelectableArrow weaponWithSelectableArrow)) return;
         Predicate<ItemStack> validArrowItem = stack -> {
-            for (Item arrow : weaponWithSelectableArrows.titanFabric$supportedArrows()) {
+            for (Item arrow : weaponWithSelectableArrow.titanFabric$supportedArrows()) {
                 if (stack.getItem().equals(arrow)) return true;
             }
             return BowItem.BOW_PROJECTILES.test(stack);
@@ -58,9 +58,10 @@ public abstract class BowItemMixin implements SelectableArrows {
         }
         return originalResult;
     }
+
     @Inject(method = "use", at = @At("HEAD"))
     private void titanFabric$use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if (!world.isClient()) ArrowSelectionHelper.cleanUpProjectileSelection(user, this);
+        if (!world.isClient()) ArrowSelectionHelper.cleanUpProjectileSelection(user, user.getStackInHand(hand));
     }
 
     @Override

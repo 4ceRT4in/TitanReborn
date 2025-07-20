@@ -10,17 +10,23 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
+import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
+import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +61,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "tickStatusEffects", at = @At("HEAD"))
     private void tickStatusEffects(CallbackInfo ci) {
+        //FIXME: should try to find a non-ticking solution!
         LivingEntity self = (LivingEntity)(Object)this;
         for (StatusEffectInstance effectInstance : new ArrayList<>(self.getStatusEffects())) {
             StatusEffect effect = effectInstance.getEffectType().value();
@@ -154,7 +161,7 @@ public abstract class LivingEntityMixin {
 
     @WrapOperation(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFinalGravity()D"))
     private double modifyGravityForParachute(LivingEntity instance, Operation<Double> original) {
-        if (instance.getVelocity().getY() >= 0 || !TitanFabricParachuteItem.isParachuteActivated(instance)) {
+        if (instance.getVelocity().getY() >= 0 || !ParachuteItem.isParachuteActivated(instance)) {
             return original.call(instance);
         }
         instance.onLanding();
@@ -186,7 +193,7 @@ public abstract class LivingEntityMixin {
     @ModifyVariable(method = "applyMovementInput", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private Vec3d titanfabric$applyMovementInputMixin(Vec3d original) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity.getVelocity().getY() < 0 && TitanFabricParachuteItem.isParachuteActivated(entity)) {
+        if (entity.getVelocity().getY() < 0 && ParachuteItem.isParachuteActivated(entity)) {
             return new Vec3d(original.getX(), original.getY(), 0.98D);
         }
         return original;
@@ -253,5 +260,25 @@ public abstract class LivingEntityMixin {
             }
         }
         return ticks;
+    }
+
+    @Inject(method = "dropInventory", at = @At("HEAD"))
+    private void dropExtendedInventories(CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        ExtendedInventoryComponent entityExtendedInventory = ExtendedInventoryComponent.getEntity(entity);
+        if (entityExtendedInventory.shouldDropInventory()) {
+            ItemScatterer.spawn(entity.getWorld(), entity, entityExtendedInventory.getInventory());
+            entityExtendedInventory.getInventory().clear();
+            entityExtendedInventory.sync();
+        }
+
+        Team team = entity.getScoreboardTeam();
+        if (team == null) return;
+        ExtendedInventoryComponent teamExtendedInventory = ExtendedInventoryComponent.getTeam(team);
+        if (teamExtendedInventory.shouldDropInventory()) {
+            ItemScatterer.spawn(entity.getWorld(), entity, teamExtendedInventory.getInventory());
+            teamExtendedInventory.getInventory().clear();
+            teamExtendedInventory.sync();
+        }
     }
 }

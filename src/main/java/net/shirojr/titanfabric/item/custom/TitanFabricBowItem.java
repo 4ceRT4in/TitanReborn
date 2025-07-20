@@ -9,11 +9,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 
 import java.util.function.Predicate;
 
-public abstract class TitanFabricBowItem extends BowItem implements SelectableArrows {
+public abstract class TitanFabricBowItem extends BowItem implements SelectableArrow {
 
     public TitanFabricBowItem(Settings settings) {
         super(settings);
@@ -33,7 +33,7 @@ public abstract class TitanFabricBowItem extends BowItem implements SelectableAr
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (!world.isClient()) ArrowSelectionHelper.cleanUpProjectileSelection(user, this);
+        if (!world.isClient()) ArrowSelectionHelper.cleanUpProjectileSelection(user, user.getStackInHand(hand));
         return super.use(world, user, hand);
     }
 }

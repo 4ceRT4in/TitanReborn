@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_citrin_greatsword": {
+      "conditions": {
+        "items": [
+          {
+            "items": "titanfabric:citrin_greatsword"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "titanfabric:citrin_greatsword_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_citrin_greatsword"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "titanfabric:citrin_greatsword_upgrade"
+    ]
+  }
+}

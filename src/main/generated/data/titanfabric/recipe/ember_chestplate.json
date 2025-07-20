@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "minecraft:fire_charge"
+    },
+    "X": {
+      "item": "titanfabric:ember_ingot"
+    }
+  },
+  "pattern": [
+    "X X",
+    "XEX",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:ember_chestplate"
+  }
+}

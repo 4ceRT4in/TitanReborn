@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:smithing_transform",
+    "base": {
+        "item": "minecraft:shield"
+    },
+    "addition": {
+        "item": "titanfabric:legend_ingot"
+    },
+    "template": [],
+    "result": {
+        "id": "titanfabric:legend_shield"
+    }
+}

@@ -14,7 +14,7 @@ import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.network.TitanFabricS2CNetworking;
-import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
+import net.shirojr.titanfabric.init.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.screen.custom.BackPackItemScreen;
 import net.shirojr.titanfabric.screen.custom.DiamondFurnaceScreen;
 import net.shirojr.titanfabric.screen.custom.ExtendedInventoryScreen;

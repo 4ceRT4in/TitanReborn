@@ -28,6 +28,12 @@
     ],
     "fabric-datagen": [
       "net.shirojr.titanfabric.TitanFabricDatagen"
+    ],
+    "cardinal-components-scoreboard": [
+      "net.shirojr.titanfabric.TitanFabricComponents"
+    ],
+    "cardinal-components-entity": [
+      "net.shirojr.titanfabric.TitanFabricComponents"
     ]
   },
   "mixins": [
@@ -38,6 +44,16 @@
     "fabricloader": ">=0.16.10",
     "minecraft": "~1.21.1",
     "java": ">=21",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "cardinal-components-base": "^6.1.2",
+    "cardinal-components-entity": "^6.1.2",
+    "cardinal-components-scoreboard": "^6.1.2"
+  },
+  "custom": {
+    "cardinal-components": [
+      "titanfabric:extended_inventory_entity",
+      "titanfabric:extended_inventory_global",
+      "titanfabric:extended_inventory_team"
+    ]
   }
 }

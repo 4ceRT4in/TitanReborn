@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "titanfabric:citrin_sword"
+        "recipe": "minecraft:citrin_sword"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "titanfabric:citrin_sword"
+      "minecraft:citrin_sword"
     ]
   }
 }

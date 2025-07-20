@@ -25,6 +25,7 @@ public abstract class ServerPlayerEntityMixin {
 
     @Inject(method = "copyFrom", at = @At("TAIL"))
     private void titanfabric$copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+        //FIXME: use event instead!
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         ImmunityEffect.resetImmunity(player);
     }

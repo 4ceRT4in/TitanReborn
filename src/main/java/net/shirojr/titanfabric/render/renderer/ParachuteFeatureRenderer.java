@@ -15,10 +15,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
-import net.shirojr.titanfabric.item.custom.TitanFabricParachuteItem;
 import net.shirojr.titanfabric.render.model.ParachuteFeatureModel;
 
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity,
                        float limbAngle, float limbDistance, float tickDelta, float animationProgress,
                        float headYaw, float headPitch) {
-        if (!TitanFabricParachuteItem.isParachuteActivated(entity)) {
+        if (!ParachuteItem.isParachuteActivated(entity)) {
             return;
         }
         String color = getParachuteColor(entity);

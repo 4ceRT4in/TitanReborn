@@ -1,0 +1,26 @@
+{
+  "type": "titanfabric:effect",
+  "base": {
+    "ingredient": {
+      "item": "minecraft:blaze_powder"
+    },
+    "slots": [
+      4
+    ]
+  },
+  "modifier": {
+    "ingredient": {
+      "item": "minecraft:potion"
+    },
+    "slots": [
+      1,
+      3,
+      5,
+      7
+    ]
+  },
+  "result": {
+    "count": 1,
+    "result": "titanfabric:essence"
+  }
+}

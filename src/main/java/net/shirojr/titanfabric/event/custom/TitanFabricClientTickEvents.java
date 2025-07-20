@@ -88,10 +88,11 @@ public class TitanFabricClientTickEvents {
     private static void handleKeyBindEvent(MinecraftClient client) {
         if (client.player == null) return;
         KeyBindRegistry keyBinds = KeyBindRegistry.getInstance();
+        int selectedSlot = client.player.getInventory().selectedSlot;
 
         if (TitanFabricKeyBinds.ARROW_SELECTION_KEY.isPressed()) {
             if (!keyBinds.wasPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY)) {
-                new ArrowSelectionPacket().sendPacket();
+                new ArrowSelectionPacket(selectedSlot).sendPacket();
                 keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, true);
             }
         } else {

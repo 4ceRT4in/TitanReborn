@@ -16,25 +16,31 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
+import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
-import net.shirojr.titanfabric.util.items.SelectableArrows;
+import net.shirojr.titanfabric.util.items.SelectableArrow;
 
 import java.util.List;
 
-public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows {
+public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow {
+    private final int maxArrowCount;
     private final int coolDownTicks;
     private float pullProgress;
 
     public MultiBowItem(Item.Settings settings, int maxArrowCount, int tickCooldown) {
-        super(settings
-                .component(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, maxArrowCount)
+        super(settings.component(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, maxArrowCount)
                 .component(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT, 0)
         );
+        this.maxArrowCount = maxArrowCount;
         this.coolDownTicks = tickCooldown;
     }
 
-    public int getFullArrowCount(ItemStack stack) {
-        return stack.getOrDefault(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, 0);
+    @Override
+    public ItemStack getDefaultStack() {
+        ItemStack defaultStack = super.getDefaultStack();
+        defaultStack.set(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, this.maxArrowCount);
+        defaultStack.set(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT, 0);
+        return defaultStack;
     }
 
     @Override
@@ -52,8 +58,10 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         if (pullProgress < 0.2f) return;
 
         player.getItemCooldownManager().set(stack.getItem(), this.coolDownTicks);
-        int possibleArrowCount = Math.min(MultiBowHelper.searchValidArrowStack(player, this).getCount(), MultiBowHelper.getFullArrowCount(stack));
-        if (player.isCreative()) possibleArrowCount = MultiBowHelper.getFullArrowCount(stack);
+        int possibleArrowCount = Math.min(MultiBowHelper.searchValidArrowStack(player, stack).getCount(), MultiBowHelper.getFullArrowCount(stack));
+        if (player.isCreative()) {
+            possibleArrowCount = MultiBowHelper.getFullArrowCount(stack);
+        }
 
         MultiBowHelper.setArrowsLeft(stack, possibleArrowCount);
         ((ArrowShootingHandler) player).titanfabric$shootsArrows(true);
@@ -75,7 +83,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         stack.set(TitanFabricDataComponents.MULTI_BOW_PROJECTILE_TICK, projectileTick - 1);
         if (!validTick(projectileTick + 1)) return;
         ((ArrowShootingHandler) player).titanfabric$shootsArrows(true);
-        handleArrowShots(player, MultiBowHelper.searchValidArrowStack(player, this), this.pullProgress);
+        handleArrowShots(player, stack, MultiBowHelper.searchValidArrowStack(player, stack), this.pullProgress);
         handleAfterShotValues(stack, player);
     }
 
@@ -89,6 +97,7 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
             MultiBowHelper.setArrowsLeft(bowStack, newArrowCount);
             if (newArrowCount <= 0) {
                 ((ArrowShootingHandler) player).titanfabric$shootsArrows(false);
+                ArrowSelectionHelper.cleanUpProjectileSelection(player, bowStack);
             }
         }
         if (player instanceof ServerPlayerEntity serverPlayer) {
@@ -97,16 +106,20 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrows
         }
     }
 
-    private static void handleArrowShots(PlayerEntity player, ItemStack arrowStack, double pullProgress) {
+    private static void handleArrowShots(PlayerEntity player, ItemStack weaponStack, ItemStack arrowStack, double pullProgress) {
         World world = player.getWorld();
-        ItemStack bowStack = player.getStackInHand(Hand.MAIN_HAND);
-        if (!MultiBowHelper.handleArrowConsumption(player, bowStack, arrowStack)) return;
+        ItemStack stackForProjectile = arrowStack.copy();
+        if (!MultiBowHelper.handleArrowConsumption(player, weaponStack, arrowStack)) {
+            MultiBowHelper.setArrowsLeft(weaponStack, 0);
+            ((ArrowShootingHandler)player).titanfabric$shootsArrows(false);
+            return;
+        }
 
         world.playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,
                 1.0f, 1.0f / (world.getRandom().nextFloat() * 0.4f + 1.2f) + (float) pullProgress * 0.5f);
-        PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, arrowStack,
-                player.getPitch(), player.getYaw(), pullProgress, bowStack);
+        PersistentProjectileEntity projectile = MultiBowHelper.prepareArrow(world, player, stackForProjectile,
+                player.getPitch(), player.getYaw(), pullProgress, weaponStack);
         if (player.getAbilities().creativeMode) {
             projectile.pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
         }

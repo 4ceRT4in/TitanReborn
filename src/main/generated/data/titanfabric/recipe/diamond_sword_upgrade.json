@@ -1,0 +1,9 @@
+{
+  "type": "titanfabric:effect_upgrade",
+  "addition": {
+    "item": "titanfabric:essence"
+  },
+  "base": {
+    "item": "titanfabric:diamond_sword"
+  }
+}

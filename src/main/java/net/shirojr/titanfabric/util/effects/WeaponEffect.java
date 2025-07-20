@@ -15,11 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum WeaponEffect {
-    BLIND("weapon_blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS, 0x23307C),
-    FIRE("weapon_fire", StatusEffects.FIRE_RESISTANCE, null, 16750848),
-    POISON("weapon_poison", StatusEffects.POISON, new PotionContentsComponent(Potions.POISON).getColor()),
-    WEAK("weapon_weak", StatusEffects.WEAKNESS, new PotionContentsComponent(Potions.WEAKNESS).getColor()),
-    WITHER("weapon_wither", StatusEffects.INSTANT_DAMAGE, StatusEffects.WITHER, 0x0D0D0D);
+    BLIND("blind", StatusEffects.NIGHT_VISION, StatusEffects.BLINDNESS, 0x23307C),
+    FIRE("fire", StatusEffects.FIRE_RESISTANCE, null, 16750848),
+    POISON("poison", StatusEffects.POISON, new PotionContentsComponent(Potions.POISON).getColor()),
+    WEAK("weak", StatusEffects.WEAKNESS, new PotionContentsComponent(Potions.WEAKNESS).getColor()),
+    WITHER("wither", StatusEffects.INSTANT_DAMAGE, StatusEffects.WITHER, 0x0D0D0D);
+
+    public static final int MAX_LEVEL = 2;
 
     private final String id;
     private final RegistryEntry<StatusEffect> ingredientEffect;

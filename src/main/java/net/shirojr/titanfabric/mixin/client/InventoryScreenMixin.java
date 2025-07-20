@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @Mixin(InventoryScreen.class)
@@ -52,7 +52,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
                 this.client.mouse.unlockCursor();
             }
             ClientPlayerEntity player = this.client.player;
-            new ExtendedInventoryOpenPacket(player.getId()).sendPacket();
+            new ExtendedInventoryOpenPacket(player.getId(), Optional.of(player.getId())).sendPacket();
         });
         builder.dimensions(buttonX + 2, this.height / 2 - 106, 20, 20);
         builder.narrationSupplier(DEFAULT_NARRATION_SUPPLIER);

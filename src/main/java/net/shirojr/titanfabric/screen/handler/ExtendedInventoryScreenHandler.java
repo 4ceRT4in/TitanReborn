@@ -6,20 +6,14 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.data.ExtendedInventory;
+import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
+import net.shirojr.titanfabric.init.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
-import net.shirojr.titanfabric.persistent.PersistentPlayerData;
-import net.shirojr.titanfabric.screen.TitanFabricScreenHandlers;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class ExtendedInventoryScreenHandler extends ScreenHandler {
     public static final Identifier BLOCK_ATLAS_TEXTURE = Identifier.ofVanilla("textures/atlas/blocks.png");
@@ -31,28 +25,22 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     private final PlayerInventory baseInventory;
-    private final ExtendedInventory data;
+    private final ExtendedInventoryComponent data;
 
-    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory playerInventory, @Nullable ExtendedInventory extendedInventory) {
+    public ExtendedInventoryScreenHandler(int syncId, PlayerInventory playerInventory, ExtendedInventoryComponent inventoryComponent) {
         super(TitanFabricScreenHandlers.EXTENDED_INVENTORY, syncId);
+
+        this.baseInventory = playerInventory;
+        this.data = inventoryComponent;
+
         addInventorySlots(playerInventory);
         addHotbarSlots(playerInventory);
         addEquipmentSlots(playerInventory);
-        ExtendedInventory inventory = Optional.ofNullable(extendedInventory)
-                .orElse(new ExtendedInventory(PersistentPlayerData.INV_SIZE));
-        addExtendedInventorySlots(inventory.asInventory());
-        this.baseInventory = playerInventory;
-        this.data = extendedInventory;
+        addExtendedInventorySlots();
     }
 
     public ExtendedInventoryScreenHandler(int syncId, PlayerInventory playerInventory, ExtendedInventoryOpenPacket packet) {
-        this(syncId, playerInventory, getInventory(playerInventory.player, packet));
-    }
-
-    @Nullable
-    private static ExtendedInventory getInventory(PlayerEntity player, ExtendedInventoryOpenPacket packet) {
-        if (!(player.getWorld() instanceof ServerWorld serverWorld)) return null;
-        return packet.getExtendedInventory(serverWorld);
+        this(syncId, playerInventory, packet.getExtendedInventory(playerInventory.player.getWorld()));
     }
 
     @Override
@@ -62,7 +50,6 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         if (slot.hasStack()) {
             ItemStack itemStack2 = slot.getStack();
             itemStack = itemStack2.copy();
-            //remove 1 from the base inventory size because we don't have the offhand slot.
             if (index < baseInventory.size() - 1 ? !this.insertItem(itemStack2, baseInventory.size() - 1, this.slots.size(), false) : !this.insertItem(itemStack2, 0, baseInventory.size() - 1, false)) {
                 return ItemStack.EMPTY;
             }
@@ -77,8 +64,8 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
 
     @Override
     public void onClosed(PlayerEntity player) {
-        if (player instanceof ServerPlayerEntity serverPlayer) {
-            this.data.savePersistent(serverPlayer);
+        if (player instanceof ServerPlayerEntity) {
+            this.data.sync();
         }
         super.onClosed(player);
     }
@@ -129,13 +116,13 @@ public class ExtendedInventoryScreenHandler extends ScreenHandler {
         }
     }
 
-    private void addExtendedInventorySlots(Inventory extendedInventory) {
+    private void addExtendedInventorySlots() {
         for (int row = 0; row < 2; row++) {
             for (int column = 0; column < 4; column++) {
                 int index = column + row * 4;
                 int x = column * 18;
                 int y = row * 18;
-                this.addSlot(new Slot(extendedInventory, index, x + 90, y + 18));
+                this.addSlot(new Slot(this.data.getInventory(), index, x + 90, y + 18));
             }
         }
     }
