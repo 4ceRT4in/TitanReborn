@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "titanfabric:ember_ingot"
+    },
+    "o": {
+      "item": "titanfabric:ember_armor_plating"
+    }
+  },
+  "pattern": [
+    " i ",
+    "ioi",
+    " i "
+  ],
+  "result": {
+    "count": 2,
+    "id": "titanfabric:ember_armor_plating"
+  }
+}

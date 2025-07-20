@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "o": {
+      "item": "titanfabric:netherite_armor_plating"
+    }
+  },
+  "pattern": [
+    " i ",
+    "ioi",
+    " i "
+  ],
+  "result": {
+    "count": 2,
+    "id": "titanfabric:netherite_armor_plating"
+  }
+}

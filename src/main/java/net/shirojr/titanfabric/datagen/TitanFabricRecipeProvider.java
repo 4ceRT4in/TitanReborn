@@ -2,14 +2,13 @@ package net.shirojr.titanfabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.recipe.CookingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeExporter;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.item.*;
-import net.minecraft.data.server.recipe.VanillaRecipeProvider;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.SwordItem;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
@@ -95,7 +94,11 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(TitanFabricItems.EMBER_INGOT), conditionsFromItem(TitanFabricItems.EMBER_INGOT))
                 .offerTo(exporter);
 
-        generateDiamondFurnaceRecipes(exporter);
+        offerArmorPlating(exporter, TitanFabricItems.DIAMOND_ARMOR_PLATING, Items.DIAMOND);
+        offerArmorPlating(exporter, TitanFabricItems.NETHERITE_ARMOR_PLATING, Items.NETHERITE_INGOT);
+        offerArmorPlating(exporter, TitanFabricItems.CITRIN_ARMOR_PLATING, TitanFabricItems.CITRIN_SHARD);
+        offerArmorPlating(exporter, TitanFabricItems.EMBER_ARMOR_PLATING, TitanFabricItems.EMBER_INGOT);
+        offerArmorPlating(exporter, TitanFabricItems.LEGEND_ARMOR_PLATING, TitanFabricItems.LEGEND_INGOT);
     }
 
     private static void offerEssenceUpgrade(String name, Item base, RecipeExporter exporter) {
@@ -215,12 +218,19 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                 .offerTo(exporter, TitanFabric.getId(name + "_upgrade"));
     }
 
-    private void generateDiamondFurnaceRecipes(RecipeExporter exporter) {
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(TitanFabricItems.LEGEND_POWDER), RecipeCategory.MISC,
-                        TitanFabricItems.LEGEND_INGOT, 0.7F, 200)
-                .criterion("has_legend_powder", conditionsFromItem(TitanFabricItems.LEGEND_POWDER)).offerTo(exporter); // for what even are the criterions xD?
-        CookingRecipeJsonBuilder.createSmelting(Ingredient.ofItems(TitanFabricItems.EMBER_SHARD), RecipeCategory.MISC,
-                        TitanFabricItems.EMBER_INGOT, 0.7F, 200)
-                .criterion("has_ember_shard", conditionsFromItem(TitanFabricItems.EMBER_SHARD)).offerTo(exporter);
+    private static void offerArmorPlating(RecipeExporter exporter, Item output, Item ingot) {
+        String name = Registries.ITEM.getId(output).getPath();
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output)
+                .input('i', ingot)
+                .pattern(" i ").pattern("iii").pattern(" i ")
+                .criterion(hasItem(ingot), conditionsFromItem(ingot))
+                .offerTo(exporter, TitanFabric.getId(name));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, output, 2)
+                .input('i', ingot).input('o', output)
+                .pattern(" i ").pattern("ioi").pattern(" i ")
+                .criterion(hasItem(ingot), conditionsFromItem(ingot))
+                .offerTo(exporter, TitanFabric.getId(name + "_increased"));
     }
 }

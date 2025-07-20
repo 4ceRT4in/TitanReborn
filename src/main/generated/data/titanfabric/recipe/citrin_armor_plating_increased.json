@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "titanfabric:citrin_shard"
+    },
+    "o": {
+      "item": "titanfabric:citrin_armor_plating"
+    }
+  },
+  "pattern": [
+    " i ",
+    "ioi",
+    " i "
+  ],
+  "result": {
+    "count": 2,
+    "id": "titanfabric:citrin_armor_plating"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "i": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "pattern": [
+    " i ",
+    "iii",
+    " i "
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:diamond_armor_plating"
+  }
+}
