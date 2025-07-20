@@ -30,6 +30,18 @@ public class GlobalExtendedInventoryImpl extends AbstractExtendedInventoryCompon
     }
 
     @Override
+    public boolean shouldDropInventory() {
+        return false;
+    }
+
+    @Override
+    public void setDropInventory(boolean shouldDropInventory, boolean shouldSync) {
+        if (shouldDropInventory) {
+            throw new UnsupportedOperationException("Global Extended Inventories can't be dropped");
+        }
+    }
+
+    @Override
     public void sync() {
         TitanFabricComponents.EXTENDED_INVENTORY_GLOBAL.sync(this.provider);
     }

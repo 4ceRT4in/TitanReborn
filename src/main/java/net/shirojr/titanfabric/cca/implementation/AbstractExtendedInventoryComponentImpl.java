@@ -15,9 +15,11 @@ import java.util.function.Consumer;
 
 public abstract class AbstractExtendedInventoryComponentImpl implements ExtendedInventoryComponent, AutoSyncedComponent {
     private final SimpleInventory inventory;
+    private boolean dropInventory;
 
     public AbstractExtendedInventoryComponentImpl() {
         this.inventory = new SimpleInventory(getType().getSize());
+        this.dropInventory = false;
     }
 
     @Override
@@ -28,6 +30,18 @@ public abstract class AbstractExtendedInventoryComponentImpl implements Extended
     @Override
     public void modifyInventory(Consumer<SimpleInventory> consumer, boolean shouldSync) {
         consumer.accept(this.inventory);
+        if (!shouldSync) return;
+        this.sync();
+    }
+
+    @Override
+    public boolean shouldDropInventory() {
+        return this.dropInventory;
+    }
+
+    @Override
+    public void setDropInventory(boolean shouldDropInventory, boolean shouldSync) {
+        this.dropInventory = shouldDropInventory;
         if (!shouldSync) return;
         this.sync();
     }
@@ -47,12 +61,16 @@ public abstract class AbstractExtendedInventoryComponentImpl implements Extended
     public void readFromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound inventoryNbt = nbt.getCompound("inventory" + StringUtils.upperCase(getType().name().toLowerCase(Locale.ROOT)));
         Inventories.readNbt(inventoryNbt, inventory.getHeldStacks(), registryLookup);
+        if (inventoryNbt.contains("dropItemsOnDeath")) {
+            setDropInventory(inventoryNbt.getBoolean("dropItemsOnDeath"), true);
+        }
     }
 
     @Override
     public void writeToNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound inventoryNbt = new NbtCompound();
         Inventories.writeNbt(inventoryNbt, this.inventory.getHeldStacks(), registryLookup);
+        inventoryNbt.putBoolean("dropItemsOnDeath", shouldDropInventory());
         nbt.put("inventory" + StringUtils.upperCase(getType().name().toLowerCase(Locale.ROOT)), inventoryNbt);
     }
 }

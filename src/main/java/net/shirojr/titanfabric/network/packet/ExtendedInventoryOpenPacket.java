@@ -20,13 +20,22 @@ import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
 import org.jetbrains.annotations.Nullable;
 
-public record ExtendedInventoryOpenPacket(int playerEntityId, int targetEntityId) implements CustomPayload {
+import java.util.Optional;
+
+/**
+ * @param playerEntityId Player, who will view the screen for the Extended Inventory
+ * @param targetEntityId Entity, which Extended Inventory content will be displayed.
+ *                       This prefers the Team Inventory over the private Inventory.
+ *                       If {@link Optional#empty()}, this will open the Global Extended Inventory instead.
+ */
+public record ExtendedInventoryOpenPacket(int playerEntityId,
+                                          Optional<Integer> targetEntityId) implements CustomPayload {
     public static final Id<ExtendedInventoryOpenPacket> IDENTIFIER =
             new Id<>(TitanFabric.getId("extended_inventory_open"));
 
     public static final PacketCodec<RegistryByteBuf, ExtendedInventoryOpenPacket> CODEC = PacketCodec.tuple(
             PacketCodecs.VAR_INT, ExtendedInventoryOpenPacket::playerEntityId,
-            PacketCodecs.VAR_INT, ExtendedInventoryOpenPacket::targetEntityId,
+            PacketCodecs.optional(PacketCodecs.VAR_INT), ExtendedInventoryOpenPacket::targetEntityId,
             ExtendedInventoryOpenPacket::new
     );
 
@@ -41,7 +50,10 @@ public record ExtendedInventoryOpenPacket(int playerEntityId, int targetEntityId
 
     @Nullable
     public ExtendedInventoryComponent getExtendedInventory(World world) {
-        if (!(world.getEntityById(this.targetEntityId) instanceof LivingEntity livingEntity)) return null;
+        if (this.targetEntityId.isEmpty()) {
+            return ExtendedInventoryComponent.getGlobal(world);
+        }
+        if (!(world.getEntityById(this.targetEntityId.get()) instanceof LivingEntity livingEntity)) return null;
         return ExtendedInventoryComponent.getTeamOrEntity(livingEntity);
     }
 

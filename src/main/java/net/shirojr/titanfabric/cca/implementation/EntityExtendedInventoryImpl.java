@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.cca.implementation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.world.GameRules;
 import net.shirojr.titanfabric.TitanFabricComponents;
 
 public class EntityExtendedInventoryImpl extends AbstractExtendedInventoryComponentImpl {
@@ -21,6 +22,11 @@ public class EntityExtendedInventoryImpl extends AbstractExtendedInventoryCompon
     @Override
     public InventoryType getType() {
         return InventoryType.ENTITY;
+    }
+
+    @Override
+    public boolean shouldDropInventory() {
+        return super.shouldDropInventory() && !this.provider.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
     }
 
     @Override

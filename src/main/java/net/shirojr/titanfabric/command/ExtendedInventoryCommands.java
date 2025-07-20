@@ -20,6 +20,9 @@ import net.minecraft.text.Text;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.network.packet.ExtendedInventoryOpenPacket;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -32,13 +35,27 @@ public class ExtendedInventoryCommands {
 
     @SuppressWarnings("unused")
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
-        dispatcher.register(literal("inventory")
+        dispatcher.register(literal("saveinventory")
                 .executes(ExtendedInventoryCommands::viewSelf)
-                .then(argument("target", EntityArgumentType.entity())
+                .then(literal("target")
                         .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
-                        .executes(ExtendedInventoryCommands::viewOther)
+                        .then(argument("entity", EntityArgumentType.entity())
+                                .executes(ExtendedInventoryCommands::viewOther)
+                        )
+                )
+                .then(literal("global")
+                        .requires(serverCommandSource -> serverCommandSource.hasPermissionLevel(2))
+                        .executes(ExtendedInventoryCommands::viewGlobal)
                 )
         );
+    }
+
+    private static int viewGlobal(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+        if (player == null) {
+            throw NOT_A_VIEWER.create();
+        }
+        return view(player, null);
     }
 
     private static int viewSelf(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -51,7 +68,7 @@ public class ExtendedInventoryCommands {
 
     private static int viewOther(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayer();
-        Entity entity = EntityArgumentType.getEntity(context, "player");
+        Entity entity = EntityArgumentType.getEntity(context, "entity");
 
         if (player == null) {
             throw NOT_A_VIEWER.create();
@@ -62,8 +79,14 @@ public class ExtendedInventoryCommands {
         return view(player, target);
     }
 
-    private static int view(ServerPlayerEntity opener, LivingEntity target) {
-        ExtendedInventoryComponent inventoryComponent = ExtendedInventoryComponent.getTeamOrEntity(target);
+    private static int view(ServerPlayerEntity opener, @Nullable LivingEntity target) {
+        ExtendedInventoryComponent inventoryComponent;
+        if (target == null) {
+            inventoryComponent = ExtendedInventoryComponent.getGlobal(opener.getServerWorld());
+        } else {
+            inventoryComponent = ExtendedInventoryComponent.getTeamOrEntity(target);
+        }
+
         opener.openHandledScreen(new ExtendedScreenHandlerFactory<ExtendedInventoryOpenPacket>() {
             @Override
             public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
@@ -77,7 +100,7 @@ public class ExtendedInventoryCommands {
 
             @Override
             public ExtendedInventoryOpenPacket getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
-                return new ExtendedInventoryOpenPacket(opener.getId(), target.getId());
+                return new ExtendedInventoryOpenPacket(opener.getId(), Optional.ofNullable(target).map(Entity::getId));
             }
         });
         return Command.SINGLE_SUCCESS;

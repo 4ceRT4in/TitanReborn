@@ -50,14 +50,14 @@ public class ExtendedInventoryScreen extends HandledScreen<ExtendedInventoryScre
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        super.drawForeground(context, mouseX, mouseY);
+        context.drawText(this.textRenderer, this.playerInventoryTitle, this.playerInventoryTitleX, this.playerInventoryTitleY, 4210752, false);
         context.drawText(this.textRenderer, Text.translatable("screen.titanfabric.extended_inventory.title"),
                 this.titleX, this.titleY, 0x404040, false);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        this.drawBackground(context, delta, mouseX, mouseY);
         super.render(context, mouseX, mouseY, delta);
         this.drawMouseoverTooltip(context, mouseX, mouseY);
     }

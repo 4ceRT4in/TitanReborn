@@ -5,6 +5,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.world.GameRules;
 import net.shirojr.titanfabric.TitanFabricComponents;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +32,13 @@ public class TeamExtendedInventoryImpl extends AbstractExtendedInventoryComponen
     @Override
     public InventoryType getType() {
         return InventoryType.TEAM;
+    }
+
+    @Override
+    public boolean shouldDropInventory() {
+        if (!super.shouldDropInventory()) return false;
+        if (server == null) return false;
+        return !server.getGameRules().getBoolean(GameRules.KEEP_INVENTORY);
     }
 
     @Override
