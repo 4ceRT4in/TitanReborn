@@ -4,10 +4,6 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 
 public class DeathEvents {
@@ -16,30 +12,20 @@ public class DeathEvents {
     }
 
     private static void afterRespawn(ServerPlayerEntity before, ServerPlayerEntity after, boolean isAlive) {
-        ServerWorld world = after.getServerWorld();
         handleExtendedInventories(
                 ExtendedInventoryComponent.getEntity(before),
-                ExtendedInventoryComponent.getEntity(after),
-                world, before.getBlockPos()
+                ExtendedInventoryComponent.getEntity(after)
         );
         if (before.getScoreboardTeam() != null && after.getScoreboardTeam() != null) {
             handleExtendedInventories(
                     ExtendedInventoryComponent.getTeam(before.getScoreboardTeam()),
-                    ExtendedInventoryComponent.getTeam(after.getScoreboardTeam()),
-                    world, before.getBlockPos()
+                    ExtendedInventoryComponent.getTeam(after.getScoreboardTeam())
             );
         }
     }
 
-    private static void handleExtendedInventories(ExtendedInventoryComponent oldInstance, ExtendedInventoryComponent newInstance,
-                                                  World world, BlockPos pos) {
-        if (oldInstance.shouldDropInventory()) {
-            ItemScatterer.spawn(world, pos, oldInstance.getInventory());
-            oldInstance.getInventory().clear();
-            oldInstance.sync();
-            return;
-        }
-        if (oldInstance.equals(newInstance)) {
+    private static void handleExtendedInventories(ExtendedInventoryComponent oldInstance, ExtendedInventoryComponent newInstance) {
+        if (oldInstance.shouldDropInventory() || oldInstance.equals(newInstance)) {
             return;
         }
         newInstance.modifyInventory(newInventory -> {
