@@ -15,7 +15,7 @@ import org.ladysnake.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 
 /**
  * <h1>Cardinal Components API Entrypoints</h1>
- * <h3>Extended Inventory</h3>
+ * <h2>Extended Inventory</h2>
  * To work with TitanFabric's extended inventories, check out {@link ExtendedInventoryComponent}<br><br>
  * To access the component you generally want to use
  * <ul>
@@ -58,16 +58,23 @@ import org.ladysnake.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
  *     }
  * }
  * <pre>
+ *
+ * <h2>Frostburn Effect</h2>
+ *
+ * An effect which limits the health of entities. This component is used to sync and ticking<br>
+ *
+ * <hr>
+ *
  * @see <a href=https://ladysnake.org/wiki/cardinal-components-api/>Cardinal Components API</a>
  */
 public class TitanFabricComponents implements EntityComponentInitializer, ScoreboardComponentInitializer {
 
     public static final ComponentKey<ExtendedInventoryComponent> EXTENDED_INVENTORY_GLOBAL =
-            ComponentRegistry.getOrCreate(TitanFabric.getId("extended_inventory_global"), ExtendedInventoryComponent.class);
+            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.GLOBAL, ExtendedInventoryComponent.class);
     public static final ComponentKey<ExtendedInventoryComponent> EXTENDED_INVENTORY_TEAM =
-            ComponentRegistry.getOrCreate(TitanFabric.getId("extended_inventory_team"), ExtendedInventoryComponent.class);
+            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.TEAM, ExtendedInventoryComponent.class);
     public static final ComponentKey<ExtendedInventoryComponent> EXTENDED_INVENTORY_ENTITY =
-            ComponentRegistry.getOrCreate(TitanFabric.getId("extended_inventory_entity"), ExtendedInventoryComponent.class);
+            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.ENTITY, ExtendedInventoryComponent.class);
 
 
     @Override
