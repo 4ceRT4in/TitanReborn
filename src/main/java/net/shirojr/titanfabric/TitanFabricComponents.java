@@ -14,11 +14,12 @@ import org.ladysnake.cca.api.v3.scoreboard.ScoreboardComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 
 /**
- * <h2>Cardinal Components API Entrypoints</h2><br>
- * To work with TitanFabric's components, check out {@link ExtendedInventoryComponent}<br><br>
- * Generally you want to use
+ * <h1>Cardinal Components API Entrypoints</h1>
+ * <h3>Extended Inventory</h3>
+ * To work with TitanFabric's extended inventories, check out {@link ExtendedInventoryComponent}<br><br>
+ * To access the component you generally want to use
  * <ul>
- *     <li>{@link ExtendedInventoryComponent#getGlobal(World)}</li>
+ *     <li>{@link ExtendedInventoryComponent#getGlobal(World)} (persistent even over dimensions)</li>
  *     <li>{@link ExtendedInventoryComponent#getTeamOrEntity(LivingEntity)}</li>
  * </ul>
  * ... for most interactions.<br><br>
@@ -28,9 +29,11 @@ import org.ladysnake.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
  * Use Extended Inventories Getter {@link ExtendedInventoryComponent#shouldDropInventory() shouldDropInventory()} and
  * Setter {@link ExtendedInventoryComponent#setDropInventory(boolean, boolean) setDropInventory(boolean, boolean)} methods
  * to remove their contents and spawn them when the next player dies,
- * which is linked to it. The {@link net.minecraft.world.GameRules#KEEP_INVENTORY KEEP_INVENTORY} Gamerule is already
- * being considered when checking if the Extended Inventory should be dropped. Item dropping is handled in
- * {@link net.shirojr.titanfabric.event.custom.DeathEvents DeathEvents}.<br><br>
+ * which is linked to it. The actual dropping of the inventory content is already being taken care of in
+ * {@link net.shirojr.titanfabric.event.custom.DeathEvents DeathEvents} and
+ * {@link net.shirojr.titanfabric.mixin.LivingEntityMixin LivingEntityMixin#dropExtendedInventories}.
+ * The {@link net.minecraft.world.GameRules#KEEP_INVENTORY KEEP_INVENTORY} Gamerule is already
+ * being considered when checking if the Extended Inventory should be dropped.<br><br>
  * For safety reasons, Global Extended Inventories can't be dropped and setting their value to be
  * droppable will result in {@link UnsupportedOperationException}
  *
