@@ -28,9 +28,6 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
     private RecipeBookWidget recipeBook;
 
     @Unique
-    private ButtonWidget buttonWidget;
-
-    @Unique
     private static final ButtonWidget.NarrationSupplier DEFAULT_NARRATION_SUPPLIER = Supplier::get;
 
 
@@ -38,15 +35,10 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         super(screenHandler, playerInventory, text);
     }
 
-    @Inject(method = "method_19891", at = @At("TAIL"))
-    private void titanfabric$moveButton(ButtonWidget button, CallbackInfo ci) {
-        buttonWidget.setX(this.x + 134);
-    }
-
     @Inject(method = "init", at = @At("TAIL"))
     private void titanfabric$addInventoryScreenElements(CallbackInfo ci) {
         if (this.client == null || this.client.player == null) return;
-        int buttonX = recipeBook.findLeftEdge(this.width, this.backgroundWidth);
+        int buttonX = (this.width - this.backgroundWidth) / 2;
         var builder = ButtonWidget.builder(Text.literal(">>"), button -> {
             if (this.client.mouse != null) {
                 this.client.mouse.unlockCursor();
@@ -56,7 +48,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         });
         builder.dimensions(buttonX + 2, this.height / 2 - 106, 20, 20);
         builder.narrationSupplier(DEFAULT_NARRATION_SUPPLIER);
-        this.buttonWidget = builder.build();
+        ButtonWidget buttonWidget = builder.build();
         this.addDrawableChild(buttonWidget);
     }
 }

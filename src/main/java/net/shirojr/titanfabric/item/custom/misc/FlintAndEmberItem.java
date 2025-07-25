@@ -55,7 +55,7 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
                 }
                 if (playerEntity != null) {
                     playerEntity.getItemCooldownManager().set(itemStack.getItem(), 30);
-                    itemStack.damage(1, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
+                    itemStack.damage(9, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
                 }
             } else if (itemStack.getDamage() < itemStack.getMaxDamage() - 8) {
                 BlockPos[] firePositions = {

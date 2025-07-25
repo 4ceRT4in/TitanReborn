@@ -7,7 +7,8 @@ import net.minecraft.world.GameRules;
 public class TitanFabricGamerules {
     public static final GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("legacyCombat", GameRules.Category.PLAYER, true);
     public static final GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("legacyFoodRegeneration", GameRules.Category.PLAYER, true);
-    public static final GameRules.Key<GameRules.BooleanRule> DISALBE_ELYTRA_BOOSTING = registerBooleanGamerule("disableElytraBoosting", GameRules.Category.PLAYER, true);
+    public static final GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("disableElytraBoosting", GameRules.Category.PLAYER, true);
+    public static final GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("greatSwordCooldown", GameRules.Category.PLAYER, true);
 
     @SuppressWarnings("SameParameterValue")
     private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(String name, GameRules.Category category, boolean defaultValue) {

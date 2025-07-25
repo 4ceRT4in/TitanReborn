@@ -22,7 +22,7 @@ public abstract class FireworkRocketItemMixin extends Item {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
-        if(!world.isClient && world.getGameRules().getBoolean(TitanFabricGamerules.DISALBE_ELYTRA_BOOSTING)) {
+        if(!world.isClient && world.getGameRules().getBoolean(TitanFabricGamerules.DISABLE_ELYTRA_BOOSTING)) {
             cir.cancel();
         }
     }

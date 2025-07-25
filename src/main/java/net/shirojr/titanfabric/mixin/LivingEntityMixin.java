@@ -37,7 +37,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -57,16 +56,15 @@ public abstract class LivingEntityMixin {
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
 
-    @Inject(method = "tickStatusEffects", at = @At("HEAD"))
-    private void tickStatusEffects(CallbackInfo ci) {
-        //FIXME: should try to find a non-ticking solution!
+    @Inject(method = "onStatusEffectApplied", at = @At("TAIL"), cancellable = true)
+    private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
-        for (StatusEffectInstance effectInstance : new ArrayList<>(self.getStatusEffects())) {
-            StatusEffect effect = effectInstance.getEffectType().value();
-
-            if (effect.getCategory() == StatusEffectCategory.HARMFUL) {
-                ImmunityEffect.checkAndBlockNegativeEffect(self, effectInstance);
-            }
+        StatusEffect statusEffect = effect.getEffectType().value();
+        if(statusEffect.getCategory() != StatusEffectCategory.HARMFUL) return;
+        ImmunityEffect.checkAndBlockNegativeEffect(self, effect);
+        if (ImmunityEffect.getBlockedEffects(self.getUuid()) == statusEffect) {
+            self.removeStatusEffect(effect.getEffectType());
+            ci.cancel();
         }
     }
 

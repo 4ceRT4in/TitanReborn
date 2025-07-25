@@ -12,9 +12,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.DamageTypeTags;
@@ -29,7 +26,6 @@ import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
-import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
@@ -43,7 +39,6 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -202,7 +197,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
                 ci.cancel();
                 return;
             }
-            cooldown = titanFabricSwordItem.getCooldownTicks();
+            if(!target.getWorld().isClient() && target.getWorld().getGameRules().getBoolean(TitanFabricGamerules.GREATSWORD_COOLDOWN)) {
+                cooldown = titanFabricSwordItem.getCooldownTicks();
+            }
         }
         if (cooldown <= 0) return;
         this.getItemCooldownManager().set(stack.getItem(), cooldown);

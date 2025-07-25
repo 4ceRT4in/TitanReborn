@@ -2,3 +2,7 @@ accessWidener	v2	named
 
 accessible class net/minecraft/entity/effect/InstantHealthOrDamageStatusEffect
 accessible method net/minecraft/entity/LivingEntity getKnockbackAgainst (Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)F
+accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget parentWidth I
+accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget parentHeight I
+accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget narrow Z
+accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget open Z

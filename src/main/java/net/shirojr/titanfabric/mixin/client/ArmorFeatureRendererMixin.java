@@ -64,7 +64,7 @@ public abstract class ArmorFeatureRendererMixin {
                 RegistryKey<Enchantment> key = keyOptional.get();
                 int level = enchantments.getLevel(enchantmentEntry);
 
-                if ((key == Enchantments.SHARPNESS && level >= 4)
+                if ((key == Enchantments.SHARPNESS && level >= 6)
                         || (key == Enchantments.PROTECTION && level >= 5)
                         || (key == Enchantments.POWER && level >= 6)) {
                     color = DyeColor.ORANGE;

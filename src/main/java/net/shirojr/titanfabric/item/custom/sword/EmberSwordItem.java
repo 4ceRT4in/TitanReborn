@@ -3,6 +3,8 @@ package net.shirojr.titanfabric.item.custom.sword;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.Text;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.VariationHolder;
@@ -15,6 +17,12 @@ public class EmberSwordItem extends TitanFabricSwordItem implements VariationHol
     public EmberSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed,
                           SwordType swordType, Item.Settings settings) {
         super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, swordType, WeaponEffect.FIRE, settings);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.translatable("tooltip.titanfabric.emberSword"));
+        super.appendTooltip(stack, context, tooltip, type);
     }
 
     @Override
