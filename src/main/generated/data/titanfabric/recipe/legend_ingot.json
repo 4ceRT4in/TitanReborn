@@ -1,12 +1,13 @@
 {
-  "type": "minecraft:smelting",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "cookingtime": 200,
-  "experience": 0.7,
-  "ingredient": {
-    "item": "titanfabric:legend_powder"
-  },
+  "ingredients": [
+    {
+      "item": "titanfabric:legend_block"
+    }
+  ],
   "result": {
+    "count": 9,
     "id": "titanfabric:legend_ingot"
   }
 }

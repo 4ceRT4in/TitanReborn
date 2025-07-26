@@ -22,6 +22,7 @@ import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -220,8 +221,14 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "blockedByShield", at = @At("HEAD"), cancellable = true)
     private void blockedByShield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity self = (LivingEntity) (Object) this;
+
+        if (self.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_COMBAT)) {
+            cir.setReturnValue(false);
+        }
+
         if (source.getAttacker() instanceof PlayerEntity attacker) {
-            if (((LivingEntity) (Object) this) instanceof PlayerEntity target) {
+            if (self instanceof PlayerEntity target) {
                 // If the target is blocking and holding a shield
                 boolean isCrit = attacker.fallDistance > 0.0F
                         && !attacker.isOnGround()
@@ -242,7 +249,6 @@ public abstract class LivingEntityMixin {
                 }
 
             }
-
         }
     }
 

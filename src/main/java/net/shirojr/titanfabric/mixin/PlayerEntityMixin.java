@@ -122,13 +122,26 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
                     if (plateType != null) {
                         int armorProb = 0;
                         if(armorProb > 0) {
-                            float damageReduction = 0.025f * armorProb; //2.5%
-                            return amount * (1.0f - damageReduction);
+                            float damageReduction = 0.025f * armorProb;
+                            amount = amount * (1.0f - damageReduction);
                         }
                     }
                 }
             }
         }
+        if (player.isBlocking()) {
+            ItemStack activeItem = player.getActiveItem();
+
+            if (activeItem.getItem() == Items.SHIELD) {
+                return amount * 0.75f;
+            } else if (activeItem.getItem() == TitanFabricItems.DIAMOND_SHIELD) {
+                return amount * 0.5f;
+            } else if (activeItem.getItem() == TitanFabricItems.LEGEND_SHIELD ||
+                    activeItem.getItem() == TitanFabricItems.NETHERITE_SHIELD) {
+                return amount * 0.25f;
+            }
+        }
+
         return amount;
     }
 
@@ -178,7 +191,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         PlayerEntity player = (PlayerEntity) (Object) this;
         ItemStack stack = player.getMainHandStack();
         if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
+            if (stack.getItem().equals(TitanFabricItems.DIAMOND_GREATSWORD) || stack.getItem().equals(TitanFabricItems.DIAMOND_SWORD)) {
+               // LoggerUtil.devLogger("works ig");
+                return titanFabricSwordItem.getCritMultiplier() * 1.25f;
+            }
             return titanFabricSwordItem.getCritMultiplier();
+        } else if (stack.getItem().equals(Items.DIAMOND_SWORD)) {
+            return 1.2f * 1.25f;
         } else if (stack.getItem() instanceof SwordItem) {
             return 1.2f;
         }

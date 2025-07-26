@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_ember_shard": {
+    "has_ember_block": {
       "conditions": {
         "items": [
           {
-            "items": "titanfabric:ember_shard"
+            "items": "titanfabric:ember_block"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "titanfabric:ember_ingot"
+        "recipe": "minecraft:ember_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_ember_shard"
+      "has_ember_block"
     ]
   ],
   "rewards": {
     "recipes": [
-      "titanfabric:ember_ingot"
+      "minecraft:ember_ingot"
     ]
   }
 }

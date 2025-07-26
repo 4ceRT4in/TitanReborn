@@ -2,32 +2,21 @@ package net.shirojr.titanfabric.mixin;
 
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
-import net.minecraft.util.Rarity;
-import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.items.Anvilable;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Mixin(Item.class)
 public class ItemMixin {
@@ -66,6 +55,9 @@ public class ItemMixin {
                     }
                 }
             }
+        } else if (stack.getItem() instanceof SwordItem) {
+            if(!(Arrays.asList(TitanFabricItems.DIAMOND_GREATSWORD, TitanFabricItems.DIAMOND_SWORD, Items.DIAMOND_SWORD).contains(stack.getItem()))) return;
+            tooltip.add(Text.translatable("tooltip.titanfabric.diamond_sword"));
         }
     }
 }

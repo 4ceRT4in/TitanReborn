@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_legend_powder": {
+    "has_legend_block": {
       "conditions": {
         "items": [
           {
-            "items": "titanfabric:legend_powder"
+            "items": "titanfabric:legend_block"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "titanfabric:legend_ingot"
+        "recipe": "minecraft:legend_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_legend_powder"
+      "has_legend_block"
     ]
   ],
   "rewards": {
     "recipes": [
-      "titanfabric:legend_ingot"
+      "minecraft:legend_ingot"
     ]
   }
 }

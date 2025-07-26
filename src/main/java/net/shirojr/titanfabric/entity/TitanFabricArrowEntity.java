@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -26,7 +25,6 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.HashSet;
 
 public class TitanFabricArrowEntity extends ArrowEntity {
@@ -69,6 +67,12 @@ public class TitanFabricArrowEntity extends ArrowEntity {
         }
         this.effect = effect;
         dataTracker.set(arrowEffect, Text.of(effect.toString()));
+        if(effect != null && effect.equals(WeaponEffect.FIRE)) {
+            if(!this.isOnFire()) {
+                this.setOnFire(true);
+                this.setOnFireFor(10000);
+            }
+        }
     }
 
     @Nullable
@@ -103,12 +107,6 @@ public class TitanFabricArrowEntity extends ArrowEntity {
     private void spawnParticles(int amount) {
         if (this.getInateWeaponEffectData() == null || !(getWorld() instanceof ServerWorld serverWorld)) return;
         int i = EffectHelper.getColor(this.getInateWeaponEffectData().weaponEffect());
-        if(this.getInateWeaponEffectData().weaponEffect().equals(WeaponEffect.FIRE)) {
-            if(!this.isOnFire()) {
-                this.setOnFire(true);
-                this.setOnFireFor(10000);
-            }
-        }
         if (i == -1 || amount <= 0) return;
 
         float d = (float) ((i >> 16 & 0xFF) / 255.0);

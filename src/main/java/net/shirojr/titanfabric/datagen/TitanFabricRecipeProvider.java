@@ -172,8 +172,8 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
 
     private static void offerHeatTreatment(RecipeExporter exporter, Item input, Item output) {
         String name = Registries.ITEM.getId(output).getPath();
-        offerBlasting(exporter, List.of(input), RecipeCategory.MISC, output, 0.1f, 100, name);
-        offerSmelting(exporter, List.of(input), RecipeCategory.MISC, output, 0.1f, 200, name);
+        offerBlasting(exporter, List.of(input), RecipeCategory.MISC, output, 0.7f, 100, name);
+        offerSmelting(exporter, List.of(input), RecipeCategory.MISC, output, 0.7f, 200, name);
     }
 
     private static void offerSwords(RecipeExporter exporter, @Nullable Item outputSword, @Nullable Item outputGreatsword, Item material) {
