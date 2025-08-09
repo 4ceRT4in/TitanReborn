@@ -5,7 +5,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
-import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.items.Anvilable;
@@ -15,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Mixin(Item.class)
@@ -56,8 +54,9 @@ public class ItemMixin {
                 }
             }
         } else if (stack.getItem() instanceof SwordItem) {
-            if(!(Arrays.asList(TitanFabricItems.DIAMOND_GREATSWORD, TitanFabricItems.DIAMOND_SWORD, Items.DIAMOND_SWORD).contains(stack.getItem()))) return;
-            tooltip.add(Text.translatable("tooltip.titanfabric.diamond_sword"));
+            if(stack.getItem() == Items.DIAMOND_SWORD) {
+                tooltip.add(Text.translatable("tooltip.titanfabric.diamond_sword"));
+            }
         }
     }
 }

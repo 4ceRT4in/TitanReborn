@@ -26,6 +26,7 @@ import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
@@ -39,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
@@ -99,6 +101,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         Optional<ItemStack> selection = Optional.ofNullable(selectionHandler.getSelectedIndex(stack)).map(index -> getInventory().getStack(index));
         if (selection.isEmpty()) return;
         cir.setReturnValue(selection.get());
+    }
+
+
+    @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At("STORE"), ordinal = 2)
+    private boolean attack(boolean critical, Entity target) {
+        PlayerEntity self = (PlayerEntity)(Object)this;
+        ItemStack stack = self.getStackInHand(Hand.MAIN_HAND);
+        if(stack == null) return critical;
+        if (Arrays.asList(Items.DIAMOND_SWORD, TitanFabricItems.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD).contains(stack.getItem())) {
+            if(self.getRandom().nextFloat() < 0.25f) {
+                LoggerUtil.devLogger("TEST");
+                return true;
+            }
+        }
+        return critical;
     }
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
@@ -191,13 +208,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         PlayerEntity player = (PlayerEntity) (Object) this;
         ItemStack stack = player.getMainHandStack();
         if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
-            if (stack.getItem().equals(TitanFabricItems.DIAMOND_GREATSWORD) || stack.getItem().equals(TitanFabricItems.DIAMOND_SWORD)) {
-               // LoggerUtil.devLogger("works ig");
-                return titanFabricSwordItem.getCritMultiplier() * 1.25f;
-            }
             return titanFabricSwordItem.getCritMultiplier();
-        } else if (stack.getItem().equals(Items.DIAMOND_SWORD)) {
-            return 1.2f * 1.25f;
         } else if (stack.getItem() instanceof SwordItem) {
             return 1.2f;
         }

@@ -2,16 +2,12 @@ package net.shirojr.titanfabric;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.init.*;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
-import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
-import net.shirojr.titanfabric.init.TitanFabricEntities;
+import net.shirojr.titanfabric.config.TitanConfig;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
+import net.shirojr.titanfabric.init.*;
 import net.shirojr.titanfabric.network.TitanFabricC2SNetworking;
-import net.shirojr.titanfabric.init.TitanFabricPotions;
-import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
-import net.shirojr.titanfabric.init.TitanFabricScreenHandlers;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
 import net.shirojr.titanfabric.world.gen.TitanFabricWorldGen;
@@ -25,6 +21,7 @@ public class TitanFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        TitanConfig.loadConfig();
         TitanFabricConfiguredFeatures.initialize();
         TitanFabricItems.initialize();
         TitanFabricArmorMaterials.initialize();

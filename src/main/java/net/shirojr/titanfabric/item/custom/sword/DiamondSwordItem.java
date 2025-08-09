@@ -2,6 +2,8 @@ package net.shirojr.titanfabric.item.custom.sword;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.text.Text;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.VariationHolder;
@@ -18,6 +20,12 @@ public class DiamondSwordItem extends TitanFabricSwordItem implements WeaponEffe
                             SwordType swordType, WeaponEffect baseEffect, Settings settings, boolean registerBaseVersion) {
         super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, swordType, baseEffect, settings);
         this.registerBaseVersion = registerBaseVersion;
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        tooltip.add(Text.translatable("tooltip.titanfabric.diamond_sword"));
+        super.appendTooltip(stack, context, tooltip, type);
     }
 
     @Override
