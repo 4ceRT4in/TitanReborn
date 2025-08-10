@@ -1,4 +1,4 @@
-<p align="center"><img src="header.png" alt="Logo" width="800"></p>
+<img width="2048" height="456" alt="Image" src="https://github.com/user-attachments/assets/f998c2df-1f51-4451-af3d-5a88afaa83f5" />
 
 <h1 align="center">
   	<a href="https://github.com/4ceRT4in/TitanReborn/blob/master/LICENSE">
@@ -17,11 +17,9 @@
 
 <h1 align="center">Prepare to battle! - Titan Reborn brings unique materials with special perks, essence infusing, and much more to player-versus-player combat!<br></h1>
 
-![Features](https://cdn-raw.modrinth.com/data/9K53v0ys/images/cb7337a3f4a243e3186132bb504b2d118a01cd72.png)
 
 📜 **About** 📜
 ---
-
 Titan Reborn introduces 3 unique materials, found in the Overworld and Nether, each granting distinct buffs upon the player. These materials encourage strategic decision-making as players choose the material their weapons and armor parts are made of, to prioritize certain buffs, adding depth and variety to their gameplay experience.
 
 🧪 **Citrin**: As a common and slightly stronger material than iron in durability and protection, this material protects the player from any form of bad potion effects, reducing effect time and chance for damage ticks when being affected. 
@@ -30,17 +28,16 @@ Titan Reborn introduces 3 unique materials, found in the Overworld and Nether, e
 
 💜 **Titan**: As the strongest material, Titan can only scarcely be found in the depths of the deepslate layer. Each armor piece grants the player extra health, resulting in up to 5 hearts when wearing a full set. It is also unbreakable and highly enchantable.
 
-⚔️ **Close Range Combat** ⚔️
+⚔️ **Swords** ⚔️
 ---
 - **Swords**\
 => Lower damage, no cooldown, 1.2x crit modifier, easier crafting, better enchantability
 - **Greatswords**\
 => Higher damage, custom cooldown, 1.5x crit modifier, harder crafting, worse enchantability
-
 - **Essences**\
-=> Imbue swords with Wither, Weakness, Poison, Blindness, or Fire essences (an essence adds +25% chance, with a max chance of 50% on swords)
+=> Imbue swords with wither, weakness, poison, blindness, or fire essences (each essence adds +25% chance, with a max chance of 50%)
 
-🏹 **Long Range Combat** 🏹
+🏹 **Bows** 🏹
 ---
 - **Multi Bow(s)**\
 => Shoots up to 3 arrows consecutively 
@@ -49,81 +46,92 @@ Titan Reborn introduces 3 unique materials, found in the Overworld and Nether, e
 - **Titan Crossbow**\
 => Shoots splash & lingering potions
 - **Potion Effect Arrows**\
-=> Inflicts level 2 wither, weakness, poison, and blindness effects 
+=> Inflicts level 2 wither, weakness, poison, blindness and fire effects 
 
-🛡️ **Armor & Shields** 🛡️
+🛡️ **Armors, Platings & Shields** 🛡️
 ---
 - **Citrin Armor**\
 => Immune to all bad effects by chance (25/50/75/100% chance depending on worn armor parts)
-- **Nether Armor**\
+- **Ember Armor**\
 => Immune to fire, magma, and lava damage by chance (25/50/75/100% chance depending on worn armor parts)
 - **Titan Armor**\
-=> Adds up to 5 extra hearts with full set, higher enchantability, unbreakable
+=> Adds up to 5 extra hearts with full set, high enchantability, unbreakable
+- **Armor Platings**\
+=> Upgrade for armor parts, that reduces damage from swords of the same material by 2,5% per plated piece
 - **Diamond Shield**\
 => Higher durability than vanilla shield
 - **Titan Shield**\
-=> Unbreakable
+=> Grants 2 temporary extra hearts while blocking, unbreakable
+- **Netherite Shield**\
+=> Deals knockback to attackers when blocking
 
 
-✨ **Secondary Gadgets** ✨
+✨ **Support Weapons & Items** ✨
 ---
 - **Citrin Star**\
-=> Reverts certain potion effects from negative to positive and vice versa for a limited time.
+=> Inverts certain potion effects from negative to positive and vice versa for a limited time.
+- **Flint and Ember**\
+=> Flint and Steel upgrade that harnesses soul-fire, igniting a larger area while dealing double damage.
 - **Diamond Apple**\
 => Grants 4 extra hearts and 5 seconds of regeneration 3
 - **Potion of Indestructibility**\
-=> Prevents durability loss on all items for duration
+=> Prevents durability loss on all items for its duration
+- **Potion of Immunity**\
+=> Grants protection against the first bad effect after drinking
+- **Potion of Frostburn**\
+=> inflicts a poison-like freezing and thawing effect, that ignores armor and enchantments
 
 
-🎒 **Miscellaneous Items** 🎒
+🎒 **Functional Blocks & Items** 🎒
 ---
-- **Parachute**\
-=> Slowly glide to the ground without taking fall damage
 - **Diamond Furnace**\
 => Doubles ore output and smelting speed
 - **Netherite Anvil**\
-=> Combines items at only half the cost
+=> Combines items at half the cost and can exclusively upgrade items to overpowered enchantment level 
+- **Parachute**\
+=> Activates in air and lets a player glide to the ground without taking fall damage
 - **Backpacks**\
 => Stores all your loot in 3 tier sizes
-
+- **Potion Bundle**\
+=> Stores potions, that when held in off-hand, links inventory directly to a Titan Crossbow
 
 ⚙️ **QOL** ⚙️
 ---
 - **Save Inventory**\
 => Player-built-in GUI extension to store your loot (integration with vanilla scoreboard teams)
 - **Quick Select System**\
-=> Easy to use keybind-system (default:<kbd>g</kbd>) for choosing arrows or potions when using variants of bows or crossbows
+=> Easy to use keybind-system (default:<kbd>g</kbd>) for choosing arrows and potions quickly
+- **Inventory preview & dyeability**\
+=> Backpacks and potion bundle show a preview of their content and can be dyed
 - **gamerule "LegacyFoodRegeneration"** (default true)\
 => Reverts extreme regeneration boost by eating food introduced in version 1.9
 - **gamerule "LegacyCombat"** (default true)\
 => Reverts weapon attack cooldowns introduced in version 1.9
+- **gamerule "ElytraBoosting"** (default false)\
+=> Disables rocket-boosting while using a elytra
+- **gamerule "GreatswordCooldown"** (default true)\
+=> Disables custom greatsword cooldown
 
-⚖️ **Additionally, the mod balances some vanilla content, including:** ⚖️
+⚖️ **Additionally, the mod balances vanilla content, including:** ⚖️
 ---
-- Stronger Netherite sword and Armor
-- More expensive netherite ingot recipe
-- Nerfed axe attack damage
-- Slight strengh and weakness effect rebalancing
-- Alternative brewing recipe for lingering potions 
-- Craftable elytra
-- craftable saddle & horse armors
-- Shields can be disabled by critical hits
-- improved projectile trajectory for enderpearls, arrows, snowballs etc.
-- Reworked lingering potion mechanic 
+- Diamond swords deal 25% critical hit damage chance
+- Diamond armor protects against critical hit damage  (25/50/75/100% chance depending on worn armor parts)
+- Shields activate instantly, block percentage damage and can be disabled by critical hits
 - Potions stack up to 3 with a short cooldown when used
+- Overpowered enchantment levels available for sharpness, power and protection
+- Sharpness enchantment increases damage by +1 per level
+- Stronger Netherite sword and a full armor effect
+- Snowballs deal knockback
+- Craftable elytra
+- Craftable saddle & horse armors
+- Adjusted netherite ingot & upgrade template crafting recipe
+- Adjusted lingering potion brewing recipe 
+- Nerfed axe attack damage
+- Nerfed strengh, weakness and resistance effects
+- Improved projectile trajectory for enderpearls, arrows, snowballs etc.
 - Disabled player and mob collision
+- Removed fire aspect & flame enchantments from enchantment tables, villager-trading and loot chests
 
-🔜 **Upcoming features** 🔜
 ---
-- 2 new potions
-- Potion storage item
-- New Ember-themed secondary weapon
-- New effect Arrow
-- Many Improvements (Parachute, Shields, Backpacks, Diamond Furnace & Netherite Anvil)
-- More reworks to vanilla mechanics
-- Some new textures, especially for modded potions
-- Version upgrade to the newest available version with integration of many vanilla features like armor templates and trial chambers. 
-  
----
-***Made by ShiroJR and 4ceRT4in, with contributions by Globox_Z and FabCode.\
+***Made by ShiroJR, Frxzenluke and 4ceRT4in, with contributions by Globox_Z and FabCode.\
 [Titan Combat](https://www.curseforge.com/minecraft/mc-mods/titan-combat 'Titan Combat') was the inspiration for this mod, which was commissioned by Zinus & ViceVice, created by ateRstones and published by TheNodop.***
