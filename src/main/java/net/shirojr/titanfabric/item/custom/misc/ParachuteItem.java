@@ -60,7 +60,7 @@ public class ParachuteItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (!user.isOnGround()) {
+        if (!user.isOnGround() && !user.isSubmergedInWater()) {
             if (user.isSneaking()) {
                 if (removeParachute(user.getStackInHand(hand), user)) {
                     return super.use(world, user, hand);

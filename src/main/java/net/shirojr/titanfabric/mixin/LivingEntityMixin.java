@@ -214,8 +214,10 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "pushAwayFrom", at = @At("HEAD"), cancellable = true)
     private void pushAwayFrom(Entity entity, CallbackInfo ci) {
-        if (entity instanceof PlayerEntity) {
-            ci.cancel();
+        if (entity instanceof PlayerEntity player) {
+            if(!player.getWorld().isClient() && player.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_COMBAT)) {
+                ci.cancel();
+            }
         }
     }
 

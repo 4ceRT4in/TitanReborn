@@ -11,15 +11,14 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.util.LoggerUtil;
 
 public class TitanFabricPotions {
     public static RegistryEntry<Potion> INDESTRUCTIBLE_POTION =
             registerPotion("indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
-                    3600, 0, Potions.AWKWARD, TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
+                    1800, 0, Potions.AWKWARD, TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
     public static RegistryEntry<Potion> LONG_INDESTRUCTIBLE_POTION =
             registerPotion("long_indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
-                    9600, 0, INDESTRUCTIBLE_POTION, Items.REDSTONE);
+                    3600, 0, INDESTRUCTIBLE_POTION, Items.REDSTONE);
     public static RegistryEntry<Potion> FROSTBURN_POTION =
             registerPotion("frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
                     400, 0, Potions.AWKWARD, Items.SNOWBALL);

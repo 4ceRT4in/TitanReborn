@@ -11,14 +11,12 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
-import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
+import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.render.model.ParachuteFeatureModel;
 
 import java.util.HashMap;
@@ -60,15 +58,11 @@ public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEnt
         ItemStack mainHand = entity.getMainHandStack();
         var comp = DataComponentTypes.BASE_COLOR;
         if (mainHand.isOf(TitanFabricItems.PARACHUTE) && mainHand.get(comp) != null) {
-            if (Boolean.TRUE.equals(mainHand.get(TitanFabricDataComponents.ACTIVATED))) {
-                return TitanFabricDyeProviders.getColorFromNBT(mainHand);
-            }
+            return TitanFabricDyeProviders.getColorFromNBT(mainHand);
         }
         ItemStack offHand = entity.getOffHandStack();
         if (offHand.isOf(TitanFabricItems.PARACHUTE) && offHand.get(comp) != null) {
-            if (Boolean.TRUE.equals(mainHand.get(TitanFabricDataComponents.ACTIVATED))) {
-                return TitanFabricDyeProviders.getColorFromNBT(offHand);
-            }
+            return TitanFabricDyeProviders.getColorFromNBT(offHand);
         }
         return "white";
     }

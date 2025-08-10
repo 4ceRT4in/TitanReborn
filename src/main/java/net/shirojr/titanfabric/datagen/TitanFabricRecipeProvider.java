@@ -74,6 +74,7 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
             Identifier id = Registries.ITEM.getId(effectSword);
             offerEssenceUpgrade(id.getPath() + "_upgrade", effectSword, exporter);
         }
+        offerEssenceUpgrade("vanilla_diamond_sword_upgrade", Items.DIAMOND_SWORD, exporter);
 
         offerSwords(exporter, TitanFabricItems.CITRIN_SWORD, TitanFabricItems.CITRIN_GREATSWORD, TitanFabricItems.CITRIN_SHARD);
         offerSwords(exporter, TitanFabricItems.EMBER_SWORD, TitanFabricItems.EMBER_GREATSWORD, TitanFabricItems.EMBER_INGOT);

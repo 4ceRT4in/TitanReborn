@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TitanConfig {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private static final Path configPath = FabricLoader.getInstance().getConfigDir().resolve("titanfabric-blockedEnchantments.json");
+    private static final Path configPath = FabricLoader.getInstance().getConfigDir().resolve("titanfabric-config.json");
     private static ConfigData configData;
 
     public static void loadConfig() {

@@ -79,7 +79,7 @@ public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInv
             button.setPosition(this.x + 104, this.height / 2 - 22);
             this.mouseDown = true;
         }));
-        ButtonWidget buttonWidget = ButtonWidget.builder(Text.literal("<<"), button -> {
+        ButtonWidget buttonWidget = ButtonWidget.builder(Text.translatable("screen.titanfabric.save_inventory_arrow2"), button -> {
             if (this.client.mouse != null) {
                 this.client.mouse.unlockCursor();
             }

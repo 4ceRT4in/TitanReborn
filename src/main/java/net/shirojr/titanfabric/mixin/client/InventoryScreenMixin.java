@@ -39,7 +39,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
     private void titanfabric$addInventoryScreenElements(CallbackInfo ci) {
         if (this.client == null || this.client.player == null) return;
         int buttonX = (this.width - this.backgroundWidth) / 2;
-        var builder = ButtonWidget.builder(Text.literal(">>"), button -> {
+        var builder = ButtonWidget.builder(Text.translatable("screen.titanfabric.save_inventory_arrow1"), button -> {
             if (this.client.mouse != null) {
                 this.client.mouse.unlockCursor();
             }

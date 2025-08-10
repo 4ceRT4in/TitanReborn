@@ -73,6 +73,7 @@
   "item.titanfabric.weakness_essence": "§7Weakness Essence",
   "item.titanfabric.wither_essence": "§8Wither Essence",
 
+  "item.titanfabric.diamond_sword": "§bDiamond Sword",
   "item.titanfabric.potion_bundle": "§cPotion Bundle",
   "item.titanfabric.potion_bundle_screen": "Potion Bundle",
   "item.titanfabric.backpack_small": "Small Backpack",
@@ -167,7 +168,7 @@
   "tooltip.titanfabric.parachute_line1": "Use item in air to enable",
   "tooltip.titanfabric.parachute_line2": "Sneak and use item while gliding to disable",
 
-  "tooltip.titanfabric.potionBundle": "§7You can store Splash- and Lingering Potions, \\n§7which can be used for the §e§kl §r§3Titan Crossbow §e§kl",
+  "tooltip.titanfabric.potionBundle": "§7Stores Splash- and Lingering Potions",
 
   "tooltip.titanfabric.color.red": "§fColor: §cRed",
   "tooltip.titanfabric.color.orange": "§fColor: §6Orange",
@@ -210,6 +211,8 @@
 
   "screen.titanfabric.extended_inventory.title": "Save Inventory",
   "screen.titanfabric.immunity_effect_blocked": "Blocked Effects ",
+  "screen.titanfabric.save_inventory_arrow1": ">>",
+  "screen.titanfabric.save_inventory_arrow2": "<<",
 
   "actionbar.titanfabric.arrow_selection": "Projectile: ",
   "actionbar.titanfabric.not_compatible": "§6[Warning]§r Projectile is not compatible",

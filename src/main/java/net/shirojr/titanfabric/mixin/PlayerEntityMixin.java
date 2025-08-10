@@ -26,7 +26,6 @@ import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
-import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
@@ -105,17 +104,25 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
 
 
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At("STORE"), ordinal = 2)
-    private boolean attack(boolean critical, Entity target) {
+    private boolean attack(boolean bl3, Entity target) {
         PlayerEntity self = (PlayerEntity)(Object)this;
         ItemStack stack = self.getStackInHand(Hand.MAIN_HAND);
-        if(stack == null) return critical;
+        if(stack == null) return bl3;
+        if(!(target instanceof LivingEntity livingEntity)) return bl3;
+        if(livingEntity.hurtTime >= livingEntity.maxHurtTime) return bl3;
         if (Arrays.asList(Items.DIAMOND_SWORD, TitanFabricItems.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD).contains(stack.getItem())) {
-            if(self.getRandom().nextFloat() < 0.25f) {
-                LoggerUtil.devLogger("TEST");
+            if (self.getRandom().nextFloat() < 0.25f) {
                 return true;
             }
         }
-        return critical;
+        return bl3;
+    }
+
+    @Unique
+    private boolean hasFullDiamondArmor(LivingEntity entity) {
+        var armorItems = entity.getAllArmorItems();
+
+        return false;
     }
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)

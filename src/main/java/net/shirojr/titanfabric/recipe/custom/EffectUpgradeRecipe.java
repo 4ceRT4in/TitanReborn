@@ -2,7 +2,9 @@ package net.shirojr.titanfabric.recipe.custom;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.Ingredient;
@@ -12,6 +14,7 @@ import net.minecraft.recipe.input.SmithingRecipeInput;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
@@ -69,9 +72,23 @@ public class EffectUpgradeRecipe implements SmithingRecipe {
             this.result = ItemStack.EMPTY;
             return this.result;
         }
+        if (this.result.getItem().equals(Items.DIAMOND_SWORD)) {
+            ItemStack stack = new ItemStack(TitanFabricItems.DIAMOND_SWORD);
+            for (ComponentType<?> type : this.result.getComponents().getTypes()) {
+                copyComponent(stack, this.result, type);
+            }
+            this.result = stack;
+        }
 
         this.result.set(TitanFabricDataComponents.WEAPON_EFFECTS, outputWeaponEffects);
         return this.result;
+    }
+
+    private static <T> void copyComponent(ItemStack target, ItemStack source, ComponentType<T> type) {
+        T value = source.get(type);
+        if (value != null) {
+            target.set(type, value);
+        }
     }
 
     @Nullable
