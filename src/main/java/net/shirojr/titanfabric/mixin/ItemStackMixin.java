@@ -16,13 +16,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,11 +34,25 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements FabricItemStack {
+
+    @Inject(method = "getTooltip", at = @At("RETURN"))
+    public void getTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir) {
+        ItemStack stack = (ItemStack)(Object)this;
+        if(stack == null) return;
+        if (Arrays.asList(TitanFabricItems.LEGEND_SWORD, TitanFabricItems.LEGEND_GREATSWORD, TitanFabricItems.LEGEND_HELMET, TitanFabricItems.LEGEND_CHESTPLATE,
+                TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS, TitanFabricItems.TITAN_CROSSBOW, TitanFabricItems.LEGEND_BOW).contains(stack.getItem())) {
+            List<Text> tooltip = cir.getReturnValue();
+            tooltip.removeIf(text -> text.getString().equals(Text.translatable("item.unbreakable").formatted(Formatting.BLUE).getString()));
+        }
+    }
+
     @ModifyExpressionValue(method = "damage(ILnet/minecraft/server/world/ServerWorld;Lnet/minecraft/server/network/ServerPlayerEntity;Ljava/util/function/Consumer;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
     private boolean titanfabric$avoidDamage(boolean original, @Local(argsOnly = true) ServerPlayerEntity player) {
         if (player == null) return original;

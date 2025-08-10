@@ -10,6 +10,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.network.packet.ArmorLifePacket;
@@ -40,9 +41,13 @@ public class TitanFabricClientTickEvents {
     private static void handleTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
+        if(stack.getItem() != TitanFabricItems.LEGEND_BOW) return;
         if (!(stack.getItem() instanceof SelectableArrow selectableArrow)) return;
         Integer index = selectableArrow.getSelectedIndex(stack);
-        if (index == null) return;
+        if (index == null) {
+            lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
+            return;
+        }
         ItemStack arrowStack = client.player.getInventory().main.get(index);
         if (!(arrowStack.getItem() instanceof TitanFabricArrowItem)) {
             lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));

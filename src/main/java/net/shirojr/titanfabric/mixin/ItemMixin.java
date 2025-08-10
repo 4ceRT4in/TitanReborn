@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Mixin(Item.class)
@@ -57,6 +58,9 @@ public class ItemMixin {
             if(stack.getItem() == Items.DIAMOND_SWORD) {
                 tooltip.add(Text.translatable("tooltip.titanfabric.diamond_sword"));
             }
+        }
+        if(Arrays.asList(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS).contains(stack.getItem())) {
+            tooltip.add(Text.translatable("tooltip.titanfabric.diamond_armor"));
         }
     }
 }

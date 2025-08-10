@@ -60,24 +60,27 @@ public class ParachuteItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (!user.isOnGround() && !user.isSubmergedInWater()) {
-            if (user.isSneaking()) {
-                if (removeParachute(user.getStackInHand(hand), user)) {
-                    return super.use(world, user, hand);
-                }
-            }
-            if (isParachuteActivated(user)) {
+        if(user.isTouchingWater() || user.isOnGround()) {
+            user.sendMessage(Text.translatable("actionbar.titanfabric.parachute_warning"), true);
+            return super.use(world, user, hand);
+        }
+        user.sendMessage(Text.empty(), true);
+        if (user.isSneaking()) {
+            if (removeParachute(user.getStackInHand(hand), user)) {
                 return super.use(world, user, hand);
             }
-            Vec3d velocity = new Vec3d(user.getVelocity().getX(), user.getVelocity().getY() * 0.05D, user.getVelocity().getZ());
-            user.setVelocity(velocity);
-            ItemStack stack = user.getStackInHand(hand);
-            stack.set(TitanFabricDataComponents.ACTIVATED, true);
-            if (world.isClient()) {
-                TitanFabricSoundHandler.playParachuteSoundInstance((ClientPlayerEntity) user);
-            } else {
-                world.playSound(null, user.getBlockPos(), SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-            }
+        }
+        if (isParachuteActivated(user)) {
+            return super.use(world, user, hand);
+        }
+        Vec3d velocity = new Vec3d(user.getVelocity().getX(), user.getVelocity().getY() * 0.05D, user.getVelocity().getZ());
+        user.setVelocity(velocity);
+        ItemStack stack = user.getStackInHand(hand);
+        stack.set(TitanFabricDataComponents.ACTIVATED, true);
+        if (world.isClient()) {
+            TitanFabricSoundHandler.playParachuteSoundInstance((ClientPlayerEntity) user);
+        } else {
+            world.playSound(null, user.getBlockPos(), SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
         }
         return super.use(world, user, hand);
 

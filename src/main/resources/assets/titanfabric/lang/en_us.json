@@ -143,6 +143,7 @@
   "tooltip.titanfabric.emberSword": "§625% Fire Chance",
   "tooltip.titanfabric.citrinSword": "§225% Poison Chance",
   "tooltip.titanfabric.diamond_sword": "§b25% Crit Chance",
+  "tooltip.titanfabric.diamond_armor": "§b+25% Crit Protection",
 
   "tooltip.titanfabric.legend_bow_arrow": "%s Arrow",
 
@@ -216,6 +217,7 @@
 
   "actionbar.titanfabric.arrow_selection": "Projectile: ",
   "actionbar.titanfabric.not_compatible": "§6[Warning]§r Projectile is not compatible",
+  "actionbar.titanfabric.parachute_warning": "§cParachutes can only be opened in air",
 
   "tag.item.titanfabric.default_selectable_arrows": "Selectable Bow Arrows",
   "tag.item.titanfabric.default_selectable_crossbow_arrows": "Selectable Crossbow Arrows",

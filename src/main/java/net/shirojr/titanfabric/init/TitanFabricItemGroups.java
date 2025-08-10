@@ -15,7 +15,7 @@ import net.shirojr.titanfabric.util.VariationHolder;
 public class TitanFabricItemGroups {
     public static final RegistryKey<ItemGroup> TITAN = register("titan",
             FabricItemGroup.builder()
-                    .icon(() -> new ItemStack(TitanFabricItems.LEGEND_INGOT))
+                    .icon(() -> new ItemStack(TitanFabricBlocks.LEGEND_CRYSTAL))
                     .displayName(Text.translatable("itemGroup.titanfabric.titan"))
                     .build());
 

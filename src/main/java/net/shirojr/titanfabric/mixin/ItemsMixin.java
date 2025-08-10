@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Items.class)
 public abstract class ItemsMixin {
-    @WrapOperation(method = "<clinit>", slice = @Slice(
+    @ModifyArg(method = "<clinit>", slice = @Slice(
             from = @At(value = "CONSTANT", args = "stringValue=netherite_helmet")),
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorItem$Type;getMaxDamage(I)I")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorItem$Type;getMaxDamage(I)I"),
+            index = 0
     )
-    private static int modifyNetheriteArmorDurability(ArmorItem.Type instance, int multiplier, Operation<Integer> original) {
-        if (multiplier == 37) return 74;
-        return multiplier;
+    private static int modifyNetheriteArmorDurability(int multiplier) {
+        return multiplier == 37 ? 74 : multiplier;
     }
 
     @ModifyArg(

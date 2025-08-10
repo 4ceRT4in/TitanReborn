@@ -106,10 +106,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At("STORE"), ordinal = 2)
     private boolean attack(boolean bl3, Entity target) {
         PlayerEntity self = (PlayerEntity)(Object)this;
+        if(!(target instanceof LivingEntity livingEntity)) return bl3;
+        if(hasFullDiamondArmor(livingEntity)) return false;
+        if(livingEntity.timeUntilRegen > 10.0F) return bl3;
+
         ItemStack stack = self.getStackInHand(Hand.MAIN_HAND);
         if(stack == null) return bl3;
-        if(!(target instanceof LivingEntity livingEntity)) return bl3;
-        if(livingEntity.hurtTime >= livingEntity.maxHurtTime) return bl3;
         if (Arrays.asList(Items.DIAMOND_SWORD, TitanFabricItems.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD).contains(stack.getItem())) {
             if (self.getRandom().nextFloat() < 0.25f) {
                 return true;
@@ -120,9 +122,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
 
     @Unique
     private boolean hasFullDiamondArmor(LivingEntity entity) {
-        var armorItems = entity.getAllArmorItems();
-
-        return false;
+        return entity.getEquippedStack(EquipmentSlot.HEAD).isOf(Items.DIAMOND_HELMET)
+                && entity.getEquippedStack(EquipmentSlot.CHEST).isOf(Items.DIAMOND_CHESTPLATE)
+                && entity.getEquippedStack(EquipmentSlot.LEGS).isOf(Items.DIAMOND_LEGGINGS)
+                && entity.getEquippedStack(EquipmentSlot.FEET).isOf(Items.DIAMOND_BOOTS);
     }
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
@@ -211,17 +214,28 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getMovementSpeed()F")
             )
     )
-    private float titanfabric$critChanges(float constant) {
+    private float titanfabric$critChanges(float constant, Entity target) {
         PlayerEntity player = (PlayerEntity) (Object) this;
         ItemStack stack = player.getMainHandStack();
+        float crit;
         if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
-            return titanFabricSwordItem.getCritMultiplier();
+            crit = titanFabricSwordItem.getCritMultiplier();
         } else if (stack.getItem() instanceof SwordItem) {
-            return 1.2f;
+            crit = 1.2f;
+        } else {
+            crit = constant;
         }
-        return constant;
+        int pieces = 0;
+        if (target instanceof LivingEntity living) {
+            if (living.getEquippedStack(EquipmentSlot.HEAD).isOf(Items.DIAMOND_HELMET)) pieces++;
+            if (living.getEquippedStack(EquipmentSlot.CHEST).isOf(Items.DIAMOND_CHESTPLATE)) pieces++;
+            if (living.getEquippedStack(EquipmentSlot.LEGS).isOf(Items.DIAMOND_LEGGINGS)) pieces++;
+            if (living.getEquippedStack(EquipmentSlot.FEET).isOf(Items.DIAMOND_BOOTS)) pieces++;
+        }
+        float reduction = Math.max(0f, 1f - 0.25f * pieces);
+        float endCrit = Math.max(0f, crit - 1f);
+        return 1f + endCrit * reduction;
     }
-
 
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
     private void titanfabric$coolDownChanges(Entity target, CallbackInfo ci) {

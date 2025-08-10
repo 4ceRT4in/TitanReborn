@@ -30,8 +30,7 @@
     "SoulFireBlockMixin",
     "SplashPotionItemMixin",
     "StatusEffectInstanceMixin",
-    "StatusEffectsMixin",
-    "UnbreakableComponent"
+    "StatusEffectsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
