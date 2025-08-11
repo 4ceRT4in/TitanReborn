@@ -112,6 +112,7 @@
   "tooltip.titanfabric.legendChestplateItem": "§5+4 Max Health",
   "tooltip.titanfabric.legendLeggingsItem": "§5+3 Max Health",
   "tooltip.titanfabric.legendHelmetItem": "§5+2 Max Health",
+  "tooltip.titanfabric.diamondArmor": "§b+25% Crit Protection",
   "tooltip.titanfabric.netherArmor": "§6+25% Fire Protection",
   "tooltip.titanfabric.citrinArmor": "§2+25% Magic Protection",
 
@@ -142,8 +143,7 @@
 
   "tooltip.titanfabric.emberSword": "§625% Fire Chance",
   "tooltip.titanfabric.citrinSword": "§225% Poison Chance",
-  "tooltip.titanfabric.diamond_sword": "§b25% Crit Chance",
-  "tooltip.titanfabric.diamond_armor": "§b+25% Crit Protection",
+  "tooltip.titanfabric.diamond_sword": "§b+25% Crit Chance",
 
   "tooltip.titanfabric.legend_bow_arrow": "%s Arrow",
 

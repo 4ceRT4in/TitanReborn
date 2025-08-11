@@ -63,6 +63,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
                     this.levelCost.set(0);
                     requiresNetherite = true;
                     this.sendContentUpdates();
+                    return;
                 }
             }
         }

@@ -30,7 +30,7 @@ public class ItemMixin {
                 tooltip.add(Text.translatable("tooltip.titanfabric.netherite_effect"));
             }
             if (stack.getItem() == Items.DIAMOND_HELMET || stack.getItem() == Items.DIAMOND_CHESTPLATE || stack.getItem() == Items.DIAMOND_LEGGINGS || stack.getItem() == Items.DIAMOND_BOOTS) {
-                tooltip.add(Text.translatable("tooltip.titanfabric.diamond_armor"));
+                tooltip.add(Text.translatable("tooltip.titanfabric.diamondArmor"));
             }
             if (ArmorPlatingHelper.hasArmorPlating(stack)) {
                 ArmorPlateType plateType = ArmorPlatingHelper.getArmorPlatingType(stack);
