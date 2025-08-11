@@ -12,6 +12,7 @@
     "BowItemMixin",
     "BrewingRecipeRegistryMixin",
     "CrossbowItemMixin",
+    "EnchantBookFactoryMixin",
     "EnchantmentHelperMixin",
     "EnchantWithLevelsLootFunctionMixin",
     "EntityMixin",

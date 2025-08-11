@@ -32,9 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -284,5 +282,20 @@ public abstract class LivingEntityMixin {
             teamExtendedInventory.getInventory().clear();
             teamExtendedInventory.sync();
         }
+    }
+
+    @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(intValue = 5))
+    private int modifyAppliedDamageInt5(int original) {
+        return 1;
+    }
+
+    @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(intValue = 25))
+    private int modifyAppliedDamageInt25(int original) {
+        return 10;
+    }
+
+    @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(floatValue = 25.0F))
+    private float modifyAppliedDamageFloat25(float original) {
+        return 10.0F;
     }
 }
