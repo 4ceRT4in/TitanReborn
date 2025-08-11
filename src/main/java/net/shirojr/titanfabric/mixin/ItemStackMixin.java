@@ -47,7 +47,7 @@ public abstract class ItemStackMixin implements FabricItemStack {
         ItemStack stack = (ItemStack)(Object)this;
         if(stack == null) return;
         if (Arrays.asList(TitanFabricItems.LEGEND_SWORD, TitanFabricItems.LEGEND_GREATSWORD, TitanFabricItems.LEGEND_HELMET, TitanFabricItems.LEGEND_CHESTPLATE,
-                TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS, TitanFabricItems.TITAN_CROSSBOW, TitanFabricItems.LEGEND_BOW).contains(stack.getItem())) {
+                TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS, TitanFabricItems.TITAN_CROSSBOW, TitanFabricItems.LEGEND_BOW, TitanFabricItems.LEGEND_SHIELD).contains(stack.getItem())) {
             List<Text> tooltip = cir.getReturnValue();
             tooltip.removeIf(text -> text.getString().equals(Text.translatable("item.unbreakable").formatted(Formatting.BLUE).getString()));
         }

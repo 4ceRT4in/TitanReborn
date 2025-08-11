@@ -17,6 +17,8 @@
     "EnchantWithLevelsLootFunctionMixin",
     "EntityMixin",
     "FireworkRocketItemMixin",
+    "GrindstoneResultSlotMixin",
+    "GrindstoneScreenHandlerMixin",
     "HungerManagerMixin",
     "InstantHealthOrDamageStatusEffectMixin",
     "ItemMixin",
