@@ -76,7 +76,7 @@ public abstract class ItemStackMixin implements FabricItemStack {
                 RegistryKey<Enchantment> key = keyOptional.get();
                 int level = enchantments.getLevel(enchantmentEntry);
 
-                if ((key == Enchantments.SHARPNESS && level >= 6)) {
+                if ((key == Enchantments.SHARPNESS && level >= 6) || (key == Enchantments.PROTECTION && level >= 5) || (key == Enchantments.POWER && level >= 6)) {
                     cir.setReturnValue(Rarity.EPIC);
                     break;
                 }

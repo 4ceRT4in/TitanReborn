@@ -4,19 +4,21 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.block.BlockState;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.access.AnvilScreenHandlerAccessor;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import org.jetbrains.annotations.Nullable;
@@ -33,11 +35,12 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @Mixin(AnvilScreenHandler.class)
-public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
+public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler implements AnvilScreenHandlerAccessor {
     @Shadow
     @Final
     private Property levelCost;
     @Unique private boolean isNetherite;
+    @Unique private boolean requiresNetherite;
 
     public AnvilScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(type, syncId, playerInventory, context);
@@ -46,6 +49,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     @Inject(method = "updateResult", at = @At("HEAD"))
     private void cacheAnvilType(CallbackInfo ci) {
         context.run((world, pos) -> isNetherite = world.getBlockState(pos).isOf(TitanFabricBlocks.NETHERITE_ANVIL));
+        requiresNetherite = false;
     }
 
     @ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z", ordinal = 1))
@@ -54,41 +58,31 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         return original || itemStack.getItem() instanceof Anvilable;
     }
 
-    @WrapOperation(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getMaxLevel()I"))
-    private int titanfabric$modifyMaxEnchantmentLevel(Enchantment enchantment, Operation<Integer> original) {
-        Optional<BlockState> blockState = context.get(World::getBlockState);
-        boolean isNetheriteAnvil = blockState.isPresent() && blockState.get().isOf(TitanFabricBlocks.NETHERITE_ANVIL);
+    @Inject(method = "updateResult", at = @At("RETURN"))
+    private void updateResultReturn(CallbackInfo ci) {
+        if (!isNetherite) {
+            ItemStack result = this.output.getStack(0);
+            if (!result.isEmpty() && EnchantmentHelper.canHaveEnchantments(result)) {
+                ItemEnchantmentsComponent enchantments = EnchantmentHelper.getEnchantments(result);
 
-        RegistryKey<Enchantment> enchantmentKey = player.getWorld().getRegistryManager()
-                .get(RegistryKeys.ENCHANTMENT).getKey(enchantment).orElse(null);
+                for (RegistryEntry<Enchantment> enchantmentEntry : enchantments.getEnchantments()) {
+                    Optional<RegistryKey<Enchantment>> keyOptional = enchantmentEntry.getKey();
+                    if (keyOptional.isEmpty()) continue;
 
-        if (enchantmentKey == null) {
-            return original.call(enchantment);
-        }
+                    RegistryKey<Enchantment> key = keyOptional.get();
+                    int level = enchantments.getLevel(enchantmentEntry);
 
-        if (isNetheriteAnvil) {
-            if (enchantmentKey == Enchantments.PROTECTION) {
-                return 5;
-            }
-            if (enchantmentKey == Enchantments.SHARPNESS) {
-                return 6;
-            }
-            if (enchantmentKey == Enchantments.POWER) {
-                return 6;
-            }
-        } else {
-            if (enchantmentKey == Enchantments.PROTECTION) {
-                return 4;
-            }
-            if (enchantmentKey == Enchantments.SHARPNESS) {
-                return 5;
-            }
-            if (enchantmentKey == Enchantments.POWER) {
-                return 5;
+                    if ((key == Enchantments.SHARPNESS && level >= 6) || (key == Enchantments.PROTECTION && level >= 5) || (key == Enchantments.POWER && level >= 6)) {
+                        this.output.setStack(0, ItemStack.EMPTY);
+                        this.levelCost.set(0);
+                        requiresNetherite = true;
+                        this.sendContentUpdates();
+                        return;
+                    }
+                }
             }
         }
-
-        return original.call(enchantment);
+        requiresNetherite = false;
     }
 
     @Inject(method = "canTakeOutput", at = @At("HEAD"), cancellable = true)
@@ -122,5 +116,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     @ModifyReturnValue(method = "getLevelCost", at = @At("RETURN"))
     private int getLevelCost(int original) {
         return isNetherite ? Math.max(0, original/2) : original;
+    }
+
+    @Override
+    public boolean titanfabric$requiresNetherite() {
+        return requiresNetherite;
     }
 }

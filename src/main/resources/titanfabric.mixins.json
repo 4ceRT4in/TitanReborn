@@ -38,6 +38,7 @@
   "client": [
     "client.AbstractClientPlayerEntityMixin",
     "client.AbstractInventoryScreenMixin",
+    "client.AnvilScreenMixin",
     "client.ArmorFeatureRendererMixin",
     "client.ArrowEntityRendererMixin",
     "client.BackgroundRendererMixin",

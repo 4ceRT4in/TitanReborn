@@ -23,18 +23,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ParachuteFeatureRenderer<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
-    private static final Map<String, Identifier> PARACHUTE_TEXTURES = new HashMap<>();
+    private static final Map<String, Identifier> PARACHUTE_TEXTURES = createParachuteTextures();
 
-    static {
+    private static Map<String, Identifier> createParachuteTextures() {
+        Map<String, Identifier> textures = new HashMap<>();
         for (DyeColor color : DyeColor.values()) {
-            PARACHUTE_TEXTURES.put(color.getName(), TitanFabric.getId("textures/entity/parachute/parachute_" + color + ".png"));
+            textures.put(color.getName(), TitanFabric.getId("textures/entity/parachute/parachute_" + color + ".png"));
         }
+        return Map.copyOf(textures);
     }
-    public static ParachuteFeatureModel parachuteModel;
+
+    private final ParachuteFeatureModel parachuteModel;
 
     public ParachuteFeatureRenderer(FeatureRendererContext<T, M> context, EntityModelLoader loader) {
         super(context);
-        parachuteModel = new ParachuteFeatureModel(ParachuteFeatureModel.getModelData().createModel());
+        this.parachuteModel = new ParachuteFeatureModel(ParachuteFeatureModel.getModelData().createModel());
     }
 
     @Override
