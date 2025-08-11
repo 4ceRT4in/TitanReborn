@@ -1,5 +1,13 @@
 {
   "item.minecraft.smithing_template.netherite_upgrade.applies_to": "Ember & Diamond Equipment",
   "item.minecraft.netherite_sword": "§8Netherite Sword",
-  "item.minecraft.diamond_sword": "§bDiamond Sword"
+  "item.minecraft.diamond_sword": "§bDiamond Sword",
+  "item.minecraft.diamond_helmet": "§bDiamond Helmet",
+  "item.minecraft.diamond_chestplate": "§bDiamond Chestplate",
+  "item.minecraft.diamond_leggings": "§bDiamond Leggings",
+  "item.minecraft.diamond_boots": "§bDiamond Boots",
+  "item.minecraft.netherite_helmet": "§8Netherite Helmet",
+  "item.minecraft.netherite_chestplate": "§8Netherite Chestplate",
+  "item.minecraft.netherite_leggings": "§8Netherite Leggings",
+  "item.minecraft.netherite_boots": "§8Netherite Boots"
 }

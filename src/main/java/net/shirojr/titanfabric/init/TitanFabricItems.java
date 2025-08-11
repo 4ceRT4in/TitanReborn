@@ -158,10 +158,10 @@ public interface TitanFabricItems {
             new FlintAndEmberItem(new Item.Settings().fireproof().maxCount(1).maxDamage(64)));
 
     EssenceItem ESSENCE = register("essence", new EssenceItem(
-            new Item.Settings().maxCount(64)));
+            new Item.Settings().maxCount(16)));
 
     Item SWORD_HANDLE = register("sword_handle",
-            new Item(new Item.Settings().maxCount(64)));
+            new Item(new Item.Settings().maxCount(16)));
     Item DIAMOND_APPLE = register("diamond_apple",
             new Item(new Item.Settings().maxCount(16)
                     .food((new FoodComponent.Builder()).nutrition(4).saturationModifier(1.2f).alwaysEdible()

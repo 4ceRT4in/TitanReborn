@@ -12,6 +12,7 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
@@ -113,6 +114,9 @@ public class BackPackItem extends Item {
         super.appendTooltip(stack, context, tooltip, type);
         if(getBackpackType() == Type.POTION) {
             TitanFabricDyeProviders.applyExtendedTooltip(tooltip,"tooltip.titanfabric.potionBundle");
+            tooltip.add(Text.empty());
+            tooltip.add(Text.translatable("item.modifiers.offhand").formatted(Formatting.GRAY));
+            TitanFabricDyeProviders.applyExtendedTooltip(tooltip,"tooltip.titanfabric.potionBundle2");
         }
         TitanFabricDyeProviders.applyColorTooltip(tooltip, stack);
     }

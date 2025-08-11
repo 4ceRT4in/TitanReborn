@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Mixin(Item.class)
@@ -29,6 +28,9 @@ public class ItemMixin {
         if(stack.getItem() instanceof ArmorItem) {
             if (stack.getItem() == Items.NETHERITE_HELMET || stack.getItem() == Items.NETHERITE_CHESTPLATE || stack.getItem() == Items.NETHERITE_LEGGINGS || stack.getItem() == Items.NETHERITE_BOOTS) {
                 tooltip.add(Text.translatable("tooltip.titanfabric.netherite_effect"));
+            }
+            if (stack.getItem() == Items.DIAMOND_HELMET || stack.getItem() == Items.DIAMOND_CHESTPLATE || stack.getItem() == Items.DIAMOND_LEGGINGS || stack.getItem() == Items.DIAMOND_BOOTS) {
+                tooltip.add(Text.translatable("tooltip.titanfabric.diamond_armor"));
             }
             if (ArmorPlatingHelper.hasArmorPlating(stack)) {
                 ArmorPlateType plateType = ArmorPlatingHelper.getArmorPlatingType(stack);
@@ -58,9 +60,6 @@ public class ItemMixin {
             if(stack.getItem() == Items.DIAMOND_SWORD) {
                 tooltip.add(Text.translatable("tooltip.titanfabric.diamond_sword"));
             }
-        }
-        if(Arrays.asList(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS).contains(stack.getItem())) {
-            tooltip.add(Text.translatable("tooltip.titanfabric.diamond_armor"));
         }
     }
 }

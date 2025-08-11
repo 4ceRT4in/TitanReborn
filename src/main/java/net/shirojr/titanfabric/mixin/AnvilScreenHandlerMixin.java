@@ -4,15 +4,10 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.*;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -20,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.access.AnvilScreenHandlerAccessor;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
+import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -31,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @Mixin(AnvilScreenHandler.class)
@@ -63,22 +58,11 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
         if (!isNetherite) {
             ItemStack result = this.output.getStack(0);
             if (!result.isEmpty() && EnchantmentHelper.canHaveEnchantments(result)) {
-                ItemEnchantmentsComponent enchantments = EnchantmentHelper.getEnchantments(result);
-
-                for (RegistryEntry<Enchantment> enchantmentEntry : enchantments.getEnchantments()) {
-                    Optional<RegistryKey<Enchantment>> keyOptional = enchantmentEntry.getKey();
-                    if (keyOptional.isEmpty()) continue;
-
-                    RegistryKey<Enchantment> key = keyOptional.get();
-                    int level = enchantments.getLevel(enchantmentEntry);
-
-                    if ((key == Enchantments.SHARPNESS && level >= 6) || (key == Enchantments.PROTECTION && level >= 5) || (key == Enchantments.POWER && level >= 6)) {
-                        this.output.setStack(0, ItemStack.EMPTY);
-                        this.levelCost.set(0);
-                        requiresNetherite = true;
-                        this.sendContentUpdates();
-                        return;
-                    }
+                if(OverpoweredEnchantmentsHelper.isOverpowered(result)) {
+                    this.output.setStack(0, ItemStack.EMPTY);
+                    this.levelCost.set(0);
+                    requiresNetherite = true;
+                    this.sendContentUpdates();
                 }
             }
         }

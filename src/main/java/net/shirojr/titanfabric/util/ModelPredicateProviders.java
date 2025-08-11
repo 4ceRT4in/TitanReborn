@@ -4,13 +4,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.component.type.PotionContentsComponent;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
@@ -20,6 +17,7 @@ import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.items.MultiBowHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
@@ -243,24 +241,8 @@ public class ModelPredicateProviders {
     private static void registerOverpoweredEnchantedBookPredicate(Item item) {
         ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("overpowered"),
                 (stack, world, entity, seed) -> {
-                    if (stack.getItem() instanceof EnchantedBookItem && world != null) {
-                        ItemEnchantmentsComponent enchantments = stack.getOrDefault(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
-
-                        var protectionEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.PROTECTION);
-                        var sharpnessEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.SHARPNESS);
-                        var powerEntry = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.POWER);
-
-                        if (protectionEntry.isPresent() && enchantments.getLevel(protectionEntry.get()) >= 5) {
-                            return 1.0f;
-                        }
-
-                        if (sharpnessEntry.isPresent() && enchantments.getLevel(sharpnessEntry.get()) >= 6) {
-                            return 1.0f;
-                        }
-
-                        if (powerEntry.isPresent() && enchantments.getLevel(powerEntry.get()) >= 6) {
-                            return 1.0f;
-                        }
+                    if(OverpoweredEnchantmentsHelper.isOverpoweredEnchantmentBook(stack)) {
+                        return 1.0f;
                     }
                     return 0.0f;
                 });
