@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.access.AnvilScreenHandlerAccessor;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
+import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +37,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
     private Property levelCost;
     @Unique private boolean isNetherite;
     @Unique private boolean requiresNetherite;
+    @Unique private boolean hasPlating;
 
     public AnvilScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(type, syncId, playerInventory, context);
@@ -45,6 +47,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
     private void cacheAnvilType(CallbackInfo ci) {
         context.run((world, pos) -> isNetherite = world.getBlockState(pos).isOf(TitanFabricBlocks.NETHERITE_ANVIL));
         requiresNetherite = false;
+        hasPlating = false;
     }
 
     @ModifyExpressionValue(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z", ordinal = 1))
@@ -55,8 +58,15 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
 
     @Inject(method = "updateResult", at = @At("RETURN"))
     private void updateResultReturn(CallbackInfo ci) {
+        ItemStack result = this.output.getStack(0);
+        if (!result.isEmpty() && ArmorPlatingHelper.hasArmorPlating(result)) {
+            this.output.setStack(0, ItemStack.EMPTY);
+            this.levelCost.set(0);
+            hasPlating = true;
+            this.sendContentUpdates();
+            return;
+        }
         if (!isNetherite) {
-            ItemStack result = this.output.getStack(0);
             if (!result.isEmpty() && EnchantmentHelper.canHaveEnchantments(result)) {
                 if(OverpoweredEnchantmentsHelper.isOverpowered(result)) {
                     this.output.setStack(0, ItemStack.EMPTY);
@@ -67,6 +77,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
                 }
             }
         }
+        hasPlating = false;
         requiresNetherite = false;
     }
 
@@ -106,5 +117,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
     @Override
     public boolean titanfabric$requiresNetherite() {
         return requiresNetherite;
+    }
+
+    @Override
+    public boolean titanfabric$hasPlating() {
+        return hasPlating;
     }
 }
