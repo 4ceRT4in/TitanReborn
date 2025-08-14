@@ -1,4 +1,5 @@
-<img width="2048" height="456" alt="Image" src="https://github.com/user-attachments/assets/f998c2df-1f51-4451-af3d-5a88afaa83f5" />
+
+<p align="center"><img src="header.png" alt="Logo" width="2048"></p>
 
 <h1 align="center">
   	<a href="https://github.com/4ceRT4in/TitanReborn/blob/master/LICENSE">
