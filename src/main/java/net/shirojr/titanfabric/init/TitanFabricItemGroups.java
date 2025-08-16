@@ -20,7 +20,10 @@ import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.VariationHolder;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
+import java.util.HashSet;
 import java.util.function.Predicate;
 
 public class TitanFabricItemGroups {
@@ -39,7 +42,7 @@ public class TitanFabricItemGroups {
                     TitanFabricItems.CITRIN_HELMET, TitanFabricItems.CITRIN_CHESTPLATE, TitanFabricItems.CITRIN_LEGGINGS, TitanFabricItems.CITRIN_BOOTS,
                     TitanFabricItems.EMBER_HELMET, TitanFabricItems.EMBER_CHESTPLATE, TitanFabricItems.EMBER_LEGGINGS, TitanFabricItems.EMBER_BOOTS,
                     TitanFabricItems.LEGEND_HELMET, TitanFabricItems.LEGEND_CHESTPLATE, TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS,
-                    TitanFabricItems.CITRIN_ARMOR_PLATING, TitanFabricItems.DIAMOND_ARMOR_PLATING, TitanFabricItems.EMBER_ARMOR_PLATING, TitanFabricItems.NETHERITE_ARMOR_PLATING, TitanFabricItems.LEGEND_ARMOR_PLATING,
+                    TitanFabricItems.CITRIN_ARMOR_PLATING, TitanFabricItems.EMBER_ARMOR_PLATING, TitanFabricItems.DIAMOND_ARMOR_PLATING, TitanFabricItems.NETHERITE_ARMOR_PLATING, TitanFabricItems.LEGEND_ARMOR_PLATING,
                     TitanFabricItems.DIAMOND_SHIELD, TitanFabricItems.NETHERITE_SHIELD, TitanFabricItems.LEGEND_SHIELD,
                     TitanFabricItems.MULTI_BOW_1, TitanFabricItems.MULTI_BOW_2, TitanFabricItems.MULTI_BOW_3,
                     TitanFabricItems.LEGEND_BOW, TitanFabricItems.TITAN_CROSSBOW
@@ -51,9 +54,9 @@ public class TitanFabricItemGroups {
                     TitanFabricItems.SWORD_HANDLE,
                     TitanFabricItems.CITRIN_SWORD, TitanFabricItems.CITRIN_GREATSWORD,
                     TitanFabricItems.EMBER_SWORD, TitanFabricItems.EMBER_GREATSWORD,
-                    Items.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD,
+                    TitanFabricItems.DIAMOND_GREATSWORD,
                     TitanFabricItems.LEGEND_SWORD, TitanFabricItems.LEGEND_GREATSWORD,
-                    Items.NETHERITE_SWORD, TitanFabricItems.NETHERITE_GREATSWORD
+                    TitanFabricItems.NETHERITE_GREATSWORD
             );
 
             addEffectSwords(entries, CitrinSwordItem.class, SwordType.DEFAULT);
@@ -101,13 +104,34 @@ public class TitanFabricItemGroups {
         }
     }
 
+    private static void addVarIgnoreInnate(FabricItemGroupEntries entries, ItemConvertible item) {
+        if (item instanceof VariationHolder holder) {
+            for (ItemStack st : holder.getVariations()) {
+                ItemStack copy = st.copy();
+                var data = copy.contains(TitanFabricDataComponents.WEAPON_EFFECTS) ? copy.get(TitanFabricDataComponents.WEAPON_EFFECTS) : null;
+                if (data != null && !data.isEmpty()) {
+                    HashSet<WeaponEffectData> filtered = new HashSet<>();
+                    for (WeaponEffectData d : data) if (d.type() == WeaponEffectType.ADDITIONAL_EFFECT) filtered.add(d);
+                    if (filtered.isEmpty()) {
+                        copy.remove(TitanFabricDataComponents.WEAPON_EFFECTS);
+                    } else {
+                        copy.set(TitanFabricDataComponents.WEAPON_EFFECTS, filtered);
+                    }
+                }
+                entries.add(copy);
+            }
+        } else {
+            entries.add(new ItemStack(item));
+        }
+    }
+
     private static void addEffectSwords(FabricItemGroupEntries entries, Class<? extends SwordItem> cls, SwordType type) {
         addEffectSwords(entries, s -> cls.isInstance(s) && s instanceof TitanFabricSwordItem tf && tf.getSwordType() == type);
     }
 
     private static void addEffectSwords(FabricItemGroupEntries entries, Predicate<SwordItem> filter) {
         for (SwordItem s : TitanFabricItems.EFFECT_SWORDS) {
-            if (filter.test(s)) addVar(entries, s);
+            if (filter.test(s)) addVarIgnoreInnate(entries, s);
         }
     }
 

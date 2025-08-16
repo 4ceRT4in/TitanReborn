@@ -24,10 +24,6 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     private final WeaponEffect baseEffect;
     private final SwordType swordType;
 
-    public SwordType getSwordType() {
-        return this.swordType;
-    }
-
     public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage,
                                 float attackSpeed, SwordType swordType, WeaponEffect baseEffect, Item.Settings settings) {
         super(toolMaterial, settings.attributeModifiers(SwordItem.createAttributeModifiers(toolMaterial, attackDamage, attackSpeed)));
@@ -78,5 +74,9 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
         }
 
         return super.postHit(stack, target, attacker);
+    }
+
+    public SwordType getSwordType() {
+        return this.swordType;
     }
 }
