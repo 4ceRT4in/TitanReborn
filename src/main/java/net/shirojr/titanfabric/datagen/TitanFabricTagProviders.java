@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.data.server.tag.vanilla.VanillaItemTagProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
@@ -60,7 +59,7 @@ public class TitanFabricTagProviders {
                     .add(TitanFabricItems.DIAMOND_ARMOR_PLATING)
                     .add(TitanFabricItems.NETHERITE_ARMOR_PLATING)
                     .setReplace(false);
-            getOrCreateTagBuilder(TitanFabricTags.Items.PLATABLE_ARMOR)
+            getOrCreateTagBuilder(TitanFabricTags.Items.PLATEABLE_ARMOR)
                     .add(TitanFabricItems.CITRIN_HELMET)
                     .add(TitanFabricItems.CITRIN_CHESTPLATE)
                     .add(TitanFabricItems.CITRIN_LEGGINGS)
@@ -82,7 +81,7 @@ public class TitanFabricTagProviders {
                     .add(Items.DIAMOND_LEGGINGS)
                     .add(Items.DIAMOND_BOOTS)
                     .setReplace(false);
-            getOrCreateTagBuilder(TitanFabricTags.Items.DYE)
+            getOrCreateTagBuilder(TitanFabricTags.Items.DYES)
                     .add(Items.RED_DYE)
                     .add(Items.LIME_DYE)
                     .add(Items.BLACK_DYE)

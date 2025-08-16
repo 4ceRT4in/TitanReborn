@@ -18,12 +18,15 @@ import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 
 public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCrafting, Anvilable {
     protected final boolean canHaveWeaponEffects;
     private final WeaponEffect baseEffect;
     private final SwordType swordType;
+
+    public SwordType getSwordType() {
+        return this.swordType;
+    }
 
     public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage,
                                 float attackSpeed, SwordType swordType, WeaponEffect baseEffect, Item.Settings settings) {

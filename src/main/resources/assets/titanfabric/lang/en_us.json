@@ -3,13 +3,13 @@
   "effect.titanfabric.indestructibility": "Indestructible",
   "effect.titanfabric.frostburn": "Frostburn",
   "effect.titanfabric.immunity": "Immunity",
-  "item.minecraft.potion.effect.indestructibility_potion": "Indestructibility Potion",
+  "item.minecraft.potion.effect.indestructibility_potion": "Potion of Indestructibility",
   "item.minecraft.splash_potion.effect.indestructibility_potion": "Splash Potion of Indestructibility",
   "item.minecraft.lingering_potion.effect.indestructibility_potion": "Lingering Potion of Indestructibility",
-  "item.minecraft.potion.effect.frostburn_potion": "Frostburn Potion",
+  "item.minecraft.potion.effect.frostburn_potion": "Potion of Frostburn",
   "item.minecraft.splash_potion.effect.frostburn_potion": "Splash Potion of Frostburn",
   "item.minecraft.lingering_potion.effect.frostburn_potion": "Lingering Potion of Frostburn",
-  "item.minecraft.potion.effect.immunity_potion": "Immunity Potion",
+  "item.minecraft.potion.effect.immunity_potion": "Potion of Immunity",
   "item.minecraft.splash_potion.effect.immunity_potion": "Splash Potion of Immunity",
   "item.minecraft.lingering_potion.effect.immunity_potion": "Lingering Potion of Immunity",
 
@@ -91,13 +91,13 @@
   "item.minecraft.netherite_leggings": "§8Netherite Leggings",
   "item.minecraft.netherite_boots": "§8Netherite Boots",
 
-  "item.minecraft.potion.effect.long_indestructibility_potion": "Indestructibility Potion",
+  "item.minecraft.potion.effect.long_indestructibility_potion": "Potion of Indestructibility",
   "item.minecraft.splash_potion.effect.long_indestructibility_potion": "Splash Potion of Indestructibility",
   "item.minecraft.lingering_potion.effect.long_indestructibility_potion": "Lingering Potion of Indestructibility",
-  "item.minecraft.potion.effect.long_frostburn_potion": "Frostburn Potion",
+  "item.minecraft.potion.effect.long_frostburn_potion": "Potion of Frostburn",
   "item.minecraft.splash_potion.effect.long_frostburn_potion": "Splash Potion of Frostburn",
   "item.minecraft.lingering_potion.effect.long_frostburn_potion": "Lingering Potion of Frostburn",
-  "item.minecraft.potion.effect.long_immunity_potion": "Immunity Potion",
+  "item.minecraft.potion.effect.long_immunity_potion": "Potion of Immunity",
   "item.minecraft.splash_potion.effect.long_immunity_potion": "Splash Potion of Immunity",
   "item.minecraft.lingering_potion.effect.long_immunity_potion": "Lingering Potion of Immunity",
 
@@ -203,11 +203,9 @@
 
   "container.titanfabric.diamond_furnace": "§bDiamond Furnace",
 
-  "itemGroup.titanfabric.titan": "§3Titan Reborn",
+  "itemGroup.titanfabric.titan": "§bTitan Reborn",
   "keys.titanfabric.misc": "Titan Reborn",
   "key.titanfabric.arrow.selection": "Change Arrow Selection For Bows",
-
-  "sounds.titanfabric.invincible_swoosh_1": "Epic Sound!",
 
   "overlay.titanfabric.netherite.resistance": "Active",
 
@@ -224,6 +222,9 @@
   "tag.item.titanfabric.default_selectable_crossbow_arrows": "Selectable Crossbow Arrows",
   "tag.item.titanfabric.improved_diamond_furnace_smelting_items": "Double Output Items in High Heat Furnaces",
   "tag.item.titanfabric.high_heat_smelting_only_items": "Only smeltable in High Heat Furnaces",
+  "tag.item.titanfabric.plateable_armor": "Armor which is plateable",
+  "tag.item.titanfabric.dye": "Dyes for coloring Backpacks and Parachutes",
+  "tag.item.titanfabric.armor_plating": "All Armor Plating Items",
   "message.requires_netherite_anvil": "§cUse Netherite Anvil",
   "message.has_plating_anvil": "§cRemove Plating"
 }

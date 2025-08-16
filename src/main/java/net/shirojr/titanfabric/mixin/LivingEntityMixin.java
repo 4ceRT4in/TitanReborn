@@ -160,7 +160,7 @@ public abstract class LivingEntityMixin {
             return original.call(instance);
         }
         instance.onLanding();
-        return 0.00175;
+        return 0.002;
     }
 
     @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
