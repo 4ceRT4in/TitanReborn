@@ -6,7 +6,7 @@ import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.GameRules;
-import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
+import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

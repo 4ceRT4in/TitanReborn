@@ -5,7 +5,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.block.stats.TitanFabricStats;
 import net.shirojr.titanfabric.config.TitanConfig;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
-import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
+import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.*;
 import net.shirojr.titanfabric.network.TitanFabricC2SNetworking;
 import net.shirojr.titanfabric.util.LoggerUtil;
@@ -36,7 +36,8 @@ public class TitanFabric implements ModInitializer {
         TitanFabricPotions.initialize();
         TitanFabricWorldGen.generateWorldGen();
         TitanFabricC2SNetworking.initialize();
-        TitanFabricGamerules.register();
+        TitanFabricGamerules.initialize();
+        TitanFabricDamageTypes.initialize();
         TitanFabricStats.register();
         TitanFabricEvents.registerEvents();
 

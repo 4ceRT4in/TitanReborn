@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.util;
+package net.shirojr.titanfabric.init;
 
 
 import net.minecraft.block.Block;
@@ -27,5 +27,6 @@ public class TitanFabricTags {
 
     public static class Blocks {
         public static final TagKey<Block> HIGH_HEAT_FURNACES = createTag("high_heat_furnaces", RegistryKeys.BLOCK);
+        public static final TagKey<Block> HOT_BLOCKS = createTag("hot", RegistryKeys.BLOCK);
     }
 }

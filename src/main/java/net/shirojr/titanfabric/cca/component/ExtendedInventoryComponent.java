@@ -5,13 +5,19 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.TitanFabricComponents;
 import org.ladysnake.cca.api.v3.component.Component;
 
 import java.util.function.Consumer;
 
 public interface ExtendedInventoryComponent extends Component {
+    Identifier IDENTIFIER_GLOBAL = TitanFabric.getId("extended_inventory_global");
+    Identifier IDENTIFIER_TEAM = TitanFabric.getId("extended_inventory_team");
+    Identifier IDENTIFIER_ENTITY = TitanFabric.getId("extended_inventory_entity");
+
     /**
      * Provides access to the player Team's Extended Inventory or their private Extended Inventory, if they don't belong
      * to any Team. For safety reasons, this method should be preferred over the others (excluding the global option),

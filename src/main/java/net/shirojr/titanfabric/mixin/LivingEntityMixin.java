@@ -21,8 +21,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
+import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
-import net.shirojr.titanfabric.gamerule.TitanFabricGamerules;
+import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
@@ -59,7 +60,7 @@ public abstract class LivingEntityMixin {
     private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
         StatusEffect statusEffect = effect.getEffectType().value();
-        if(statusEffect.getCategory() != StatusEffectCategory.HARMFUL) return;
+        if (statusEffect.getCategory() != StatusEffectCategory.HARMFUL) return;
         ImmunityEffect.checkAndBlockNegativeEffect(self, effect);
         if (ImmunityEffect.getBlockedEffects(self.getUuid()) == statusEffect) {
             self.removeStatusEffect(effect.getEffectType());
@@ -76,7 +77,7 @@ public abstract class LivingEntityMixin {
                 DamageSource damageSource = self.getDamageSources().generic();
                 //LoggerUtil.devLogger("works");
                 float k = attacker.getKnockbackAgainst(self, damageSource) + (1.25F);
-                attacker.takeKnockback((double) (k * 0.5F), (double) MathHelper.sin(self.getYaw() * ((float) Math.PI / 180F)), (double) (-MathHelper.cos(self.getYaw() * ((float) Math.PI / 180F))));
+                attacker.takeKnockback(k * 0.5F, MathHelper.sin(self.getYaw() * ((float) Math.PI / 180F)), -MathHelper.cos(self.getYaw() * ((float) Math.PI / 180F)));
             }
         }
     }
@@ -297,5 +298,14 @@ public abstract class LivingEntityMixin {
     @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(floatValue = 25.0F))
     private float modifyAppliedDamageFloat25(float original) {
         return 10.0F;
+    }
+
+    @WrapOperation(method = "heal", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setHealth(F)V"))
+    private void healWithFrostburnLimit(LivingEntity instance, float health, Operation<Void> original) {
+        FrostburnComponent frostburnComponent = FrostburnComponent.get(instance);
+        if (frostburnComponent.getFrostburn() > 0) {
+            health = Math.min(health, frostburnComponent.getMissingHealth());
+        }
+        original.call(instance, health);
     }
 }

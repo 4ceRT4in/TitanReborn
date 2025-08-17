@@ -3,7 +3,9 @@ package net.shirojr.titanfabric;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
+import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.cca.implementation.EntityExtendedInventoryImpl;
+import net.shirojr.titanfabric.cca.implementation.FrostburnComponentImpl;
 import net.shirojr.titanfabric.cca.implementation.GlobalExtendedInventoryImpl;
 import net.shirojr.titanfabric.cca.implementation.TeamExtendedInventoryImpl;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
@@ -70,11 +72,14 @@ import org.ladysnake.cca.api.v3.scoreboard.ScoreboardComponentInitializer;
 public class TitanFabricComponents implements EntityComponentInitializer, ScoreboardComponentInitializer {
 
     public static final ComponentKey<ExtendedInventoryComponent> EXTENDED_INVENTORY_GLOBAL =
-            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.GLOBAL, ExtendedInventoryComponent.class);
+            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.IDENTIFIER_GLOBAL, ExtendedInventoryComponent.class);
     public static final ComponentKey<ExtendedInventoryComponent> EXTENDED_INVENTORY_TEAM =
-            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.TEAM, ExtendedInventoryComponent.class);
+            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.IDENTIFIER_TEAM, ExtendedInventoryComponent.class);
     public static final ComponentKey<ExtendedInventoryComponent> EXTENDED_INVENTORY_ENTITY =
-            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.ENTITY, ExtendedInventoryComponent.class);
+            ComponentRegistry.getOrCreate(ExtendedInventoryComponent.IDENTIFIER_ENTITY, ExtendedInventoryComponent.class);
+
+    public static final ComponentKey<FrostburnComponent> FROSTBURN =
+            ComponentRegistry.getOrCreate(FrostburnComponent.IDENTIFIER, FrostburnComponent.class);
 
 
     @Override
@@ -86,5 +91,6 @@ public class TitanFabricComponents implements EntityComponentInitializer, Scoreb
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(LivingEntity.class, EXTENDED_INVENTORY_ENTITY, EntityExtendedInventoryImpl::new);
+        registry.registerFor(LivingEntity.class, FROSTBURN, FrostburnComponentImpl::new);
     }
 }

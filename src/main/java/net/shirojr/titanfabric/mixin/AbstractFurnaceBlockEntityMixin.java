@@ -22,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.block.entity.DiamondFurnaceBlockEntity;
-import net.shirojr.titanfabric.util.TitanFabricTags;
+import net.shirojr.titanfabric.init.TitanFabricTags;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,32 +38,35 @@ public abstract class AbstractFurnaceBlockEntityMixin implements SidedInventory 
     @Shadow
     protected DefaultedList<ItemStack> inventory;
 
-    @Unique private static final int[] EXTENDED_BOTTOM_SLOTS = new int[]{2, 1, 3};
+    @Unique
+    private static final int[] EXTENDED_BOTTOM_SLOTS = new int[]{2, 1, 3};
 
     @Inject(method = "<init>*", at = @At("RETURN"))
     private void titanfabric$initializeExtendedInventory(BlockEntityType blockEntityType, BlockPos pos, BlockState state, RecipeType recipeType, CallbackInfo ci) {
-        if ((Object)this instanceof DiamondFurnaceBlockEntity) {
+        if ((Object) this instanceof DiamondFurnaceBlockEntity) {
             this.inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
         }
     }
 
     @Inject(method = "getAvailableSlots", at = @At("HEAD"), cancellable = true)
     private void titanfabric$getModifiedAvailableSlots(Direction side, CallbackInfoReturnable<int[]> cir) {
-        if (side == Direction.DOWN && (Object)this instanceof DiamondFurnaceBlockEntity) {
+        if (!((AbstractFurnaceBlockEntity) (Object) this instanceof DiamondFurnaceBlockEntity)) return;
+        if (side == Direction.DOWN) {
             cir.setReturnValue(EXTENDED_BOTTOM_SLOTS);
         }
     }
 
     @Inject(method = "isValid", at = @At("HEAD"), cancellable = true)
     private void titanfabric$isValidForNewSlot(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (slot == 3 && (Object)this instanceof DiamondFurnaceBlockEntity) {
+        if (!((AbstractFurnaceBlockEntity) (Object) this instanceof DiamondFurnaceBlockEntity)) return;
+        if (slot == 3) {
             cir.setReturnValue(false);
         }
     }
 
     @Inject(method = "readNbt", at = @At("HEAD"))
     private void titanfabric$readNbtWithExtraSlot(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup, CallbackInfo ci) {
-        if ((Object)this instanceof DiamondFurnaceBlockEntity) {
+        if ((Object) this instanceof DiamondFurnaceBlockEntity) {
             this.inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
         }
     }
@@ -194,9 +197,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements SidedInventory 
 
         if (ItemStack.areItemsAndComponentsEqual(outputSlotStack2, recipeOutputStack)) {
             int outputSlot2Count = outputSlotStack2.getCount();
-            if (outputSlot2Count < inputSlotCount && outputSlot2Count + changeAmount <= outputSlotStack2.getMaxCount()) {
-                return true;
-            }
+            return outputSlot2Count < inputSlotCount && outputSlot2Count + changeAmount <= outputSlotStack2.getMaxCount();
         }
         return false;
     }

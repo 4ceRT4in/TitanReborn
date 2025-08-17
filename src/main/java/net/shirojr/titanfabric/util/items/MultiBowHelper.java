@@ -9,7 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
-import net.shirojr.titanfabric.util.TitanFabricTags;
+import net.shirojr.titanfabric.init.TitanFabricTags;
 
 import java.util.function.Predicate;
 

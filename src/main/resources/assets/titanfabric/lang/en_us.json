@@ -222,6 +222,11 @@
   "tag.item.titanfabric.default_selectable_crossbow_arrows": "Selectable Crossbow Arrows",
   "tag.item.titanfabric.improved_diamond_furnace_smelting_items": "Double Output Items in High Heat Furnaces",
   "tag.item.titanfabric.high_heat_smelting_only_items": "Only smeltable in High Heat Furnaces",
+
+  "death.attack.linked_damage": "%s froze to death",
+  "death.attack.linked_damage.item": "%s froze to death by %s using %s",
+  "death.attack.linked_damage.player": "%s was frozen to death by %s",
+
   "tag.item.titanfabric.plateable_armor": "Armor which is plateable",
   "tag.item.titanfabric.dye": "Dyes for coloring Backpacks and Parachutes",
   "tag.item.titanfabric.armor_plating": "All Armor Plating Items",

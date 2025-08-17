@@ -53,7 +53,8 @@
     "cardinal-components": [
       "titanfabric:extended_inventory_entity",
       "titanfabric:extended_inventory_global",
-      "titanfabric:extended_inventory_team"
+      "titanfabric:extended_inventory_team",
+      "titanfabric:frostburn"
     ]
   }
 }

@@ -8,7 +8,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.util.TitanFabricTags;
+import net.shirojr.titanfabric.init.TitanFabricTags;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
 import org.spongepowered.asm.mixin.Mixin;

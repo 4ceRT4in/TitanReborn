@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.registry.RegistryBuilder;
 import net.minecraft.registry.RegistryKeys;
 import net.shirojr.titanfabric.datagen.*;
+import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.world.feature.TitanFabricConfiguredFeatures;
 import net.shirojr.titanfabric.world.feature.TitanFabricPlacedFeatures;
 
@@ -16,7 +17,7 @@ public class TitanFabricDatagen implements DataGeneratorEntrypoint {
         pack.addProvider(TitanFabricModelProvider::new);
         pack.addProvider(TitanFabricRecipeProvider::new);
         pack.addProvider(TitanFabricBlockLootTableProvider::new);
-        pack.addProvider(TitanFabricRegistryDataGenerator::new);
+        pack.addProvider(TitanFabricDynamicRegistriesDataGenerator::new);
         TitanFabricTagProviders.addProviders(pack);
     }
 
@@ -26,5 +27,6 @@ public class TitanFabricDatagen implements DataGeneratorEntrypoint {
 
         registryBuilder.addRegistry(RegistryKeys.CONFIGURED_FEATURE, TitanFabricConfiguredFeatures::bootstrap);
         registryBuilder.addRegistry(RegistryKeys.PLACED_FEATURE, TitanFabricPlacedFeatures::bootstrap);
+        registryBuilder.addRegistry(RegistryKeys.DAMAGE_TYPE, TitanFabricDamageTypes::bootstrap);
     }
 }

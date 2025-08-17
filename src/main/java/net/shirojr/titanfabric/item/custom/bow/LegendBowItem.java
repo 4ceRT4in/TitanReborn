@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
-import net.shirojr.titanfabric.util.TitanFabricTags;
+import net.shirojr.titanfabric.init.TitanFabricTags;
 import net.shirojr.titanfabric.util.items.Anvilable;
 
 import java.util.List;
