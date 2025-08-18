@@ -1,4 +1,4 @@
-package net.shirojr.titanfabric.event.custom;
+package net.shirojr.titanfabric.render.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -9,14 +9,11 @@ import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 
-public class HudRenderEvent {
+public class FrostburnHudRenderer implements HudRenderCallback {
     public static final int SPRITE_SIZE = 9;
 
-    public static void register() {
-        HudRenderCallback.EVENT.register(HudRenderEvent::render);
-    }
-
-    private static void render(DrawContext context, RenderTickCounter tick) {
+    @Override
+    public void onHudRender(DrawContext context, RenderTickCounter tickCounter) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
         FrostburnComponent frostburnComponent = FrostburnComponent.get(player);

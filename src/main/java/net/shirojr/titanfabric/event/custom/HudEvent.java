@@ -1,41 +1,12 @@
 package net.shirojr.titanfabric.event.custom;
 
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.item.ItemStack;
-import net.shirojr.titanfabric.util.items.SelectableArrow;
+import net.shirojr.titanfabric.render.renderer.ArrowSelectionHudRenderer;
+import net.shirojr.titanfabric.render.renderer.FrostburnHudRenderer;
 
 public class HudEvent {
     public static void register() {
-        HudRenderCallback.EVENT.register(HudEvent::renderArrowSelection);
-    }
-
-    private static void renderArrowSelection(DrawContext context, RenderTickCounter tickCounter) {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null || player.isSpectator()) return;
-        SelectableArrow selectionHandler;
-        ItemStack weaponStack;
-        if (player.getMainHandStack().getItem() instanceof SelectableArrow selectableArrow) {
-            selectionHandler = selectableArrow;
-            weaponStack = player.getMainHandStack();
-        } else if (player.getOffHandStack().getItem() instanceof SelectableArrow selectableArrow) {
-            selectionHandler = selectableArrow;
-            weaponStack = player.getOffHandStack();
-        } else {
-            return;
-        }
-        Integer selectedIndex = selectionHandler.getSelectedIndex(weaponStack);
-        if (selectedIndex == null) return;
-        ItemStack selectedArrowStack = player.getInventory().getStack(selectedIndex);
-        int x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - 118;
-        int y = MinecraftClient.getInstance().getWindow().getScaledHeight() - 19;
-        if (!player.getOffHandStack().isEmpty()) {
-            y -= 25;
-        }
-        context.drawItem(selectedArrowStack, x, y);
-        context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, selectedArrowStack, x, y);
+        HudRenderCallback.EVENT.register(new ArrowSelectionHudRenderer());
+        HudRenderCallback.EVENT.register(new FrostburnHudRenderer());
     }
 }

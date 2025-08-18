@@ -13,6 +13,5 @@ public class TitanFabricEvents {
         ParachuteFeatureRendererEventHandler.register();
         HudEvent.register();
         ToolTipComponentEvent.register();
-        HudRenderEvent.register();
     }
 }
