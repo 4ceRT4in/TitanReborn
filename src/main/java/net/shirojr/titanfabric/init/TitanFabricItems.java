@@ -105,7 +105,7 @@ public interface TitanFabricItems {
     SwordItem NETHERITE_SWORD = new SwordItem(TitanFabricToolMaterials.NETHERITE,
             new Item.Settings().fireproof().attributeModifiers(SwordItem.createAttributeModifiers(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f)));  // registered in ItemsMixin class
     TitanFabricSwordItem NETHERITE_GREATSWORD = register("netherite_greatsword",
-            new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -2.4f, SwordType.GREAT_SWORD, null, new Item.Settings().fireproof()));
+            new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -3f, SwordType.GREAT_SWORD, null, new Item.Settings().fireproof()));
 
     TitanCrossBowItem TITAN_CROSSBOW = register("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1)
             .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)

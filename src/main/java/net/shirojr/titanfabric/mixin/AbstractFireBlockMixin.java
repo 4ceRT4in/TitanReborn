@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabricClient;
+import net.shirojr.titanfabric.access.EntityAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,9 +28,14 @@ public abstract class AbstractFireBlockMixin {
             handleClientSide(soulFire, fire, entity);
         }
 
-        if (soulFire && !entity.isFireImmune() && !world.isClient) {
-            entity.setFireTicks(99999);
-            entity.setOnFireFor(99999);
+        if (!entity.isFireImmune() && !world.isClient) {
+            if(soulFire) {
+                ((EntityAccessor) entity).titanfabric$setSoulBurning(true);
+                entity.setFireTicks(99999);
+                entity.setOnFireFor(99999);
+            } else {
+                ((EntityAccessor) entity).titanfabric$setSoulBurning(false);
+            }
         }
     }
 
