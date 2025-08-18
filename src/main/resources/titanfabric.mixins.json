@@ -28,6 +28,7 @@
     "LivingEntityMixin",
     "OreFeatureMixin",
     "PlayerEntityMixin",
+    "PotionEntityMixin",
     "ServerPlayerEntityMixin",
     "SnowballEntityMixin",
     "SoulFireBlockMixin",
