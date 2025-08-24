@@ -20,10 +20,7 @@ import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.VariationHolder;
-import net.shirojr.titanfabric.util.effects.WeaponEffectData;
-import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
-import java.util.HashSet;
 import java.util.function.Predicate;
 
 public class TitanFabricItemGroups {
@@ -104,34 +101,13 @@ public class TitanFabricItemGroups {
         }
     }
 
-    private static void addVarIgnoreInnate(FabricItemGroupEntries entries, ItemConvertible item) {
-        if (item instanceof VariationHolder holder) {
-            for (ItemStack st : holder.getVariations()) {
-                ItemStack copy = st.copy();
-                var data = copy.contains(TitanFabricDataComponents.WEAPON_EFFECTS) ? copy.get(TitanFabricDataComponents.WEAPON_EFFECTS) : null;
-                if (data != null && !data.isEmpty()) {
-                    HashSet<WeaponEffectData> filtered = new HashSet<>();
-                    for (WeaponEffectData d : data) if (d.type() == WeaponEffectType.ADDITIONAL_EFFECT) filtered.add(d);
-                    if (filtered.isEmpty()) {
-                        copy.remove(TitanFabricDataComponents.WEAPON_EFFECTS);
-                    } else {
-                        copy.set(TitanFabricDataComponents.WEAPON_EFFECTS, filtered);
-                    }
-                }
-                entries.add(copy);
-            }
-        } else {
-            entries.add(new ItemStack(item));
-        }
-    }
-
     private static void addEffectSwords(FabricItemGroupEntries entries, Class<? extends SwordItem> cls, SwordType type) {
         addEffectSwords(entries, s -> cls.isInstance(s) && s instanceof TitanFabricSwordItem tf && tf.getSwordType() == type);
     }
 
     private static void addEffectSwords(FabricItemGroupEntries entries, Predicate<SwordItem> filter) {
         for (SwordItem s : TitanFabricItems.EFFECT_SWORDS) {
-            if (filter.test(s)) addVarIgnoreInnate(entries, s);
+            if (filter.test(s)) addVar(entries, s);
         }
     }
 
