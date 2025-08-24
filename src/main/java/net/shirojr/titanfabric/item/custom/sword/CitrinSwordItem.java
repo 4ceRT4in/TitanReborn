@@ -19,7 +19,6 @@ public class CitrinSwordItem extends TitanFabricSwordItem implements VariationHo
         super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, swordType, WeaponEffect.POISON, settings);
     }
 
-
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         tooltip.add(Text.translatable("tooltip.titanfabric.citrinSword"));

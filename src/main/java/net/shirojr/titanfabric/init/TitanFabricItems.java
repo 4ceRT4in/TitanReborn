@@ -31,9 +31,14 @@ import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
+import net.shirojr.titanfabric.util.effects.WeaponEffectData;
+import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public interface TitanFabricItems {
@@ -84,14 +89,17 @@ public interface TitanFabricItems {
             new LegendArmorItem(ArmorItem.Type.BOOTS, new Item.Settings(), 1.0f), LEGEND_ARMOR_ITEMS);
     //endregion
 
+    HashSet<WeaponEffectData> INNATE_POISON_COMP = new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.POISON, 1)));
+    HashSet<WeaponEffectData> INNATE_FIRE_COMP = new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.FIRE, 1)));
+
     CitrinSwordItem CITRIN_SWORD = registerEffectSword("citrin_sword",
-            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, SwordType.DEFAULT, new Item.Settings()));
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, SwordType.DEFAULT, new Item.Settings().component(TitanFabricDataComponents.WEAPON_EFFECTS, INNATE_POISON_COMP)));
     CitrinSwordItem CITRIN_GREATSWORD = registerEffectSword("citrin_greatsword",
-            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -3f, SwordType.GREAT_SWORD, new Item.Settings()));
+            new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN_GREAT, removeBaseDamage(7), -3f, SwordType.GREAT_SWORD, new Item.Settings().component(TitanFabricDataComponents.WEAPON_EFFECTS, INNATE_POISON_COMP)));
     EmberSwordItem EMBER_SWORD = registerEffectSword("ember_sword",
-            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new Item.Settings().fireproof()));
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER, removeBaseDamage(7), -2.4f, SwordType.DEFAULT, new Item.Settings().fireproof().component(TitanFabricDataComponents.WEAPON_EFFECTS, INNATE_FIRE_COMP)));
     EmberSwordItem EMBER_GREATSWORD = registerEffectSword("ember_greatsword",
-            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -3f, SwordType.GREAT_SWORD, new Item.Settings().fireproof()));
+            new EmberSwordItem(true, TitanFabricToolMaterials.EMBER_GREAT, removeBaseDamage(8), -3f, SwordType.GREAT_SWORD, new Item.Settings().fireproof().component(TitanFabricDataComponents.WEAPON_EFFECTS, INNATE_FIRE_COMP)));
     LegendSwordItem LEGEND_SWORD = registerEffectSword("legend_sword",
             new LegendSwordItem(true, TitanFabricToolMaterials.LEGEND, removeBaseDamage(8), -2.4f, SwordType.DEFAULT,
                     new Item.Settings().component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true))));
