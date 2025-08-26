@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -27,14 +28,14 @@ import java.util.Optional;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
-public class ExtendedInventoryCommands {
+public class ExtendedInventoryCommands implements CommandRegistrationCallback {
     private static final SimpleCommandExceptionType NOT_ELIGIBLE =
             new SimpleCommandExceptionType(Text.literal("Target doesn't hold Extended Inventories"));
     private static final SimpleCommandExceptionType NOT_A_VIEWER =
             new SimpleCommandExceptionType(Text.literal("Command User can't view Screens"));
 
-    @SuppressWarnings("unused")
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment environment) {
+    @Override
+    public void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandRegistryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
         dispatcher.register(literal("saveinventory")
                 .executes(ExtendedInventoryCommands::viewSelf)
                 .then(literal("target")

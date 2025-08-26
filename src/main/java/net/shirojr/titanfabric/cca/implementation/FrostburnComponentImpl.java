@@ -20,12 +20,11 @@ import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.init.TitanFabricTags;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
-import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedComponent, ServerTickingComponent {
+public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedComponent {
     private final LivingEntity provider;
 
     private float frostburn;
@@ -188,6 +187,9 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public void serverTick() {
+        if (this.frostburnTickSpeed == 0) {
+            return;
+        }
         if (getFrostburnLimit() == getFrostburn()) {
             if (tick != 0) {
                 tick = 0;

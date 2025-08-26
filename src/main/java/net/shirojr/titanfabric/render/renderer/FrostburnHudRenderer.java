@@ -7,21 +7,48 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 
 public class FrostburnHudRenderer implements HudRenderCallback {
     public static final int SPRITE_SIZE = 9;
+    public static final int SPACE_BETWEEN_SPRITES = 8;
+    public static final int HEARTS_PER_ROW = 10;
 
     @Override
     public void onHudRender(DrawContext context, RenderTickCounter tickCounter) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return;
         FrostburnComponent frostburnComponent = FrostburnComponent.get(player);
-        int x = context.getScaledWindowWidth() / 2;
-        int y = context.getScaledWindowHeight() / 2;
         float frostburn = frostburnComponent.getFrostburn();
-        for (int i = 0; i < Math.floor(frostburn); i++) {
-            // drawHeart(context, x, y, );
+        if (frostburn <= 0) return;
+
+        int centerX = context.getScaledWindowWidth() / 2;
+        int bottomY = context.getScaledWindowHeight();
+
+        int x = centerX - 91;
+        int y = bottomY - 39;
+
+        int currentHealth = (int) Math.ceil(player.getHealth());
+        int currentHearts = (currentHealth + 1) / 2;
+        int frostburnHearts = (int) Math.floor(frostburn);
+        boolean hasHalf = (frostburn % 1.0f) >= 0.5f;
+
+        TitanFabric.LOGGER.info(String.valueOf(frostburnHearts));
+
+        for (int i = 0; i < frostburnHearts; i++) {
+            int heartIndex = currentHearts + i;
+            int heartX = x + (heartIndex % 10) * SPACE_BETWEEN_SPRITES;
+            int heartY = y - (heartIndex / 10) * HEARTS_PER_ROW;
+
+            drawHeart(context, heartX, heartY, false);
+        }
+
+        if (hasHalf) {
+            int heartIndex = currentHearts + frostburnHearts;
+            int heartX = x + (heartIndex % 10) * 8;
+            int heartY = y - (heartIndex / 10) * 10;
+            drawHeart(context, heartX, heartY, true);
         }
     }
 

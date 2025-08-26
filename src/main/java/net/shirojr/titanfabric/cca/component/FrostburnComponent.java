@@ -8,6 +8,7 @@ import net.shirojr.titanfabric.TitanFabricComponents;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricTags;
 import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
 
 import java.util.function.Predicate;
 
@@ -22,7 +23,7 @@ import java.util.function.Predicate;
  * To start frostburn, use {@link #setFrostburnLimit(float, boolean)} and make sure that the
  * {@link net.shirojr.titanfabric.init.TitanFabricStatusEffects#FROSTBURN TitanFabricStatusEffects#FROSTBURN} is applied
  */
-public interface FrostburnComponent extends Component {
+public interface FrostburnComponent extends Component, ServerTickingComponent {
     Identifier IDENTIFIER = TitanFabric.getId("frostburn");
     float CHANGE_AMOUNT = 0.5f;
     float SAFETY_THRESHOLD = 0.5f;
@@ -31,6 +32,7 @@ public interface FrostburnComponent extends Component {
         return TitanFabricComponents.FROSTBURN.get(entity);
     }
 
+    @SuppressWarnings("unused")
     LivingEntity getProvider();
 
     /**
