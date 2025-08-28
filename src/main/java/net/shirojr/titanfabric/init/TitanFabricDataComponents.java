@@ -47,7 +47,10 @@ public interface TitanFabricDataComponents {
     ComponentType<PotionBundleContent> POTION_BUNDLE_CONTENT = register("potion_bundle_content",
             builder -> builder.codec(PotionBundleContent.CODEC).packetCodec(PotionBundleContent.PACKET_CODEC));
 
-    ComponentType<Integer> SELECTED_PROJECTILE = register("selected_projectile",
+    ComponentType<Integer> SELECTED_PROJECTILE = register("selected_projectile_index",
+            builder -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
+
+    ComponentType<Integer> CONTAINER_FOR_SELECTED_PROJECTILE = register("container_index",
             builder -> builder.codec(Codec.INT).packetCodec(PacketCodecs.VAR_INT));
 
 

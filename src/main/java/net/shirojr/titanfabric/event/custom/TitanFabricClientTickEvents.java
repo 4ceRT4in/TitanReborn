@@ -41,20 +41,18 @@ public class TitanFabricClientTickEvents {
     private static void handleTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
-        if(stack.getItem() != TitanFabricItems.LEGEND_BOW) return;
-        if (!(stack.getItem() instanceof SelectableArrow selectableArrow)) return;
-        Integer index = selectableArrow.getSelectedIndex(stack);
-        if (index == null) {
+        if (stack.getItem() != TitanFabricItems.LEGEND_BOW) return;
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, client.player.getInventory().main);
+        if (selectedArrowStack == null) {
             lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
             return;
         }
-        ItemStack arrowStack = client.player.getInventory().main.get(index);
-        if (!(arrowStack.getItem() instanceof TitanFabricArrowItem)) {
+        if (!(selectedArrowStack.getItem() instanceof TitanFabricArrowItem)) {
             lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
             return;
         }
 
-        Optional<WeaponEffectData> effectData = WeaponEffectData.get(arrowStack, INNATE_EFFECT);
+        Optional<WeaponEffectData> effectData = WeaponEffectData.get(selectedArrowStack, INNATE_EFFECT);
         if (effectData.isEmpty() || effectData.get().weaponEffect() == null) {
             lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
             return;

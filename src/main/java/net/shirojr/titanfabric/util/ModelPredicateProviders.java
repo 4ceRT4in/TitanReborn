@@ -111,12 +111,11 @@ public class ModelPredicateProviders {
         ModelPredicateProviderRegistry.register(TitanFabricItems.LEGEND_BOW, identifier,
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!(livingEntity instanceof PlayerEntity player)) return 0.0f;
-                    if (!(itemStack.getItem() instanceof SelectableArrow selectionHandler)) return 0.0f;
-                    Integer selectedIndex = selectionHandler.getSelectedIndex(itemStack);
-                    if (selectedIndex == null) return 0.0f;
-                    ItemStack savedArrowItemStack = player.getInventory().getStack(selectedIndex);
-                    if (!(savedArrowItemStack.getItem() instanceof TitanFabricArrowItem)) return 0.0f;
-                    Optional<WeaponEffectData> effectData = WeaponEffectData.get(savedArrowItemStack, INNATE_EFFECT);
+                    if (!(itemStack.getItem() instanceof SelectableArrow)) return 0.0f;
+                    ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(itemStack, player.getInventory().main);
+                    if (selectedArrowStack == null) return 0.0f;
+                    if (!(selectedArrowStack.getItem() instanceof TitanFabricArrowItem)) return 0.0f;
+                    Optional<WeaponEffectData> effectData = WeaponEffectData.get(selectedArrowStack, INNATE_EFFECT);
                     if (effectData.isEmpty()) return 0.0f;
                     if (effectData.get().weaponEffect() == null) return 0.0f;
                     return switch (effectData.get().weaponEffect()) {
@@ -125,7 +124,6 @@ public class ModelPredicateProviders {
                         case POISON -> 0.3f;
                         case WEAK -> 0.4f;
                         case WITHER -> 0.5f;
-                        default -> 0.0f;
                     };
                 });
     }
@@ -193,7 +191,7 @@ public class ModelPredicateProviders {
     }
 
     private static void registerCustomPotionPredicate(Item item) {
-        if(item == null) return;
+        if (item == null) return;
         ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("frostburn"),
                 (stack, world, entity, seed) -> {
                     if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
@@ -241,7 +239,7 @@ public class ModelPredicateProviders {
     private static void registerOverpoweredEnchantedBookPredicate(Item item) {
         ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("overpowered"),
                 (stack, world, entity, seed) -> {
-                    if(OverpoweredEnchantmentsHelper.isOverpoweredEnchantmentBook(stack)) {
+                    if (OverpoweredEnchantmentsHelper.isOverpoweredEnchantmentBook(stack)) {
                         return 1.0f;
                     }
                     return 0.0f;

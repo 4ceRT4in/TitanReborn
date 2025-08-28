@@ -12,8 +12,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.DamageTypeTags;
@@ -43,7 +41,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 
 @Debug(export = true)
 @Mixin(PlayerEntity.class)
@@ -98,22 +95,20 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
 
     @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        if (!(stack.getItem() instanceof SelectableArrow selectionHandler)) return;
-        Optional<ItemStack> selection = Optional.ofNullable(selectionHandler.getSelectedIndex(stack)).map(index -> getInventory().getStack(index));
-        if (selection.isEmpty()) return;
-        cir.setReturnValue(selection.get());
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, getInventory().main);
+        if (selectedArrowStack == null) return;
+        cir.setReturnValue(selectedArrowStack);
     }
-
 
     @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At("STORE"), ordinal = 2)
     private boolean attack(boolean bl3, Entity target) {
-        PlayerEntity self = (PlayerEntity)(Object)this;
-        if(!(target instanceof LivingEntity livingEntity)) return bl3;
-        if(hasFullDiamondArmor(livingEntity)) return false;
-        if(livingEntity.timeUntilRegen > 10.0F) return bl3;
+        PlayerEntity self = (PlayerEntity) (Object) this;
+        if (!(target instanceof LivingEntity livingEntity)) return bl3;
+        if (hasFullDiamondArmor(livingEntity)) return false;
+        if (livingEntity.timeUntilRegen > 10.0F) return bl3;
 
         ItemStack stack = self.getStackInHand(Hand.MAIN_HAND);
-        if(stack == null) return bl3;
+        if (stack == null) return bl3;
         if (Arrays.asList(Items.DIAMOND_SWORD, TitanFabricItems.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD).contains(stack.getItem())) {
             if (self.getRandom().nextFloat() < 0.25f) {
                 return true;
@@ -133,12 +128,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private float damage(float amount, DamageSource source) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        if(!player.getWorld().isClient()) {
-            if(source != null && source.getSource() != null && source.getSource() instanceof LivingEntity attacker) {
+        if (!player.getWorld().isClient()) {
+            if (source != null && source.getSource() != null && source.getSource() instanceof LivingEntity attacker) {
                 ItemStack mainIs = attacker.getMainHandStack();
 
-                if(mainIs != null && mainIs.getItem() instanceof ToolItem) {
-                    ToolMaterial toolMaterial = ((ToolItem)mainIs.getItem()).getMaterial();
+                if (mainIs != null && mainIs.getItem() instanceof ToolItem) {
+                    ToolMaterial toolMaterial = ((ToolItem) mainIs.getItem()).getMaterial();
 
                     Map<ToolMaterial, ArmorPlateType> armorPlateTypes = Map.of(
                             ToolMaterials.DIAMOND, ArmorPlateType.DIAMOND,
@@ -150,7 +145,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
                     ArmorPlateType plateType = armorPlateTypes.get(toolMaterial);
                     if (plateType != null) {
                         int armorProb = 0;
-                        if(armorProb > 0) {
+                        if (armorProb > 0) {
                             float damageReduction = 0.025f * armorProb;
                             amount = amount * (1.0f - damageReduction);
                         }
@@ -250,7 +245,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
                 ci.cancel();
                 return;
             }
-            if(!target.getWorld().isClient() && target.getWorld().getGameRules().getBoolean(TitanFabricGamerules.GREATSWORD_COOLDOWN)) {
+            if (!target.getWorld().isClient() && target.getWorld().getGameRules().getBoolean(TitanFabricGamerules.GREATSWORD_COOLDOWN)) {
                 cooldown = titanFabricSwordItem.getCooldownTicks();
             }
         }

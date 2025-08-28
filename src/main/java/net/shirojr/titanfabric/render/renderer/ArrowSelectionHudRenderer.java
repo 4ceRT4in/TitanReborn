@@ -13,20 +13,17 @@ public class ArrowSelectionHudRenderer implements HudRenderCallback {
     public void onHudRender(DrawContext drawContext, RenderTickCounter tickCounter) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null || player.isSpectator()) return;
-        SelectableArrow selectionHandler;
         ItemStack weaponStack;
-        if (player.getMainHandStack().getItem() instanceof SelectableArrow selectableArrow) {
-            selectionHandler = selectableArrow;
+        if (player.getMainHandStack().getItem() instanceof SelectableArrow) {
             weaponStack = player.getMainHandStack();
-        } else if (player.getOffHandStack().getItem() instanceof SelectableArrow selectableArrow) {
-            selectionHandler = selectableArrow;
+        } else if (player.getOffHandStack().getItem() instanceof SelectableArrow) {
             weaponStack = player.getOffHandStack();
         } else {
             return;
         }
-        Integer selectedIndex = selectionHandler.getSelectedIndex(weaponStack);
-        if (selectedIndex == null) return;
-        ItemStack selectedArrowStack = player.getInventory().getStack(selectedIndex);
+
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, player.getInventory().main);
+        if (selectedArrowStack == null) return;
         int x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - 118;
         int y = MinecraftClient.getInstance().getWindow().getScaledHeight() - 19;
         if (!player.getOffHandStack().isEmpty()) {

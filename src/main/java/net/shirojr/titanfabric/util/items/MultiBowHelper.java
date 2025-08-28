@@ -93,11 +93,10 @@ public final class MultiBowHelper {
         Predicate<ItemStack> isSelectableArrow = itemStack -> selectionHandler.titanFabric$supportedArrows().contains(itemStack.getItem());
 
         ItemStack outputStack = ItemStack.EMPTY;
-        Integer selectedIndex = selectionHandler.getSelectedIndex(weaponStack);
-        if (selectedIndex != null) {
-            ItemStack selectedStack = player.getInventory().getStack(selectedIndex);
-            if (isSelectableArrow.test(selectedStack)) {
-                outputStack = selectedStack;
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, player.getInventory().main);
+        if (selectedArrowStack != null) {
+            if (isSelectableArrow.test(selectedArrowStack)) {
+                outputStack = selectedArrowStack;
             }
         }
         if (outputStack.isEmpty()) {
