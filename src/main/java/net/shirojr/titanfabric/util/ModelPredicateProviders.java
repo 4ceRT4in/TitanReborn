@@ -112,7 +112,7 @@ public class ModelPredicateProviders {
                 (itemStack, clientWorld, livingEntity, seed) -> {
                     if (!(livingEntity instanceof PlayerEntity player)) return 0.0f;
                     if (!(itemStack.getItem() instanceof SelectableArrow)) return 0.0f;
-                    ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(itemStack, player.getInventory().main);
+                    ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(itemStack, player);
                     if (selectedArrowStack == null) return 0.0f;
                     if (!(selectedArrowStack.getItem() instanceof TitanFabricArrowItem)) return 0.0f;
                     Optional<WeaponEffectData> effectData = WeaponEffectData.get(selectedArrowStack, INNATE_EFFECT);

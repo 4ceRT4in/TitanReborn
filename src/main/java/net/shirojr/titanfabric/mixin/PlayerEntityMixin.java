@@ -95,7 +95,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
 
     @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, getInventory().main);
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, (PlayerEntity) (Object) this);
         if (selectedArrowStack == null) return;
         cir.setReturnValue(selectedArrowStack);
     }

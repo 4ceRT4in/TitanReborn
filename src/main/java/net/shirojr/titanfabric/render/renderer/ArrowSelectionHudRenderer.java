@@ -22,7 +22,7 @@ public class ArrowSelectionHudRenderer implements HudRenderCallback {
             return;
         }
 
-        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, player.getInventory().main);
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, player);
         if (selectedArrowStack == null) return;
         int x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2 - 118;
         int y = MinecraftClient.getInstance().getWindow().getScaledHeight() - 19;

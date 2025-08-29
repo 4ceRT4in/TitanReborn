@@ -26,6 +26,7 @@ public final class MultiBowHelper {
      * @param bowStack for editing the NBT information
      * @param arrows   count of concurrent arrows
      */
+    @SuppressWarnings("unused")
     public static void setFullArrowCount(ItemStack bowStack, int arrows) {
         bowStack.set(TitanFabricDataComponents.MULTI_BOW_MAX_ARROWS_COUNT, arrows);
     }
@@ -93,7 +94,7 @@ public final class MultiBowHelper {
         Predicate<ItemStack> isSelectableArrow = itemStack -> selectionHandler.titanFabric$supportedArrows().contains(itemStack.getItem());
 
         ItemStack outputStack = ItemStack.EMPTY;
-        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, player.getInventory().main);
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, player);
         if (selectedArrowStack != null) {
             if (isSelectableArrow.test(selectedArrowStack)) {
                 outputStack = selectedArrowStack;

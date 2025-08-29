@@ -13,6 +13,7 @@ public interface TitanFabricGamerules {
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_SEARCH_RANGE = registerIntegerGamerule("hotBlockSearchRange", GameRules.Category.MISC, 7, -1, null);
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_AMOUNT_FOR_THAWING = registerIntegerGamerule("hotBlockAmountForThawing", GameRules.Category.MISC, 1, 1, null);
     GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("greatSwordCooldown", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> FULL_INVENTORY_POTION_BAG_SEARCH = registerBooleanGamerule("fullInventoryPotionBagSearch", GameRules.Category.PLAYER, false);
 
     @SuppressWarnings("SameParameterValue")
     private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(String name, GameRules.Category category, boolean defaultValue) {

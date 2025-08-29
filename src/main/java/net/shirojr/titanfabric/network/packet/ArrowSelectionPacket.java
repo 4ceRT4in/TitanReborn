@@ -48,7 +48,8 @@ public record ArrowSelectionPacket(int weaponStackIndex) implements CustomPayloa
         PlayerInventory inventory = player.getInventory();
         ItemStack weaponStack = inventory.getStack(weaponStackIndex);
         if (!(weaponStack.getItem() instanceof SelectableArrow selectionHandler)) return;
-        List<ItemStack> arrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(inventory.main, selectionHandler);
+
+        List<ItemStack> arrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(player, selectionHandler);
 
         Map<Item, ItemStack> highestCountStacks = new HashMap<>();
         Map<String, ItemStack> effectBasedStacks = new HashMap<>();
@@ -92,7 +93,7 @@ public record ArrowSelectionPacket(int weaponStackIndex) implements CustomPayloa
         if (filteredArrowStacks.isEmpty()) return;
         ItemStack newSelectedArrowStack;
 
-        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, inventory.main);
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(weaponStack, player);
         if (selectedArrowStack == null) {
             newSelectedArrowStack = filteredArrowStacks.get(0);
         } else {
@@ -108,7 +109,7 @@ public record ArrowSelectionPacket(int weaponStackIndex) implements CustomPayloa
         Text arrowStackName = newSelectedArrowStack.getItem().getName(newSelectedArrowStack);
         player.sendMessage(Text.translatable("actionbar.titanfabric.arrow_selection").append(arrowStackName), true);
 
-        Optional<SelectableArrow.Index> newStackIndex = SelectableArrow.Index.get(player.getInventory().main, newSelectedArrowStack);
+        Optional<SelectableArrow.Index> newStackIndex = SelectableArrow.Index.get(player, newSelectedArrowStack);
 
         boolean changedComponent = false;
         if (newStackIndex.isPresent()) {

@@ -42,7 +42,7 @@ public class TitanFabricClientTickEvents {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
         if (stack.getItem() != TitanFabricItems.LEGEND_BOW) return;
-        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, client.player.getInventory().main);
+        ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, client.player);
         if (selectedArrowStack == null) {
             lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", "Normal").formatted(Formatting.GRAY));
             return;
