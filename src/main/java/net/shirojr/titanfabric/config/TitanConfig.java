@@ -19,6 +19,8 @@ public class TitanConfig {
     private static ConfigData configData;
 
     public static void loadConfig() {
+        // FIXME: doesn't react to newly added values in dev env
+        //  iirc we used ClothConfig in the past, so mby get that back in? - ShiroJR
         if (!Files.exists(configPath)) {
             configData = new ConfigData();
             saveConfig();
