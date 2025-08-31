@@ -6,10 +6,9 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.network.NetworkingIdentifiers;
 
 public record BackPackScreenPacket(ItemStack backPackStack) implements CustomPayload {
-    public static final Id<BackPackScreenPacket> IDENTIFIER = new Id<>(NetworkingIdentifiers.BACKPACK_INVENTORY_OPEN);
+    public static final Id<BackPackScreenPacket> IDENTIFIER = new Id<>(TitanFabric.getId("backpack_inventory_open"));
     public static final PacketCodec<RegistryByteBuf, BackPackScreenPacket> CODEC = PacketCodec.tuple(
             ItemStack.PACKET_CODEC, BackPackScreenPacket::backPackStack,
             BackPackScreenPacket::new
@@ -20,6 +19,7 @@ public record BackPackScreenPacket(ItemStack backPackStack) implements CustomPay
         return IDENTIFIER;
     }
 
+    @SuppressWarnings("unused")
     public void handlePacket(ClientPlayNetworking.Context context) {
         TitanFabric.LOGGER.info("backpack screen packet arrived on client");
     }

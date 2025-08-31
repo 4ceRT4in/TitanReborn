@@ -8,12 +8,12 @@ import net.shirojr.titanfabric.network.packet.*;
 
 public class TitanFabricNetworkingPayloads {
     static {
-        registerC2S(ArmorLifePacket.IDENTIFIER, ArmorLifePacket.CODEC);
         registerC2S(ArrowSelectionPacket.IDENTIFIER, ArrowSelectionPacket.CODEC);
         registerC2S(BowScreenPacket.IDENTIFIER, BowScreenPacket.CODEC);
         registerC2S(ExtendedInventoryOpenPacket.IDENTIFIER, ExtendedInventoryOpenPacket.CODEC);
 
         registerS2C(BackPackScreenPacket.IDENTIFIER, BackPackScreenPacket.CODEC);
+        registerS2C(ArmorDamageTiltFixPacket.IDENTIFIER, ArmorDamageTiltFixPacket.CODEC);
     }
 
     private static <T extends CustomPayload> void registerS2C(CustomPayload.Id<T> packetIdentifier, PacketCodec<RegistryByteBuf, T> codec) {
