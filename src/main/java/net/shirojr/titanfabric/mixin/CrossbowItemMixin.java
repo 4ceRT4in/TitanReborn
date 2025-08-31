@@ -1,13 +1,16 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.PotionItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.config.TitanConfig;
 import net.shirojr.titanfabric.init.TitanFabricTags;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
@@ -28,5 +31,16 @@ public class CrossbowItemMixin implements SelectableArrow {
     @Override
     public List<Item> titanFabric$supportedArrows() {
         return Registries.ITEM.stream().filter(item -> item.getDefaultStack().isIn(TitanFabricTags.Items.DEFAULT_CROSSBOW_ARROWS)).toList();
+    }
+
+    @Inject(method = "getSpeed", at = @At("HEAD"), cancellable = true)
+    private static void getPotionSpeed(ChargedProjectilesComponent stack, CallbackInfoReturnable<Float> cir) {
+        for (ItemStack projectile : stack.getProjectiles()) {
+            Item projectileItem = projectile.getItem();
+            if (projectileItem instanceof PotionItem) {
+                cir.setReturnValue(TitanConfig.getCrossbowPotionProjectileSpeed());
+                return;
+            }
+        }
     }
 }

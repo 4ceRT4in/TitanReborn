@@ -4,10 +4,9 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.projectile.thrown.PotionEntity;
+import net.minecraft.item.*;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -35,10 +34,6 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrow, 
         return stack -> stack.isIn(ItemTags.ARROWS) || stack.isOf(Items.LINGERING_POTION) || stack.isOf(Items.SPLASH_POTION);
     }
 
-    private static float getSpeed(ChargedProjectilesComponent stack) {
-        return stack.contains(Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
-    }
-
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
@@ -62,6 +57,17 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrow, 
         ChargedProjectilesComponent component = stack.get(DataComponentTypes.CHARGED_PROJECTILES);
         if (component == null) return List.of();
         return component.getProjectiles();
+    }
+
+    @Override
+    protected ProjectileEntity createArrowEntity(World world, LivingEntity shooter, ItemStack weaponStack, ItemStack projectileStack, boolean critical) {
+        Item projectileItem = projectileStack.getItem();
+        if (projectileItem instanceof SplashPotionItem || projectileItem instanceof LingeringPotionItem) {
+            PotionEntity potionEntity = new PotionEntity(world, shooter);
+            potionEntity.setItem(projectileStack);
+            return potionEntity;
+        }
+        return super.createArrowEntity(world, shooter, weaponStack, projectileStack, critical);
     }
 
     @Override
