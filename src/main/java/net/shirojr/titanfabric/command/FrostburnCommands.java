@@ -42,6 +42,7 @@ public class FrostburnCommands implements CommandRegistrationCallback {
                 )
                 .then(literal("speed")
                         .then(argument("entity", EntityArgumentType.entity())
+                                .executes(FrostburnCommands::printFrostburnSpeed)
                                 .then(argument("ticks", IntegerArgumentType.integer(0))
                                         .executes(FrostburnCommands::setFrostburnTickSpeed)
                                 )
@@ -81,6 +82,18 @@ public class FrostburnCommands implements CommandRegistrationCallback {
         int tickSpeed = IntegerArgumentType.getInteger(context, "ticks");
         FrostburnComponent targetFrostburnComponent = FrostburnComponent.get(target);
         targetFrostburnComponent.setFrostburnTickSpeed(tickSpeed, true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int printFrostburnSpeed(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        if (!(EntityArgumentType.getEntity(context, "entity") instanceof LivingEntity target)) {
+            throw NOT_APPLICABLE.create();
+        }
+        FrostburnComponent frostburnComponent = FrostburnComponent.get(target);
+        context.getSource().sendFeedback(
+                () -> Text.literal(target.getNameForScoreboard()).append(Text.literal(": %s ticks".formatted(frostburnComponent.getFrostburnTickSpeed()))),
+                true
+        );
         return Command.SINGLE_SUCCESS;
     }
 }

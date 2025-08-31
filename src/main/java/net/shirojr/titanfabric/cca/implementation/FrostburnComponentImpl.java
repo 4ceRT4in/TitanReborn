@@ -61,7 +61,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public void setFrostburnTickSpeed(int speed, boolean shouldSync) {
-        this.frostburnTickSpeed = Math.max(1, speed);
+        this.frostburnTickSpeed = Math.max(0, speed);
         if (shouldSync) {
             sync();
         }
@@ -110,6 +110,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public boolean shouldMaintainFrostburn(int hotBlocksSearchRange, int hotBlocksAmountForThawing, Predicate<BlockState> isHotBlock) {
+        if (this.getFrostburnTickSpeed() <= 0) return true;
         boolean advancedThawing = provider.getWorld().getGameRules().getBoolean(TitanFabricGamerules.ADVANCED_FROSTBURN_THAWING);
         if (advancedThawing) {
             if (provider.isFrozen()) return true;

@@ -97,12 +97,16 @@ public interface SelectableArrow {
      *                   ItemStack is located in a bag which is being held in the offhand slot,
      *                   otherwise the index of the bag, which holds the ItemStack in a normal inventory
      */
+    @SuppressWarnings("unused")
     record Index(int index, @Nullable Integer indexOfBag) {
         public Index(int index) {
             this(index, null);
         }
 
-        @SuppressWarnings("unused")
+        public boolean isInBag() {
+            return indexOfBag != null;
+        }
+
         public boolean isInOffhandBag() {
             return indexOfBag != null && indexOfBag == -1;
         }

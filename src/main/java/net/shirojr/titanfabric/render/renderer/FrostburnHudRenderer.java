@@ -26,28 +26,24 @@ public class FrostburnHudRenderer implements HudRenderCallback {
         int centerX = context.getScaledWindowWidth() / 2;
         int bottomY = context.getScaledWindowHeight();
 
-        int x = centerX - 91;
+        int x = centerX - 11;
         int y = bottomY - 39;
 
-        int currentHealth = (int) Math.ceil(player.getHealth());
-        int currentHearts = (currentHealth + 1) / 2;
-        int frostburnHearts = (int) Math.floor(frostburn);
+        int frostburnHearts = (int) Math.floor(frostburn / 2);
         boolean hasHalf = (frostburn % 1.0f) >= 0.5f;
 
         TitanFabric.LOGGER.info(String.valueOf(frostburnHearts));
 
         for (int i = 0; i < frostburnHearts; i++) {
-            int heartIndex = currentHearts + i;
-            int heartX = x + (heartIndex % 10) * SPACE_BETWEEN_SPRITES;
-            int heartY = y - (heartIndex / 10) * HEARTS_PER_ROW;
+            int heartX = x + (i % 10) * SPACE_BETWEEN_SPRITES;
+            int heartY = y - (i / 10) * HEARTS_PER_ROW;
 
             drawHeart(context, heartX, heartY, false);
         }
 
         if (hasHalf) {
-            int heartIndex = currentHearts + frostburnHearts;
-            int heartX = x + (heartIndex % 10) * 8;
-            int heartY = y - (heartIndex / 10) * 10;
+            int heartX = x + ((frostburnHearts + 1) % 10) * 8;
+            int heartY = y - ((frostburnHearts + 1) / 10) * 10;
             drawHeart(context, heartX, heartY, true);
         }
     }
