@@ -5,7 +5,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
@@ -18,10 +17,7 @@ public class TitanFabricColorProviders {
 
     public static void create(Item item) {
         ColorProviderRegistry.ITEM.register((stack, textureLayer) -> {
-
-            if (!stack.contains(TitanFabricDataComponents.CHARGED)) return -1;
-            if (!stack.getOrDefault(TitanFabricDataComponents.CHARGED, false)) return -1;
-            ChargedProjectilesComponent loadedProjectiles = stack.get(DataComponentTypes.CHARGED_PROJECTILES);
+            ChargedProjectilesComponent loadedProjectiles = stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
             if (loadedProjectiles == null || loadedProjectiles.isEmpty()) return -1;
             ItemStack firstProjectileStack = loadedProjectiles.getProjectiles().get(0);
             if (WeaponEffectData.get(firstProjectileStack, WeaponEffectType.INNATE_EFFECT).isPresent()) {

@@ -53,8 +53,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrow, 
     }
 
     public static List<ItemStack> getLoadedProjectiles(ItemStack stack) {
-        ChargedProjectilesComponent component = stack.get(DataComponentTypes.CHARGED_PROJECTILES);
-        if (component == null) return List.of();
+        ChargedProjectilesComponent component = stack.getOrDefault(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
         return component.getProjectiles();
     }
 

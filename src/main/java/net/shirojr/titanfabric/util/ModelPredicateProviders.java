@@ -153,8 +153,6 @@ public class ModelPredicateProviders {
     private static void registerCrossBowCharge() {
         ModelPredicateProviderRegistry.register(TitanFabricItems.TITAN_CROSSBOW, Identifier.ofVanilla("charged"),
                 (itemStack, clientWorld, livingEntity, seed) -> {
-                    boolean charged = Optional.ofNullable(itemStack.get(TitanFabricDataComponents.CHARGED)).orElse(false);
-                    if (!charged) return 0.0f;
                     if (!(itemStack.getItem() instanceof TitanCrossBowItem)) return 0.0f;
                     List<ItemStack> loadedProjectiles = TitanCrossBowItem.getLoadedProjectiles(itemStack);
                     if (loadedProjectiles.isEmpty()) return 0;

@@ -17,9 +17,6 @@ import java.util.HashSet;
 import java.util.function.Consumer;
 
 public interface TitanFabricDataComponents {
-    ComponentType<Boolean> CHARGED = register("charged",
-            itemStackBuilder -> itemStackBuilder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
-
     ComponentType<Boolean> ACTIVATED = register("activated",
             builder -> builder.codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL));
 
