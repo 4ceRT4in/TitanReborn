@@ -11,6 +11,7 @@ import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.config.TitanConfig;
 import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
 
@@ -18,8 +19,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TitanCrossBowItem extends CrossbowItem implements SelectableArrow, Anvilable {
-    public static final int RANGE = 8;
-
     public TitanCrossBowItem(Item.Settings settings) {
         super(settings);
     }
@@ -70,8 +69,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrow, 
         return super.createArrowEntity(world, shooter, weaponStack, projectileStack, critical);
     }
 
-    @Override
-    public int getRange() {
-        return RANGE;
+    public static float getPotionSpeed() {
+        return TitanConfig.getCrossbowPotionProjectileSpeed();
     }
 }

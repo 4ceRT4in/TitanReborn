@@ -10,8 +10,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.config.TitanConfig;
 import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +38,7 @@ public class CrossbowItemMixin implements SelectableArrow {
         for (ItemStack projectile : stack.getProjectiles()) {
             Item projectileItem = projectile.getItem();
             if (projectileItem instanceof PotionItem) {
-                cir.setReturnValue(TitanConfig.getCrossbowPotionProjectileSpeed());
+                cir.setReturnValue(TitanCrossBowItem.getPotionSpeed());
                 return;
             }
         }
