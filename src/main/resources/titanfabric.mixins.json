@@ -11,6 +11,8 @@
     "ArmorItemMixin",
     "BowItemMixin",
     "BrewingRecipeRegistryMixin",
+    "BundleContentsComponentBuilderMixin",
+    "BundleContentsComponentMixin",
     "CrossbowItemMixin",
     "EnchantBookFactoryMixin",
     "EnchantmentHelperMixin",

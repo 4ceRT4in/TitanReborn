@@ -69,9 +69,6 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), stack, target);
-        if (this.baseEffect != null) {
-            EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), stack, target);
-        }
 
         return super.postHit(stack, target, attacker);
     }

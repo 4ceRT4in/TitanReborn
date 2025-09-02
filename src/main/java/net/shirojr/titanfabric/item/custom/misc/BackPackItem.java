@@ -2,12 +2,16 @@ package net.shirojr.titanfabric.item.custom.misc;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.BundleTooltipData;
+import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -25,6 +29,7 @@ import net.shirojr.titanfabric.screen.handler.BackPackItemScreenHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BackPackItem extends Item {
     private final BackPackItem.Type backpackType;
@@ -107,6 +112,24 @@ public class BackPackItem extends Item {
     @Override
     public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
+    }
+
+    @Override
+    public Optional<TooltipData> getTooltipData(ItemStack stack) {
+        if (stack.contains(DataComponentTypes.HIDE_TOOLTIP) || stack.contains(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP)) return Optional.empty();
+        BackPackContent content = stack.get(TitanFabricDataComponents.BACKPACK_CONTENT);
+        if (content == null || content.getItems().isEmpty()) return Optional.empty();
+        BundleContentsComponent.Builder builder = new BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT);
+        List<ItemStack> items = content.getItems();
+        for (int i = items.size() - 1; i >= 0; i--) {
+            ItemStack s = items.get(i);
+            if (!s.isEmpty() && s.getItem() != TitanFabricItems.BACKPACK_BIG) {
+                builder.add(s.copy());
+            }
+        }
+        BundleContentsComponent bundle = builder.build();
+        if (bundle.isEmpty()) return Optional.empty();
+        return Optional.of(new BundleTooltipData(bundle));
     }
 
     @Override
