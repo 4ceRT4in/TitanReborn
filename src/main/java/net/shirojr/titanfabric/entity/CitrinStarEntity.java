@@ -54,20 +54,21 @@ public class CitrinStarEntity extends ThrownItemEntity {
         if (!getWorld().isClient) {
             boolean unchanged = livingEntity.hasStatusEffect(statusEffect) && !this.changedEffects.contains(statusEffect);
             if (unchanged) {
+                RegistryEntry<StatusEffect> oppositeEffect = getEffectOpposites().get(statusEffect);
+                if (oppositeEffect == null) return;
+
                 StatusEffectInstance oldEffectInstance = livingEntity.getStatusEffect(statusEffect);
-                StatusEffectInstanceAccessor oldAccessor = (StatusEffectInstanceAccessor) oldEffectInstance;
-                if (oldAccessor != null) {
-                    StatusEffectInstance previousEffect = oldAccessor.titanfabric$getPreviousStatusEffect();
-                    if (previousEffect != null) {
-                        return;
-                    }
+                if (!(oldEffectInstance instanceof StatusEffectInstanceAccessor accessor)) return;
+                StatusEffectInstance previousEffect = accessor.titanfabric$getPreviousStatusEffect();
+                if (previousEffect != null) {
+                    return;
                 }
 
                 int oldDuration = oldEffectInstance.getDuration();
                 int newDuration = Math.min(oldDuration, 200); // Use 200 ticks or the old duration if it's less
 
                 StatusEffectInstance newEffectInstance = new StatusEffectInstance(
-                        getEffectOpposites().get(statusEffect),
+                        oppositeEffect,
                         newDuration,
                         oldEffectInstance.getAmplifier()
                 );
@@ -76,10 +77,10 @@ public class CitrinStarEntity extends ThrownItemEntity {
 
                 // Only set the previous status effect if the old duration is 10 seconds or more
                 if (oldDuration >= 200) {
-                    StatusEffectInstanceAccessor accessor = (StatusEffectInstanceAccessor) newEffectInstance;
-                    if (accessor != null) {
-                        accessor.titanfabric$setPreviousStatusEffect(new StatusEffectInstance(oldEffectInstance));
-                        livingEntity.addStatusEffect((StatusEffectInstance) accessor);
+                    StatusEffectInstanceAccessor newAccessor = (StatusEffectInstanceAccessor) newEffectInstance;
+                    if (newAccessor != null) {
+                        newAccessor.titanfabric$setPreviousStatusEffect(new StatusEffectInstance(oldEffectInstance));
+                        livingEntity.addStatusEffect((StatusEffectInstance) newAccessor);
                     } else {
                         livingEntity.addStatusEffect(newEffectInstance);
                     }
@@ -88,7 +89,7 @@ public class CitrinStarEntity extends ThrownItemEntity {
                     livingEntity.addStatusEffect(newEffectInstance);
                 }
 
-                this.changedEffects.add(getEffectOpposites().get(statusEffect));
+                this.changedEffects.add(oppositeEffect);
             }
 
         }
@@ -99,26 +100,27 @@ public class CitrinStarEntity extends ThrownItemEntity {
         super.onEntityHit(entityHitResult);
 
         Entity entity = entityHitResult.getEntity();
-        if (entity instanceof LivingEntity livingEntity && !livingEntity.getWorld().isClient()) {
+        if (!(entityHitResult.getEntity().getWorld() instanceof ServerWorld serverWorld)) return;
+        if (entity instanceof LivingEntity target) {
             for (var entry : getEffectOpposites().entrySet()) {
                 RegistryEntry<StatusEffect> effect = entry.getKey();
                 RegistryEntry<StatusEffect> oppositeEffect = entry.getValue();
-                updateStatusEffects(livingEntity, effect);
-                updateStatusEffects(livingEntity, oppositeEffect);
+                updateStatusEffects(target, effect);
+                updateStatusEffects(target, oppositeEffect);
             }
-            if (livingEntity.isOnFire()) {
+            if (target.isOnFire()) {
                 entity.extinguish();
-                livingEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 200, 0));
-            } else if (livingEntity.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
-                livingEntity.removeStatusEffect(StatusEffects.FIRE_RESISTANCE);
-                livingEntity.setOnFireFor(10);
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 200, 0));
+            } else if (target.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
+                target.removeStatusEffect(StatusEffects.FIRE_RESISTANCE);
+                target.setOnFireFor(10);
             }
             for (int i = 0; i < 32; ++i) {
-                ((ServerWorld) livingEntity.getWorld()).spawnParticles(
+                serverWorld.spawnParticles(
                         ParticleTypes.END_ROD,
-                        livingEntity.getX(),
+                        target.getX(),
                         this.getY(),
-                        livingEntity.getZ(),
+                        target.getZ(),
                         1,            // count
                         this.random.nextGaussian() * 0.3D, this.random.nextGaussian() * 0.3D,
                         this.random.nextGaussian() * 0.3D,          // offsetZ
