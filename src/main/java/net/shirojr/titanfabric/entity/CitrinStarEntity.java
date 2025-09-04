@@ -1,6 +1,5 @@
 package net.shirojr.titanfabric.entity;
 
-import com.google.common.collect.HashBiMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,15 +12,19 @@ import net.minecraft.item.Item;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.init.TitanFabricItems;
+import net.shirojr.titanfabric.util.BiDirectionalLookup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CitrinStarEntity extends ThrownItemEntity {
 
@@ -54,7 +57,7 @@ public class CitrinStarEntity extends ThrownItemEntity {
         if (!getWorld().isClient) {
             boolean unchanged = livingEntity.hasStatusEffect(statusEffect) && !this.changedEffects.contains(statusEffect);
             if (unchanged) {
-                RegistryEntry<StatusEffect> oppositeEffect = getEffectOpposites().get(statusEffect);
+                RegistryEntry<StatusEffect> oppositeEffect = getEffectOpposites().getOpposite(statusEffect);
                 if (oppositeEffect == null) return;
 
                 StatusEffectInstance oldEffectInstance = livingEntity.getStatusEffect(statusEffect);
@@ -102,7 +105,7 @@ public class CitrinStarEntity extends ThrownItemEntity {
         Entity entity = entityHitResult.getEntity();
         if (!(entityHitResult.getEntity().getWorld() instanceof ServerWorld serverWorld)) return;
         if (entity instanceof LivingEntity target) {
-            for (var entry : getEffectOpposites().entrySet()) {
+            for (var entry : getEffectOpposites().getDataMap().entrySet()) {
                 RegistryEntry<StatusEffect> effect = entry.getKey();
                 RegistryEntry<StatusEffect> oppositeEffect = entry.getValue();
                 updateStatusEffects(target, effect);
@@ -142,12 +145,12 @@ public class CitrinStarEntity extends ThrownItemEntity {
         }
     }
 
-    private HashBiMap<RegistryEntry<StatusEffect>, RegistryEntry<StatusEffect>> getEffectOpposites() {
-        HashBiMap<RegistryEntry<StatusEffect>, RegistryEntry<StatusEffect>> map = HashBiMap.create();
-        map.put(StatusEffects.BLINDNESS, StatusEffects.NIGHT_VISION);
-        map.put(StatusEffects.POISON, StatusEffects.REGENERATION);
-        map.put(StatusEffects.WEAKNESS, StatusEffects.STRENGTH);
-        map.put(StatusEffects.SLOWNESS, StatusEffects.SPEED);
-        return map;
+    private BiDirectionalLookup<RegistryEntry<StatusEffect>> getEffectOpposites() {
+        Set<Pair<RegistryEntry<StatusEffect>, RegistryEntry<StatusEffect>>> opposites = new HashSet<>();
+        opposites.add(new Pair<>(StatusEffects.BLINDNESS, StatusEffects.NIGHT_VISION));
+        opposites.add(new Pair<>(StatusEffects.POISON, StatusEffects.REGENERATION));
+        opposites.add(new Pair<>(StatusEffects.WEAKNESS, StatusEffects.STRENGTH));
+        opposites.add(new Pair<>(StatusEffects.SLOWNESS, StatusEffects.SPEED));
+        return new BiDirectionalLookup<>(opposites);
     }
 }
