@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class BiDirectionalLookup<T> {
     private final HashMap<T, T> data;
     private final HashMap<T, T> invertedData;
@@ -37,6 +38,6 @@ public class BiDirectionalLookup<T> {
     }
 
     public HashMap<T, T> getInvertedDataMap() {
-        return this.data;
+        return this.invertedData;
     }
 }
