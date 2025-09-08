@@ -21,7 +21,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
-import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
@@ -214,7 +213,7 @@ public abstract class LivingEntityMixin {
     @Inject(method = "pushAwayFrom", at = @At("HEAD"), cancellable = true)
     private void pushAwayFrom(Entity entity, CallbackInfo ci) {
         if (entity instanceof PlayerEntity player) {
-            if(!player.getWorld().isClient() && player.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_COMBAT)) {
+            if (!player.getWorld().isClient() && player.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_COMBAT)) {
                 ci.cancel();
             }
         }
@@ -298,14 +297,5 @@ public abstract class LivingEntityMixin {
     @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(floatValue = 25.0F))
     private float modifyAppliedDamageFloat25(float original) {
         return 10.0F;
-    }
-
-    @WrapOperation(method = "heal", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setHealth(F)V"))
-    private void healWithFrostburnLimit(LivingEntity instance, float health, Operation<Void> original) {
-        FrostburnComponent frostburnComponent = FrostburnComponent.get(instance);
-        if (frostburnComponent.getFrostburn() > 0) {
-            health = Math.min(health, frostburnComponent.getMissingHealth());
-        }
-        original.call(instance, health);
     }
 }

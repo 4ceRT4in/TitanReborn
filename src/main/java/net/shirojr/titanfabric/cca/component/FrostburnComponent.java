@@ -25,8 +25,8 @@ import java.util.function.Predicate;
  */
 public interface FrostburnComponent extends Component, ServerTickingComponent {
     Identifier IDENTIFIER = TitanFabric.getId("frostburn");
-    float CHANGE_AMOUNT = 0.5f;
-    float SAFETY_THRESHOLD = 0.5f;
+    float CHANGE_AMOUNT = 1.0f;
+    float SAFETY_THRESHOLD = 2.0f;
 
     static FrostburnComponent get(LivingEntity entity) {
         return TitanFabricComponents.FROSTBURN.get(entity);

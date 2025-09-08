@@ -32,7 +32,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     private float frostburn;
     private float frostburnLimit;
     private long tick;
-    private int frostburnTickSpeed = 40;
+    private int frostburnTickSpeed = 60;
     private Phase currentPhase = Phase.INCREASE;
 
     public FrostburnComponentImpl(LivingEntity provider) {
@@ -106,16 +106,18 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         if (newFrostburnAmount > getFrostburn()) {
             setPhase(Phase.INCREASE);
         }
-        float damageAmount = newFrostburnAmount - getMissingHealth();
-        if (damageAmount > 0) {
-            float maxDamageableHealth = provider.getHealth() - SAFETY_THRESHOLD;
-            if (damageAmount > maxDamageableHealth) {
-                damageAmount = maxDamageableHealth;
-                newFrostburnAmount = provider.getMaxHealth() - damageAmount;
-            }
-            LoggerUtil.devLogger("Forced %s damage".formatted(damageAmount));
-            this.provider.damage(TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN), damageAmount);
+
+        float damageAmount = CHANGE_AMOUNT;
+        float maxDamageableHealth = provider.getHealth() - SAFETY_THRESHOLD;
+        float trueMissingHealth = provider.getMaxHealth() - provider.getHealth();
+
+        if (trueMissingHealth + damageAmount > maxDamageableHealth) {
+            damageAmount = maxDamageableHealth;
+            newFrostburnAmount = getMaxAllowedFrostburn();
         }
+        LoggerUtil.devLogger("Forced %s damage".formatted(damageAmount));
+        this.provider.damage(TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN), damageAmount);
+
         // LoggerUtil.devLogger("forced frostburn - damage: %s - frostburn amount: %s ".formatted(damageAmount, this.frostburn));
         setFrostburn(newFrostburnAmount, shouldSync);
     }
