@@ -81,7 +81,7 @@ public class FrostburnCommands implements CommandRegistrationCallback {
         }
         int tickSpeed = IntegerArgumentType.getInteger(context, "ticks");
         FrostburnComponent targetFrostburnComponent = FrostburnComponent.get(target);
-        targetFrostburnComponent.setFrostburnTickSpeed(tickSpeed, true);
+        targetFrostburnComponent.setFrostburnTickSpeed(tickSpeed);
         return Command.SINGLE_SUCCESS;
     }
 

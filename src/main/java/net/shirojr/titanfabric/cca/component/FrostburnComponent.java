@@ -47,7 +47,7 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
 
     int getFrostburnTickSpeed();
 
-    void setFrostburnTickSpeed(int speed, boolean shouldSync);
+    void setFrostburnTickSpeed(int speed);
 
     float getFrostburn();
 
@@ -71,6 +71,17 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
     void forceFrostburn(float newAmount, boolean shouldSync);
 
     /**
+     * @return The target value which will eventually be reached by increasing {@link #getFrostburn() frostburn} using ticks
+     */
+    float getFrostburnLimit();
+
+    void setFrostburnLimit(float limit, boolean shouldSync);
+
+    Phase getPhase();
+
+    void setPhase(Phase phase);
+
+    /**
      * @param hotBlocksSearchRange use <code>range <= 0</code> to disable search
      * @return Specifies if {@link #getProvider() provider} should maintain the current frostburn value
      */
@@ -87,14 +98,11 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
      */
     boolean shouldMaintainFrostburn();
 
-    /**
-     * @return The target value which will eventually be reached by increasing {@link #getFrostburn() frostburn} using ticks
-     */
-    float getFrostburnLimit();
-
-    void setFrostburnLimit(float limit, boolean shouldSync);
-
     float getMaxAllowedFrostburn();
 
     void sync();
+
+    enum Phase {
+        INCREASE, DECREASE
+    }
 }

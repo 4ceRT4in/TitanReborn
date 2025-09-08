@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
@@ -19,6 +20,7 @@ import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import java.util.Iterator;
@@ -30,7 +32,8 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     private float frostburn;
     private float frostburnLimit;
     private long tick;
-    private int frostburnTickSpeed;
+    private int frostburnTickSpeed = 40;
+    private Phase currentPhase = Phase.INCREASE;
 
     public FrostburnComponentImpl(LivingEntity provider) {
         this.provider = provider;
@@ -60,11 +63,9 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     }
 
     @Override
-    public void setFrostburnTickSpeed(int speed, boolean shouldSync) {
+    public void setFrostburnTickSpeed(int speed) {
         this.frostburnTickSpeed = Math.max(0, speed);
-        if (shouldSync) {
-            sync();
-        }
+        LoggerUtil.devLogger("set frostburn speed to " + this.frostburnTickSpeed);
     }
 
     @Override
@@ -83,19 +84,28 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         if (shouldSync) {
             sync();
         }
+        if (!provider.getWorld().isClient()) {
+            LoggerUtil.devLogger("set frostburn value to " + this.frostburn);
+        }
     }
 
     @Override
     public void setFrostburn(float newAmount) {
-        float buffer = this.frostburn;
+        float oldValue = this.frostburn;
         this.frostburn = MathHelper.clamp(newAmount, 0, provider.getMaxHealth() - provider.getHealth());
-        if (this.frostburn != buffer) {
+        if (this.frostburn != oldValue) {
             sync();
+        }
+        if (!provider.getWorld().isClient()) {
+            LoggerUtil.devLogger("set frostburn value to " + this.frostburn);
         }
     }
 
     @Override
     public void forceFrostburn(float newFrostburnAmount, boolean shouldSync) {
+        if (newFrostburnAmount > getFrostburn()) {
+            setPhase(Phase.INCREASE);
+        }
         float damageAmount = newFrostburnAmount - getMissingHealth();
         if (damageAmount > 0) {
             float maxDamageableHealth = provider.getHealth() - SAFETY_THRESHOLD;
@@ -103,9 +113,37 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
                 damageAmount = maxDamageableHealth;
                 newFrostburnAmount = provider.getMaxHealth() - damageAmount;
             }
+            LoggerUtil.devLogger("Forced %s damage".formatted(damageAmount));
             this.provider.damage(TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN), damageAmount);
         }
+        // LoggerUtil.devLogger("forced frostburn - damage: %s - frostburn amount: %s ".formatted(damageAmount, this.frostburn));
         setFrostburn(newFrostburnAmount, shouldSync);
+    }
+
+    @Override
+    public float getFrostburnLimit() {
+        return frostburnLimit;
+    }
+
+    @Override
+    public void setFrostburnLimit(float limit, boolean shouldSync) {
+        if (limit > this.frostburnLimit) {
+            this.setPhase(Phase.INCREASE);
+        }
+        this.frostburnLimit = MathHelper.clamp(limit, 0, getMaxAllowedFrostburn());
+        if (!provider.getWorld().isClient()) {
+            LoggerUtil.devLogger("set frostburn target limit to " + this.frostburnLimit);
+        }
+    }
+
+    @Override
+    public Phase getPhase() {
+        return this.currentPhase;
+    }
+
+    @Override
+    public void setPhase(Phase phase) {
+        this.currentPhase = phase;
     }
 
     @Override
@@ -117,9 +155,8 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
             if (provider.isOnFire()) return false;
         }
         if (provider.hasStatusEffect(TitanFabricStatusEffects.FROSTBURN)) return true;
-        if (!advancedThawing) {
-            return false;
-        }
+        if (!advancedThawing) return false;
+
         RegistryEntry<Biome> currentBiome = provider.getWorld().getBiome(provider.getBlockPos());
         if (currentBiome.isIn(ConventionalBiomeTags.IS_HOT)) {
             return false;
@@ -154,22 +191,16 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         int hotBlocksSearchRange = gameRules.getInt(TitanFabricGamerules.HOT_BLOCK_SEARCH_RANGE);
         int minHotBlockAmount = gameRules.getInt(TitanFabricGamerules.HOT_BLOCK_AMOUNT_FOR_THAWING);
         Predicate<BlockState> isHotBlock = blockState -> {
-            if (blockState.contains(Properties.LIT) && blockState.get(Properties.LIT)) {
-                return true;
+            boolean hasHotTag = blockState.isIn(TitanFabricTags.Blocks.HOT_BLOCKS);
+            if (blockState.contains(Properties.LIT)) {
+                if (blockState.get(Properties.LIT)) {
+                    return hasHotTag;
+                }
+                return false;
             }
-            return blockState.isIn(TitanFabricTags.Blocks.HOT_BLOCKS);
+            return hasHotTag;
         };
         return this.shouldMaintainFrostburn(hotBlocksSearchRange, minHotBlockAmount, isHotBlock);
-    }
-
-    @Override
-    public float getFrostburnLimit() {
-        return frostburnLimit;
-    }
-
-    @Override
-    public void setFrostburnLimit(float limit, boolean shouldSync) {
-        this.frostburnLimit = MathHelper.clamp(limit, 0, getMaxAllowedFrostburn());
     }
 
     @Override
@@ -191,22 +222,27 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         if (this.frostburnTickSpeed == 0) {
             return;
         }
-        if (getFrostburnLimit() == getFrostburn()) {
-            if (tick != 0) {
-                tick = 0;
-            }
-            return;
-        }
         this.tick++;
         if (this.tick % this.frostburnTickSpeed != 0) {
             return;
         }
-        if (getFrostburn() > getFrostburnLimit() && shouldMaintainFrostburn()) {
-            return;
-        }
-        if (getFrostburn() != getFrostburnLimit()) {
-            float changeAmount = getFrostburn() > getFrostburnLimit() ? -CHANGE_AMOUNT : CHANGE_AMOUNT;
-            this.forceFrostburn(getFrostburn() + changeAmount, true);
+
+        if (getPhase().equals(Phase.INCREASE)) {
+            if (getFrostburn() != getFrostburnLimit()) {
+                float changeAmount = getFrostburn() > getFrostburnLimit() ? -CHANGE_AMOUNT : CHANGE_AMOUNT;
+                this.forceFrostburn(getFrostburn() + changeAmount, true);
+                if (getFrostburn() == getFrostburnLimit()) {
+                    this.setPhase(Phase.DECREASE);
+                }
+            }
+        } else {
+            if (!shouldMaintainFrostburn()) {
+                this.setFrostburn(this.getFrostburn() - CHANGE_AMOUNT);
+                if (getFrostburn() == 0) {
+                    setFrostburnLimit(0, true);
+                    setPhase(Phase.INCREASE);
+                }
+            }
         }
     }
 
@@ -216,7 +252,8 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
             NbtCompound frostburnNbt = nbtCompound.getCompound("frostburn");
             this.setFrostburn(frostburnNbt.getFloat("currentFrostburn"), true);
             this.setFrostburnLimit(frostburnNbt.getFloat("limit"), true);
-            this.setFrostburnTickSpeed(frostburnNbt.getInt("tickSpeed"), true);
+            this.setFrostburnTickSpeed(frostburnNbt.getInt("tickSpeed"));
+            this.setPhase(Phase.values()[frostburnNbt.getInt("phase")]);
         }
     }
 
@@ -226,7 +263,18 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         frostburnNbt.putFloat("currentFrostburn", this.getFrostburn());
         frostburnNbt.putFloat("limit", this.getFrostburnLimit());
         frostburnNbt.putInt("tickSpeed", this.getFrostburnTickSpeed());
+        frostburnNbt.putInt("phase", this.getPhase().ordinal());
 
         nbtCompound.put("frostburn", frostburnNbt);
+    }
+
+    @Override
+    public void writeSyncPacket(RegistryByteBuf buf, ServerPlayerEntity recipient) {
+        buf.writeFloat(this.getFrostburn());
+    }
+
+    @Override
+    public void applySyncPacket(RegistryByteBuf buf) {
+        this.setFrostburn(buf.readFloat());
     }
 }

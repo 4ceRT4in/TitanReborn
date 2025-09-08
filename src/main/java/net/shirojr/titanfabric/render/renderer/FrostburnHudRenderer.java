@@ -7,7 +7,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 
 public class FrostburnHudRenderer implements HudRenderCallback {
@@ -31,8 +30,6 @@ public class FrostburnHudRenderer implements HudRenderCallback {
 
         int frostburnHearts = (int) Math.floor(frostburn / 2);
         boolean hasHalf = (frostburn % 1.0f) >= 0.5f;
-
-        TitanFabric.LOGGER.info(String.valueOf(frostburnHearts));
 
         for (int i = 0; i < frostburnHearts; i++) {
             int heartX = x + (i % 10) * SPACE_BETWEEN_SPRITES;
