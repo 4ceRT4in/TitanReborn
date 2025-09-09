@@ -118,8 +118,11 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         LoggerUtil.devLogger("Forced %s damage".formatted(damageAmount));
         this.provider.damage(TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN), damageAmount);
 
-        // LoggerUtil.devLogger("forced frostburn - damage: %s - frostburn amount: %s ".formatted(damageAmount, this.frostburn));
-        setFrostburn(newFrostburnAmount, shouldSync);
+        this.frostburn = newFrostburnAmount;
+        LoggerUtil.devLogger("New forced Frostburn amount: " + this.frostburn);
+        if (shouldSync) {
+            this.sync();
+        }
     }
 
     @Override
