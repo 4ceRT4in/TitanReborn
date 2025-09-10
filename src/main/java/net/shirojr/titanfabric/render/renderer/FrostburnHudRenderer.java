@@ -14,6 +14,33 @@ public class FrostburnHudRenderer implements HudRenderCallback {
     public static final int SPACE_BETWEEN_SPRITES = 0;
     public static final int HEARTS_PER_ROW = 10;
 
+    private static FrostburnHudRenderer instance;
+
+    private int yWobbleOffset;
+
+    private FrostburnHudRenderer() {
+        this.yWobbleOffset = 0;
+    }
+
+    public static FrostburnHudRenderer getInstance() {
+        if (instance == null) {
+            instance = new FrostburnHudRenderer();
+        }
+        return instance;
+    }
+
+    public static boolean isInstantiated() {
+        return instance != null;
+    }
+
+    public int getYWobbleOffset() {
+        return yWobbleOffset;
+    }
+
+    public void setYWobbleOffset(int yWobbleOffset) {
+        this.yWobbleOffset = yWobbleOffset;
+    }
+
     @Override
     public void onHudRender(DrawContext context, RenderTickCounter tickCounter) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
@@ -25,15 +52,15 @@ public class FrostburnHudRenderer implements HudRenderCallback {
         int centerX = context.getScaledWindowWidth() / 2;
         int bottomY = context.getScaledWindowHeight();
 
-        int startX = centerX - 11;
-        int startY = bottomY - 39;
+        int startX = centerX - 19;
+        int startY = bottomY - 39 + getYWobbleOffset();
 
         int frostburnHearts = (int) Math.floor(frostburn / 2);
         boolean hasHalf = (frostburn % 2.0f) != 0f;
 
         for (int i = 0; i < frostburnHearts; i++) {
             int heartX = startX - (SPRITE_SIZE + SPACE_BETWEEN_SPRITES) * i;
-            int row = i % 10;
+            int row = i / 10;
             int heartY = startY - (10 * row);    // assumes 10px between rows
 
             drawHeart(context, heartX, heartY, false);
@@ -53,7 +80,7 @@ public class FrostburnHudRenderer implements HudRenderCallback {
         if (half) {
             matrices.translate(x - SPRITE_SIZE * 0.5f, y - SPRITE_SIZE * 0.5f, 0);
             matrices.scale(-1, 1, 1);
-            matrices.translate( x + (-SPRITE_SIZE * 0.5f), y + (-SPRITE_SIZE * 0.5f), 0);
+            matrices.translate(x + (-SPRITE_SIZE * 0.5f), y + (-SPRITE_SIZE * 0.5f), 0);
         }
         context.drawGuiTexture(textureIdentifier, x, y, SPRITE_SIZE, SPRITE_SIZE);
         matrices.pop();
