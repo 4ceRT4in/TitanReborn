@@ -45,7 +45,9 @@ public class FrostburnCommands implements CommandRegistrationCallback {
                         .then(argument("entity", EntityArgumentType.entity())
                                 .executes(FrostburnCommands::printFrostburnSpeed)
                                 .then(argument("ticks", IntegerArgumentType.integer(0))
-                                        .executes(FrostburnCommands::setFrostburnTickSpeed)
+                                        .then(argument("phase", FrostburnComponent.Phase.PhaseArgumentType.phase())
+                                                .executes(FrostburnCommands::setFrostburnTickSpeed)
+                                        )
                                 )
                         )
                 )
@@ -90,8 +92,12 @@ public class FrostburnCommands implements CommandRegistrationCallback {
             throw NOT_APPLICABLE.create();
         }
         int tickSpeed = IntegerArgumentType.getInteger(context, "ticks");
+        FrostburnComponent.Phase phase = FrostburnComponent.Phase.PhaseArgumentType.getPhase(context, "phase");
         FrostburnComponent targetFrostburnComponent = FrostburnComponent.get(target);
-        targetFrostburnComponent.setFrostburnTickSpeed(tickSpeed);
+        switch (phase) {
+            case INCREASE -> targetFrostburnComponent.setFrostburnTickSpeedIncrease(tickSpeed);
+            case DECREASE -> targetFrostburnComponent.setFrostburnTickSpeedDecrease(tickSpeed);
+        }
 
         context.getSource().sendFeedback(() -> Text.literal("Set Frostburn Tick Speed to " + tickSpeed), true);
 
@@ -104,7 +110,11 @@ public class FrostburnCommands implements CommandRegistrationCallback {
         }
         FrostburnComponent frostburnComponent = FrostburnComponent.get(target);
         context.getSource().sendFeedback(
-                () -> Text.literal(target.getNameForScoreboard()).append(Text.literal(": %s ticks".formatted(frostburnComponent.getFrostburnTickSpeed()))),
+                () -> Text.literal(target.getNameForScoreboard()).append(Text.literal(": %s increase ticks".formatted(frostburnComponent.getFrostburnTickSpeedIncrease()))),
+                true
+        );
+        context.getSource().sendFeedback(
+                () -> Text.literal(target.getNameForScoreboard()).append(Text.literal(": %s decrease ticks".formatted(frostburnComponent.getFrostburnTickSpeedDecrease()))),
                 true
         );
         return Command.SINGLE_SUCCESS;

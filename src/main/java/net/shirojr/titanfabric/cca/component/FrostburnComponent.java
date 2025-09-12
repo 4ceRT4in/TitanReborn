@@ -1,8 +1,14 @@
 package net.shirojr.titanfabric.cca.component;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
+import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.TitanFabricComponents;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
@@ -45,9 +51,13 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
      */
     float getLimitedMaxHealth();
 
-    int getFrostburnTickSpeed();
+    int getFrostburnTickSpeedIncrease();
 
-    void setFrostburnTickSpeed(int speed);
+    void setFrostburnTickSpeedIncrease(int speed);
+
+    int getFrostburnTickSpeedDecrease();
+
+    void setFrostburnTickSpeedDecrease(int speed);
 
     float getFrostburn();
 
@@ -97,7 +107,28 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
 
     void sync();
 
-    enum Phase {
-        INCREASE, DECREASE
+    enum Phase implements StringIdentifiable {
+        INCREASE, DECREASE;
+
+        public static final Codec<Phase> CODEC = StringIdentifiable.createCodec(Phase::values);
+
+        @Override
+        public String asString() {
+            return this.name();
+        }
+
+        public static class PhaseArgumentType extends EnumArgumentType<Phase> implements ArgumentType<Phase> {
+            private PhaseArgumentType() {
+                super(Phase.CODEC, Phase::values);
+            }
+
+            public static PhaseArgumentType phase() {
+                return new PhaseArgumentType();
+            }
+
+            public static Phase getPhase(CommandContext<ServerCommandSource> context, String id) {
+                return context.getArgument(id, Phase.class);
+            }
+        }
     }
 }
