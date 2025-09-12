@@ -9,7 +9,7 @@ public interface TitanFabricGamerules {
     GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("legacyCombat", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("legacyFoodRegeneration", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("disableElytraBoosting", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("advancedFrostburnThawing", GameRules.Category.MISC, true);
+    GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("advancedFrostburnThawing", GameRules.Category.MISC, false);
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_SEARCH_RANGE = registerIntegerGamerule("hotBlockSearchRange", GameRules.Category.MISC, 7, -1, null);
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_AMOUNT_FOR_THAWING = registerIntegerGamerule("hotBlockAmountForThawing", GameRules.Category.MISC, 1, 1, null);
     GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("greatSwordCooldown", GameRules.Category.PLAYER, true);
