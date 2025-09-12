@@ -19,12 +19,15 @@ public class TitanFabricPotions {
     public static RegistryEntry<Potion> LONG_INDESTRUCTIBLE_POTION =
             registerPotion("long_indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
                     3600, 0, INDESTRUCTIBLE_POTION, Items.REDSTONE);
+
     public static RegistryEntry<Potion> FROSTBURN_POTION =
             registerPotion("frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
-                    400, 0, Potions.AWKWARD, Items.SNOWBALL);
-    public static RegistryEntry<Potion> LONG_FROSTBURN_POTION =
-            registerPotion("long_frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
-                    600, 0, FROSTBURN_POTION, Items.REDSTONE);
+                    600, 6, Potions.AWKWARD, Items.SNOWBALL);
+
+    public static RegistryEntry<Potion> STRONG_FROSTBURN_POTION =
+            registerPotion("strong_frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
+                    300, 12, FROSTBURN_POTION, Items.GLOWSTONE);
+
     public static RegistryEntry<Potion> IMMUNITY_POTION =
             registerPotion("immunity_potion", TitanFabricStatusEffects.IMMUNITY,
                     1800, 0, Potions.AWKWARD, TitanFabricItems.CITRIN_STAR);
@@ -40,9 +43,7 @@ public class TitanFabricPotions {
     }
 
     public static void registerRecipes(RegistryEntry<Potion> input, Item ingredient, RegistryEntry<Potion> output) {
-        FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> {
-            builder.registerPotionRecipe(input, ingredient, output);
-        });
+        FabricBrewingRecipeRegistryBuilder.BUILD.register(builder -> builder.registerPotionRecipe(input, ingredient, output));
     }
 
     public static void initialize() {

@@ -32,7 +32,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     private float frostburn;
     private float frostburnLimit;
     private long tick;
-    private int frostburnTickSpeed = 40;
+    private int frostburnTickSpeed = 20;
     private Phase currentPhase = Phase.INCREASE;
 
     public FrostburnComponentImpl(LivingEntity provider) {
