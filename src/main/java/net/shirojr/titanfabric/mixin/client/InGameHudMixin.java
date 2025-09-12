@@ -1,13 +1,5 @@
 package net.shirojr.titanfabric.mixin.client;
 
-import com.llamalad7.mixinextras.expression.Definition;
-import com.llamalad7.mixinextras.expression.Expression;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,7 +12,6 @@ import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.render.renderer.FrostburnHudRenderer;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import org.spongepowered.asm.mixin.Final;
@@ -113,7 +104,7 @@ public abstract class InGameHudMixin {
         RenderSystem.disableBlend();
     }
 
-    @Definition(id = "lines", local = @Local(argsOnly = true, ordinal = 2, type = int.class))
+    /*@Definition(id = "lines", local = @Local(argsOnly = true, ordinal = 2, type = int.class))
     @Expression("? - @(?) * lines")
     @ModifyExpressionValue(method = "renderHealthBar", at = @At("MIXINEXTRAS:EXPRESSION"))
     private int captureYHeartOffset(int original, @Share("n")LocalIntRef n) {
@@ -139,5 +130,5 @@ public abstract class InGameHudMixin {
             return;
         }
         FrostburnHudRenderer.getInstance().setYWobbleOffset(sharedValueN);
-    }
+    }*/
 }

@@ -32,7 +32,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     private float frostburn;
     private float frostburnLimit;
     private long tick;
-    private int frostburnTickSpeed = 60;
+    private int frostburnTickSpeed = 40;
     private Phase currentPhase = Phase.INCREASE;
 
     public FrostburnComponentImpl(LivingEntity provider) {
@@ -79,21 +79,9 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     }
 
     @Override
-    public void setFrostburn(float newAmount, boolean shouldSync) {
-        this.frostburn = MathHelper.clamp(newAmount, 0, provider.getMaxHealth() - provider.getHealth());
+    public void setFrostburn(float newAmount, boolean limitAmount, boolean shouldSync) {
+        this.frostburn = limitAmount ? MathHelper.clamp(newAmount, 0, getMaxAllowedFrostburn()) : newAmount;
         if (shouldSync) {
-            sync();
-        }
-        if (!provider.getWorld().isClient()) {
-            LoggerUtil.devLogger("set frostburn value to " + this.frostburn);
-        }
-    }
-
-    @Override
-    public void setFrostburn(float newAmount) {
-        float oldValue = this.frostburn;
-        this.frostburn = MathHelper.clamp(newAmount, 0, provider.getMaxHealth() - provider.getHealth());
-        if (this.frostburn != oldValue) {
             sync();
         }
         if (!provider.getWorld().isClient()) {
@@ -107,16 +95,14 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
             setPhase(Phase.INCREASE);
         }
 
-        float damageAmount = CHANGE_AMOUNT;
+        float damageAmount = newFrostburnAmount > getFrostburn() ? CHANGE_AMOUNT : -CHANGE_AMOUNT;
         float maxDamageableHealth = provider.getHealth() - SAFETY_THRESHOLD;
         float trueMissingHealth = provider.getMaxHealth() - provider.getHealth();
-
-        if (trueMissingHealth + damageAmount > maxDamageableHealth) {
-            damageAmount = maxDamageableHealth;
-            newFrostburnAmount = getMaxAllowedFrostburn();
+        damageAmount = Math.min(damageAmount, maxDamageableHealth);
+        if (damageAmount > 0 && trueMissingHealth + damageAmount <= newFrostburnAmount) {
+            LoggerUtil.devLogger("Forced %s damage".formatted(damageAmount));
+            this.provider.damage(TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN), damageAmount);
         }
-        LoggerUtil.devLogger("Forced %s damage".formatted(damageAmount));
-        this.provider.damage(TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN), damageAmount);
 
         this.frostburn = newFrostburnAmount;
         LoggerUtil.devLogger("New forced Frostburn amount: " + this.frostburn);
@@ -242,7 +228,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
             }
         } else {
             if (!shouldMaintainFrostburn()) {
-                this.setFrostburn(this.getFrostburn() - CHANGE_AMOUNT);
+                this.setFrostburn(this.getFrostburn() - CHANGE_AMOUNT, true, true);
                 if (getFrostburn() == 0) {
                     setFrostburnLimit(0, true);
                     setPhase(Phase.INCREASE);
@@ -255,7 +241,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup wrapperLookup) {
         if (nbtCompound.contains("frostburn")) {
             NbtCompound frostburnNbt = nbtCompound.getCompound("frostburn");
-            this.setFrostburn(frostburnNbt.getFloat("currentFrostburn"), true);
+            this.setFrostburn(frostburnNbt.getFloat("currentFrostburn"), false, false);
             this.setFrostburnLimit(frostburnNbt.getFloat("limit"), true);
             this.setFrostburnTickSpeed(frostburnNbt.getInt("tickSpeed"));
             this.setPhase(Phase.values()[frostburnNbt.getInt("phase")]);
@@ -280,6 +266,6 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public void applySyncPacket(RegistryByteBuf buf) {
-        this.setFrostburn(buf.readFloat());
+        this.setFrostburn(buf.readFloat(), false, false);
     }
 }

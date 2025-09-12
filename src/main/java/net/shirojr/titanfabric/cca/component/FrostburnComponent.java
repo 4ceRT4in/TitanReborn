@@ -58,12 +58,7 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
      * @param newAmount  new frostburn value which is capped at a maximum of {@link #getProvider()}'s actual missing health
      * @param shouldSync sync to client side
      */
-    void setFrostburn(float newAmount, boolean shouldSync);
-
-    /**
-     * {@link #setFrostburn(float, boolean)} but automatically only uses {@link #sync()} if the value has changed
-     */
-    void setFrostburn(float newAmount);
+    void setFrostburn(float newAmount, boolean limitAmount, boolean shouldSync);
 
     /**
      * Forces new frostburn value by damaging the {@link #getProvider() provider} if necessary

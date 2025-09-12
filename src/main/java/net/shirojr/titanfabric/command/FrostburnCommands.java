@@ -14,6 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 
 import static net.minecraft.server.command.CommandManager.argument;
@@ -48,6 +49,11 @@ public class FrostburnCommands implements CommandRegistrationCallback {
                                 )
                         )
                 )
+                .then(literal("print")
+                        .then(argument("entity", EntityArgumentType.entity())
+                                .executes(FrostburnCommands::print)
+                        )
+                )
         );
     }
 
@@ -59,6 +65,8 @@ public class FrostburnCommands implements CommandRegistrationCallback {
 
         FrostburnComponent targetFrostburnComponent = FrostburnComponent.get(target);
         targetFrostburnComponent.forceFrostburn(frostburn, true);
+
+        context.getSource().sendFeedback(() -> Text.literal("Forced Frostburn to " + frostburn), true);
 
         return Command.SINGLE_SUCCESS;
     }
@@ -72,6 +80,8 @@ public class FrostburnCommands implements CommandRegistrationCallback {
         FrostburnComponent targetFrostburnComponent = FrostburnComponent.get(target);
         targetFrostburnComponent.setFrostburnLimit(frostburn, true);
 
+        context.getSource().sendFeedback(() -> Text.literal("Set Frostburn Target Limit to " + frostburn), true);
+
         return Command.SINGLE_SUCCESS;
     }
 
@@ -82,6 +92,9 @@ public class FrostburnCommands implements CommandRegistrationCallback {
         int tickSpeed = IntegerArgumentType.getInteger(context, "ticks");
         FrostburnComponent targetFrostburnComponent = FrostburnComponent.get(target);
         targetFrostburnComponent.setFrostburnTickSpeed(tickSpeed);
+
+        context.getSource().sendFeedback(() -> Text.literal("Set Frostburn Tick Speed to " + tickSpeed), true);
+
         return Command.SINGLE_SUCCESS;
     }
 
@@ -94,6 +107,20 @@ public class FrostburnCommands implements CommandRegistrationCallback {
                 () -> Text.literal(target.getNameForScoreboard()).append(Text.literal(": %s ticks".formatted(frostburnComponent.getFrostburnTickSpeed()))),
                 true
         );
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int print(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        if (!(EntityArgumentType.getEntity(context, "entity") instanceof LivingEntity target)) {
+            throw NOT_APPLICABLE.create();
+        }
+        FrostburnComponent frostburnComponent = FrostburnComponent.get(target);
+
+        context.getSource().sendFeedback(() -> Text.literal("[%s]:".formatted(target.getNameForScoreboard())).formatted(Formatting.BLUE), true);
+        context.getSource().sendFeedback(() -> Text.literal("Frostburn: " + frostburnComponent.getFrostburn()), true);
+        context.getSource().sendFeedback(() -> Text.literal("Frostburn Target Limit: " + frostburnComponent.getFrostburnLimit()), true);
+        context.getSource().sendFeedback(() -> Text.literal("Frostburn phase: " + frostburnComponent.getPhase()), true);
+        context.getSource().sendFeedback(() -> Text.literal("Maintains or increases Frostburn: " + frostburnComponent.shouldMaintainFrostburn()), true);
         return Command.SINGLE_SUCCESS;
     }
 }

@@ -5,14 +5,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 
 public class FrostburnHudRenderer implements HudRenderCallback {
     public static final int SPRITE_SIZE = 9;
-    public static final int SPACE_BETWEEN_SPRITES = 0;
-    public static final int HEARTS_PER_ROW = 10;
 
     private static FrostburnHudRenderer instance;
 
@@ -59,7 +57,7 @@ public class FrostburnHudRenderer implements HudRenderCallback {
         boolean hasHalf = (frostburn % 2.0f) != 0f;
 
         for (int i = 0; i < frostburnHearts; i++) {
-            int heartX = startX - (SPRITE_SIZE + SPACE_BETWEEN_SPRITES) * i;
+            int heartX = startX - ((SPRITE_SIZE - 1) * i);
             int row = i / 10;
             int heartY = startY - (10 * row);    // assumes 10px between rows
 
@@ -67,22 +65,15 @@ public class FrostburnHudRenderer implements HudRenderCallback {
         }
 
         if (hasHalf) {
-            int heartX = startX + ((frostburnHearts + 1) % 10)/* * SPACE_BETWEEN_SPRITES*/;
-            int heartY = startY - ((frostburnHearts + 1) / 10) * 10;
+            int row = frostburnHearts / 10;
+            int heartX = startX - ((frostburnHearts) * (SPRITE_SIZE - 1));
+            int heartY = startY - (10 * row);
             drawHeart(context, heartX, heartY, true);
         }
     }
 
     private static void drawHeart(DrawContext context, int x, int y, boolean half) {
-        Identifier textureIdentifier = Identifier.ofVanilla("hud/heart/frozen_" + (half ? "half" : "full"));
-        MatrixStack matrices = context.getMatrices();
-        matrices.push();
-        if (half) {
-            matrices.translate(x - SPRITE_SIZE * 0.5f, y - SPRITE_SIZE * 0.5f, 0);
-            matrices.scale(-1, 1, 1);
-            matrices.translate(x + (-SPRITE_SIZE * 0.5f), y + (-SPRITE_SIZE * 0.5f), 0);
-        }
-        context.drawGuiTexture(textureIdentifier, x, y, SPRITE_SIZE, SPRITE_SIZE);
-        matrices.pop();
+        Identifier textureIdentifier = TitanFabric.getId("hud/heart/frozen_" + (half ? "half" : "full"));
+        context.drawGuiTexture(textureIdentifier, x, y, 0, SPRITE_SIZE, SPRITE_SIZE);
     }
 }
