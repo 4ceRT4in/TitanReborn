@@ -23,7 +23,6 @@ public class TitanFabricPotions {
     public static RegistryEntry<Potion> FROSTBURN_POTION =
             registerPotion("frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
                     600, 6, Potions.AWKWARD, Items.SNOWBALL);
-
     public static RegistryEntry<Potion> STRONG_FROSTBURN_POTION =
             registerPotion("strong_frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
                     300, 12, FROSTBURN_POTION, Items.GLOWSTONE_DUST);
