@@ -42,7 +42,7 @@ public class FrostburnHudRenderer implements HudRenderCallback {
     @Override
     public void onHudRender(DrawContext context, RenderTickCounter tickCounter) {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return;
+        if (player == null || player.isSpectator() || player.isCreative()) return;
         FrostburnComponent frostburnComponent = FrostburnComponent.get(player);
         float frostburn = frostburnComponent.getFrostburn();
         if (frostburn <= 0) return;
