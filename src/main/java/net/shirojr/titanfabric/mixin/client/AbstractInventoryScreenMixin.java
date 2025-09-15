@@ -1,15 +1,17 @@
 package net.shirojr.titanfabric.mixin.client;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
@@ -27,8 +29,18 @@ import java.util.UUID;
 public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler>
         extends HandledScreen<T> {
 
-    public AbstractInventoryScreenMixin(T handler, PlayerInventory inventory, Text title) {
+    private AbstractInventoryScreenMixin(T handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+    }
+
+    @Definition(id = "getAmplifier", method = "Lnet/minecraft/entity/effect/StatusEffectInstance;getAmplifier()I")
+    @Definition(id = "statusEffect", local = @Local(type = StatusEffectInstance.class, argsOnly = true))
+    @Expression("statusEffect.getAmplifier() >= 1")
+    @ModifyExpressionValue(method = "getStatusEffectDescription", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean preventFrostburnEffectAmplifierRendering(boolean original, @Local(argsOnly = true) StatusEffectInstance statusEffectInstance) {
+        if (client == null || client.player == null) return original;
+        if (!statusEffectInstance.getEffectType().equals(TitanFabricStatusEffects.FROSTBURN)) return original;
+        return false;
     }
 
     @Inject(method = "render", at = @At("TAIL"))
