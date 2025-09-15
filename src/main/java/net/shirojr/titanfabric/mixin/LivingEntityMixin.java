@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -22,6 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
@@ -297,5 +299,11 @@ public abstract class LivingEntityMixin {
     @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(floatValue = 25.0F))
     private float modifyAppliedDamageFloat25(float original) {
         return 10.0F;
+    }
+
+    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V"))
+    private void absorptionFrostburnBypass(LivingEntity instance, float absorptionAmount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
+        if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
+        original.call(instance, absorptionAmount);
     }
 }
