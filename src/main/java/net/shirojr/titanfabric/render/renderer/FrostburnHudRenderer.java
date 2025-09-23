@@ -11,6 +11,8 @@ import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 
 public class FrostburnHudRenderer implements HudRenderCallback {
     public static final int SPRITE_SIZE = 9;
+    private static final int HEARTS_PER_ROW = 10;
+    private static final int VERTICAL_SPRITE_GAP = 10;
 
     private static FrostburnHudRenderer instance;
 
@@ -56,18 +58,28 @@ public class FrostburnHudRenderer implements HudRenderCallback {
         int frostburnHearts = (int) Math.floor(frostburn / 2);
         boolean hasHalf = (frostburn % 2.0f) != 0f;
 
+        int trueMaxHearts = (int) (player.getMaxHealth() / 2);
+
         for (int i = 0; i < frostburnHearts; i++) {
-            int heartX = startX - ((SPRITE_SIZE - 1) * i);
-            int row = i / 10;
-            int heartY = startY - (10 * row);    // assumes 10px between rows
+            int frostburnHeartIndex = Math.max(0, trueMaxHearts - i - 1);
+            int row = frostburnHeartIndex / HEARTS_PER_ROW;
+
+            int frostburnHeartIndexInRow = (HEARTS_PER_ROW - 1) - (frostburnHeartIndex % HEARTS_PER_ROW);
+
+            int heartX = startX - (frostburnHeartIndexInRow * (SPRITE_SIZE - 1));
+            int heartY = startY - (VERTICAL_SPRITE_GAP * (row));
 
             drawHeart(context, heartX, heartY, false);
         }
 
         if (hasHalf) {
-            int row = frostburnHearts / 10;
-            int heartX = startX - ((frostburnHearts) * (SPRITE_SIZE - 1));
-            int heartY = startY - (10 * row);
+            int frostburnHeartIndex = Math.max(0, trueMaxHearts - frostburnHearts - 1);
+            int frostburnHeartIndexInRow = (HEARTS_PER_ROW - 1) - (frostburnHeartIndex % HEARTS_PER_ROW);
+            int row = frostburnHeartIndex / HEARTS_PER_ROW;
+
+            int heartX = startX - (frostburnHeartIndexInRow * (SPRITE_SIZE - 1));
+            int heartY = startY - (VERTICAL_SPRITE_GAP * row);
+
             drawHeart(context, heartX, heartY, true);
         }
     }
