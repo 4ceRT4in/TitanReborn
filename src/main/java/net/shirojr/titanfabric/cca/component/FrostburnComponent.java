@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
@@ -104,6 +105,8 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
     boolean shouldMaintainFrostburn();
 
     float getMaxAllowedFrostburn();
+
+    void equipmentChange(LivingEntity user, ItemStack oldStack, ItemStack newStack);
 
     void sync();
 

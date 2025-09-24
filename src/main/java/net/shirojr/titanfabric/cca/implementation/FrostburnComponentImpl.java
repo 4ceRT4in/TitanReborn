@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.cca.implementation;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.registry.RegistryWrapper;
@@ -20,6 +21,7 @@ import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
@@ -102,6 +104,8 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public void forceFrostburn(float newFrostburnAmount, boolean shouldSync) {
+        LoggerUtil.devLogger("Entity HP after force: " + this.provider.getHealth());
+
         if (newFrostburnAmount > getFrostburn()) {
             setPhase(Phase.INCREASE);
         }
@@ -120,6 +124,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         if (shouldSync) {
             this.sync();
         }
+        LoggerUtil.devLogger("Entity HP after force: " + this.provider.getHealth());
     }
 
     @Override
@@ -206,6 +211,23 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     }
 
     @Override
+    public void equipmentChange(LivingEntity user, ItemStack oldStack, ItemStack newStack) {
+        float oldHp = user.getHealth();
+        float newHp = oldHp;
+        if (!(oldStack.getItem() instanceof LegendArmorItem) && newStack.getItem() instanceof LegendArmorItem newItem) {
+            newHp += newItem.getExtraValue();
+        } else if (oldStack.getItem() instanceof LegendArmorItem oldItem && !(newStack.getItem() instanceof LegendArmorItem)) {
+            newHp = Math.max(0, newHp - oldItem.getExtraValue());
+        }
+        else return;
+
+        if (oldHp > newHp && !user.getWorld().isClient()) {
+            forceFrostburn(getFrostburn(), true);
+            setFrostburnLimit(getFrostburn(), true);
+        }
+    }
+
+    @Override
     public void sync() {
         TitanFabricComponents.FROSTBURN.sync(provider);
     }
@@ -229,7 +251,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
             if (this.tick % this.frostburnTickSpeedIncrease != 0) {
                 return;
             }
-            if (getFrostburn() != getFrostburnLimit()) {
+            if (getFrostburn() != getFrostburnLimit() || getMissingHealth() < getFrostburn()) {
                 float changeAmount = getFrostburn() > getFrostburnLimit() ? -CHANGE_AMOUNT : CHANGE_AMOUNT;
                 this.forceFrostburn(getFrostburn() + changeAmount, true);
                 if (getFrostburn() == getFrostburnLimit()) {

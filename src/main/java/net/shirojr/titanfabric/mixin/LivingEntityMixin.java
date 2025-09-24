@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
@@ -22,6 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
+import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
@@ -31,6 +33,7 @@ import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -305,5 +308,19 @@ public abstract class LivingEntityMixin {
     private void absorptionFrostburnBypass(LivingEntity instance, float absorptionAmount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
         if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
         original.call(instance, absorptionAmount);
+    }
+
+    @Debug(export = true)
+    @Inject(method = "getEquipmentChanges",
+            at = @At(
+                    value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;applyAttributeModifiers(Lnet/minecraft/entity/EquipmentSlot;Ljava/util/function/BiConsumer;)V",
+                    ordinal = 0,
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void afterEquipmentChanges(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
+        LivingEntity livingEntity = (LivingEntity) (Object) this;
+        FrostburnComponent frostburnComponent = FrostburnComponent.get(livingEntity);
+        frostburnComponent.setPhase(FrostburnComponent.Phase.INCREASE);
     }
 }
