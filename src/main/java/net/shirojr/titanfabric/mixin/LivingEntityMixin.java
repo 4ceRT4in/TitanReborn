@@ -319,8 +319,8 @@ public abstract class LivingEntityMixin {
             )
     )
     private void afterEquipmentChanges(CallbackInfoReturnable<Map<EquipmentSlot, ItemStack>> cir) {
-        LivingEntity livingEntity = (LivingEntity) (Object) this;
+        /*LivingEntity livingEntity = (LivingEntity) (Object) this;
         FrostburnComponent frostburnComponent = FrostburnComponent.get(livingEntity);
-        frostburnComponent.setPhase(FrostburnComponent.Phase.INCREASE);
+        frostburnComponent.setPhase(FrostburnComponent.Phase.INCREASE);*/
     }
 }
