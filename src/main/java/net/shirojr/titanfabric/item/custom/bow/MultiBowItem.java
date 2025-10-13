@@ -12,6 +12,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
@@ -85,6 +86,20 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
         ((ArrowShootingHandler) player).titanfabric$shootsArrows(true);
         handleArrowShots(player, stack, MultiBowHelper.searchValidArrowStack(player, stack), this.pullProgress);
         handleAfterShotValues(stack, player);
+    }
+
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if (!world.isClient()) {
+            ArrowSelectionHelper.cleanUpProjectileSelection(user, user.getStackInHand(hand));
+
+            ItemStack stack = user.getStackInHand(hand);
+            var comp = stack.get(TitanFabricDataComponents.MULTI_BOW_ARROWS_COUNT);
+            if(comp == null) return super.use(world, user, hand);
+
+            if(comp.doubleValue() > 0) return TypedActionResult.fail(stack);
+        }
+        return super.use(world, user, hand);
     }
 
     private static boolean validTick(int tick) {
