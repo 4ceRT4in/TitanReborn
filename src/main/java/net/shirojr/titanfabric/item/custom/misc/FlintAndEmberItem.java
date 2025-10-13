@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.item.custom.misc;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FlintAndSteelItem;
@@ -42,63 +43,92 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
 
         BlockPos firePos = pos.offset(context.getSide());
         if (!AbstractFireBlock.canPlaceAt(world, firePos, Direction.UP)) {
-            return ActionResult.FAIL;
+            if (!isReplaceablePlant(world.getBlockState(firePos))) return ActionResult.FAIL;
         }
 
         world.playSound(player, firePos, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
 
         int damage = stack.getDamage();
         int maxDamage = stack.getMaxDamage();
+        int placed = 0;
 
         if (damage < maxDamage - 28) {
-            placeSoulFireArea(world, firePos, player, 3, 3);
+            placed = placeSoulFireArea(world, firePos, player, 3, 3);
             if (player != null) {
                 player.getItemCooldownManager().set(stack.getItem(), 30);
-                stack.damage(9, player, LivingEntity.getSlotForHand(context.getHand()));
+                if (placed > 0) stack.damage(placed, player, LivingEntity.getSlotForHand(context.getHand()));
             }
         } else if (damage < maxDamage - 8) {
-            placeSoulFireCross(world, firePos, player);
+            placed = placeSoulFireCross(world, firePos, player);
             if (player != null) {
                 player.getItemCooldownManager().set(stack.getItem(), 20);
-                stack.damage(5, player, LivingEntity.getSlotForHand(context.getHand()));
+                if (placed > 0) stack.damage(placed, player, LivingEntity.getSlotForHand(context.getHand()));
             }
         } else {
-            BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
-            world.setBlockState(firePos, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-            world.emitGameEvent(player, GameEvent.BLOCK_PLACE, firePos);
-            if (player != null) {
-                stack.damage(1, player, LivingEntity.getSlotForHand(context.getHand()));
+            placed = tryPlaceSoulFire(world, firePos, player);
+            if (player != null && placed > 0) {
+                stack.damage(placed, player, LivingEntity.getSlotForHand(context.getHand()));
             }
         }
 
-        if (player instanceof ServerPlayerEntity) {
+        if (player instanceof ServerPlayerEntity && placed > 0) {
             Criteria.PLACED_BLOCK.trigger((ServerPlayerEntity) player, firePos, stack);
         }
         return ActionResult.success(world.isClient());
     }
 
-    private void placeSoulFireArea(World world, BlockPos center, PlayerEntity player, int width, int height) {
-        int offset = width / 2;
-        for (int x = -offset; x <= offset; x++) {
-            for (int z = -offset; z <= offset; z++) {
-                BlockPos p = center.add(x, 0, z);
-                if (world.getBlockState(p).isAir() && AbstractFireBlock.canPlaceAt(world, p, Direction.UP)) {
-                    BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
-                    world.setBlockState(p, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-                    world.emitGameEvent(player, GameEvent.BLOCK_PLACE, p);
-                }
+    private boolean isReplaceablePlant(BlockState state) {
+        return state.getBlock() instanceof PlantBlock
+                || state.getBlock() instanceof TallPlantBlock
+                || state.isOf(Blocks.SHORT_GRASS)
+                || state.isOf(Blocks.TALL_GRASS);
+    }
+
+    private void removePlantAt(World world, BlockPos pos, BlockState state) {
+        if (state.getBlock() instanceof TallPlantBlock && state.contains(Properties.DOUBLE_BLOCK_HALF)) {
+            DoubleBlockHalf half = state.get(Properties.DOUBLE_BLOCK_HALF);
+            BlockPos other = half == DoubleBlockHalf.UPPER ? pos.down() : pos.up();
+            world.breakBlock(pos, false);
+            if (world.getBlockState(other).getBlock() instanceof TallPlantBlock) {
+                world.breakBlock(other, false);
             }
+        } else {
+            world.breakBlock(pos, false);
         }
     }
 
-    private void placeSoulFireCross(World world, BlockPos center, PlayerEntity player) {
-        BlockPos[] positions = {center, center.north(), center.south(), center.east(), center.west()};
-        for (BlockPos p : positions) {
-            if (world.getBlockState(p).isAir() && AbstractFireBlock.canPlaceAt(world, p, Direction.UP)) {
-                BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
-                world.setBlockState(p, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-                world.emitGameEvent(player, GameEvent.BLOCK_PLACE, p);
+    private int tryPlaceSoulFire(World world, BlockPos pos, PlayerEntity player) {
+        BlockState current = world.getBlockState(pos);
+        if (isReplaceablePlant(current)) {
+            removePlantAt(world, pos, current);
+        }
+        if (world.getBlockState(pos).isAir() && AbstractFireBlock.canPlaceAt(world, pos, Direction.UP)) {
+            BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
+            world.setBlockState(pos, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+            world.emitGameEvent(player, GameEvent.BLOCK_PLACE, pos);
+            return 1;
+        }
+        return 0;
+    }
+
+    private int placeSoulFireArea(World world, BlockPos center, PlayerEntity player, int width, int height) {
+        int offset = width / 2;
+        int placed = 0;
+        for (int x = -offset; x <= offset; x++) {
+            for (int z = -offset; z <= offset; z++) {
+                BlockPos p = center.add(x, 0, z);
+                placed += tryPlaceSoulFire(world, p, player);
             }
         }
+        return placed;
+    }
+
+    private int placeSoulFireCross(World world, BlockPos center, PlayerEntity player) {
+        BlockPos[] positions = {center, center.north(), center.south(), center.east(), center.west()};
+        int placed = 0;
+        for (BlockPos p : positions) {
+            placed += tryPlaceSoulFire(world, p, player);
+        }
+        return placed;
     }
 }
