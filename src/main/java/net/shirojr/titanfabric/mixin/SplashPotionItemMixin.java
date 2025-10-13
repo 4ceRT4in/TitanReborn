@@ -23,6 +23,6 @@ public abstract class SplashPotionItemMixin extends PotionItem {
     private void onUse(World world, PlayerEntity user, Hand hand,
                        CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         // Add a cooldown to prevent splash damage/health from becoming too overpowered when stackable
-        user.getItemCooldownManager().set(this, 20);
+        user.getItemCooldownManager().set(this, 10);
     }
 }

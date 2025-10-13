@@ -13,18 +13,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.shirojr.titanfabric.access.HealthAccessor;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
-import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -42,7 +44,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin {
+public abstract class LivingEntityMixin implements HealthAccessor {
     @Shadow
     public abstract boolean canHaveStatusEffect(StatusEffectInstance effect);
 
@@ -56,6 +58,12 @@ public abstract class LivingEntityMixin {
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
 
+    @Shadow public abstract void setHealth(float health);
+
+    @Shadow public abstract float getHealth();
+
+    @Shadow public abstract float getMaxHealth();
+
     @Inject(method = "onStatusEffectApplied", at = @At("TAIL"), cancellable = true)
     private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
@@ -67,17 +75,32 @@ public abstract class LivingEntityMixin {
             ci.cancel();
         }
     }
+    @Unique
+    @Nullable
+    private Float titanfabric$restorePoint = null;
 
-    @Inject(method = "damage", at = @At("HEAD"))
-    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source != null && source.getAttacker() instanceof LivingEntity attacker && !source.isIn(DamageTypeTags.IS_PROJECTILE)) {
-            LivingEntity self = (LivingEntity) (Object) this;
+    @Override
+    public void titanfabric$setRestorePoint(Float restorePoint) {
+        this.titanfabric$restorePoint = restorePoint;
+    }
 
-            if (self.isBlocking() && self.getActiveItem().getItem() == TitanFabricItems.NETHERITE_SHIELD) {
-                DamageSource damageSource = self.getDamageSources().generic();
-                //LoggerUtil.devLogger("works");
-                float k = attacker.getKnockbackAgainst(self, damageSource) + (1.25F);
-                attacker.takeKnockback(k * 0.5F, MathHelper.sin(self.getYaw() * ((float) Math.PI / 180F)), -MathHelper.cos(self.getYaw() * ((float) Math.PI / 180F)));
+    @Inject(method = "tick()V", at = @At("TAIL"))
+    private void titanfabric$tick(CallbackInfo callback) {
+        if (this.titanfabric$restorePoint != null) {
+            if (this.titanfabric$restorePoint > 0 && this.titanfabric$restorePoint > this.getHealth()) {
+                this.setHealth(this.titanfabric$restorePoint);
+            }
+            this.titanfabric$setRestorePoint(null);
+        }
+    }
+
+    @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
+    private void titanfabric$readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+        if (nbt.contains("Health", NbtElement.NUMBER_TYPE)) {
+            final float nbtHealth = nbt.getFloat("Health");
+
+            if (nbtHealth > this.getMaxHealth() && nbtHealth > 0) {
+                titanfabric$restorePoint = nbtHealth;
             }
         }
     }
@@ -224,10 +247,6 @@ public abstract class LivingEntityMixin {
     private void blockedByShield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity self = (LivingEntity) (Object) this;
 
-        if (self.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_COMBAT)) {
-            cir.setReturnValue(false);
-        }
-
         if (source.getAttacker() instanceof PlayerEntity attacker) {
             if (self instanceof PlayerEntity target) {
                 // If the target is blocking and holding a shield
@@ -242,9 +261,7 @@ public abstract class LivingEntityMixin {
                     if (target.isBlocking()) {
                         float f = 0.25F;
                         if (target.getRandom().nextFloat() < f) {
-                            target.getItemCooldownManager().set(target.getActiveItem().getItem(), 100);
-                            target.clearActiveItem();
-                            target.getWorld().sendEntityStatus(target, (byte) 30);
+                            target.disableShield();
                         }
                     }
                 }

@@ -153,18 +153,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
                 }
             }
         }
-        if (player.isBlocking()) {
-            ItemStack activeItem = player.getActiveItem();
-
-            if (activeItem.getItem() == Items.SHIELD) {
-                return amount * 0.75f;
-            } else if (activeItem.getItem() == TitanFabricItems.DIAMOND_SHIELD) {
-                return amount * 0.5f;
-            } else if (activeItem.getItem() == TitanFabricItems.LEGEND_SHIELD ||
-                    activeItem.getItem() == TitanFabricItems.NETHERITE_SHIELD) {
-                return amount * 0.25f;
-            }
-        }
 
         return amount;
     }
@@ -278,7 +266,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
 
     @Inject(method = "disableShield", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ItemCooldownManager;set(Lnet/minecraft/item/Item;I)V"))
     public void titanfabric$disableNeMuelchShield(CallbackInfo ci) {
-        this.getItemCooldownManager().set(TitanFabricItems.DIAMOND_SHIELD.asItem(), 90);
-        this.getItemCooldownManager().set(TitanFabricItems.LEGEND_SHIELD.asItem(), 90);
+        this.getItemCooldownManager().set(TitanFabricItems.DIAMOND_SHIELD.asItem(), 80);
+        this.getItemCooldownManager().set(TitanFabricItems.LEGEND_SHIELD.asItem(), 60);
+        this.getItemCooldownManager().set(TitanFabricItems.NETHERITE_SHIELD.asItem(), 40);
     }
 }

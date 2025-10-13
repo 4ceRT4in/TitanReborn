@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.AbstractFireBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -10,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.TitanFabricClient;
 import net.shirojr.titanfabric.access.EntityAccessor;
+import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +19,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractFireBlock.class)
-public abstract class AbstractFireBlockMixin {
+public abstract class AbstractFireBlockMixin extends Block {
+
+    public AbstractFireBlockMixin(Settings settings) {
+        super(settings);
+    }
 
     @Inject(method = "onEntityCollision", at = @At("HEAD"))
     private void onEntityCollisionMixin(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci) {
@@ -29,6 +35,7 @@ public abstract class AbstractFireBlockMixin {
         }
 
         if (!entity.isFireImmune() && !world.isClient) {
+            if(!world.getGameRules().getBoolean(TitanFabricGamerules.SOUL_FIRE_INFINITE)) return;
             if(soulFire) {
                 ((EntityAccessor) entity).titanfabric$setSoulBurning(true);
                 entity.setFireTicks(99999);

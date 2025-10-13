@@ -134,11 +134,11 @@ public interface TitanFabricItems {
             new TitanFabricArrowItem(new Item.Settings().maxCount(32)));
 
     TitanFabricShieldItem DIAMOND_SHIELD = register("diamond_shield",
-            new TitanFabricShieldItem(new Item.Settings().maxCount(1).maxDamage(1685), Items.DIAMOND));
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1).maxDamage(1685),4, Items.DIAMOND));
     TitanFabricShieldItem NETHERITE_SHIELD = register("netherite_shield",
-            new TitanFabricShieldItem(new Item.Settings().maxCount(1).maxDamage(3370).fireproof(), Items.NETHERITE_INGOT));
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1).maxDamage(3370).fireproof(),2, Items.NETHERITE_INGOT));
     TitanFabricShieldItem LEGEND_SHIELD = register("legend_shield",
-            new TitanFabricShieldItem(new Item.Settings().maxCount(1).component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)), TitanFabricItems.LEGEND_INGOT));
+            new TitanFabricShieldItem(new Item.Settings().maxCount(1).component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)),3, TitanFabricItems.LEGEND_INGOT));
 
     ArmorPlatingItem CITRIN_ARMOR_PLATING = register("citrin_armor_plating",
             new ArmorPlatingItem(new Item.Settings().maxCount(16), ArmorPlateType.CITRIN));

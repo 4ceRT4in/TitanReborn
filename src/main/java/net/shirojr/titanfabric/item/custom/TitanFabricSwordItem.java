@@ -1,12 +1,19 @@
 package net.shirojr.titanfabric.item.custom;
 
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.entity.attribute.ExtendedEntityAttributes;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -23,13 +30,21 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     protected final boolean canHaveWeaponEffects;
     private final WeaponEffect baseEffect;
     private final SwordType swordType;
+    private static final Identifier BASE_CRIT_MODIFIER_ID = TitanFabric.getId("base_crit_modifier");
 
     public TitanFabricSwordItem(boolean canHaveWeaponEffects, ToolMaterial toolMaterial, int attackDamage,
                                 float attackSpeed, SwordType swordType, WeaponEffect baseEffect, Item.Settings settings) {
-        super(toolMaterial, settings.attributeModifiers(SwordItem.createAttributeModifiers(toolMaterial, attackDamage, attackSpeed)));
+        super(toolMaterial, settings.attributeModifiers(createAttributeModifiers(toolMaterial, attackDamage, attackSpeed, swordType.getCritMultiplier())));
         this.canHaveWeaponEffects = canHaveWeaponEffects;
         this.baseEffect = baseEffect;
         this.swordType = swordType;
+    }
+
+    public static AttributeModifiersComponent createAttributeModifiers(ToolMaterial material, int baseAttackDamage, float attackSpeed, float critModifier) {
+        return AttributeModifiersComponent.builder().add(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(BASE_ATTACK_DAMAGE_MODIFIER_ID, (double)((float)baseAttackDamage + material.getAttackDamage()), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND).add(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(BASE_ATTACK_SPEED_MODIFIER_ID, (double)attackSpeed, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND)
+                .add(ExtendedEntityAttributes.GENERIC_CRIT_MODIFIER,
+                        new EntityAttributeModifier(BASE_CRIT_MODIFIER_ID, critModifier, EntityAttributeModifier.Operation.ADD_VALUE),
+                        AttributeModifierSlot.MAINHAND).build();
     }
 
     @Override

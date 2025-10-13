@@ -32,11 +32,13 @@
     "PlayerEntityMixin",
     "PotionEntityMixin",
     "ServerPlayerEntityMixin",
+    "ShieldItemMixin",
     "SnowballEntityMixin",
     "SoulFireBlockMixin",
     "SplashPotionItemMixin",
     "StatusEffectInstanceMixin",
-    "StatusEffectsMixin"
+    "StatusEffectsMixin",
+    "SwordItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -50,6 +52,7 @@
     "client.BackgroundRendererMixin",
     "client.BipedEntityModelMixin",
     "client.BufferBuilderStorageMixin",
+    "client.BundleTooltipComponentMixin",
     "client.ClientPlayerEntityMixin",
     "client.EntityRenderDispatcherMixin",
     "client.HeldItemRendererMixin",

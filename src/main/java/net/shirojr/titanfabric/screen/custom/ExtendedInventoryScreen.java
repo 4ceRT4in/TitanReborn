@@ -23,31 +23,85 @@ import java.util.List;
 
 public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInventoryScreenHandler> implements RecipeBookProvider {
     public static final Identifier TEXTURE = TitanFabric.getId("textures/gui/extended_inventory.png");
-    private final RecipeBookWidget recipeBook = new RecipeBookWidget() {
+
+    private static class FakeRecipeBookWidget extends RecipeBookWidget {
+        private boolean open;
+        private boolean narrow;
+        private int parentWidth;
+        private int parentHeight;
+        private final int panelWidth = 147;
+        private int panelTop;
+        private int panelLeft;
         @Override
         public void initialize(int parentWidth, int parentHeight, MinecraftClient client, boolean narrow, AbstractRecipeScreenHandler<?, ?> handler) {
-            this.client = client;
             this.parentWidth = parentWidth;
             this.parentHeight = parentHeight;
             this.narrow = narrow;
             this.open = false;
+            this.recomputePanelPos();
         }
-
+        private void recomputePanelPos() {
+            this.panelTop = (this.parentHeight - 166) / 2;
+            this.panelLeft = this.narrow ? 0 : (this.parentWidth - 176) / 2 - this.panelWidth;
+        }
         @Override
-        public void reset() {
+        public void toggleOpen() {
+            this.open = !this.open;
         }
-
+        @Override
+        public boolean isOpen() {
+            return this.open;
+        }
+        @Override
+        public int findLeftEdge(int parentWidth, int backgroundWidth) {
+            return (parentWidth - backgroundWidth) / 2 + ((this.open && !this.narrow) ? 0 : 0);
+        }
+        @Override
+        public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        }
+        @Override
+        public void drawGhostSlots(DrawContext context, int left, int top, boolean bl, float delta) {
+        }
+        @Override
+        public void drawTooltip(DrawContext context, int left, int top, int mouseX, int mouseY) {
+        }
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
+            return false;
+        }
+        @Override
+        public boolean mouseReleased(double mouseX, double mouseY, int button) {
+            return false;
+        }
+        @Override
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            return false;
+        }
+        @Override
+        public boolean charTyped(char chr, int modifiers) {
+            return false;
+        }
         @Override
         public void slotClicked(Slot slot) {
         }
-
         @Override
         public void showGhostRecipe(RecipeEntry<?> recipe, List<Slot> slots) {
         }
         @Override
         public void refresh() {
         }
-    };
+        @Override
+        public boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int backgroundWidth, int backgroundHeight, int button) {
+            if (!this.open) return false;
+            int x0 = this.narrow ? 0 : this.panelLeft;
+            int y0 = this.panelTop;
+            int x1 = x0 + this.panelWidth;
+            int y1 = y0 + 166;
+            return mouseX < x0 || mouseX >= x1 || mouseY < y0 || mouseY >= y1;
+        }
+    }
+
+    private final FakeRecipeBookWidget recipeBook = new FakeRecipeBookWidget();
     private boolean narrow;
     private boolean mouseDown;
 
@@ -63,7 +117,6 @@ public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInv
         this.titleX = 86;
         this.titleY = 6;
         this.playerInventoryTitleX = this.titleX;
-
         if (client == null || this.client.player == null || this.client.interactionManager == null) return;
         if (this.client.interactionManager.hasCreativeInventory()) {
             this.client.setScreen(new CreativeInventoryScreen(this.client.player, this.client.player.networkHandler.getEnabledFeatures(), this.client.options.getOperatorItemsTab().getValue()));
@@ -71,7 +124,6 @@ public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInv
         }
         this.narrow = this.width < 379;
         this.recipeBook.initialize(this.width, this.height, this.client, this.narrow, null);
-
         this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);
         this.addDrawableChild(new TexturedButtonWidget(this.x + 104, this.height / 2 - 22, 20, 18, RecipeBookWidget.BUTTON_TEXTURES, button -> {
             this.recipeBook.toggleOpen();
@@ -80,9 +132,7 @@ public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInv
             this.mouseDown = true;
         }));
         ButtonWidget buttonWidget = ButtonWidget.builder(Text.translatable("screen.titanfabric.save_inventory_arrow2"), button -> {
-            if (this.client.mouse != null) {
-                this.client.mouse.unlockCursor();
-            }
+            if (this.client.mouse != null) this.client.mouse.unlockCursor();
             this.client.setScreen(new InventoryScreen(this.client.player));
         }).dimensions(this.x + 2, this.height / 2 - 106, 20, 20).build();
         this.addDrawableChild(buttonWidget);
@@ -97,16 +147,13 @@ public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInv
 
     @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.textRenderer, Text.translatable("screen.titanfabric.extended_inventory.title"),
-                this.titleX, this.titleY, 0x404040, false);
+        context.drawText(this.textRenderer, Text.translatable("screen.titanfabric.extended_inventory.title"), this.titleX, this.titleY, 0x404040, false);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (this.recipeBook.isOpen() && this.narrow) {
-            this.recipeBook.render(context, mouseX, mouseY, delta);
-        } else {
-            this.recipeBook.render(context, mouseX, mouseY, delta);
+        this.recipeBook.render(context, mouseX, mouseY, delta);
+        if (!this.recipeBook.isOpen() || !this.narrow) {
             this.recipeBook.drawGhostSlots(context, this.x, this.y, false, delta);
         }
         this.drawBackground(context, delta, mouseX, mouseY);

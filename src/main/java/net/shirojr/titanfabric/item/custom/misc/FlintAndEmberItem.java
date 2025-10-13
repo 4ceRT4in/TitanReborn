@@ -24,71 +24,81 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
-        BlockPos blockPos;
-        PlayerEntity playerEntity = context.getPlayer();
+        PlayerEntity player = context.getPlayer();
         World world = context.getWorld();
-        BlockState blockState = world.getBlockState(blockPos = context.getBlockPos());
-        ItemStack itemStack = context.getStack();
+        BlockPos pos = context.getBlockPos();
+        BlockState state = world.getBlockState(pos);
+        ItemStack stack = context.getStack();
 
-        if (CampfireBlock.canBeLit(blockState) || CandleBlock.canBeLit(blockState) || CandleCakeBlock.canBeLit(blockState)) {
-            world.playSound(playerEntity, blockPos, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, (world.getRandom().nextFloat() * 0.4f + 0.8f));
-            world.setBlockState(blockPos, blockState.with(Properties.LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-            world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, blockPos);
-            if (playerEntity != null) {
-                itemStack.damage(1, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
+        if (CampfireBlock.canBeLit(state) || CandleBlock.canBeLit(state) || CandleCakeBlock.canBeLit(state)) {
+            world.playSound(player, pos, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
+            world.setBlockState(pos, state.with(Properties.LIT, true), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+            world.emitGameEvent(player, GameEvent.BLOCK_PLACE, pos);
+            if (player != null) {
+                stack.damage(1, player, LivingEntity.getSlotForHand(context.getHand()));
             }
             return ActionResult.success(world.isClient());
         }
 
-        BlockPos blockPos2 = blockPos.offset(context.getSide());
-        if (AbstractFireBlock.canPlaceAt(world, blockPos2, context.getHorizontalPlayerFacing())) {
-            world.playSound(playerEntity, blockPos2, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, (world.getRandom().nextFloat() * 0.4f + 0.8f));
-            if (itemStack.getDamage() < itemStack.getMaxDamage() - 28) {
-                for (int x = -1; x <= 1; x++) {
-                    for (int z = -1; z <= 1; z++) {
-                        BlockPos firePos = blockPos2.add(x, 0, z);
-                        if (world.getBlockState(firePos).isAir() && AbstractFireBlock.canPlaceAt(world, firePos, context.getHorizontalPlayerFacing())) {
-                            world.setBlockState(firePos, Blocks.SOUL_FIRE.getDefaultState(), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-                            world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, firePos);
-                        }
-                    }
-                }
-                if (playerEntity != null) {
-                    playerEntity.getItemCooldownManager().set(itemStack.getItem(), 30);
-                    itemStack.damage(9, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
-                }
-            } else if (itemStack.getDamage() < itemStack.getMaxDamage() - 8) {
-                BlockPos[] firePositions = {
-                        blockPos2,
-                        blockPos2.north(),
-                        blockPos2.south(),
-                        blockPos2.east(),
-                        blockPos2.west()
-                };
-                for (BlockPos firePos : firePositions) {
-                    if (world.getBlockState(firePos).isAir() && AbstractFireBlock.canPlaceAt(world, firePos, Direction.UP)) {
-                        world.setBlockState(firePos, Blocks.SOUL_FIRE.getDefaultState(), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-                        world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, firePos);
-                    }
-                }
-                if (playerEntity != null) {
-                    playerEntity.getItemCooldownManager().set(itemStack.getItem(), 20);
-                    itemStack.damage(5, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
-                }
-            } else {
-                world.setBlockState(blockPos2, Blocks.SOUL_FIRE.getDefaultState(), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
-                world.emitGameEvent(playerEntity, GameEvent.BLOCK_PLACE, blockPos2);
-                if (playerEntity != null) {
-                    playerEntity.getItemCooldownManager().set(itemStack.getItem(), 10);
-                    itemStack.damage(1, playerEntity, LivingEntity.getSlotForHand(context.getHand()));
-                }
-            }
-
-            if (playerEntity instanceof ServerPlayerEntity) {
-                Criteria.PLACED_BLOCK.trigger((ServerPlayerEntity) playerEntity, blockPos2, itemStack);
-            }
-            return ActionResult.success(world.isClient());
+        BlockPos firePos = pos.offset(context.getSide());
+        if (!AbstractFireBlock.canPlaceAt(world, firePos, Direction.UP)) {
+            return ActionResult.FAIL;
         }
-        return ActionResult.FAIL;
+
+        world.playSound(player, firePos, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
+
+        int damage = stack.getDamage();
+        int maxDamage = stack.getMaxDamage();
+
+        if (damage < maxDamage - 28) {
+            placeSoulFireArea(world, firePos, player, 3, 3);
+            if (player != null) {
+                player.getItemCooldownManager().set(stack.getItem(), 30);
+                stack.damage(9, player, LivingEntity.getSlotForHand(context.getHand()));
+            }
+        } else if (damage < maxDamage - 8) {
+            placeSoulFireCross(world, firePos, player);
+            if (player != null) {
+                player.getItemCooldownManager().set(stack.getItem(), 20);
+                stack.damage(5, player, LivingEntity.getSlotForHand(context.getHand()));
+            }
+        } else {
+            BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
+            world.setBlockState(firePos, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+            world.emitGameEvent(player, GameEvent.BLOCK_PLACE, firePos);
+            if (player != null) {
+                stack.damage(1, player, LivingEntity.getSlotForHand(context.getHand()));
+            }
+        }
+
+        if (player instanceof ServerPlayerEntity) {
+            Criteria.PLACED_BLOCK.trigger((ServerPlayerEntity) player, firePos, stack);
+        }
+        return ActionResult.success(world.isClient());
+    }
+
+    private void placeSoulFireArea(World world, BlockPos center, PlayerEntity player, int width, int height) {
+        int offset = width / 2;
+        for (int x = -offset; x <= offset; x++) {
+            for (int z = -offset; z <= offset; z++) {
+                BlockPos p = center.add(x, 0, z);
+                if (world.getBlockState(p).isAir() && AbstractFireBlock.canPlaceAt(world, p, Direction.UP)) {
+                    BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
+                    world.setBlockState(p, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+                    world.emitGameEvent(player, GameEvent.BLOCK_PLACE, p);
+                }
+            }
+        }
+    }
+
+    private void placeSoulFireCross(World world, BlockPos center, PlayerEntity player) {
+        BlockPos[] positions = {center, center.north(), center.south(), center.east(), center.west()};
+        for (BlockPos p : positions) {
+            if (world.getBlockState(p).isAir() && AbstractFireBlock.canPlaceAt(world, p, Direction.UP)) {
+                BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
+                world.setBlockState(p, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
+                world.emitGameEvent(player, GameEvent.BLOCK_PLACE, p);
+            }
+        }
     }
 }

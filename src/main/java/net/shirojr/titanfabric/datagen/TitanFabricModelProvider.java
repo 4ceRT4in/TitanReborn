@@ -7,8 +7,10 @@ import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
 import net.minecraft.data.client.TexturedModel;
+import net.minecraft.item.ArmorItem;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 
 import static net.minecraft.data.client.BlockStateModelGenerator.createSouthDefaultHorizontalRotationStates;
 
@@ -42,5 +44,19 @@ public class TitanFabricModelProvider extends FabricModelProvider {
     @Override
     public void generateItemModels(ItemModelGenerator generator) {
         generator.register(TitanFabricBlocks.LEGEND_CRYSTAL.asItem(), Models.GENERATED);
+        generator.registerArmor((ArmorItem) TitanFabricItems.LEGEND_HELMET);
+        generator.registerArmor((ArmorItem) TitanFabricItems.LEGEND_CHESTPLATE);
+        generator.registerArmor((ArmorItem) TitanFabricItems.LEGEND_LEGGINGS);
+        generator.registerArmor((ArmorItem) TitanFabricItems.LEGEND_BOOTS);
+
+        generator.registerArmor((ArmorItem) TitanFabricItems.CITRIN_HELMET);
+        generator.registerArmor((ArmorItem) TitanFabricItems.CITRIN_CHESTPLATE);
+        generator.registerArmor((ArmorItem) TitanFabricItems.CITRIN_LEGGINGS);
+        generator.registerArmor((ArmorItem) TitanFabricItems.CITRIN_BOOTS);
+
+        generator.registerArmor((ArmorItem) TitanFabricItems.EMBER_HELMET);
+        generator.registerArmor((ArmorItem) TitanFabricItems.EMBER_CHESTPLATE);
+        generator.registerArmor((ArmorItem) TitanFabricItems.EMBER_LEGGINGS);
+        generator.registerArmor((ArmorItem) TitanFabricItems.EMBER_BOOTS);
     }
 }

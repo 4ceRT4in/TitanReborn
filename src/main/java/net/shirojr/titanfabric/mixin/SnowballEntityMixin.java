@@ -1,14 +1,13 @@
 package net.shirojr.titanfabric.mixin;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.SnowballEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,17 +21,15 @@ public abstract class SnowballEntityMixin extends ThrownItemEntity {
 
     @Inject(method = "onEntityHit", at = @At("TAIL"))
     protected void onEntityHit(EntityHitResult entityHitResult, CallbackInfo ci) {
-        var entity = entityHitResult.getEntity();
-        var owner = getOwner();
+        LoggerUtil.devLogger("Test1");
+        Entity entity = entityHitResult.getEntity();
+        Entity owner = getOwner();
         if(entity == null) return;
         if(owner == null) return;
 
 
-        if(entity instanceof LivingEntity livingEntity && owner instanceof PlayerEntity player) {
-            DamageSource damageSource = owner.getDamageSources().playerAttack(player);
-            float k = livingEntity.getKnockbackAgainst(entity, damageSource) + (0.0F);
-            livingEntity.damage(damageSource, 0.0f);
-            livingEntity.takeKnockback((double)(k * 0.5F), (double) MathHelper.sin(player.getYaw() * ((float)Math.PI / 180F)), (double)(-MathHelper.cos(player.getYaw() * ((float)Math.PI / 180F))));
+        if(entity instanceof PlayerEntity) {
+            entity.damage(this.getDamageSources().thrown(this, owner), (float)0.0000001); // if you put the value to 0 it doesn't work for players but for mobs lol, minecraft moment.
         }
     }
 }

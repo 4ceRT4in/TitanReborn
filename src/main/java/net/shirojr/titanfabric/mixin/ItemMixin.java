@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(Item.class)
-public class ItemMixin {
+public abstract class ItemMixin {
     @Redirect(method = "isEnchantable", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"))
     private boolean titanfabric$enchantmentProductIsEnchantable(ItemStack instance, ComponentType<Integer> componentType) {
         return instance.contains(DataComponentTypes.MAX_DAMAGE) || instance.getItem() instanceof Anvilable;
@@ -56,7 +56,8 @@ public class ItemMixin {
                     }
                 }
             }
-        } else if (stack.getItem() instanceof SwordItem) {
+        }
+        if (stack.getItem() instanceof SwordItem) {
             if(stack.getItem() == Items.DIAMOND_SWORD) {
                 tooltip.add(Text.translatable("tooltip.titanfabric.diamond_sword"));
             }

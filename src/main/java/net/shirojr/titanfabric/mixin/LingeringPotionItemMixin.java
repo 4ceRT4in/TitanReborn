@@ -4,7 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.PotionItem;
-import net.minecraft.item.SplashPotionItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -24,6 +23,6 @@ public abstract class LingeringPotionItemMixin extends PotionItem {
     private void onUse(World world, PlayerEntity user, Hand hand,
                        CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         // Add a cooldown to prevent splash damage/health from becoming too overpowered when stackable
-        user.getItemCooldownManager().set(this, 20 * 10);
+        user.getItemCooldownManager().set(this, 10 * 10);
     }
 }

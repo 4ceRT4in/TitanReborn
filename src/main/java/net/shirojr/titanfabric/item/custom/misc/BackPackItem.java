@@ -45,15 +45,16 @@ public class BackPackItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        openScreen(user, user.getStackInHand(hand));
+        openScreen(user, user.getStackInHand(hand), hand);
         return super.use(world, user, hand);
     }
 
-    public static void openScreen(PlayerEntity user, ItemStack backpackItemStack) {
+    public static void openScreen(PlayerEntity user, ItemStack backpackItemStack, Hand hand) {
         World world = user.getWorld();
         if (!(backpackItemStack.getItem() instanceof BackPackItem backPackItem))
             return;
         if (!world.isClient()) {
+            if(backPackItem.getBackpackType() == Type.POTION && hand == Hand.OFF_HAND && !user.isSneaking()) return;
             user.openHandledScreen(new ExtendedScreenHandlerFactory() {
 
                 @Override

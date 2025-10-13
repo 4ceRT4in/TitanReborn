@@ -6,14 +6,15 @@ import net.minecraft.world.GameRules;
 import org.jetbrains.annotations.Nullable;
 
 public interface TitanFabricGamerules {
-    GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("legacyCombat", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("legacyFoodRegeneration", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("disableElytraBoosting", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("advancedFrostburnThawing", GameRules.Category.MISC, true);
-    GameRules.Key<GameRules.IntRule> HOT_BLOCK_SEARCH_RANGE = registerIntegerGamerule("hotBlockSearchRange", GameRules.Category.MISC, 7, -1, null);
-    GameRules.Key<GameRules.IntRule> HOT_BLOCK_AMOUNT_FOR_THAWING = registerIntegerGamerule("hotBlockAmountForThawing", GameRules.Category.MISC, 1, 1, null);
-    GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("greatSwordCooldown", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> FULL_INVENTORY_POTION_BAG_SEARCH = registerBooleanGamerule("fullInventoryPotionBagSearch", GameRules.Category.PLAYER, false);
+    GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("TitanFabric.legacyCombat", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.legacyFoodRegeneration", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.disableElytraBoosting", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("TitanFabric.advancedFrostburnThawing", GameRules.Category.MISC, true);
+    GameRules.Key<GameRules.IntRule> HOT_BLOCK_SEARCH_RANGE = registerIntegerGamerule("TitanFabric.hotBlockSearchRange", GameRules.Category.MISC, 7, -1, null);
+    GameRules.Key<GameRules.IntRule> HOT_BLOCK_AMOUNT_FOR_THAWING = registerIntegerGamerule("TitanFabric.hotBlockAmountForThawing", GameRules.Category.MISC, 1, 1, null);
+    GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.greatSwordCooldown", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> FULL_INVENTORY_POTION_BAG_SEARCH = registerBooleanGamerule("TitanFabric.fullInventoryPotionBagSearch", GameRules.Category.PLAYER, false);
+    GameRules.Key<GameRules.BooleanRule> SOUL_FIRE_INFINITE = registerBooleanGamerule("TitanFabric.doInfiniteSoulFireBurn", GameRules.Category.PLAYER, true);
 
     @SuppressWarnings("SameParameterValue")
     private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(String name, GameRules.Category category, boolean defaultValue) {

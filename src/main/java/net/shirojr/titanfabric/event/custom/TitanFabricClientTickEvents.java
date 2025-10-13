@@ -30,9 +30,7 @@ public class TitanFabricClientTickEvents {
         ItemTooltipCallback.EVENT.register(TitanFabricClientTickEvents::handleTooltip);
     }
 
-    private static void handleTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null) return;
+    private static void handleBow(ItemStack stack, List<Text> lines, MinecraftClient client) {
         if (stack.getItem() != TitanFabricItems.LEGEND_BOW) return;
         ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, client.player);
         if (selectedArrowStack == null) {
@@ -67,6 +65,13 @@ public class TitanFabricClientTickEvents {
         };
 
         lines.add(Text.translatable("tooltip.titanfabric.legend_bow_arrow", effectName).formatted(effectColor));
+    }
+
+
+    private static void handleTooltip(ItemStack stack, Item.TooltipContext tooltipContext, TooltipType tooltipType, List<Text> lines) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null) return;
+        handleBow(stack, lines, client);
     }
 
     private static void handleKeyBindEvent(MinecraftClient client) {

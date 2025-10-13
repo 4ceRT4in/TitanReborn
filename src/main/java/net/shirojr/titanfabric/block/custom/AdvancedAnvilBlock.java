@@ -92,11 +92,6 @@ public class AdvancedAnvilBlock extends FallingBlock {
     }
 
     @Override
-    protected void configureFallingBlockEntity(FallingBlockEntity entity) {
-        entity.setHurtEntities(2.0f, 40);
-    }
-
-    @Override
     public void onLanding(World world, BlockPos pos, BlockState fallingBlockState, BlockState currentStateInPos, FallingBlockEntity fallingBlockEntity) {
         super.onLanding(world, pos, fallingBlockState, currentStateInPos, fallingBlockEntity);
         if (world instanceof ServerWorld serverWorld) {

@@ -70,6 +70,12 @@ public class TitanFabricTagProviders {
                             Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS,
                             Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS)
                     .setReplace(false);
+            getOrCreateTagBuilder(ItemTags.TRIMMABLE_ARMOR)
+                    .add(TitanFabricItems.CITRIN_HELMET, TitanFabricItems.CITRIN_CHESTPLATE, TitanFabricItems.CITRIN_LEGGINGS,
+                            TitanFabricItems.CITRIN_BOOTS, TitanFabricItems.EMBER_HELMET, TitanFabricItems.EMBER_CHESTPLATE,
+                            TitanFabricItems.EMBER_LEGGINGS, TitanFabricItems.EMBER_BOOTS, TitanFabricItems.LEGEND_HELMET,
+                            TitanFabricItems.LEGEND_CHESTPLATE, TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS)
+                    .setReplace(false);
             getOrCreateTagBuilder(TitanFabricTags.Items.DYES)
                     .add(Items.RED_DYE, Items.LIME_DYE, Items.BLACK_DYE, Items.BROWN_DYE, Items.BLUE_DYE, Items.CYAN_DYE, Items.GRAY_DYE,
                             Items.GREEN_DYE, Items.LIGHT_BLUE_DYE, Items.LIGHT_GRAY_DYE, Items.MAGENTA_DYE, Items.ORANGE_DYE, Items.PINK_DYE,
