@@ -40,17 +40,7 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
     @Unique
     private static final Identifier BUNDLE_PROGRESS_BAR_FULL_TEXTURE = TitanFabric.getId("container/bundle/bundle_progressbar_full");
     @Unique
-    private static final Identifier BUNDLE_SLOT_HIGHLIGHT_BACK_TEXTURE = TitanFabric.getId("container/bundle/slot_highlight_back");
-    @Unique
-    private static final Identifier BUNDLE_SLOT_HIGHLIGHT_FRONT_TEXTURE = TitanFabric.getId("container/bundle/slot_highlight_front");
-    @Unique
     private static final Identifier BUNDLE_SLOT_BACKGROUND_TEXTURE = TitanFabric.getId("container/bundle/slot_background");
-    @Unique
-    private static final Text BUNDLE_EMPTY_DESCRIPTION = Text.translatable("item.minecraft.bundle.empty.description");
-    @Unique
-    private static final Text BUNDLE_FULL = Text.translatable("item.minecraft.bundle.fullness");
-    @Unique
-    private static final Text BUNDLE_EMPTY = Text.translatable("item.minecraft.bundle");
 
     public int getHeight() {
         return this.bundleContents.isEmpty() ? 39 : this.getHeightOfNonEmpty();
@@ -77,7 +67,7 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
 
     @Unique
     private int getNumVisibleSlots() {
-        return Math.min(9, this.bundleContents.size());
+        return Math.min(12, this.bundleContents.size());
     }
 
     @Inject(method = "drawItems", at = @At("HEAD"), cancellable = true)
@@ -92,33 +82,33 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
 
     @Unique
     private void drawEmptyTooltip(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
-        drawEmptyDescription(x + this.getXMargin(width), y, textRenderer, context);
-        this.drawProgressBar(x + this.getXMargin(width), y + getDescriptionHeight(textRenderer) + 4, textRenderer, context);
+        drawEmptyDescription(x + this.getItemsXMargin(width), y, textRenderer, context);
+        this.drawProgressBar(x, y + getDescriptionHeight(textRenderer) + 4, textRenderer, context);
     }
 
-    public void drawText(TextRenderer textRenderer, int x, int y, Matrix4f matrix, VertexConsumerProvider.Immediate vertexConsumers) {
-    }
+    public void drawText(TextRenderer textRenderer, int x, int y, Matrix4f matrix, VertexConsumerProvider.Immediate vertexConsumers) { }
 
     @Unique
     private void drawNonEmptyTooltip(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
-        boolean hasMore = this.bundleContents.size() > 9;
+        boolean hasMore = this.bundleContents.size() > 12;
         List<ItemStack> list = this.firstStacksInContents(this.getNumberOfStacksShown());
-        int originX = x + this.getXMargin(width);
-        int originY = y;
+        int startX = x + this.getItemsXMargin(width);
+        int startY = y;
         int k = 1;
-        for (int row = 1; row <= this.getRows(); ++row) {
-            for (int col = 1; col <= 3; ++col) {
-                int n = originX + (col - 1) * 24;
-                int o = originY + (row - 1) * 24;
+        for (int row = 0; row < this.getRows(); ++row) {
+            for (int col = 0; col < 3; ++col) {
+                int slotX = startX + col * 24;
+                int slotY = startY + row * 24;
                 if (shouldDrawExtraItemsCount(hasMore, col, row)) {
-                    drawExtraItemsCount(n, o, this.numContentItemsAfter(list), textRenderer, context);
+                    drawExtraItemsCount(slotX, slotY, this.numContentItemsAfter(list), textRenderer, context);
                 } else if (shouldDrawItem(list, k)) {
-                    this.drawItem(k, n, o, list, k, textRenderer, context);
+                    this.drawItem(k, slotX, slotY, list, k, textRenderer, context);
                     ++k;
                 }
             }
         }
-        this.drawProgressBar(x + this.getXMargin(width), y + this.getFixedRowsHeight() + 4, textRenderer, context);
+        int gap = this.bundleContents.size() >= 9 ? 2 : 4;
+        this.drawProgressBar(x, y + this.getFixedRowsHeight() + gap, textRenderer, context);
     }
 
     @Unique
@@ -128,7 +118,7 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
 
     @Unique
     private static boolean shouldDrawExtraItemsCount(boolean hasMoreItems, int column, int row) {
-        return hasMoreItems && column == 1 && row == 1;
+        return hasMoreItems && column == 2 && row == 0;
     }
 
     @Unique
@@ -139,7 +129,7 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
 
     @Unique
     private static void drawEmptyDescription(int x, int y, TextRenderer textRenderer, DrawContext context) {
-        context.drawTextWithBackground(textRenderer, BUNDLE_EMPTY_DESCRIPTION, x, y, 96, 0xAAAAAA);
+        context.drawTextWithBackground(textRenderer, Text.empty(), x, y, 96, 0xAAAAAA);
     }
 
     @Unique
@@ -148,29 +138,22 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
     }
 
     @Unique
-    private int getXMargin(int width) {
-        return (width - 96) / 2;
+    private int getItemsXMargin(int width) {
+        return (width - 72) / 2;
     }
 
     @Unique
     private void drawItem(int index, int x, int y, List<ItemStack> stacks, int seed, TextRenderer textRenderer, DrawContext context) {
-        boolean selected = index == 1;
-        ItemStack stack = stacks.get(index - 1);
-        if (selected) {
-            context.drawGuiTexture(BUNDLE_SLOT_HIGHLIGHT_BACK_TEXTURE, x, y, 24, 24);
-        } else {
-            context.drawGuiTexture(BUNDLE_SLOT_BACKGROUND_TEXTURE, x, y, 24, 24);
-        }
+        int i = index - 1;
+        ItemStack stack = stacks.get(i);
+        context.drawGuiTexture(BUNDLE_SLOT_BACKGROUND_TEXTURE, x, y, 24, 24);
         context.drawItem(stack, x + 4, y + 4, seed);
         context.drawItemInSlot(textRenderer, stack, x + 4, y + 4);
-        if (selected) {
-            context.drawGuiTexture(BUNDLE_SLOT_HIGHLIGHT_FRONT_TEXTURE, x, y, 24, 24);
-        }
     }
 
     @Unique
     private static int getDescriptionHeight(TextRenderer textRenderer) {
-        int lines = textRenderer.wrapLines(BUNDLE_EMPTY_DESCRIPTION, 96).size();
+        int lines = textRenderer.wrapLines(Text.empty(), 96).size();
         Objects.requireNonNull(textRenderer);
         return lines * 9;
     }
@@ -203,16 +186,18 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
     @Unique
     private @Nullable Text getProgressBarLabel() {
         if (this.bundleContents.isEmpty()) {
-            return BUNDLE_EMPTY;
+            return Text.empty();
         } else {
-            return this.bundleContents.getOccupancy().compareTo(Fraction.ONE) >= 0 ? BUNDLE_FULL : null;
+            return this.bundleContents.getOccupancy().compareTo(Fraction.ONE) >= 0 ? Text.empty() : null;
         }
     }
 
     @Unique
     public int getNumberOfStacksShown() {
-        int size = this.bundleContents.size();
-        if (size > 9) return 8;
-        return size;
+        int i = this.bundleContents.size();
+        int j = i > 9 ? 8 : 9;
+        int k = i % 3;
+        int l = k == 0 ? 0 : 3 - k;
+        return Math.min(i, j - l);
     }
 }
