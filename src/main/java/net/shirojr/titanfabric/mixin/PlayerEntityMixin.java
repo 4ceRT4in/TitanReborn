@@ -259,7 +259,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)
     private void titanfabric$getAttackCooldownProgressPerTickMixin(CallbackInfoReturnable<Float> cir) {
         if (this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_COMBAT)) {
-            cir.setReturnValue(0.00001f);
+            cir.setReturnValue(Float.MIN_NORMAL);
         }
     }
 
