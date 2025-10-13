@@ -22,9 +22,9 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> extends Screen
         super(title);
     }
 
-
     @WrapOperation(method = "drawSlotHighlight", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fillGradient(Lnet/minecraft/client/render/RenderLayer;IIIIIII)V"))
     private static void drawSlotHighlight(DrawContext instance, RenderLayer layer, int startX, int startY, int endX, int endY, int colorStart, int colorEnd, int z, Operation<Void> original) {
-        original.call(instance, layer, startX, startY, endX, endY, colorStart, colorEnd, -200);
+        RenderLayer renderLayer = RenderLayer.getGui();
+        original.call(instance, renderLayer, startX, startY, endX, endY, colorStart, colorEnd, z);
     }
 }
