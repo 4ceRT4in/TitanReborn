@@ -11,6 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 
 import java.util.function.Predicate;
 
@@ -27,7 +28,7 @@ public final class MultiBowHelper {
         if(player.isCreative()) return 3.0f;
         float count = 0;
         for (ItemStack stack : player.getInventory().main) {
-            if (stack.getItem() instanceof ArrowItem) count += stack.getCount();
+            if (stack.getItem() instanceof ArrowItem && !(stack.getItem() instanceof TitanFabricArrowItem)) count += stack.getCount();
         }
         return Math.min(count, 3.0f);
     }

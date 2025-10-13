@@ -29,6 +29,7 @@ import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
+import net.shirojr.titanfabric.util.handler.NetheriteArmorHandler;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
 import org.spongepowered.asm.mixin.Debug;
@@ -44,10 +45,12 @@ import java.util.Map;
 
 @Debug(export = true)
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements ArrowShootingHandler {
+public abstract class PlayerEntityMixin extends LivingEntity implements ArrowShootingHandler, NetheriteArmorHandler {
     @Unique
     private static final TrackedData<Boolean> SHOOTING_ARROWS = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BOOLEAN);
 
+    @Unique
+    private static final TrackedData<Boolean> HAS_FULL_NETHERITE_ARMOR = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -71,6 +74,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void titanfabric$appendSelectedArrowDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
         builder.add(SHOOTING_ARROWS, false);
+        builder.add(HAS_FULL_NETHERITE_ARMOR, false);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At(value = "TAIL"))
@@ -92,6 +96,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     public void titanfabric$shootsArrows(boolean shootsArrows) {
         this.dataTracker.set(SHOOTING_ARROWS, shootsArrows);
     }
+
+    @Override
+    public boolean titanfabric$hasFullNetheriteArmor() {
+        return this.dataTracker.get(HAS_FULL_NETHERITE_ARMOR);
+    }
+
+    @Override
+    public void titanfabric$setFullNetheriteArmor(boolean fullNetherite) {
+        this.dataTracker.set(HAS_FULL_NETHERITE_ARMOR, fullNetherite);
+    }
+
 
     @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
     private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
