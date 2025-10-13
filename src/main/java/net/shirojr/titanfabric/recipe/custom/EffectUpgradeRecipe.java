@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.stream.Stream;
 
 public class EffectUpgradeRecipe implements SmithingRecipe {
-    private final Ingredient base;
+    public final Ingredient base;
     private final Ingredient modifier;
     private ItemStack result;
 

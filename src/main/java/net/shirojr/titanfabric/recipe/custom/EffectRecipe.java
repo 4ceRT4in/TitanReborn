@@ -30,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class EffectRecipe extends SpecialCraftingRecipe {
-    private final IngredientModule base;
-    private final IngredientModule modifier;
+    public final IngredientModule base;
+    public final IngredientModule modifier;
     private final Result result;
     @Nullable
     private WeaponEffectData effectData;
