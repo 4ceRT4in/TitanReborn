@@ -36,7 +36,7 @@ public class ParachuteItem extends Item {
         if (!(entity instanceof PlayerEntity playerEntity)) return;
         boolean shouldReset = playerEntity.isOnGround() || playerEntity.isFallFlying() || playerEntity.isTouchingWater() || playerEntity.isInLava();
         if (shouldReset) {
-            playerEntity.timeUntilRegen = 20;
+            playerEntity.timeUntilRegen = 1;
             stack.set(TitanFabricDataComponents.ACTIVATED, false);
             if (playerEntity.getItemCooldownManager().isCoolingDown(this)) {
                 playerEntity.getItemCooldownManager().remove(this);
@@ -48,7 +48,7 @@ public class ParachuteItem extends Item {
             removeParachute(stack, playerEntity);
         }
         if (shouldReset) {
-            playerEntity.timeUntilRegen = 20;
+            playerEntity.timeUntilRegen = 1;
             stack.set(TitanFabricDataComponents.ACTIVATED, false);
             return;
         }
