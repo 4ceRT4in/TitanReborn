@@ -1,0 +1,6 @@
+{
+  "parent": "titanfabric:item/multi_bow_3",
+  "textures": {
+    "layer0": "titanfabric:item/multi_bow_3_1_pulling_0"
+  }
+}

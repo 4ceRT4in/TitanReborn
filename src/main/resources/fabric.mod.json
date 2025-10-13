@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "titanfabric",
   "version": "${version}",
-  "name": "Titan Fabric",
-  "description": "Fabric Port of the Titan mod",
+  "name": "Titan Mod",
+  "description": "Titan Reborn Mod",
   "authors": [
     "4ceRT4in - Project Lead",
     "Fab - Forge dev",

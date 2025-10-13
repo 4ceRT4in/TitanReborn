@@ -55,6 +55,7 @@
     "client.BundleTooltipComponentMixin",
     "client.ClientPlayerEntityMixin",
     "client.EntityRenderDispatcherMixin",
+    "client.HandledScreenMixin",
     "client.HeldItemRendererMixin",
     "client.InGameHudMixin",
     "client.InGameOverlayRendererMixin",

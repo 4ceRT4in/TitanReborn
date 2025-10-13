@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ArrowItem;
@@ -19,6 +20,18 @@ import java.util.function.Predicate;
 public final class MultiBowHelper {
     private MultiBowHelper() {
     }
+
+
+    public static float getArrowCount(LivingEntity entity) {
+        if(!(entity instanceof PlayerEntity player)) return 0.0f;
+        if(player.isCreative()) return 3.0f;
+        float count = 0;
+        for (ItemStack stack : player.getInventory().main) {
+            if (stack.getItem() instanceof ArrowItem) count += stack.getCount();
+        }
+        return Math.min(count, 3.0f);
+    }
+
 
     /**
      * Set the arrow count, which will be shot at the same time.

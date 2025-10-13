@@ -276,11 +276,12 @@ public class ModelPredicateProviders {
         if (item == null) return;
         ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("arrows"), (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
-            return MultiBowHelper.getFullArrowCount(stack) * 0.1f;
+            return MultiBowHelper.getArrowCount(entity) * 0.1f;
         });
     }
 
     private static void registerShieldBlockingProvider(Item item) {
+        if(item == null) return;
         ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("blocking"), (stack, world, entity, seed) -> {
             if (stack == null || entity == null) return 0.0f;
             return entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0f : 0.0f;
