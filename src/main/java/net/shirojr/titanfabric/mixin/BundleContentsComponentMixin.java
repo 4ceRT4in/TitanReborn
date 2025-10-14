@@ -18,6 +18,9 @@ public abstract class BundleContentsComponentMixin implements TooltipData {
     private static final Fraction MEDIUM = Fraction.getFraction(1, 12);
     @Unique
     private static final Fraction SMALL = Fraction.getFraction(1, 6);
+    @Unique
+    private static final Fraction POTION = Fraction.getFraction(1, 9);
+
 
     @Inject(method = "getOccupancy*", at = @At("RETURN"), cancellable = true)
     private static void getOccupancy(ItemStack stack, CallbackInfoReturnable<Fraction> cir) {

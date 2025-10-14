@@ -6,7 +6,6 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.BundleTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -15,7 +14,6 @@ import net.minecraft.util.math.MathHelper;
 import net.shirojr.titanfabric.TitanFabric;
 import org.apache.commons.lang3.math.Fraction;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -67,14 +65,12 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
 
     @Unique
     private int getNumVisibleSlots() {
-        return Math.min(12, this.bundleContents.size());
+        return Math.min(9, this.bundleContents.size());
     }
 
     @Inject(method = "drawItems", at = @At("HEAD"), cancellable = true)
     public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context, CallbackInfo ci) {
-        if (this.bundleContents.isEmpty()) {
-            this.drawEmptyTooltip(textRenderer, x, y, this.getWidth(textRenderer), this.getHeight(), context);
-        } else {
+        if (!this.bundleContents.isEmpty()) {
             this.drawNonEmptyTooltip(textRenderer, x, y, this.getWidth(textRenderer), this.getHeight(), context);
         }
         ci.cancel();
@@ -85,8 +81,6 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
         drawEmptyDescription(x + this.getItemsXMargin(width), y, textRenderer, context);
         this.drawProgressBar(x, y + getDescriptionHeight(textRenderer) + 4, textRenderer, context);
     }
-
-    public void drawText(TextRenderer textRenderer, int x, int y, Matrix4f matrix, VertexConsumerProvider.Immediate vertexConsumers) { }
 
     @Unique
     private void drawNonEmptyTooltip(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
@@ -108,7 +102,7 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
             }
         }
         int gap = this.bundleContents.size() >= 9 ? 2 : 4;
-        this.drawProgressBar(x, y + this.getFixedRowsHeight() + gap, textRenderer, context);
+        this.drawProgressBar(x, y + this.getFixedRowsHeight(), textRenderer, context);
     }
 
     @Unique
@@ -118,7 +112,7 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
 
     @Unique
     private static boolean shouldDrawExtraItemsCount(boolean hasMoreItems, int column, int row) {
-        return hasMoreItems && column == 2 && row == 0;
+        return false;
     }
 
     @Unique
@@ -194,10 +188,6 @@ public abstract class BundleTooltipComponentMixin implements TooltipComponent {
 
     @Unique
     public int getNumberOfStacksShown() {
-        int i = this.bundleContents.size();
-        int j = i > 9 ? 8 : 9;
-        int k = i % 3;
-        int l = k == 0 ? 0 : 3 - k;
-        return Math.min(i, j - l);
+        return Math.min(this.bundleContents.size(), 9);
     }
 }

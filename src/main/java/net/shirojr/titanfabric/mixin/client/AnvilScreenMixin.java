@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AnvilScreenMixin extends ForgingScreen<AnvilScreenHandler> {
     @Unique
     private static final Text REQUIRES_NETHERITE_ANVIL_TEXT = Text.translatable("message.requires_netherite_anvil");
+    @Unique
     private static final Text HAS_PLATING_TEXT = Text.translatable("message.has_plating_anvil");
 
     public AnvilScreenMixin(AnvilScreenHandler handler, PlayerInventory playerInventory, Text title, Identifier texture) {
