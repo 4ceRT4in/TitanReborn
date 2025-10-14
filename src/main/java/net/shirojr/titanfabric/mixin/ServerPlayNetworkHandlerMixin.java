@@ -43,30 +43,36 @@ public abstract class ServerPlayNetworkHandlerMixin
         if (stack == null || stack.isEmpty()) return;
         List<String> blockedEnchants = TitanConfig.getBlockedEnchantments();
         if(stack.getItem() instanceof EnchantedBookItem) {
-            handleRemoval(stack, blockedEnchants);
+            handleBook(stack, blockedEnchants);
         } else {
             handleNormal(stack, blockedEnchants);
         }
     }
 
     @Unique
-    private void handleRemoval(ItemStack stack, List<String> blockedEnchants){
+    private void handleBook(ItemStack stack, List<String> blockedEnchants){
         var stored = stack.get(DataComponentTypes.STORED_ENCHANTMENTS);
         if (stored != null) {
             for (var entry : stored.getEnchantmentEntries()) {
+                if(entry.getKey().getKey().isEmpty()) return;
                 var enchantId = entry.getKey().getKey().get().getValue();
                 if (blockedEnchants.contains(enchantId.toString())) {
                     stack.remove(DataComponentTypes.STORED_ENCHANTMENTS);
-                    player.getInventory().markDirty();
-                    player.networkHandler.sendPacket(new InventoryS2CPacket(
-                            player.currentScreenHandler.syncId,
-                            0,
-                            player.currentScreenHandler.getStacks(),
-                            player.currentScreenHandler.getCursorStack()
-                    ));
+                    markInventoryDirty(player);
                 }
             }
         }
+    }
+
+    @Unique
+    private void markInventoryDirty(ServerPlayerEntity player) {
+        player.getInventory().markDirty();
+        player.networkHandler.sendPacket(new InventoryS2CPacket(
+                player.currentScreenHandler.syncId,
+                0,
+                player.currentScreenHandler.getStacks(),
+                player.currentScreenHandler.getCursorStack()
+        ));
     }
 
     @Unique
@@ -74,16 +80,11 @@ public abstract class ServerPlayNetworkHandlerMixin
         var stored = stack.get(DataComponentTypes.ENCHANTMENTS);
         if (stored != null) {
             for (var entry : stored.getEnchantmentEntries()) {
+                if(entry.getKey().getKey().isEmpty()) return;
                 var enchantId = entry.getKey().getKey().get().getValue();
                 if (blockedEnchants.contains(enchantId.toString())) {
                     stack.remove(DataComponentTypes.ENCHANTMENTS);
-                    player.getInventory().markDirty();
-                    player.networkHandler.sendPacket(new InventoryS2CPacket(
-                            player.currentScreenHandler.syncId,
-                            0,
-                            player.currentScreenHandler.getStacks(),
-                            player.currentScreenHandler.getCursorStack()
-                    ));
+                    markInventoryDirty(player);
                 }
             }
         }
