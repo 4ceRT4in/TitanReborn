@@ -45,7 +45,9 @@ public class BackPackItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        openScreen(user, user.getStackInHand(hand));
+        if (hand.equals(Hand.MAIN_HAND)) {
+            openScreen(user, user.getStackInHand(hand));
+        }
         return super.use(world, user, hand);
     }
 
@@ -54,7 +56,7 @@ public class BackPackItem extends Item {
         if (!(backpackItemStack.getItem() instanceof BackPackItem backPackItem))
             return;
         if (!world.isClient()) {
-            user.openHandledScreen(new ExtendedScreenHandlerFactory() {
+            user.openHandledScreen(new ExtendedScreenHandlerFactory<>() {
 
                 @Override
                 public Object getScreenOpeningData(ServerPlayerEntity player) {
@@ -85,7 +87,7 @@ public class BackPackItem extends Item {
 
         if (content == null) return inventory;
         for (int i = 0; i < Math.min(content.getItems().size(), type.getSize()); i++) {
-            if(content.getItems().get(i).getItem() != TitanFabricItems.BACKPACK_BIG && content.getItems().get(i) != ItemStack.EMPTY && !content.getItems().isEmpty() && !content.getItems().get(i).getItem().equals(Blocks.AIR.asItem())) {
+            if(content.getItems().get(i).getItem() != TitanFabricItems.BACKPACK_BIG && content.getItems().get(i) != ItemStack.EMPTY && !content.getItems().get(i).getItem().equals(Blocks.AIR.asItem())) {
                 inventory.setStack(i, content.getItems().get(i));
             }
         }
@@ -168,6 +170,7 @@ public class BackPackItem extends Item {
             return size;
         }
 
+        @SuppressWarnings("unused")
         public Rarity getRarity() {
             return rarity;
         }
