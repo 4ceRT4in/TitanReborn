@@ -14,12 +14,12 @@ import java.util.Optional;
 public record BackPackContent(List<ItemStack> items) {
 
     public static final Codec<BackPackContent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ItemStack.CODEC.listOf().fieldOf("items").forGetter(BackPackContent::items)
+            ItemStack.OPTIONAL_CODEC.listOf().fieldOf("items").forGetter(BackPackContent::items)
     ).apply(instance, BackPackContent::new));
 
     public static final PacketCodec<RegistryByteBuf, BackPackContent> PACKET_CODEC =
             PacketCodec.tuple(
-                    PacketCodecs.optional(ItemStack.PACKET_CODEC).collect(PacketCodecs.toList()),
+                    PacketCodecs.optional(ItemStack.OPTIONAL_PACKET_CODEC).collect(PacketCodecs.toList()),
                     items -> items.items().stream()
                             .map(stack -> stack.isEmpty() ? Optional.<ItemStack>empty() : Optional.of(stack))
                             .toList(),
