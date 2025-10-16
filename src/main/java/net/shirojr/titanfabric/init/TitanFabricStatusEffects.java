@@ -18,7 +18,7 @@ public interface TitanFabricStatusEffects {
     );
     RegistryEntry<StatusEffect> FROSTBURN = registerStatusEffect(
             "frostburn",
-            new FrostburnEffect(StatusEffectCategory.HARMFUL, 0x9DBFE8)
+            new FrostburnEffect(StatusEffectCategory.HARMFUL, 0x00D5FF)
     );
     RegistryEntry<StatusEffect> IMMUNITY = registerStatusEffect(
             "immunity",

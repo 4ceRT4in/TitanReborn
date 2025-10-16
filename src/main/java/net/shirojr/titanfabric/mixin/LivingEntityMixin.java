@@ -243,7 +243,7 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         }
     }
 
-    @Inject(method = "blockedByShield", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "blockedByShield", at = @At("HEAD"))
     private void blockedByShield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity self = (LivingEntity) (Object) this;
 
@@ -259,10 +259,7 @@ public abstract class LivingEntityMixin implements HealthAccessor {
                         && !attacker.isSprinting();
                 if (isCrit) {
                     if (target.isBlocking()) {
-                        float f = 0.25F;
-                        if (target.getRandom().nextFloat() < f) {
-                            target.disableShield();
-                        }
+                        target.disableShield();
                     }
                 }
 
