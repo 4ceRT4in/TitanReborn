@@ -49,8 +49,7 @@ public class TitanCrossBowItem extends CrossbowItem implements SelectableArrow, 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        TitanFabricDyeProviders.applyExtendedTooltip(tooltip,"tooltip.titanfabric.legendCrossBow");
-        TitanFabricDyeProviders.applyExtendedTooltip(tooltip, "tooltip.titanfabric.bow");
+        TitanFabricDyeProviders.applyExtendedTooltip(tooltip, "tooltip.titanfabric.legendCrossBowKeybind");
     }
 
     private static boolean loadProjectiles(LivingEntity shooter, ItemStack crossbow) {

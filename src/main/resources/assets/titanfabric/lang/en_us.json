@@ -116,7 +116,8 @@
   "tooltip.titanfabric.netherArmor": "§6+25% Fire Protection",
   "tooltip.titanfabric.citrinArmor": "§2+25% Magic Protection",
 
-  "tooltip.titanfabric.bow": "§8Switch through Projectiles set in Keybind",
+  "tooltip.titanfabric.legendBowKeybind": "§7Use Keybind to cycle §fEffect Arrows",
+  "tooltip.titanfabric.legendCrossBowKeybind": "§7Use Keybind to cycle §fSplash & §fLingering Potions",
 
   "tooltip.titanfabric.citrin_armor_plating": "Applies §e+2.5% Citrin Weapon Protection §fon Armor",
   "tooltip.titanfabric.ember_armor_plating": "Applies §c+2.5% Ember Weapon Protection §fon Armor",
@@ -173,8 +174,6 @@
 
   "tooltip.titanfabric.parachute_line1": "Use item in air to enable",
   "tooltip.titanfabric.parachute_line2": "Sneak and use item while gliding to disable",
-
-  "tooltip.titanfabric.legendCrossBow": "§7Allows you to shoot Potions\\n§7when switching Projectiles",
 
   "tooltip.titanfabric.potionBundle": "§7Stores Splash- and Lingering Potions",
   "tooltip.titanfabric.potionBundle2": "  §2Links with §e§kl §r§3Titan Crossbow §e§kl",

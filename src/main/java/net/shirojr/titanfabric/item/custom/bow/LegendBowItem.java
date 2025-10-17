@@ -22,6 +22,18 @@ public class LegendBowItem extends TitanFabricBowItem implements Anvilable {
     }
 
     @Override
+    public Predicate<ItemStack> getProjectiles() {
+        return stack -> {
+            for (Item supportedArrowItem : this.titanFabric$supportedArrows()) {
+                if (stack.getItem().equals(supportedArrowItem)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+    }
+
+    @Override
     public List<Item> titanFabric$supportedArrows() {
         return List.of(Items.ARROW, Items.SPECTRAL_ARROW, TitanFabricItems.EFFECT_ARROW);
     }
@@ -29,7 +41,7 @@ public class LegendBowItem extends TitanFabricBowItem implements Anvilable {
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         super.appendTooltip(stack, context, tooltip, type);
-        TitanFabricDyeProviders.applyExtendedTooltip(tooltip, "tooltip.titanfabric.bow");
+        TitanFabricDyeProviders.applyExtendedTooltip(tooltip, "tooltip.titanfabric.legendBowKeybind");
     }
 
 }
