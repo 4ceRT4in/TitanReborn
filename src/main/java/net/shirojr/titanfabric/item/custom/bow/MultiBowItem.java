@@ -8,12 +8,15 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
@@ -140,4 +143,11 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
         }
         world.spawnEntity(projectile);
     }
-}
+
+        @Override
+        public void appendTooltip(ItemStack stack, TooltipContext context, List< Text > tooltip, TooltipType type) {
+            super.appendTooltip(stack, context, tooltip, type);
+            TitanFabricDyeProviders.applyExtendedTooltip(tooltip, "tooltip.titanfabric.MultiBowKeybind");
+        }
+    }
+

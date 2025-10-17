@@ -118,6 +118,7 @@
 
   "tooltip.titanfabric.legendBowKeybind": "§7Use Keybind to cycle §fEffect Arrows",
   "tooltip.titanfabric.legendCrossBowKeybind": "§7Use Keybind to cycle §fSplash & §fLingering Potions",
+  "tooltip.titanfabric.MultiBowKeybind": "§7Use Keybind to cycle §fArrows",
 
   "tooltip.titanfabric.citrin_armor_plating": "Applies §e+2.5% Citrin Weapon Protection §fon Armor",
   "tooltip.titanfabric.ember_armor_plating": "Applies §c+2.5% Ember Weapon Protection §fon Armor",
