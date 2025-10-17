@@ -24,6 +24,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
@@ -35,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -45,11 +45,12 @@ public abstract class ItemStackMixin implements FabricItemStack {
     @Inject(method = "getTooltip", at = @At("RETURN"))
     public void getTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type, CallbackInfoReturnable<List<Text>> cir) {
         ItemStack stack = (ItemStack)(Object)this;
-        if(stack == null) return;
-        if (Arrays.asList(TitanFabricItems.LEGEND_SWORD, TitanFabricItems.LEGEND_GREATSWORD, TitanFabricItems.LEGEND_HELMET, TitanFabricItems.LEGEND_CHESTPLATE,
-                TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS, TitanFabricItems.TITAN_CROSSBOW, TitanFabricItems.LEGEND_BOW, TitanFabricItems.LEGEND_SHIELD).contains(stack.getItem())) {
-            List<Text> tooltip = cir.getReturnValue();
-            tooltip.removeIf(text -> text.getString().equals(Text.translatable("item.unbreakable").formatted(Formatting.BLUE).getString()));
+        if (stack == null) return;
+        Item item = stack.getItem();
+        if (item == TitanFabricItems.LEGEND_SWORD || item == TitanFabricItems.LEGEND_GREATSWORD || item == TitanFabricItems.LEGEND_HELMET ||
+                item == TitanFabricItems.LEGEND_CHESTPLATE || item == TitanFabricItems.LEGEND_LEGGINGS || item == TitanFabricItems.LEGEND_BOOTS ||
+                item == TitanFabricItems.TITAN_CROSSBOW || item == TitanFabricItems.LEGEND_BOW || item == TitanFabricItems.LEGEND_SHIELD) {
+            cir.getReturnValue().removeIf(text -> text.getString().equals(Text.translatable("item.unbreakable").formatted(Formatting.BLUE).getString()));
         }
     }
 
@@ -111,7 +112,7 @@ public abstract class ItemStackMixin implements FabricItemStack {
 
     @Inject(at = @At("HEAD"), method = "finishUsing")
     private void titanfabric$finishUsing(World world, LivingEntity user, CallbackInfoReturnable<ItemStack> info) {
-        if (((ItemStack) (Object) this).getItem() == Items.GOLDEN_APPLE) {
+        if (((ItemStack) (Object) this).getItem() == Items.GOLDEN_APPLE && user.getEntityWorld() != null && user.getEntityWorld().getGameRules().getBoolean(TitanFabricGamerules.LEGACY_ABSORPTION)) {
             if (user.hasStatusEffect(StatusEffects.ABSORPTION)) {
                 StatusEffectInstance absorptionEffect = user.getStatusEffect(StatusEffects.ABSORPTION);
                 if (absorptionEffect != null) {

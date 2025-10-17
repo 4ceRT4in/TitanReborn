@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface TitanFabricGamerules {
     GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("TitanFabric.legacyCombat", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> LEGACY_ABSORPTION = registerBooleanGamerule("TitanFabric.legacyAbsorption", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.legacyFoodRegeneration", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.disableElytraBoosting", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("TitanFabric.advancedFrostburnThawing", GameRules.Category.MISC, true);
