@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "#",
+        "#",
+        "s"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:diamond"
+        },
+        "s": {
+            "item": "titanfabric:sword_handle"
+        }
+    },
+    "result": {
+        "id": "minecraft:diamond_sword",
+        "count": 1
+    }
+}
