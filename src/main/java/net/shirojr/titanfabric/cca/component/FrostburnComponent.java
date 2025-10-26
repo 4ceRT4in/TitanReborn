@@ -1,8 +1,15 @@
 package net.shirojr.titanfabric.cca.component;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
+import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.StringIdentifiable;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.TitanFabricComponents;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
@@ -25,8 +32,8 @@ import java.util.function.Predicate;
  */
 public interface FrostburnComponent extends Component, ServerTickingComponent {
     Identifier IDENTIFIER = TitanFabric.getId("frostburn");
-    float CHANGE_AMOUNT = 0.5f;
-    float SAFETY_THRESHOLD = 0.5f;
+    float CHANGE_AMOUNT = 1.0f;
+    float SAFETY_THRESHOLD = 2.0f;
 
     static FrostburnComponent get(LivingEntity entity) {
         return TitanFabricComponents.FROSTBURN.get(entity);
@@ -45,9 +52,13 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
      */
     float getLimitedMaxHealth();
 
-    int getFrostburnTickSpeed();
+    int getFrostburnTickSpeedIncrease();
 
-    void setFrostburnTickSpeed(int speed, boolean shouldSync);
+    void setFrostburnTickSpeedIncrease(int speed);
+
+    int getFrostburnTickSpeedDecrease();
+
+    void setFrostburnTickSpeedDecrease(int speed);
 
     float getFrostburn();
 
@@ -58,17 +69,23 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
      * @param newAmount  new frostburn value which is capped at a maximum of {@link #getProvider()}'s actual missing health
      * @param shouldSync sync to client side
      */
-    void setFrostburn(float newAmount, boolean shouldSync);
-
-    /**
-     * {@link #setFrostburn(float, boolean)} but automatically only uses {@link #sync()} if the value has changed
-     */
-    void setFrostburn(float newAmount);
+    void setFrostburn(float newAmount, boolean limitAmount, boolean shouldSync);
 
     /**
      * Forces new frostburn value by damaging the {@link #getProvider() provider} if necessary
      */
     void forceFrostburn(float newAmount, boolean shouldSync);
+
+    /**
+     * @return The target value which will eventually be reached by increasing {@link #getFrostburn() frostburn} using ticks
+     */
+    float getFrostburnLimit();
+
+    void setFrostburnLimit(float limit, boolean shouldSync);
+
+    Phase getPhase();
+
+    void setPhase(Phase phase);
 
     /**
      * @param hotBlocksSearchRange use <code>range <= 0</code> to disable search
@@ -87,14 +104,34 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
      */
     boolean shouldMaintainFrostburn();
 
-    /**
-     * @return The target value which will eventually be reached by increasing {@link #getFrostburn() frostburn} using ticks
-     */
-    float getFrostburnLimit();
-
-    void setFrostburnLimit(float limit, boolean shouldSync);
-
     float getMaxAllowedFrostburn();
 
+    void equipmentChange(LivingEntity user, ItemStack oldStack, ItemStack newStack);
+
     void sync();
+
+    enum Phase implements StringIdentifiable {
+        INCREASE, DECREASE;
+
+        public static final Codec<Phase> CODEC = StringIdentifiable.createCodec(Phase::values);
+
+        @Override
+        public String asString() {
+            return this.name();
+        }
+
+        public static class PhaseArgumentType extends EnumArgumentType<Phase> implements ArgumentType<Phase> {
+            private PhaseArgumentType() {
+                super(Phase.CODEC, Phase::values);
+            }
+
+            public static PhaseArgumentType phase() {
+                return new PhaseArgumentType();
+            }
+
+            public static Phase getPhase(CommandContext<ServerCommandSource> context, String id) {
+                return context.getArgument(id, Phase.class);
+            }
+        }
+    }
 }

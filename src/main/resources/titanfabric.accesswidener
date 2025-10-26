@@ -6,3 +6,4 @@ accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget par
 accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget parentHeight I
 accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget narrow Z
 accessible field net/minecraft/client/gui/screen/recipebook/RecipeBookWidget open Z
+accessible class net/minecraft/client/gui/hud/InGameHud$HeartType

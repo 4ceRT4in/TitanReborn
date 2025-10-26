@@ -10,7 +10,7 @@ public interface TitanFabricGamerules {
     GameRules.Key<GameRules.BooleanRule> LEGACY_ABSORPTION = registerBooleanGamerule("TitanFabric.legacyAbsorption", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.legacyFoodRegeneration", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.disableElytraBoosting", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("TitanFabric.advancedFrostburnThawing", GameRules.Category.MISC, true);
+    GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("TitanFabric.advancedFrostburnThawing", GameRules.Category.MISC, false);
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_SEARCH_RANGE = registerIntegerGamerule("TitanFabric.hotBlockSearchRange", GameRules.Category.MISC, 7, -1, null);
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_AMOUNT_FOR_THAWING = registerIntegerGamerule("TitanFabric.hotBlockAmountForThawing", GameRules.Category.MISC, 1, 1, null);
     GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.greatSwordCooldown", GameRules.Category.PLAYER, true);

@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.network.packet.ArmorDamageTiltFixPacket;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
@@ -40,6 +41,11 @@ public class TitanFabricServerEntityEvents {
         private void handleLegendArmor(LivingEntity user, ItemStack oldStack, ItemStack newStack) {
             Item oldItem = oldStack.getItem();
             Item newItem = newStack.getItem();
+            if (oldItem instanceof LegendArmorItem ^ newItem instanceof LegendArmorItem) {
+                FrostburnComponent frostburnComponent = FrostburnComponent.get(user);
+                frostburnComponent.equipmentChange(user, oldStack, newStack);
+            }
+
             if (newItem instanceof LegendArmorItem) {
                 return;
             }

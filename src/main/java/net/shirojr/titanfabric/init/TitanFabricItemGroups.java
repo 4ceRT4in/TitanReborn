@@ -84,7 +84,7 @@ public class TitanFabricItemGroups {
                 addEnchBook(entries, wrapper, Enchantments.SHARPNESS, 6);
             });
             addPotionFamily(entries, TitanFabricPotions.INDESTRUCTIBLE_POTION, TitanFabricPotions.LONG_INDESTRUCTIBLE_POTION);
-            addPotionFamily(entries, TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.LONG_FROSTBURN_POTION);
+            addPotionFamily(entries, TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.STRONG_FROSTBURN_POTION);
             addPotionFamily(entries, TitanFabricPotions.IMMUNITY_POTION, TitanFabricPotions.LONG_IMMUNITY_POTION);
         });
     }

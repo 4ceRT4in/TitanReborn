@@ -1,5 +1,9 @@
 package net.shirojr.titanfabric.mixin.client;
 
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
@@ -27,8 +31,18 @@ import java.util.UUID;
 public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler>
         extends HandledScreen<T> {
 
-    public AbstractInventoryScreenMixin(T handler, PlayerInventory inventory, Text title) {
+    private AbstractInventoryScreenMixin(T handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
+    }
+
+    @Definition(id = "getAmplifier", method = "Lnet/minecraft/entity/effect/StatusEffectInstance;getAmplifier()I")
+    @Definition(id = "statusEffect", local = @Local(type = StatusEffectInstance.class, argsOnly = true))
+    @Expression("statusEffect.getAmplifier() >= 1")
+    @ModifyExpressionValue(method = "getStatusEffectDescription", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private boolean preventFrostburnEffectAmplifierRendering(boolean original, @Local(argsOnly = true) StatusEffectInstance statusEffectInstance) {
+        if (client == null || client.player == null) return original;
+        if (!statusEffectInstance.getEffectType().equals(TitanFabricStatusEffects.FROSTBURN)) return original;
+        return false;
     }
 
     @Inject(method = "render", at = @At("TAIL"))

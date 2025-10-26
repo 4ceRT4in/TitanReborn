@@ -103,4 +103,32 @@ public abstract class InGameHudMixin {
 
         RenderSystem.disableBlend();
     }
+
+    /*@Definition(id = "lines", local = @Local(argsOnly = true, ordinal = 2, type = int.class))
+    @Expression("? - @(?) * lines")
+    @ModifyExpressionValue(method = "renderHealthBar", at = @At("MIXINEXTRAS:EXPRESSION"))
+    private int captureYHeartOffset(int original, @Share("n")LocalIntRef n) {
+        n.set(original);
+        return original;
+    }
+
+    @WrapOperation(
+            method = "renderHealthBar",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawHeart(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/gui/hud/InGameHud$HeartType;IIZZZ)V",
+                    ordinal = 0
+            )
+    )
+    private void applyHeartWobbleOffsetToFrostburnHearts(InGameHud instance, DrawContext context, InGameHud.HeartType type,
+                                                         int x, int y, boolean hardcore, boolean blinking, boolean half,
+                                                         Operation<Void> original, @Share("n")LocalIntRef n) {
+        int sharedValueN = n.get();
+
+        original.call(instance, context, type, x, y, half, blinking, half);
+        if (!FrostburnHudRenderer.isInstantiated()) {
+            return;
+        }
+        FrostburnHudRenderer.getInstance().setYWobbleOffset(sharedValueN);
+    }*/
 }

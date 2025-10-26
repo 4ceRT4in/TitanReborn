@@ -1,5 +1,8 @@
 package net.shirojr.titanfabric.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -21,6 +24,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
@@ -269,5 +273,18 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         this.getItemCooldownManager().set(TitanFabricItems.DIAMOND_SHIELD.asItem(), 80);
         this.getItemCooldownManager().set(TitanFabricItems.LEGEND_SHIELD.asItem(), 60);
         this.getItemCooldownManager().set(TitanFabricItems.NETHERITE_SHIELD.asItem(), 40);
+    }
+
+    @Debug(export = true)
+    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAbsorptionAmount()F"))
+    private float absorptionFrostburnBypass(PlayerEntity instance, Operation<Float> original, @Local(argsOnly = true) DamageSource source) {
+        if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return 0;
+        return original.call(instance);
+    }
+
+    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setAbsorptionAmount(F)V"))
+    private void avoidAbsorptionResetOnFrostburnDamage(PlayerEntity instance, float amount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
+        if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
+        original.call(instance, amount);
     }
 }

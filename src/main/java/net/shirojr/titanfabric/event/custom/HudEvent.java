@@ -7,6 +7,6 @@ import net.shirojr.titanfabric.render.renderer.FrostburnHudRenderer;
 public class HudEvent {
     public static void register() {
         HudRenderCallback.EVENT.register(new ArrowSelectionHudRenderer());
-        HudRenderCallback.EVENT.register(new FrostburnHudRenderer());
+        HudRenderCallback.EVENT.register(FrostburnHudRenderer.getInstance());
     }
 }

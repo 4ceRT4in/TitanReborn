@@ -3,7 +3,9 @@ package net.shirojr.titanfabric.cca.implementation;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
@@ -19,6 +21,8 @@ import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
+import net.shirojr.titanfabric.util.LoggerUtil;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import java.util.Iterator;
@@ -30,7 +34,9 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     private float frostburn;
     private float frostburnLimit;
     private long tick;
-    private int frostburnTickSpeed;
+    private int frostburnTickSpeedIncrease = 20;
+    private int frostburnTickSpeedDecrease = 1;
+    private Phase currentPhase = Phase.INCREASE;
 
     public FrostburnComponentImpl(LivingEntity provider) {
         this.provider = provider;
@@ -55,16 +61,24 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     }
 
     @Override
-    public int getFrostburnTickSpeed() {
-        return frostburnTickSpeed;
+    public int getFrostburnTickSpeedIncrease() {
+        return frostburnTickSpeedIncrease;
     }
 
     @Override
-    public void setFrostburnTickSpeed(int speed, boolean shouldSync) {
-        this.frostburnTickSpeed = Math.max(0, speed);
-        if (shouldSync) {
-            sync();
-        }
+    public void setFrostburnTickSpeedIncrease(int speed) {
+        this.frostburnTickSpeedIncrease = Math.max(0, speed);
+        LoggerUtil.devLogger("set frostburn speed to " + this.frostburnTickSpeedIncrease);
+    }
+
+    @Override
+    public int getFrostburnTickSpeedDecrease() {
+        return frostburnTickSpeedDecrease;
+    }
+
+    @Override
+    public void setFrostburnTickSpeedDecrease(int frostburnTickSpeedDecrease) {
+        this.frostburnTickSpeedDecrease = frostburnTickSpeedDecrease;
     }
 
     @Override
@@ -78,48 +92,78 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     }
 
     @Override
-    public void setFrostburn(float newAmount, boolean shouldSync) {
-        this.frostburn = MathHelper.clamp(newAmount, 0, provider.getMaxHealth() - provider.getHealth());
+    public void setFrostburn(float newAmount, boolean limitAmount, boolean shouldSync) {
+        this.frostburn = limitAmount ? MathHelper.clamp(newAmount, 0, getMaxAllowedFrostburn()) : newAmount;
         if (shouldSync) {
             sync();
         }
-    }
-
-    @Override
-    public void setFrostburn(float newAmount) {
-        float buffer = this.frostburn;
-        this.frostburn = MathHelper.clamp(newAmount, 0, provider.getMaxHealth() - provider.getHealth());
-        if (this.frostburn != buffer) {
-            sync();
+        if (!provider.getWorld().isClient()) {
+            LoggerUtil.devLogger("set frostburn value to " + this.frostburn);
         }
     }
 
     @Override
     public void forceFrostburn(float newFrostburnAmount, boolean shouldSync) {
-        float damageAmount = newFrostburnAmount - getMissingHealth();
-        if (damageAmount > 0) {
-            float maxDamageableHealth = provider.getHealth() - SAFETY_THRESHOLD;
-            if (damageAmount > maxDamageableHealth) {
-                damageAmount = maxDamageableHealth;
-                newFrostburnAmount = provider.getMaxHealth() - damageAmount;
-            }
+        LoggerUtil.devLogger("Entity HP after force: " + this.provider.getHealth());
+
+        if (newFrostburnAmount > getFrostburn()) {
+            setPhase(Phase.INCREASE);
+        }
+
+        float damageAmount = newFrostburnAmount > getFrostburn() ? CHANGE_AMOUNT : -CHANGE_AMOUNT;
+        float maxDamageableHealth = provider.getHealth() - SAFETY_THRESHOLD;
+        float trueMissingHealth = provider.getMaxHealth() - provider.getHealth();
+        damageAmount = Math.min(damageAmount, maxDamageableHealth);
+        if (damageAmount > 0 && trueMissingHealth + damageAmount <= newFrostburnAmount) {
+            LoggerUtil.devLogger("Forced %s damage".formatted(damageAmount));
             this.provider.damage(TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN), damageAmount);
         }
-        setFrostburn(newFrostburnAmount, shouldSync);
+
+        this.frostburn = newFrostburnAmount;
+        LoggerUtil.devLogger("New forced Frostburn amount: " + this.frostburn);
+        if (shouldSync) {
+            this.sync();
+        }
+        LoggerUtil.devLogger("Entity HP after force: " + this.provider.getHealth());
+    }
+
+    @Override
+    public float getFrostburnLimit() {
+        return frostburnLimit;
+    }
+
+    @Override
+    public void setFrostburnLimit(float limit, boolean shouldSync) {
+        if (limit > this.frostburnLimit) {
+            this.setPhase(Phase.INCREASE);
+        }
+        this.frostburnLimit = MathHelper.clamp(limit, 0, getMaxAllowedFrostburn());
+        if (!provider.getWorld().isClient()) {
+            LoggerUtil.devLogger("set frostburn target limit to " + this.frostburnLimit);
+        }
+    }
+
+    @Override
+    public Phase getPhase() {
+        return this.currentPhase;
+    }
+
+    @Override
+    public void setPhase(Phase phase) {
+        this.currentPhase = phase;
     }
 
     @Override
     public boolean shouldMaintainFrostburn(int hotBlocksSearchRange, int hotBlocksAmountForThawing, Predicate<BlockState> isHotBlock) {
-        if (this.getFrostburnTickSpeed() <= 0) return true;
+        if (this.getFrostburnTickSpeedIncrease() <= 0) return true;
         boolean advancedThawing = provider.getWorld().getGameRules().getBoolean(TitanFabricGamerules.ADVANCED_FROSTBURN_THAWING);
         if (advancedThawing) {
             if (provider.isFrozen()) return true;
             if (provider.isOnFire()) return false;
         }
         if (provider.hasStatusEffect(TitanFabricStatusEffects.FROSTBURN)) return true;
-        if (!advancedThawing) {
-            return false;
-        }
+        if (!advancedThawing) return false;
+
         RegistryEntry<Biome> currentBiome = provider.getWorld().getBiome(provider.getBlockPos());
         if (currentBiome.isIn(ConventionalBiomeTags.IS_HOT)) {
             return false;
@@ -154,22 +198,33 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         int hotBlocksSearchRange = gameRules.getInt(TitanFabricGamerules.HOT_BLOCK_SEARCH_RANGE);
         int minHotBlockAmount = gameRules.getInt(TitanFabricGamerules.HOT_BLOCK_AMOUNT_FOR_THAWING);
         Predicate<BlockState> isHotBlock = blockState -> {
-            if (blockState.contains(Properties.LIT) && blockState.get(Properties.LIT)) {
-                return true;
+            boolean hasHotTag = blockState.isIn(TitanFabricTags.Blocks.HOT_BLOCKS);
+            if (blockState.contains(Properties.LIT)) {
+                if (blockState.get(Properties.LIT)) {
+                    return hasHotTag;
+                }
+                return false;
             }
-            return blockState.isIn(TitanFabricTags.Blocks.HOT_BLOCKS);
+            return hasHotTag;
         };
         return this.shouldMaintainFrostburn(hotBlocksSearchRange, minHotBlockAmount, isHotBlock);
     }
 
     @Override
-    public float getFrostburnLimit() {
-        return frostburnLimit;
-    }
+    public void equipmentChange(LivingEntity user, ItemStack oldStack, ItemStack newStack) {
+        float oldHp = user.getHealth();
+        float newHp = oldHp;
+        if (!(oldStack.getItem() instanceof LegendArmorItem) && newStack.getItem() instanceof LegendArmorItem newItem) {
+            newHp += newItem.getExtraValue();
+        } else if (oldStack.getItem() instanceof LegendArmorItem oldItem && !(newStack.getItem() instanceof LegendArmorItem)) {
+            newHp = Math.max(0, newHp - oldItem.getExtraValue());
+        }
+        else return;
 
-    @Override
-    public void setFrostburnLimit(float limit, boolean shouldSync) {
-        this.frostburnLimit = MathHelper.clamp(limit, 0, getMaxAllowedFrostburn());
+        if (oldHp > newHp && !user.getWorld().isClient()) {
+            forceFrostburn(getFrostburn(), true);
+            setFrostburnLimit(getFrostburn(), true);
+        }
     }
 
     @Override
@@ -188,25 +243,34 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public void serverTick() {
-        if (this.frostburnTickSpeed == 0) {
-            return;
-        }
-        if (getFrostburnLimit() == getFrostburn()) {
-            if (tick != 0) {
-                tick = 0;
-            }
+        if (this.frostburnTickSpeedIncrease == 0 && this.frostburnTickSpeedDecrease == 0) {
             return;
         }
         this.tick++;
-        if (this.tick % this.frostburnTickSpeed != 0) {
+        if (getPhase().equals(Phase.INCREASE)) {
+            if (this.tick % this.frostburnTickSpeedIncrease != 0) {
+                return;
+            }
+            if (getFrostburn() != getFrostburnLimit() || getMissingHealth() < getFrostburn()) {
+                float changeAmount = getFrostburn() > getFrostburnLimit() ? -CHANGE_AMOUNT : CHANGE_AMOUNT;
+                this.forceFrostburn(getFrostburn() + changeAmount, true);
+                if (getFrostburn() == getFrostburnLimit()) {
+                    this.setPhase(Phase.DECREASE);
+                }
+            }
             return;
         }
-        if (getFrostburn() > getFrostburnLimit() && shouldMaintainFrostburn()) {
-            return;
-        }
-        if (getFrostburn() != getFrostburnLimit()) {
-            float changeAmount = getFrostburn() > getFrostburnLimit() ? -CHANGE_AMOUNT : CHANGE_AMOUNT;
-            this.forceFrostburn(getFrostburn() + changeAmount, true);
+        if (getPhase().equals(Phase.DECREASE)) {
+            if (this.tick % this.frostburnTickSpeedDecrease != 0) {
+                return;
+            }
+            if (!shouldMaintainFrostburn()) {
+                this.setFrostburn(this.getFrostburn() - CHANGE_AMOUNT, true, true);
+                if (getFrostburn() == 0) {
+                    setFrostburnLimit(0, true);
+                    setPhase(Phase.INCREASE);
+                }
+            }
         }
     }
 
@@ -214,9 +278,11 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     public void readFromNbt(NbtCompound nbtCompound, RegistryWrapper.WrapperLookup wrapperLookup) {
         if (nbtCompound.contains("frostburn")) {
             NbtCompound frostburnNbt = nbtCompound.getCompound("frostburn");
-            this.setFrostburn(frostburnNbt.getFloat("currentFrostburn"), true);
+            this.setFrostburn(frostburnNbt.getFloat("currentFrostburn"), false, false);
             this.setFrostburnLimit(frostburnNbt.getFloat("limit"), true);
-            this.setFrostburnTickSpeed(frostburnNbt.getInt("tickSpeed"), true);
+            this.setFrostburnTickSpeedIncrease(frostburnNbt.getInt("tickSpeedIncrease"));
+            this.setFrostburnTickSpeedDecrease(frostburnNbt.getInt("tickSpeedDecrease"));
+            this.setPhase(Phase.values()[frostburnNbt.getInt("phase")]);
         }
     }
 
@@ -225,8 +291,20 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         NbtCompound frostburnNbt = new NbtCompound();
         frostburnNbt.putFloat("currentFrostburn", this.getFrostburn());
         frostburnNbt.putFloat("limit", this.getFrostburnLimit());
-        frostburnNbt.putInt("tickSpeed", this.getFrostburnTickSpeed());
+        frostburnNbt.putInt("tickSpeedIncrease", this.getFrostburnTickSpeedIncrease());
+        frostburnNbt.putInt("tickSpeedDecrease", this.getFrostburnTickSpeedDecrease());
+        frostburnNbt.putInt("phase", this.getPhase().ordinal());
 
         nbtCompound.put("frostburn", frostburnNbt);
+    }
+
+    @Override
+    public void writeSyncPacket(RegistryByteBuf buf, ServerPlayerEntity recipient) {
+        buf.writeFloat(this.getFrostburn());
+    }
+
+    @Override
+    public void applySyncPacket(RegistryByteBuf buf) {
+        this.setFrostburn(buf.readFloat(), false, false);
     }
 }

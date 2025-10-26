@@ -40,6 +40,7 @@ public class TitanFabric implements ModInitializer {
         TitanFabricDamageTypes.initialize();
         TitanFabricStats.register();
         TitanFabricEvents.registerEvents();
+        TitanFabricCommandArgumentTypes.initialize();
 
         LOGGER.info("Titans incoming!");
         LoggerUtil.devLogger("Initialized Instance in development environment!");

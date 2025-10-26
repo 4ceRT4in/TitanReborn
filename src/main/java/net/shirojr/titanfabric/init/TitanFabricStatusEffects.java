@@ -6,7 +6,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
-import net.shirojr.titanfabric.effect.FrostburnEffect;
+import net.shirojr.titanfabric.effect.FrostburnStatusEffect;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.effect.IndestructibileStatusEffect;
 import net.shirojr.titanfabric.effect.SafeFallingStatusEffect;
@@ -18,7 +18,7 @@ public interface TitanFabricStatusEffects {
     );
     RegistryEntry<StatusEffect> FROSTBURN = registerStatusEffect(
             "frostburn",
-            new FrostburnEffect(StatusEffectCategory.HARMFUL, 0x00D5FF)
+            new FrostburnStatusEffect(StatusEffectCategory.HARMFUL, 0x9DBFE8)
     );
     RegistryEntry<StatusEffect> IMMUNITY = registerStatusEffect(
             "immunity",
