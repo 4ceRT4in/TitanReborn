@@ -25,7 +25,6 @@ import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.HealthAccessor;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
-import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
@@ -34,11 +33,7 @@ import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Debug;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -62,11 +57,14 @@ public abstract class LivingEntityMixin implements HealthAccessor {
     @Shadow
     protected abstract void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source);
 
-    @Shadow public abstract void setHealth(float health);
+    @Shadow
+    public abstract void setHealth(float health);
 
-    @Shadow public abstract float getHealth();
+    @Shadow
+    public abstract float getHealth();
 
-    @Shadow public abstract float getMaxHealth();
+    @Shadow
+    public abstract float getMaxHealth();
 
     @Inject(method = "onStatusEffectApplied", at = @At("TAIL"), cancellable = true)
     private void onStatusEffectApplied(StatusEffectInstance effect, Entity source, CallbackInfo ci) {
@@ -79,6 +77,7 @@ public abstract class LivingEntityMixin implements HealthAccessor {
             ci.cancel();
         }
     }
+
     @Unique
     @Nullable
     private Float titanfabric$restorePoint = null;
