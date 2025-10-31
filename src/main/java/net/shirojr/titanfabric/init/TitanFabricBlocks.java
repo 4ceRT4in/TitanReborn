@@ -14,7 +14,6 @@ import net.shirojr.titanfabric.block.custom.TitanFabricOreBlock;
 
 @SuppressWarnings("unused")
 public interface TitanFabricBlocks {
-
     Block LEGEND_CRYSTAL = registerBlock("legend_crystal",
             new AmethystClusterBlock(7, 3, AbstractBlock.Settings.create().nonOpaque().ticksRandomly().sounds(BlockSoundGroup.AMETHYST_CLUSTER)
                     .strength(3.5F).luminance(state -> 10).requiresTool()));
@@ -26,7 +25,7 @@ public interface TitanFabricBlocks {
                     .hardness(4.5f).strength(3.5f, 3.0f).requiresTool(), 1, 4));
     Block DEEPSTALE_LEGEND_ORE = registerBlock("deepslate_legend_ore",
             new TitanFabricOreBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.DEEPSLATE).mapColor(MapColor.DEEPSLATE_GRAY)
-                    .hardness(10.0f).strength(4.5f, 3.0f).requiresTool(), 1, 7));
+                    .hardness(4.5f).strength(4.5f, 3.0f).requiresTool(), 1, 7));
 
     Block CITRIN_BLOCK = registerBlock("citrin_block",
             new Block(AbstractBlock.Settings.create().sounds(BlockSoundGroup.METAL).mapColor(DyeColor.YELLOW)

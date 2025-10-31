@@ -9,5 +9,8 @@
   "item.minecraft.netherite_helmet": "§8Netherithelm",
   "item.minecraft.netherite_chestplate": "§8Netheritharnisch",
   "item.minecraft.netherite_leggings": "§8Netheritbeinschutz",
-  "item.minecraft.netherite_boots": "§8Netheritstiefel"
+  "item.minecraft.netherite_boots": "§8Netheritstiefel",
+
+  "potion.potency.6": "",
+  "potion.potency.12": ""
 }
