@@ -25,8 +25,9 @@ public abstract class EnchantWithLevelsLootFunctionMixin extends ConditionalLoot
         super(conditions);
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @WrapOperation(method="process", at=@At(value="INVOKE", target="Lnet/minecraft/enchantment/EnchantmentHelper;enchant(Lnet/minecraft/util/math/random/Random;Lnet/minecraft/item/ItemStack;ILnet/minecraft/registry/DynamicRegistryManager;Ljava/util/Optional;)Lnet/minecraft/item/ItemStack;"))
-    private ItemStack titan$filter(Random r, ItemStack s, int lvl, DynamicRegistryManager drm, Optional<? extends RegistryEntryList.Direct<Enchantment>> opts, Operation<ItemStack> op) {
+    private ItemStack titan$removeEnchantsFromConfig(Random r, ItemStack s, int lvl, DynamicRegistryManager drm, Optional<RegistryEntryList<Enchantment>> opts, Operation<ItemStack> op) {
         List<String> blocked = TitanConfig.getBlockedEnchantments();
         Optional<RegistryEntryList.Direct<Enchantment>> filtered = opts.flatMap(list -> {
             List<RegistryEntry<Enchantment>> kept = list.stream().filter(e -> e.getKey().isPresent() && !blocked.contains(e.getKey().get().getValue().toString())).toList();
