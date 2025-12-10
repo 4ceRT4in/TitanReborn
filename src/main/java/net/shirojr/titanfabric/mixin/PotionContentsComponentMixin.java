@@ -25,7 +25,8 @@ public class PotionContentsComponentMixin {
 
     @ModifyExpressionValue(method = "buildTooltip(Ljava/lang/Iterable;Ljava/util/function/Consumer;FF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffectInstance;getAmplifier()I", ordinal = 1))
     private static int bigAmplifierPrintingBugFix(int original, @Local StatusEffectInstance instance) {
-        if (instance.getEffectType().equals(TitanFabricStatusEffects.FROSTBURN)) return 0;
+        // translation only holds amp up to 5, but code allows for bigger. This solution prevents additional whitespace insertion
+        if (instance.getAmplifier() > 5) return 0;
         return original;
     }
 
