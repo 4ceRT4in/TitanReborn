@@ -3,7 +3,9 @@
   "minVersion": "0.8",
   "package": "net.shirojr.titanfabric.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixinextras": {"minVersion": "0.5.0"},
+  "mixinextras": {
+    "minVersion": "0.5.0"
+  },
   "mixins": [
     "AbsorptionStatusEffectMixin",
     "AbstractFireBlockMixin",
@@ -31,6 +33,7 @@
     "LivingEntityMixin",
     "OreFeatureMixin",
     "PlayerEntityMixin",
+    "PotionContentsComponentMixin",
     "PotionEntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",

@@ -154,6 +154,8 @@
 
   "tooltip.titanfabric.legend_bow_arrow": "%s Arrow",
 
+  "tooltip.titanfabric.potion.frostburn": "-%s Health",
+
   "tooltip.titanfabric.legendArmorHealth": "+%s Max Health",
   "tooltip.titanfabric.blindnessEssenceItem": "Applies §1+25% Blindness Chance §ron Swords",
   "tooltip.titanfabric.fireEssenceItem": "Applies §6+25% Fire Chance §ron Swords",
