@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -21,6 +22,12 @@ import java.util.function.Consumer;
 
 @Mixin(PotionContentsComponent.class)
 public class PotionContentsComponentMixin {
+
+    @ModifyExpressionValue(method = "buildTooltip(Ljava/lang/Iterable;Ljava/util/function/Consumer;FF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffectInstance;getAmplifier()I", ordinal = 1))
+    private static int bigAmplifierPrintingBugFix(int original, @Local StatusEffectInstance instance) {
+        if (instance.getEffectType().equals(TitanFabricStatusEffects.FROSTBURN)) return 0;
+        return original;
+    }
 
     @WrapOperation(method = "buildTooltip(Ljava/lang/Iterable;Ljava/util/function/Consumer;FF)V", at = @At(value = "INVOKE", target = "Ljava/util/List;isEmpty()Z"))
     private static boolean appendFrostburnHealth(List<Pair<RegistryEntry<EntityAttribute>, EntityAttributeModifier>> instance, Operation<Boolean> original,
