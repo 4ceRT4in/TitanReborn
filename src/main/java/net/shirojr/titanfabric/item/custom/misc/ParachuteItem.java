@@ -55,7 +55,8 @@ public class ParachuteItem extends Item {
         double x = MathHelper.clamp(newVec3d.getX(), -1.5, 1.5);
         double y = newVec3d.getY();
         double z = MathHelper.clamp(newVec3d.getZ(), -1.5, 1.5);
-        playerEntity.setVelocity(new Vec3d(x, y, z));
+        double horizontalSpeedMultiplier = 0.8;
+        playerEntity.setVelocity(new Vec3d(x, y, z).multiply(horizontalSpeedMultiplier, 1, horizontalSpeedMultiplier));
     }
 
     @Override
