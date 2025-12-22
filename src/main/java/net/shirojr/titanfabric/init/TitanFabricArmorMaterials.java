@@ -28,7 +28,7 @@ public interface TitanFabricArmorMaterials {
                     9, 0.0f, 0.0f,
                     () -> Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)
             ),
-            15
+            23
     );
 
     CustomArmorMaterial EMBER = new CustomArmorMaterial(
