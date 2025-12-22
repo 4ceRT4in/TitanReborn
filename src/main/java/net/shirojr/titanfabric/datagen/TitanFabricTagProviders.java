@@ -45,11 +45,11 @@ public class TitanFabricTagProviders {
                     .addOptionalTag(ConventionalItemTags.ORES_IN_GROUND_NETHERRACK)
                     .add(Items.ANCIENT_DEBRIS)
                     .add(TitanFabricBlocks.CITRIN_ORE.asItem(), TitanFabricBlocks.EMBER_ORE.asItem(),
-                            TitanFabricBlocks.DEEPSTALE_LEGEND_ORE.asItem(), TitanFabricItems.EMBER_SHARD,
+                            TitanFabricBlocks.DEEPSLATE_LEGEND_ORE.asItem(), TitanFabricItems.EMBER_SHARD,
                             TitanFabricItems.LEGEND_POWDER)
                     .setReplace(false);
             getOrCreateTagBuilder(TitanFabricTags.Items.HIGH_HEAT_SMELTING)
-                    .add(TitanFabricBlocks.CITRIN_ORE.asItem(), TitanFabricBlocks.EMBER_ORE.asItem(), TitanFabricBlocks.DEEPSTALE_LEGEND_ORE.asItem())
+                    .add(TitanFabricBlocks.CITRIN_ORE.asItem(), TitanFabricBlocks.EMBER_ORE.asItem(), TitanFabricBlocks.DEEPSLATE_LEGEND_ORE.asItem())
                     .add(TitanFabricItems.EMBER_SHARD, TitanFabricItems.LEGEND_POWDER)
                     .setReplace(false);
             getOrCreateTagBuilder(TitanFabricTags.Items.DEFAULT_CROSSBOW_ARROWS)
@@ -100,12 +100,12 @@ public class TitanFabricTagProviders {
             getOrCreateTagBuilder(BlockTags.NEEDS_IRON_TOOL)
                     .add(TitanFabricBlocks.CITRIN_ORE, TitanFabricBlocks.CITRIN_BLOCK)
                     .add(TitanFabricBlocks.EMBER_ORE, TitanFabricBlocks.EMBER_BLOCK)
-                    .add(TitanFabricBlocks.DEEPSTALE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL, TitanFabricBlocks.LEGEND_BLOCK)
+                    .add(TitanFabricBlocks.DEEPSLATE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL, TitanFabricBlocks.LEGEND_BLOCK)
                     .setReplace(false);
             getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
                     .add(TitanFabricBlocks.CITRIN_ORE, TitanFabricBlocks.CITRIN_BLOCK)
                     .add(TitanFabricBlocks.EMBER_ORE, TitanFabricBlocks.EMBER_BLOCK)
-                    .add(TitanFabricBlocks.DEEPSTALE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL, TitanFabricBlocks.LEGEND_BLOCK)
+                    .add(TitanFabricBlocks.DEEPSLATE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL, TitanFabricBlocks.LEGEND_BLOCK)
                     .add(TitanFabricBlocks.DIAMOND_FURNACE, TitanFabricBlocks.NETHERITE_ANVIL)
                     .setReplace(false);
 

@@ -35,7 +35,7 @@ public class TitanFabricItemGroups {
             addRaw(entries,
                     TitanFabricBlocks.CITRIN_ORE, TitanFabricItems.CITRIN_SHARD, TitanFabricBlocks.CITRIN_BLOCK,
                     TitanFabricBlocks.EMBER_ORE, TitanFabricItems.EMBER_SHARD, TitanFabricItems.EMBER_INGOT, TitanFabricBlocks.EMBER_BLOCK,
-                    TitanFabricBlocks.DEEPSTALE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL, TitanFabricItems.LEGEND_POWDER, TitanFabricItems.LEGEND_INGOT, TitanFabricBlocks.LEGEND_BLOCK,
+                    TitanFabricBlocks.DEEPSLATE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL, TitanFabricItems.LEGEND_POWDER, TitanFabricItems.LEGEND_INGOT, TitanFabricBlocks.LEGEND_BLOCK,
                     TitanFabricItems.CITRIN_HELMET, TitanFabricItems.CITRIN_CHESTPLATE, TitanFabricItems.CITRIN_LEGGINGS, TitanFabricItems.CITRIN_BOOTS,
                     TitanFabricItems.EMBER_HELMET, TitanFabricItems.EMBER_CHESTPLATE, TitanFabricItems.EMBER_LEGGINGS, TitanFabricItems.EMBER_BOOTS,
                     TitanFabricItems.LEGEND_HELMET, TitanFabricItems.LEGEND_CHESTPLATE, TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS,

@@ -6,15 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
-import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
-import net.minecraft.loot.condition.MatchToolLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
-import net.minecraft.predicate.item.ItemPredicate;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
@@ -31,7 +27,7 @@ public class TitanFabricBlockLootTableProvider extends FabricBlockLootTableProvi
     public void generate() {
         addDrop(TitanFabricBlocks.CITRIN_BLOCK);
         addDrop(TitanFabricBlocks.CITRIN_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.CITRIN_ORE, TitanFabricItems.CITRIN_SHARD, 1f, 1f));
-        addDrop(TitanFabricBlocks.DEEPSTALE_LEGEND_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.DEEPSTALE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL.asItem(), 1f, 1f));
+        addDrop(TitanFabricBlocks.DEEPSLATE_LEGEND_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.DEEPSLATE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL.asItem(), 1f, 1f));
         addDrop(TitanFabricBlocks.DIAMOND_FURNACE);
         addDrop(TitanFabricBlocks.EMBER_BLOCK);
         addDrop(TitanFabricBlocks.EMBER_ORE, addDropWithSilkAndFortune(TitanFabricBlocks.EMBER_ORE, TitanFabricItems.EMBER_SHARD, 1f, 1f));

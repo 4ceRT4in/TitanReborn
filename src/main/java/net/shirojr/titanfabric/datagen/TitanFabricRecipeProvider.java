@@ -58,7 +58,7 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         offerHeatTreatment(exporter, TitanFabricBlocks.CITRIN_ORE.asItem(), TitanFabricItems.CITRIN_SHARD);
         offerHeatTreatment(exporter, TitanFabricItems.EMBER_SHARD, TitanFabricItems.EMBER_INGOT);
         offerHeatTreatment(exporter, TitanFabricBlocks.EMBER_ORE.asItem(), TitanFabricItems.EMBER_SHARD);
-        offerHeatTreatment(exporter, TitanFabricBlocks.DEEPSTALE_LEGEND_ORE.asItem(), TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
+        offerHeatTreatment(exporter, TitanFabricBlocks.DEEPSLATE_LEGEND_ORE.asItem(), TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
         offerHeatTreatment(exporter, TitanFabricItems.LEGEND_POWDER, TitanFabricItems.LEGEND_INGOT);
 
         for (CitrinArmorItem entry : TitanFabricItems.CITRIN_ARMOR_ITEMS) {

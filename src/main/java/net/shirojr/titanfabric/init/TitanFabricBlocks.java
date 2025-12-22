@@ -23,7 +23,7 @@ public interface TitanFabricBlocks {
     Block EMBER_ORE = registerBlock("ember_ore",
             new TitanFabricOreBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.NETHER_ORE).mapColor(DyeColor.RED)
                     .hardness(4.5f).strength(3.5f, 3.0f).requiresTool(), 1, 4));
-    Block DEEPSTALE_LEGEND_ORE = registerBlock("deepslate_legend_ore",
+    Block DEEPSLATE_LEGEND_ORE = registerBlock("deepslate_legend_ore",
             new TitanFabricOreBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.DEEPSLATE).mapColor(MapColor.DEEPSLATE_GRAY)
                     .hardness(4.5f).strength(4.5f, 3.0f).requiresTool(), 1, 7));
 

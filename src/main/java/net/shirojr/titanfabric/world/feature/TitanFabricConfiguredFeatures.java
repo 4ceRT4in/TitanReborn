@@ -37,7 +37,7 @@ public class TitanFabricConfiguredFeatures {
         );
         List<OreFeatureConfig.Target> overworldLegendOres = List.of(
                 //OreFeatureConfig.createTarget(stoneReplacables, TitanFabricBlocks.LEGEND_ORE.getDefaultState()),
-                OreFeatureConfig.createTarget(deepslateReplacables, TitanFabricBlocks.DEEPSTALE_LEGEND_ORE.getDefaultState())
+                OreFeatureConfig.createTarget(deepslateReplacables, TitanFabricBlocks.DEEPSLATE_LEGEND_ORE.getDefaultState())
         );
 
         register(context, CITRIN_ORE, Feature.ORE, new OreFeatureConfig(overworldCitrinOres, 9));
