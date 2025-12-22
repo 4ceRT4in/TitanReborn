@@ -60,7 +60,7 @@ public class ParachuteItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if(user.isTouchingWater() || user.isOnGround()) {
+        if(user.isTouchingWater() || user.isOnGround() || user.hasVehicle()) {
             user.sendMessage(Text.translatable("actionbar.titanfabric.parachute_warning"), true);
             return super.use(world, user, hand);
         }
