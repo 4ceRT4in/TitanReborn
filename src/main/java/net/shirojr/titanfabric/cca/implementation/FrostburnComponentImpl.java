@@ -191,6 +191,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public boolean shouldMaintainFrostburn() {
+        if (provider.hasStatusEffect(TitanFabricStatusEffects.IMMUNITY)) return false;
         GameRules gameRules = provider.getWorld().getGameRules();
         if (!gameRules.getBoolean(TitanFabricGamerules.ADVANCED_FROSTBURN_THAWING)) {
             return this.shouldMaintainFrostburn(-1, 1, blockState -> true);
@@ -218,8 +219,7 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
             newHp += newItem.getExtraValue();
         } else if (oldStack.getItem() instanceof LegendArmorItem oldItem && !(newStack.getItem() instanceof LegendArmorItem)) {
             newHp = Math.max(0, newHp - oldItem.getExtraValue());
-        }
-        else return;
+        } else return;
 
         if (oldHp > newHp && !user.getWorld().isClient()) {
             forceFrostburn(getFrostburn(), true);

@@ -1,6 +1,7 @@
 package net.shirojr.titanfabric.effect;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -69,5 +70,10 @@ public class ImmunityEffect extends StatusEffect {
         UUID uuid = entity.getUuid();
         entityBlockedEffect.remove(uuid);
         LoggerUtil.devLogger("Immunity reset for " + uuid + ". Cleared immunity effect");
+    }
+
+    @Override
+    public void onRemoved(AttributeContainer attributeContainer) {
+        super.onRemoved(attributeContainer);
     }
 }
