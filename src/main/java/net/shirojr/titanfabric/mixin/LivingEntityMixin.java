@@ -13,7 +13,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -29,7 +28,6 @@ import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
-import net.shirojr.titanfabric.item.custom.armor.CitrinArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +38,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin implements HealthAccessor {
@@ -118,35 +115,16 @@ public abstract class LivingEntityMixin implements HealthAccessor {
 
         List<RegistryEntry<StatusEffect>> blockedEffectList = List.of(StatusEffects.BLINDNESS, StatusEffects.POISON, StatusEffects.WEAKNESS, StatusEffects.WITHER, StatusEffects.SLOWNESS);
 
-        for (var entry : blockedEffectList) {
-            if (!blockedEffectList.contains(effect.getEffectType()))
-                return;
-        }
+        if (!blockedEffectList.contains(effect.getEffectType())) return;
 
-        List<Item> armorSet = IntStream.rangeClosed(0, 3).mapToObj(player.getInventory()::getArmorStack).map(ItemStack::getItem).toList();
 
-        if (armorSet.stream().allMatch(item -> item instanceof CitrinArmorItem)) {
-            cir.setReturnValue(false);
-            return;
-        }
-
-        int itemCounter = 0;
-        for (Item entry : armorSet) {
-            if (entry instanceof CitrinArmorItem) {
-                itemCounter++;
-            }
-        }
-
-        int effectDuration;
-
-        // TODO: helper class
-        switch (itemCounter) {
-            case 1 -> effectDuration = (int) (effect.getDuration() * 0.75);
-            case 2 -> effectDuration = (int) (effect.getDuration() * 0.5);
-            case 3 -> effectDuration = (int) (effect.getDuration() * 0.25);
-            case 4 -> effectDuration = 0;
-            default -> effectDuration = effect.getDuration();
-        }
+        int effectDuration = switch (ArmorHelper.getCitrinArmorCount(player)) {
+            case 1 -> (int) (effect.getDuration() * 0.75);
+            case 2 -> (int) (effect.getDuration() * 0.5);
+            case 3 -> (int) (effect.getDuration() * 0.25);
+            case 4 -> 0;
+            default -> effect.getDuration();
+        };
 
         StatusEffectInstance newStatusEffectInstance = new StatusEffectInstance(
                 effect.getEffectType(),
@@ -174,7 +152,10 @@ public abstract class LivingEntityMixin implements HealthAccessor {
             cir.setReturnValue(true);
             return;
         }
-        if (statusEffectInstance.upgrade(effect)) {
+        if (newStatusEffectInstance != null && statusEffectInstance.upgrade(newStatusEffectInstance)) {
+            onStatusEffectUpgraded(statusEffectInstance, true, source);
+            cir.setReturnValue(true);
+        } else if (statusEffectInstance.upgrade(effect)) {
             onStatusEffectUpgraded(statusEffectInstance, true, source);
             cir.setReturnValue(true);
         }
