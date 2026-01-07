@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.authlib.GameProfile;
@@ -19,6 +20,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
@@ -71,5 +73,16 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         //TODO: nbt is not available on client side
 
         return originalEvaluation || ((ArrowShootingHandler) player).titanfabric$isShootingArrows();
+    }
+
+    @ModifyExpressionValue(
+            method = "canStartSprinting",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
+            )
+    )
+    private boolean sprintableBlindness(boolean original) {
+        return false;
     }
 }
