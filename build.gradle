@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.10-SNAPSHOT'
+	id 'fabric-loom' version '1.11-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -53,7 +53,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// EMI compat
-	modCompileOnly "dev.emi:emi-fabric:${emi_version}:api"
+	modCompileOnly "dev.emi:emi-fabric:${emi_version}"
 	modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
 	// CCA
