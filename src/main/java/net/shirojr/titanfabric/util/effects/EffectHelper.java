@@ -83,6 +83,28 @@ public final class EffectHelper {
         return getStackWithEffects(itemStack, List.of(effectData), overwrite);
     }
 
+    public static boolean hasWeaponEffects(ItemStack itemStack) {
+        HashSet<WeaponEffectData> effects = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        return effects != null && !effects.isEmpty();
+    }
+
+    public static boolean hasAdditionalWeaponEffects(ItemStack itemStack) {
+        HashSet<WeaponEffectData> effects = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        if (effects == null || effects.isEmpty()) return false;
+        return effects.stream().anyMatch(entry -> entry.type().equals(WeaponEffectType.ADDITIONAL_EFFECT));
+    }
+
+    public static void removeAdditionalEffectsFromStack(ItemStack itemStack) {
+        HashSet<WeaponEffectData> effects = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+        if (effects == null || effects.isEmpty()) return;
+        HashSet<WeaponEffectData> filteredEffects = new HashSet<>(
+                effects.stream()
+                        .filter(entry -> entry.type().equals(WeaponEffectType.INNATE_EFFECT))
+                        .toList()
+        );
+        itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, filteredEffects);
+    }
+
     public static void removeEffectsFromStack(ItemStack itemStack) {
         if (!itemStack.contains(TitanFabricDataComponents.WEAPON_EFFECTS)) return;
         itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>());

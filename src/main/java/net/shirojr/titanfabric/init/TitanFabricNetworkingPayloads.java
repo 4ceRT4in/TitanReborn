@@ -14,6 +14,9 @@ public class TitanFabricNetworkingPayloads {
 
         registerS2C(BackPackScreenPacket.IDENTIFIER, BackPackScreenPacket.CODEC);
         registerS2C(ArmorDamageTiltFixPacket.IDENTIFIER, ArmorDamageTiltFixPacket.CODEC);
+        registerS2C(ArmorHudOverlayPacket.IDENTIFIER, ArmorHudOverlayPacket.CODEC);
+        registerS2C(DisableSwimmingPacket.IDENTIFIER, DisableSwimmingPacket.CODEC);
+        registerS2C(ImmunityBlockedEffectPacket.IDENTIFIER, ImmunityBlockedEffectPacket.CODEC);
     }
 
     private static <T extends CustomPayload> void registerS2C(CustomPayload.Id<T> packetIdentifier, PacketCodec<RegistryByteBuf, T> codec) {

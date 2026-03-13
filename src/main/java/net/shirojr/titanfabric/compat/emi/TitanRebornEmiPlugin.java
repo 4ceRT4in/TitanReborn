@@ -7,6 +7,7 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiCraftingRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
@@ -38,6 +39,7 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class TitanRebornEmiPlugin implements EmiPlugin {
@@ -133,6 +135,8 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         addArrowRecipe(registry, Potions.FIRE_RESISTANCE, WeaponEffect.FIRE, "fire_resistance_arrow");
         addArrowRecipe(registry, Potions.HARMING, WeaponEffect.WITHER, "wither_arrow");
         addArrowRecipe(registry, Potions.WEAKNESS, WeaponEffect.WEAK, "weakness_arrow");
+        removeUncraftableFurnaceRecipes(registry);
+        addMissingMultiBowSmithingRecipes(registry);
 
         for (SwordItem effectSword : TitanFabricItems.EFFECT_SWORDS) {
             Identifier id = Registries.ITEM.getId(effectSword);
@@ -199,6 +203,45 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
 
     private static <C extends RecipeInput, T extends Recipe<C>> Iterable<T> getRecipes(EmiRegistry registry, RecipeType<T> type) {
         return registry.getRecipeManager().listAllOfType(type).stream().map(e -> e.value())::iterator;
+    }
+
+    private void removeUncraftableFurnaceRecipes(EmiRegistry registry) {
+        Set<Item> hiddenFurnaceOutputs = Set.of(
+                TitanFabricItems.LEGEND_POWDER,
+                TitanFabricItems.LEGEND_INGOT,
+                TitanFabricItems.EMBER_INGOT,
+                TitanFabricBlocks.LEGEND_CRYSTAL.asItem()
+        );
+        registry.removeRecipes(recipe -> {
+            if (!recipe.getCategory().equals(VanillaEmiRecipeCategories.SMELTING)) return false;
+            return recipe.getOutputs().stream()
+                    .map(EmiStack::getItemStack)
+                    .anyMatch(stack -> hiddenFurnaceOutputs.contains(stack.getItem()));
+        });
+    }
+
+    private void addMissingMultiBowSmithingRecipes(EmiRegistry registry) {
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                EmiStack.of(Items.BOW),
+                EmiStack.of(TitanFabricItems.EMBER_INGOT),
+                EmiStack.of(TitanFabricItems.MULTI_BOW_1),
+                TitanFabric.getId("/multi_bow_1_smithing_emi")
+        ));
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                EmiStack.of(TitanFabricItems.MULTI_BOW_1),
+                EmiStack.of(TitanFabricItems.MULTI_BOW_1),
+                EmiStack.of(TitanFabricItems.MULTI_BOW_2),
+                TitanFabric.getId("/multi_bow_2_smithing_emi")
+        ));
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                EmiStack.of(TitanFabricItems.MULTI_BOW_2),
+                EmiStack.of(TitanFabricItems.MULTI_BOW_2),
+                EmiStack.of(TitanFabricItems.MULTI_BOW_3),
+                TitanFabric.getId("/multi_bow_3_smithing_emi")
+        ));
     }
 
     private void addEssenceRecipe(EmiRegistry registry, RegistryEntry<Potion> potionType, WeaponEffect effect, String id) {

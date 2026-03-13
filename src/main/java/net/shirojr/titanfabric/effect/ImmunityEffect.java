@@ -5,11 +5,14 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.network.packet.ImmunityBlockedEffectPacket;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,6 +26,18 @@ public class ImmunityEffect extends StatusEffect {
     @Nullable
     public static StatusEffect getBlockedEffects(UUID uuid) {
         return entityBlockedEffect.get(uuid);
+    }
+
+    public static void setBlockedEffect(UUID uuid, @Nullable StatusEffect effect) {
+        if (effect == null) {
+            entityBlockedEffect.remove(uuid);
+            return;
+        }
+        entityBlockedEffect.put(uuid, effect);
+    }
+
+    public static void clearBlockedEffect(UUID uuid) {
+        entityBlockedEffect.remove(uuid);
     }
 
     @Override
@@ -59,7 +74,11 @@ public class ImmunityEffect extends StatusEffect {
                     LoggerUtil.devLogger("Immunity for " + uuid + " blocked known effect: " + newEffect.getEffectType().value().getTranslationKey());
                 }
             } else {
-                entityBlockedEffect.put(uuid, newEffect.getEffectType().value());
+                StatusEffect newlyBlocked = newEffect.getEffectType().value();
+                setBlockedEffect(uuid, newlyBlocked);
+                if (entity instanceof ServerPlayerEntity player) {
+                    new ImmunityBlockedEffectPacket(uuid, newlyBlocked).sendPacket(player);
+                }
                 entity.removeStatusEffect(newEffect.getEffectType());
                 LoggerUtil.devLogger("Immunity for " + uuid + " now protects against new effect: " + newEffect.getEffectType().value().getTranslationKey());
             }
@@ -68,8 +87,16 @@ public class ImmunityEffect extends StatusEffect {
 
     public static void resetImmunity(LivingEntity entity) {
         UUID uuid = entity.getUuid();
-        entityBlockedEffect.remove(uuid);
+        clearBlockedEffect(uuid);
+        if (entity instanceof ServerPlayerEntity player) {
+            new ImmunityBlockedEffectPacket(uuid, Optional.empty()).sendPacket(player);
+        }
         LoggerUtil.devLogger("Immunity reset for " + uuid + ". Cleared immunity effect");
+    }
+
+    public static void syncBlockedEffect(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        new ImmunityBlockedEffectPacket(uuid, getBlockedEffects(uuid)).sendPacket(player);
     }
 
     @Override

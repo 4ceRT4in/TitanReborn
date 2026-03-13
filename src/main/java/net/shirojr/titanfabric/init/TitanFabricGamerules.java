@@ -2,8 +2,14 @@ package net.shirojr.titanfabric.init;
 
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.GameRules;
+import net.shirojr.titanfabric.network.packet.ArmorHudOverlayPacket;
+import net.shirojr.titanfabric.network.packet.DisableSwimmingPacket;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BiConsumer;
 
 public interface TitanFabricGamerules {
     GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("TitanFabric.legacyCombat", GameRules.Category.PLAYER, true);
@@ -14,12 +20,41 @@ public interface TitanFabricGamerules {
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_SEARCH_RANGE = registerIntegerGamerule("TitanFabric.hotBlockSearchRange", GameRules.Category.MISC, 7, -1, null);
     GameRules.Key<GameRules.IntRule> HOT_BLOCK_AMOUNT_FOR_THAWING = registerIntegerGamerule("TitanFabric.hotBlockAmountForThawing", GameRules.Category.MISC, 1, 1, null);
     GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.greatSwordCooldown", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> ARMOR_HUD_OVERLAY = registerBooleanGamerule(
+            "titanfabric.ArmorHudOverlay",
+            GameRules.Category.PLAYER,
+            true,
+            (server, rule) -> {
+                boolean enabled = rule.get();
+                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                    new ArmorHudOverlayPacket(enabled).sendPacket(player);
+                }
+            }
+    );
+    GameRules.Key<GameRules.BooleanRule> DISABLE_SWIMMING = registerBooleanGamerule(
+            "titanfabric.DisableSwimming",
+            GameRules.Category.PLAYER,
+            true,
+            (server, rule) -> {
+                boolean enabled = rule.get();
+                for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                    new DisableSwimmingPacket(enabled).sendPacket(player);
+                }
+            }
+    );
     GameRules.Key<GameRules.BooleanRule> FULL_INVENTORY_POTION_BAG_SEARCH = registerBooleanGamerule("TitanFabric.fullInventoryPotionBagSearch", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> SOUL_FIRE_INFINITE = registerBooleanGamerule("TitanFabric.doInfiniteSoulFireBurn", GameRules.Category.PLAYER, false);
 
     @SuppressWarnings("SameParameterValue")
     private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(String name, GameRules.Category category, boolean defaultValue) {
         return GameRuleRegistry.register(name, category, GameRuleFactory.createBooleanRule(defaultValue));
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(
+            String name, GameRules.Category category, boolean defaultValue,
+            BiConsumer<MinecraftServer, GameRules.BooleanRule> callback) {
+        return GameRuleRegistry.register(name, category, GameRuleFactory.createBooleanRule(defaultValue, callback));
     }
 
     @SuppressWarnings("SameParameterValue")
@@ -39,5 +74,15 @@ public interface TitanFabricGamerules {
 
     static void initialize() {
         // static initialisation
+    }
+
+    static void syncArmorHudOverlay(ServerPlayerEntity player) {
+        boolean enabled = player.getWorld().getGameRules().getBoolean(ARMOR_HUD_OVERLAY);
+        new ArmorHudOverlayPacket(enabled).sendPacket(player);
+    }
+
+    static void syncDisableSwimming(ServerPlayerEntity player) {
+        boolean enabled = player.getWorld().getGameRules().getBoolean(DISABLE_SWIMMING);
+        new DisableSwimmingPacket(enabled).sendPacket(player);
     }
 }

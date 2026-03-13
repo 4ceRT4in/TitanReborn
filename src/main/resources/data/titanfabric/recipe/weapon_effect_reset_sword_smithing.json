@@ -1,0 +1,6 @@
+{
+  "type": "titanfabric:weapon_effect_reset",
+  "base": {
+    "tag": "minecraft:swords"
+  }
+}

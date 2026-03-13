@@ -3,14 +3,12 @@ package net.shirojr.titanfabric.item.custom.misc;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.tooltip.BundleTooltipData;
 import net.minecraft.item.tooltip.TooltipData;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.ScreenHandler;
@@ -22,6 +20,7 @@ import net.minecraft.util.Rarity;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
+import net.shirojr.titanfabric.data.BackPackPreviewData;
 import net.shirojr.titanfabric.data.BackPackContent;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
@@ -121,17 +120,19 @@ public class BackPackItem extends Item {
         if (stack.contains(DataComponentTypes.HIDE_TOOLTIP) || stack.contains(DataComponentTypes.HIDE_ADDITIONAL_TOOLTIP)) return Optional.empty();
         BackPackContent content = stack.get(TitanFabricDataComponents.BACKPACK_CONTENT);
         if (content == null || content.getItems().isEmpty()) return Optional.empty();
-        BundleContentsComponent.Builder builder = new BundleContentsComponent.Builder(BundleContentsComponent.DEFAULT);
+        List<ItemStack> previewStacks = new ArrayList<>();
         List<ItemStack> items = content.getItems();
         for (int i = items.size() - 1; i >= 0; i--) {
-            ItemStack s = items.get(i);
-            if (!s.isEmpty() && s.getItem() != TitanFabricItems.BACKPACK_BIG) {
-                builder.add(s.copy());
-            }
+            ItemStack itemStack = items.get(i);
+            if (itemStack.isEmpty() || itemStack.getItem() == TitanFabricItems.BACKPACK_BIG) continue;
+            previewStacks.add(itemStack.copy());
         }
-        BundleContentsComponent bundle = builder.build();
-        if (bundle.isEmpty()) return Optional.empty();
-        return Optional.of(new BundleTooltipData(bundle));
+        if (previewStacks.isEmpty()) return Optional.empty();
+        int occupiedSlots = previewStacks.size();
+        int totalSlots = this.backpackType.getSize();
+        return Optional.of(new BackPackPreviewData.ToolTipData(
+                new BackPackPreviewData(previewStacks, occupiedSlots, totalSlots)
+        ));
     }
 
     @Override

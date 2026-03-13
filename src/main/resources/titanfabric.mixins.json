@@ -21,6 +21,7 @@
     "EmiAnvilEnchantRecipeMixin",
     "EnchantBookFactoryMixin",
     "EnchantmentHelperMixin",
+    "EnchantmentScreenHandlerMixin",
     "EnchantWithLevelsLootFunctionMixin",
     "EntityMixin",
     "FireworkRocketItemMixin",

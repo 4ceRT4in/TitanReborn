@@ -27,6 +27,7 @@ import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
+import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
@@ -171,27 +172,50 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         return 0.002;
     }
 
+    @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$reduceEmberDamageTickChance(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity.getWorld() == null || entity.getWorld().isClient()) return;
+        if (amount <= 0) return;
+
+        int emberArmorCount = ArmorHelper.getEmberArmorCount(entity);
+        if (emberArmorCount <= 0) return;
+        if (!titanfabric$isEmberTickAffectedDamage(source)) return;
+
+        float avoidChance = Math.min(1.0f, 0.25f * emberArmorCount);
+        if (entity.getRandom().nextFloat() < avoidChance) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "onStatusEffectRemoved", at = @At("TAIL"))
+    private void titanfabric$onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo ci) {
+        LivingEntity self = (LivingEntity) (Object) this;
+        if (self.getWorld().isClient()) return;
+        if (!effect.getEffectType().equals(TitanFabricStatusEffects.IMMUNITY)) return;
+        ImmunityEffect.resetImmunity(self);
+    }
+
     @ModifyVariable(method = "damage", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private float modifyDamageAmount(float amount, DamageSource source) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity.getWorld() != null && !entity.getWorld().isClient() && source != null) {
-            if (source.isIn(DamageTypeTags.IS_FIRE)) {
-                int totalArmor = 0;
-                for (ItemStack armorStack : entity.getArmorItems()) {
-                    if (!armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem armorItem) {
-                        totalArmor += armorItem.getProtection();
-                    }
-                }
-                if (totalArmor > 0) {
-                    float multiplier = 1.0F - (totalArmor * 0.04F);
-                    multiplier = Math.max(0.0F, multiplier);
-                    return (amount * multiplier) + 0.5F;
-                }
-            }
-        }
-        return amount;
+        if (entity.getWorld() == null || entity.getWorld().isClient() || source == null) return amount;
+
+        int emberArmorCount = ArmorHelper.getEmberArmorCount(entity);
+        if (emberArmorCount <= 0) return amount;
+        if (!source.isOf(net.minecraft.entity.damage.DamageTypes.LAVA)) return amount;
+
+        float damageMultiplier = Math.max(0.0f, 1.0f - (0.25f * emberArmorCount));
+        return amount * damageMultiplier;
     }
 
+    @Unique
+    private boolean titanfabric$isEmberTickAffectedDamage(@Nullable DamageSource source) {
+        if (source == null) return false;
+        return source.isOf(net.minecraft.entity.damage.DamageTypes.LAVA)
+                || source.isOf(net.minecraft.entity.damage.DamageTypes.HOT_FLOOR)
+                || source.isIn(DamageTypeTags.IS_FIRE);
+    }
 
     @ModifyVariable(method = "applyMovementInput", at = @At("HEAD"), ordinal = 0, argsOnly = true)
     private Vec3d titanfabric$applyMovementInputMixin(Vec3d original) {
@@ -253,14 +277,13 @@ public abstract class LivingEntityMixin implements HealthAccessor {
 
     @ModifyVariable(method = "setOnFireForTicks", at = @At("HEAD"), argsOnly = true)
     private int handleFireTicksForArmor(int ticks) {
-        if (ticks > 0) {
-            int netherArmorCount = ArmorHelper.getEmberArmorCount((LivingEntity) (Object) this);
-            if (netherArmorCount > 0) {
-                float seconds = ticks * 0.05f;
-                ticks = netherArmorCount == 4 ? 0 : (int) (seconds * netherArmorCount * 0.25f);
-            }
-        }
-        return ticks;
+        if (ticks <= 0) return ticks;
+
+        int emberArmorCount = ArmorHelper.getEmberArmorCount((LivingEntity) (Object) this);
+        if (emberArmorCount <= 0) return ticks;
+
+        float durationMultiplier = Math.max(0.0f, 1.0f - (0.25f * emberArmorCount));
+        return Math.max(0, Math.round(ticks * durationMultiplier));
     }
 
     @Inject(method = "dropInventory", at = @At("HEAD"))

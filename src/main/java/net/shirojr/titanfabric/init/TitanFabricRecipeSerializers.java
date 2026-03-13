@@ -12,6 +12,7 @@ public interface TitanFabricRecipeSerializers {
     RecipeSerializer<EffectUpgradeRecipe> EFFECT_UPGRADE = register("effect_upgrade", new EffectUpgradeRecipe.Serializer());
     RecipeSerializer<MultiBowUpgradeRecipe> MULTI_BOW_UPGRADE = register("multi_bow_upgrade", new MultiBowUpgradeRecipe.Serializer());
     RecipeSerializer<ArmorPlatingRecipe> ARMOR_PLATING = register("armor_plating", new ArmorPlatingRecipe.Serializer());
+    RecipeSerializer<WeaponEffectResetRecipe> WEAPON_EFFECT_RESET = register("weapon_effect_reset", new WeaponEffectResetRecipe.Serializer());
     RecipeSerializer<DyeableRecipe> DYEABLE_RECIPE = register("dyeable_recipe", new DyeableRecipe.Serializer());
 
 
