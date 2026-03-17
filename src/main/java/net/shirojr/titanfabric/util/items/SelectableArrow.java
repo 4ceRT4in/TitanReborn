@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
-import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,11 +59,6 @@ public interface SelectableArrow {
         Integer selectedIndex = arrowSelector.getSelectedIndex(weaponStack);
         if (selectedIndex == null) return null;
 
-        // gamerule doesn't seem to be synced over to the client side automatically.
-        // I can't be bothered to write a client cache for that right now so we just allow it always.
-        // It's only for displaying anyway... - ShiroJR
-        boolean checkBagsInInventory = player.getWorld().isClient() || player.getWorld().getGameRules().getBoolean(TitanFabricGamerules.FULL_INVENTORY_POTION_BAG_SEARCH);
-
         Integer selectedIndexOfBag = arrowSelector.getSelectedIndexOfBag(weaponStack);
         ItemStack bagStack = null;
         DefaultedList<ItemStack> playerInventory = player.getInventory().main;
@@ -74,7 +68,7 @@ public interface SelectableArrow {
             return playerInventory.get(selectedIndex);
         } else if (selectedIndexOfBag.equals(-1)) {
             bagStack = player.getOffHandStack();
-        } else if (checkBagsInInventory) {
+        } else if (selectedIndexOfBag >= 0 && selectedIndexOfBag < playerInventory.size()) {
             bagStack = playerInventory.get(selectedIndexOfBag);
         }
         if (bagStack == null || !(bagStack.getItem() instanceof BackPackItem bagItem)) return null;
@@ -113,17 +107,14 @@ public interface SelectableArrow {
 
         public static Optional<Index> get(PlayerEntity player, ItemStack searchStack) {
             Index result = null;
-            boolean checkBagsInInventory = player.getWorld().getGameRules().getBoolean(TitanFabricGamerules.FULL_INVENTORY_POTION_BAG_SEARCH);
 
-            if (!checkBagsInInventory) {
-                ItemStack offhandStack = player.getOffHandStack();
-                if (offhandStack.getItem() instanceof BackPackItem bagItem && bagItem.getBackpackType().equals(BackPackItem.Type.POTION)) {
-                    Inventory bagInventory = BackPackItem.getInventoryFromComponents(offhandStack, BackPackItem.Type.POTION);
-                    for (int indexInBag = 0; indexInBag < bagInventory.size(); indexInBag++) {
-                        ItemStack stackInBag = bagInventory.getStack(indexInBag);
-                        if (stackInBag.equals(searchStack)) {
-                            return Optional.of(new Index(indexInBag, -1));
-                        }
+            ItemStack offhandStack = player.getOffHandStack();
+            if (offhandStack.getItem() instanceof BackPackItem bagItem && bagItem.getBackpackType().equals(BackPackItem.Type.POTION)) {
+                Inventory bagInventory = BackPackItem.getInventoryFromComponents(offhandStack, BackPackItem.Type.POTION);
+                for (int indexInBag = 0; indexInBag < bagInventory.size(); indexInBag++) {
+                    ItemStack stackInBag = bagInventory.getStack(indexInBag);
+                    if (stackInBag.equals(searchStack)) {
+                        return Optional.of(new Index(indexInBag, -1));
                     }
                 }
             }
@@ -135,7 +126,6 @@ public interface SelectableArrow {
                     result = new Index(inventoryIndex);
                     break;
                 }
-                if (!checkBagsInInventory) continue;
                 if (!(stack.getItem() instanceof BackPackItem bagItem)) continue;
                 if (!bagItem.getBackpackType().equals(BackPackItem.Type.POTION)) continue;
                 Inventory bagInventory = BackPackItem.getInventoryFromComponents(stack, BackPackItem.Type.POTION);

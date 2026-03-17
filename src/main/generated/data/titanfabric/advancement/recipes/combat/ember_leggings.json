@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:ember_leggings"
+        "recipe": "titanfabric:ember_leggings"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -37,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:ember_leggings"
+      "titanfabric:ember_leggings"
     ]
   }
 }

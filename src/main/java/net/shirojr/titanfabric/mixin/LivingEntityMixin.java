@@ -308,17 +308,17 @@ public abstract class LivingEntityMixin implements HealthAccessor {
 
     @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(intValue = 5))
     private int modifyAppliedDamageInt5(int original) {
-        return 1;
+        return 3;
     }
 
     @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(intValue = 25))
     private int modifyAppliedDamageInt25(int original) {
-        return 10;
+        return 20;
     }
 
     @ModifyConstant(method = "modifyAppliedDamage", constant = @Constant(floatValue = 25.0F))
     private float modifyAppliedDamageFloat25(float original) {
-        return 10.0F;
+        return 20.0F;
     }
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V"))

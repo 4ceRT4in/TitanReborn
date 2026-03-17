@@ -16,9 +16,6 @@ public interface TitanFabricGamerules {
     GameRules.Key<GameRules.BooleanRule> LEGACY_ABSORPTION = registerBooleanGamerule("TitanFabric.legacyAbsorption", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.legacyFoodRegeneration", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.disableElytraBoosting", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> ADVANCED_FROSTBURN_THAWING = registerBooleanGamerule("TitanFabric.advancedFrostburnThawing", GameRules.Category.MISC, false);
-    GameRules.Key<GameRules.IntRule> HOT_BLOCK_SEARCH_RANGE = registerIntegerGamerule("TitanFabric.hotBlockSearchRange", GameRules.Category.MISC, 7, -1, null);
-    GameRules.Key<GameRules.IntRule> HOT_BLOCK_AMOUNT_FOR_THAWING = registerIntegerGamerule("TitanFabric.hotBlockAmountForThawing", GameRules.Category.MISC, 1, 1, null);
     GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.greatSwordCooldown", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> ARMOR_HUD_OVERLAY = registerBooleanGamerule(
             "titanfabric.ArmorHudOverlay",
@@ -42,9 +39,11 @@ public interface TitanFabricGamerules {
                 }
             }
     );
-    GameRules.Key<GameRules.BooleanRule> FULL_INVENTORY_POTION_BAG_SEARCH = registerBooleanGamerule("TitanFabric.fullInventoryPotionBagSearch", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> SOUL_FIRE_INFINITE = registerBooleanGamerule("TitanFabric.doInfiniteSoulFireBurn", GameRules.Category.PLAYER, false);
-
+    GameRules.Key<GameRules.BooleanRule> DISABLE_FIRE_ENCHANTMENTS = registerBooleanGamerule(
+            "titanfabric.DisableFireEnchantments",
+            GameRules.Category.PLAYER,
+            true
+    );
     @SuppressWarnings("SameParameterValue")
     private static GameRules.Key<GameRules.BooleanRule> registerBooleanGamerule(String name, GameRules.Category category, boolean defaultValue) {
         return GameRuleRegistry.register(name, category, GameRuleFactory.createBooleanRule(defaultValue));

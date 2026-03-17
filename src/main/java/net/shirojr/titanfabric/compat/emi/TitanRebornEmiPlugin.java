@@ -209,6 +209,8 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         Set<Item> hiddenFurnaceOutputs = Set.of(
                 TitanFabricItems.LEGEND_POWDER,
                 TitanFabricItems.LEGEND_INGOT,
+                TitanFabricItems.CITRIN_SHARD,
+                TitanFabricItems.EMBER_SHARD,
                 TitanFabricItems.EMBER_INGOT,
                 TitanFabricBlocks.LEGEND_CRYSTAL.asItem()
         );
@@ -221,6 +223,20 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
     }
 
     private void addMissingMultiBowSmithingRecipes(EmiRegistry registry) {
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                EmiStack.of(Items.BOW),
+                EmiStack.of(TitanFabricItems.LEGEND_INGOT),
+                EmiStack.of(TitanFabricItems.LEGEND_BOW),
+                TitanFabric.getId("/legend_bow_smithing_emi")
+        ));
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                EmiStack.of(Items.CROSSBOW),
+                EmiStack.of(TitanFabricItems.LEGEND_INGOT),
+                EmiStack.of(TitanFabricItems.TITAN_CROSSBOW),
+                TitanFabric.getId("/legend_crossbow_smithing_emi")
+        ));
         registry.addRecipe(new EmiSmithingRecipe(
                 EmiStack.EMPTY,
                 EmiStack.of(Items.BOW),

@@ -5,7 +5,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 
 import java.util.ArrayList;
@@ -21,13 +20,11 @@ public class ArrowSelectionHelper {
         List<ItemStack> supported = new ArrayList<>();
         Predicate<ItemStack> isSupportedArrowStack = stack -> bowItem.titanFabric$supportedArrows().contains(stack.getItem());
 
-        boolean checkBagsInInventory = player.getWorld().getGameRules().getBoolean(TitanFabricGamerules.FULL_INVENTORY_POTION_BAG_SEARCH);
         for (ItemStack stack : player.getInventory().main) {
             if (isSupportedArrowStack.test(stack)) {
                 supported.add(stack);
                 continue;
             }
-            if (!checkBagsInInventory) continue;
             if (!(stack.getItem() instanceof BackPackItem bagItem)) continue;
             if (!bagItem.getBackpackType().equals(BackPackItem.Type.POTION)) continue;
             Inventory bagItemInventory = BackPackItem.getInventoryFromComponents(stack, BackPackItem.Type.POTION);
@@ -40,7 +37,7 @@ public class ArrowSelectionHelper {
         }
 
         ItemStack offhandStack = player.getOffHandStack();
-        if (!checkBagsInInventory && offhandStack.getItem() instanceof BackPackItem bagItem && bagItem.getBackpackType().equals(BackPackItem.Type.POTION)) {
+        if (offhandStack.getItem() instanceof BackPackItem bagItem && bagItem.getBackpackType().equals(BackPackItem.Type.POTION)) {
             Inventory bagItemInventory = BackPackItem.getInventoryFromComponents(offhandStack, BackPackItem.Type.POTION);
             for (int i = 0; i < bagItemInventory.size(); i++) {
                 ItemStack stackInBag = bagItemInventory.getStack(i);

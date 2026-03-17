@@ -9,10 +9,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.util.items.FireEnchantmentBanHelper;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
 import org.spongepowered.asm.mixin.Mixin;
@@ -55,6 +57,30 @@ public abstract class BowItemMixin implements SelectableArrow {
             return new ItemStack(Items.ARROW);
         }
         return originalResult;
+    }
+
+    @WrapOperation(
+            method = "onStoppedUsing",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/BowItem;shootAll(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;Ljava/util/List;FFZLnet/minecraft/entity/LivingEntity;)V"
+            )
+    )
+    private void titanfabric$removeFlameEffect(
+            BowItem instance,
+            ServerWorld world,
+            LivingEntity shooter,
+            Hand hand,
+            ItemStack bowStack,
+            List<ItemStack> projectiles,
+            float speed,
+            float divergence,
+            boolean critical,
+            LivingEntity target,
+            Operation<Void> original
+    ) {
+        ItemStack sanitizedBowStack = FireEnchantmentBanHelper.getSanitizedCombatStackForEffects(world, bowStack);
+        original.call(instance, world, shooter, hand, sanitizedBowStack, projectiles, speed, divergence, critical, target);
     }
 
     @Inject(method = "use", at = @At("HEAD"))

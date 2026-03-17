@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:diamond_greatsword"
+        "recipe": "titanfabric:diamond_greatsword"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:diamond_greatsword"
+      "titanfabric:diamond_greatsword"
     ]
   }
 }

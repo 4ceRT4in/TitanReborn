@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "c": {
-      "item": "minecraft:iron_ingot"
+      "item": "minecraft:gold_ingot"
     },
     "l": {
       "item": "minecraft:leather"
@@ -22,6 +22,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "titanfabric:backpack_small"
+    "id": "titanfabric:medium_backpack"
   }
 }

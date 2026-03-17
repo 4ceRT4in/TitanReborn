@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:ember_ingot_from_blasting_ember_shard"
+        "recipe": "titanfabric:ember_ingot_from_blasting_ember_shard"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:ember_ingot_from_blasting_ember_shard"
+      "titanfabric:ember_ingot_from_blasting_ember_shard"
     ]
   }
 }

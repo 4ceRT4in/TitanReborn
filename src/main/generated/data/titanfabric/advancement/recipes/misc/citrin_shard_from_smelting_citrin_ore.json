@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:citrin_shard_from_smelting_citrin_ore"
+        "recipe": "titanfabric:citrin_shard_from_smelting_citrin_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:citrin_shard_from_smelting_citrin_ore"
+      "titanfabric:citrin_shard_from_smelting_citrin_ore"
     ]
   }
 }

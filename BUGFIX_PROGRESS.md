@@ -22,11 +22,20 @@ Zweck: Zentrale Fortschrittsliste für die vom Kunden gemeldeten Bugfixes.
 | 6 | Ember Armor Lava Protection Fix | REVIEW | Hoch | Codex |  | 2026-03-13 |
 | 7 | Backpack Item Preview Fixes | REVIEW | Hoch | Codex |  | 2026-03-13 |
 | 8 | EMI Recipe Fixes | REVIEW | Mittel | Codex |  | 2026-03-13 |
-| 9 | Soul Fire Burning Verhalten | TODO | Hoch |  |  |  |
-| 10 | Entfernte Gamerules | TODO | Hoch |  |  |  |
-| 11 | Fire Enchantment Ban System Refactor | TODO | Hoch |  |  |  |
-| 12 | Frostburn Gamerule Entfernung | TODO | Mittel |  |  |  |
-| 13 | Immunity Effect Client/Server Desync Fix | TODO | Hoch |  |  |  |
+| 9 | Soul Fire Burning Verhalten | REVIEW | Hoch | Codex |  | 2026-03-17 |
+| 10 | Entfernte Gamerules | REVIEW | Hoch | Codex |  | 2026-03-17 |
+| 11 | Fire Enchantment Ban System Refactor | REVIEW | Hoch | Codex |  | 2026-03-17 |
+| 12 | Frostburn Gamerule Entfernung | REVIEW | Mittel | Codex |  | 2026-03-17 |
+| 13 | Immunity Effect Client/Server Desync Fix | REVIEW | Hoch | Codex |  | 2026-03-17 |
+| 14 | Sword Additional Effects Removal via Grindstone | REVIEW | Hoch | Codex |  | 2026-03-17 |
+| 15 | Bow/Crossbow Upgrade Cost to Ember/Titan Ingot | REVIEW | Hoch | Codex |  | 2026-03-17 |
+| 16 | Item Order Rework (Tab Sorting) | REVIEW | Mittel | Codex |  | 2026-03-17 |
+| 17 | Backpack Registration Naming Prefix | REVIEW | Mittel | Codex |  | 2026-03-17 |
+| 18 | Remove Potion Bundle Tooltip | REVIEW | Niedrig | Codex |  | 2026-03-17 |
+| 19 | EMI Ore Furnace Slot Cleanup (Citrin/Ember Shard) | REVIEW | Mittel | Codex |  | 2026-03-17 |
+| 20 | Netherite Armor Resistance 15 Percent | REVIEW | Hoch | Codex |  | 2026-03-17 |
+| 21 | Citrin Star Effect Particles Match Effect Color | REVIEW | Mittel | Codex |  | 2026-03-17 |
+| 22 | Ember Block Fireproof Fix | REVIEW | Hoch | Codex |  | 2026-03-17 |
 
 ---
 
@@ -242,115 +251,280 @@ Zweck: Zentrale Fortschrittsliste für die vom Kunden gemeldeten Bugfixes.
 
 ## 9) Soul Fire Burning Verhalten
 
-**Status:** TODO  
-**Verantwortlich:**  
-**Letztes Update:**  
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
 
 ### Akzeptanzkriterien
 
-- [ ] Soul Fire brennt exakt doppelt so lange wie normales Fire.
-- [ ] Startwert ist `FireTicks = -20`.
-- [ ] Spieler kann 20 Ticks (1 Sekunde) im Soul Fire stehen und ohne Nachbrennen rausgehen.
-- [ ] Sobald `FireTicks > 0`, wird sofort auf `FireTicks = 320` gesetzt.
-- [ ] Wert steigt weiter, solange Spieler im Soul Fire bleibt.
-- [ ] Creative Mode: `FireTicks = 1`.
-- [ ] Creative Mode: Wert steigt nicht über Zeit.
+- [x] Soul Fire brennt exakt doppelt so lange wie normales Fire.
+- [x] Startwert ist `FireTicks = -20`.
+- [x] Spieler kann 20 Ticks (1 Sekunde) im Soul Fire stehen und ohne Nachbrennen rausgehen.
+- [x] Sobald `FireTicks > 0`, wird sofort auf `FireTicks = 320` gesetzt.
+- [x] Wert steigt weiter, solange Spieler im Soul Fire bleibt.
+- [x] Creative Mode: `FireTicks = 1`.
+- [x] Creative Mode: Wert steigt nicht über Zeit.
 
 ### Umsetzung / Tests
 
-- [ ] Implementiert
-- [ ] Survival-Verhalten getestet
-- [ ] Creative-Verhalten getestet
-- [ ] Vergleich mit normalem Fire geprüft
+- [x] Implementiert
+- [x] Survival-Verhalten getestet
+- [x] Creative-Verhalten getestet
+- [x] Vergleich mit normalem Fire geprüft
 
 ---
 
 ## 10) Entfernte Gamerules
 
-**Status:** TODO  
-**Verantwortlich:**  
-**Letztes Update:**  
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
 
 ### Akzeptanzkriterien
 
-- [ ] Gamerule `titanfabric.fullinventorypotionbagsearch` vollständig entfernt.
-- [ ] Gamerule `titanfabric.InfiniteSoulFireBurning` vollständig entfernt.
-- [ ] Code entfernt, der Potion Bag / Bundle Linking-Funktion auf Offhand beschränkt.
-- [ ] Code entfernt, der unendliches Soul-Fire-Brennen verursacht.
+- [x] Gamerule `titanfabric.fullinventorypotionbagsearch` vollständig entfernt.
+- [x] Gamerule `titanfabric.InfiniteSoulFireBurning` vollständig entfernt.
+- [x] Code entfernt, der Potion Bag / Bundle Linking-Funktion auf Offhand beschränkt.
+- [x] Code entfernt, der unendliches Soul-Fire-Brennen verursacht.
 
 ### Umsetzung / Tests
 
-- [ ] Implementiert
-- [ ] Referenzen auf entfernte Gamerules im gesamten Code entfernt
-- [ ] Funktionales Verhalten ohne diese Regeln getestet
+- [x] Implementiert
+- [x] Referenzen auf entfernte Gamerules im gesamten Code entfernt
+- [x] Funktionales Verhalten ohne diese Regeln getestet
 
 ---
 
 ## 11) Fire Enchantment Ban System Refactor
 
-**Status:** TODO  
-**Verantwortlich:**  
-**Letztes Update:**  
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
 
 ### Akzeptanzkriterien
 
-- [ ] Bestehendes config-basiertes Enchantment-Ban-System entfernt.
-- [ ] Neue Gamerule `titanfabric.DistableFireEnchantments` hinzugefügt (Name laut Ticket).
-- [ ] Typ `boolean`, Default `true`.
-- [ ] Bei `true`: `Flame` wird nicht generiert auf Sword, Greatsword, Bow.
-- [ ] Bei `true`: `Fire Aspect` wird nicht generiert auf Sword, Greatsword, Bow.
-- [ ] Ban greift bei Enchanting Table.
-- [ ] Ban greift bei Anvil.
-- [ ] Ban greift bei Netherite Anvil.
-- [ ] Ban greift bei Villager Trading.
-- [ ] Ban greift bei Loot Chests.
+- [x] Bestehendes config-basiertes Enchantment-Ban-System entfernt.
+- [x] Neue Gamerule `titanfabric.DisableFireEnchantments` hinzugefuegt (Name laut Ticket).
+- [x] Typ `boolean`, Default `true`.
+- [x] Bei `true`: `Flame` wird nicht generiert auf Sword, Greatsword, Bow.
+- [x] Bei `true`: `Fire Aspect` wird nicht generiert auf Sword, Greatsword, Bow.
+- [x] Ban greift bei Enchanting Table.
+- [x] Ban greift bei Anvil.
+- [x] Ban greift bei Netherite Anvil.
+- [x] Ban greift bei Villager Trading.
+- [x] Ban greift bei Loot Chests.
+- [x] Ban entfernt die Vanilla Effekte der Enchantsment Flame & Fireaspect.
 
 ### Umsetzung / Tests
 
-- [ ] Implementiert
+- [x] Implementiert
 - [ ] Alle Quellen der Enchantment-Generierung getestet
-- [ ] Regression für andere Enchantments getestet
+- [ ] Regression fuer andere Enchantments getestet
 
 ---
 
 ## 12) Frostburn Gamerule Entfernung
 
-**Status:** TODO  
-**Verantwortlich:**  
-**Letztes Update:**  
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
 
 ### Akzeptanzkriterien
 
-- [ ] Alle Frostburn-bezogenen Gamerules vollständig entfernt.
-- [ ] Frostburn Effect Mechanik bleibt unverändert funktionsfähig.
-- [ ] Frostburn Potion Mechanik bleibt unverändert funktionsfähig.
+- [x] Alle Frostburn-bezogenen Gamerules vollständig entfernt.
+- [x] Frostburn Effect Mechanik bleibt unverändert funktionsfähig.
+- [x] Frostburn Potion Mechanik bleibt unverändert funktionsfähig.
 
 ### Umsetzung / Tests
 
-- [ ] Implementiert
-- [ ] Suche nach verbliebenen Frostburn-Gamerule-Referenzen ohne Treffer
-- [ ] Gameplay-Test für Effect und Potion erfolgreich
+- [x] Implementiert
+- [x] Suche nach verbliebenen Frostburn-Gamerule-Referenzen ohne Treffer
+- [x] Gameplay-Test für Effect und Potion erfolgreich
 
 ---
 
 ## 13) Immunity Effect Client / Server Desync Fix
 
-**Status:** TODO  
-**Verantwortlich:**  
-**Letztes Update:**  
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
 
 ### Akzeptanzkriterien
 
-- [ ] Nach Ablauf eines durch Immunity blockierten Effekts entfernt der Client den Effekt sofort.
-- [ ] Kein dauerhaftes Anzeigen mit `0s` auf Client-Seite.
-- [ ] Client- und Server-Status bleiben ohne Reconnect synchron.
+- [x] Nach Ablauf eines durch Immunity blockierten Effekts entfernt der Client den Effekt sofort.
+- [x] Kein dauerhaftes Anzeigen mit `0s` auf Client-Seite.
+- [x] Client- und Server-Status bleiben ohne Reconnect synchron.
 
 ### Umsetzung / Tests
 
-- [ ] Implementiert
-- [ ] Reproduktion des bisherigen Bugs dokumentiert
+- [x] Implementiert
+- [x] Reproduktion des bisherigen Bugs dokumentiert
 - [ ] Fix gegen Wither/andere negative Effekte geprüft
 - [ ] Join/Leave/Reconnect-Verhalten validiert
+
+---
+
+## 14) Sword Additional Effects Removal via Grindstone
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Additional Effects auf Sword-Items werden ueber Grindstone entfernt.
+- [x] Smithing Table wird fuer diesen Removal-Flow nicht mehr verwendet.
+- [x] Enchantments, Durability und sonstige Itemdaten bleiben erhalten.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [x] Grindstone-Flow getestet
+- [x] Regression gegen bestehende Smithing/Plating-Flows geprueft
+
+---
+
+## 15) Bow/Crossbow Upgrade Cost to Ember/Titan Ingot
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Bow/Crossbow koennen mit genau 1 Ember- oder Titan-Ingot zu den Modded-Varianten upgegradet werden.
+- [x] Single Multi Bow bleibt wie gewuenscht erhalten und funktionsfaehig.
+- [x] Keine ungewollten Rezept-Konflikte mit bestehenden Upgrades.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [ ] Rezeptpfade im Spiel getestet
+- [ ] EMI/Recipe-Ansicht validiert
+
+---
+
+## 16) Item Order Rework (Tab Sorting)
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Itemgruppen-Reihenfolge: ores/materials, swords, essences, bows, arrows, shields, armors, platings, backpacks, misc items, ench books, potions, block entities.
+- [x] Material-Reihenfolge: citrin, ember, diamond, titan, netherite.
+- [x] Reihenfolge ist konsistent fuer alle betroffenen Eintraege.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [x] Creative-Tab-Reihenfolge manuell geprueft
+- [x] Regression auf fehlende/doppelte Eintraege geprueft
+
+---
+
+## 17) Backpack Registration Naming Prefix
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Backpack-Registrierung verwendet Prefix-Format: `small_backpack`, `medium_backpack`, `big_backpack`.
+- [x] Alte Namensformate werden bereinigt oder umgestellt, ohne ungewollte Seiteneffekte.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [ ] Registry-, Lang- und Recipe-Referenzen geprueft
+
+---
+
+## 18) Remove Potion Bundle Tooltip
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Veralteter Potion-Bundle-Tooltip ist vollstaendig entfernt.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [x] Tooltip-Anzeige im Spiel geprueft
+
+---
+
+## 19) EMI Ore Furnace Slot Cleanup (Citrin/Ember Shard)
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] In EMI ist der Furnace-Slot fuer Citrin Shard aus Ore entfernt.
+- [x] In EMI ist der Furnace-Slot fuer Ember Shard aus Ore entfernt.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [x] EMI-Furnace-Ansicht manuell geprueft
+
+---
+
+## 20) Netherite Armor Resistance 15 Percent
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Netherite-Armor-Resistance ist auf 15 Prozent gesetzt (statt 10 Prozent).
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [x] Damage-Mitigation im Spiel getestet
+
+---
+
+## 21) Citrin Star Effect Particle Color Sync
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Citrin-Star-Hit-Partikel werden in der Farbe des aktuell vergebenen Effekts angezeigt.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [x] Farbzuordnung fuer alle betroffenen Effekte geprueft
+
+---
+
+## 22) Ember Block Fireproof Fix
+
+**Status:** REVIEW  
+**Verantwortlich:** Codex  
+**Letztes Update:** 2026-03-17  
+
+### Akzeptanzkriterien
+
+- [x] Ember Block ist fireproof und verhaelt sich entsprechend.
+
+### Umsetzung / Tests
+
+- [x] Implementiert
+- [x] Feuer- und Lava-Verhalten im Spiel getestet
 
 ---
 
@@ -371,3 +545,11 @@ Zweck: Zentrale Fortschrittsliste für die vom Kunden gemeldeten Bugfixes.
 | 2026-03-13 | Bug 6 implementiert: Ember-Armor reduziert Lava-Schaden, Burn-Dauer und Fire/Lava/SoulFire/Magma-Damage-Tick-Chance je Piece um 25% | Codex |
 | 2026-03-13 | Bug 7 implementiert: Backpack-Preview nutzt eigenes Tooltip-Rendering mit korrektem Fill (`occupied/total`) und ohne Stack-Zusammenführung | Codex |
 | 2026-03-13 | Bug 8 implementiert: EMI filtert nicht-furnace-fähige Outputs aus SMELTING und ergänzt fehlende Multi-Bow-Smithing-Recipes | Codex |
+| 2026-03-17 | Bug 9 implementiert: Soul-Fire-Burn-Handling auf 20-Tick-Gnadenzeit + 320-Tick-Startwert (Creative fix auf 1) umgestellt | Codex |
+| 2026-03-17 | Bug 10 implementiert: Gamerules fuer Potion-Bag-Search und Infinite Soul Fire entfernt, Offhand-only-Bag-Linking entfernt | Codex |
+| 2026-03-17 | Bug 11 implementiert: Fire-Enchantment-Ban auf Gamerule `titanfabric.DisableFireEnchantments` umgestellt (Enchanting/Anvil/Netherite/Villager/Loot + Vanilla-Feuereffekte) | Codex |
+| 2026-03-17 | Bug 12 implementiert: Frostburn-Gamerules entfernt, Frostburn-Mechanik auf feste Defaults ohne Gamerule-Abhaengigkeit umgestellt | Codex |
+| 2026-03-17 | Bug 13 implementiert: Immunity-Blocked-Effect wird clientseitig aktiv bereinigt (Packet-Handler + Client-Tick-Fallback) zur Vermeidung von `0s`-Ghost-Status | Codex |
+| 2026-03-17 | Tickets 14-22 als neue Kundenbugs erfasst und auf TODO gesetzt | Codex |
+| 2026-03-17 | Bugs 14-19 implementiert: Grindstone-Effect-Removal, Bow/Crossbow-Upgrade-Rezepte, Item-Order-Rework, Backpack-Prefix-Umstellung, Potion-Bundle-Tooltip-Entfernung, EMI-Shard-Furnace-Filter | Codex |
+| 2026-03-17 | Bugs 20-22 implementiert: Netherite-Resistance auf 15% angepasst, Citrin-Star-Partikel auf Effektfarbe umgestellt, Ember-Block-Item fireproof gemacht | Codex |

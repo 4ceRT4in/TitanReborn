@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
+import net.minecraft.particle.EntityEffectParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
@@ -20,6 +21,7 @@ import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.BiDirectionalLookup;
+import net.shirojr.titanfabric.util.effects.WeaponEffect;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,18 +55,18 @@ public class CitrinStarEntity extends ThrownItemEntity {
         }
     }
 
-    private void updateStatusEffects(LivingEntity livingEntity, RegistryEntry<StatusEffect> statusEffect) {
+    private RegistryEntry<StatusEffect> updateStatusEffects(LivingEntity livingEntity, RegistryEntry<StatusEffect> statusEffect) {
         if (!getWorld().isClient) {
             boolean unchanged = livingEntity.hasStatusEffect(statusEffect) && !this.changedEffects.contains(statusEffect);
             if (unchanged) {
                 RegistryEntry<StatusEffect> oppositeEffect = getEffectOpposites().getOpposite(statusEffect);
-                if (oppositeEffect == null) return;
+                if (oppositeEffect == null) return null;
 
                 StatusEffectInstance oldEffectInstance = livingEntity.getStatusEffect(statusEffect);
-                if (!(oldEffectInstance instanceof StatusEffectInstanceAccessor accessor)) return;
+                if (!(oldEffectInstance instanceof StatusEffectInstanceAccessor accessor)) return null;
                 StatusEffectInstance previousEffect = accessor.titanfabric$getPreviousStatusEffect();
                 if (previousEffect != null) {
-                    return;
+                    return null;
                 }
 
                 int oldDuration = oldEffectInstance.getDuration();
@@ -93,9 +95,11 @@ public class CitrinStarEntity extends ThrownItemEntity {
                 }
 
                 this.changedEffects.add(oppositeEffect);
+                return oppositeEffect;
             }
 
         }
+        return null;
     }
 
     @Override
@@ -105,29 +109,57 @@ public class CitrinStarEntity extends ThrownItemEntity {
         Entity entity = entityHitResult.getEntity();
         if (!(entityHitResult.getEntity().getWorld() instanceof ServerWorld serverWorld)) return;
         if (entity instanceof LivingEntity target) {
+            List<Integer> particleColors = new ArrayList<>();
             for (var entry : getEffectOpposites().getDataMap().entrySet()) {
                 RegistryEntry<StatusEffect> effect = entry.getKey();
                 RegistryEntry<StatusEffect> oppositeEffect = entry.getValue();
-                updateStatusEffects(target, effect);
-                updateStatusEffects(target, oppositeEffect);
+                RegistryEntry<StatusEffect> appliedEffect = updateStatusEffects(target, effect);
+                if (appliedEffect != null) {
+                    particleColors.add(appliedEffect.value().getColor());
+                }
+                RegistryEntry<StatusEffect> appliedOppositeEffect = updateStatusEffects(target, oppositeEffect);
+                if (appliedOppositeEffect != null) {
+                    particleColors.add(appliedOppositeEffect.value().getColor());
+                }
             }
             if (target.isOnFire()) {
                 entity.extinguish();
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 200, 0));
+                particleColors.add(StatusEffects.FIRE_RESISTANCE.value().getColor());
             } else if (target.hasStatusEffect(StatusEffects.FIRE_RESISTANCE)) {
                 target.removeStatusEffect(StatusEffects.FIRE_RESISTANCE);
                 target.setOnFireFor(10);
+                particleColors.add(WeaponEffect.FIRE.getColor());
             }
             for (int i = 0; i < 32; ++i) {
+                if (particleColors.isEmpty()) {
+                    serverWorld.spawnParticles(
+                            ParticleTypes.END_ROD,
+                            target.getX(),
+                            this.getY(),
+                            target.getZ(),
+                            1,
+                            this.random.nextGaussian() * 0.3D, this.random.nextGaussian() * 0.3D,
+                            this.random.nextGaussian() * 0.3D,
+                            0.0D
+                    );
+                    continue;
+                }
+
+                int color = particleColors.get(this.random.nextInt(particleColors.size()));
+                float red = (float) (color >> 16 & 255) / 255.0F;
+                float green = (float) (color >> 8 & 255) / 255.0F;
+                float blue = (float) (color & 255) / 255.0F;
+
                 serverWorld.spawnParticles(
-                        ParticleTypes.END_ROD,
+                        EntityEffectParticleEffect.create(ParticleTypes.ENTITY_EFFECT, red, green, blue),
                         target.getX(),
                         this.getY(),
                         target.getZ(),
-                        1,            // count
+                        1,
                         this.random.nextGaussian() * 0.3D, this.random.nextGaussian() * 0.3D,
-                        this.random.nextGaussian() * 0.3D,          // offsetZ
-                        0.0D           // speed
+                        this.random.nextGaussian() * 0.3D,
+                        0.0D
                 );
             }
 

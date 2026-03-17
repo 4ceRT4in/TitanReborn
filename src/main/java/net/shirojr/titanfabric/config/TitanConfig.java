@@ -10,8 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TitanConfig {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -45,16 +43,11 @@ public class TitanConfig {
         }
     }
 
-    public static List<String> getBlockedEnchantments() {
-        return configData.blockedEnchantments;
-    }
-
     public static float getCrossbowPotionProjectileSpeed() {
         return configData.crossbowPotionProjectileSpeed;
     }
 
     private static class ConfigData {
-        public List<String> blockedEnchantments = new ArrayList<>();
         public float crossbowPotionProjectileSpeed = 1.2f;
     }
 }

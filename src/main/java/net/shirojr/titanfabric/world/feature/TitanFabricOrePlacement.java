@@ -10,10 +10,10 @@ public class TitanFabricOrePlacement {
     }
 
     public static List<PlacementModifier> modifiersWithCount(int count, PlacementModifier heightModifier) {
-        return List.of(CountPlacementModifier.of(count), heightModifier);
+        return modifiers(CountPlacementModifier.of(count), heightModifier);
     }
 
     public static List<PlacementModifier> modifiersWithRarity(int chance, PlacementModifier heightModifier) {
-        return List.of(RarityFilterPlacementModifier.of(chance), heightModifier);
+        return modifiers(RarityFilterPlacementModifier.of(chance), heightModifier);
     }
 }

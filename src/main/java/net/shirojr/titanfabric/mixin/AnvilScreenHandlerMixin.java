@@ -17,6 +17,7 @@ import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import net.shirojr.titanfabric.util.items.Anvilable;
+import net.shirojr.titanfabric.util.items.FireEnchantmentBanHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,6 +38,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
     private boolean requiresNetherite;
     @Unique
     private boolean hasPlating;
+    @Unique
+    private boolean fireEnchantmentBanEnabled;
 
     public AnvilScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(type, syncId, playerInventory, context);
@@ -44,7 +47,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
 
     @Inject(method = "updateResult", at = @At("HEAD"))
     private void cacheAnvilType(CallbackInfo ci) {
-        context.run((world, pos) -> isNetherite = world.getBlockState(pos).isOf(TitanFabricBlocks.NETHERITE_ANVIL));
+        isNetherite = false;
+        fireEnchantmentBanEnabled = false;
+        context.run((world, pos) -> {
+            isNetherite = world.getBlockState(pos).isOf(TitanFabricBlocks.NETHERITE_ANVIL);
+            fireEnchantmentBanEnabled = FireEnchantmentBanHelper.isFireEnchantmentBanEnabled(world);
+        });
         requiresNetherite = false;
         hasPlating = false;
     }
@@ -58,6 +66,23 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
     @Inject(method = "updateResult", at = @At("RETURN"))
     private void updateResultReturn(CallbackInfo ci) {
         ItemStack result = this.output.getStack(0);
+        if (fireEnchantmentBanEnabled && !result.isEmpty()) {
+            ItemStack baseInput = this.input.getStack(0);
+            ItemStack sacrificeInput = this.input.getStack(1);
+            if (FireEnchantmentBanHelper.isRestrictedCombatItem(baseInput)
+                    && FireEnchantmentBanHelper.hasBlockedFireEnchantment(sacrificeInput)) {
+                this.output.setStack(0, ItemStack.EMPTY);
+                this.levelCost.set(0);
+                this.sendContentUpdates();
+                return;
+            }
+
+            if (FireEnchantmentBanHelper.stripFireEnchantments(result)) {
+                this.output.setStack(0, result);
+                this.sendContentUpdates();
+            }
+        }
+
         if (!result.isEmpty() && ArmorPlatingHelper.hasArmorPlating(result)) {
             this.output.setStack(0, ItemStack.EMPTY);
             this.levelCost.set(0);

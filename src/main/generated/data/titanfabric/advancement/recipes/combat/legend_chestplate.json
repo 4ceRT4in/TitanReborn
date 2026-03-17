@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:legend_chestplate"
+        "recipe": "titanfabric:legend_chestplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -37,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:legend_chestplate"
+      "titanfabric:legend_chestplate"
     ]
   }
 }

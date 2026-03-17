@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:legend_ingot_from_blasting_legend_powder"
+        "recipe": "titanfabric:legend_ingot_from_blasting_legend_powder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:legend_ingot_from_blasting_legend_powder"
+      "titanfabric:legend_ingot_from_blasting_legend_powder"
     ]
   }
 }

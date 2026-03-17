@@ -8,6 +8,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
@@ -43,12 +44,21 @@ public record ImmunityBlockedEffectPacket(UUID entityUuid, Optional<Identifier> 
 
     public static void handlePacket(ImmunityBlockedEffectPacket packet, ClientPlayNetworking.Context context) {
         context.client().execute(() -> {
+            var clientPlayer = context.client().player;
             if (packet.blockedEffectId().isEmpty()) {
                 ImmunityEffect.clearBlockedEffect(packet.entityUuid());
                 return;
             }
             StatusEffect effect = Registries.STATUS_EFFECT.get(packet.blockedEffectId().get());
             ImmunityEffect.setBlockedEffect(packet.entityUuid(), effect);
+
+            // Ensure client state cannot keep a stale blocked effect entry.
+            if (clientPlayer != null && clientPlayer.getUuid().equals(packet.entityUuid())) {
+                RegistryEntry<StatusEffect> blockedEffectEntry = Registries.STATUS_EFFECT.getEntry(effect);
+                if (clientPlayer.hasStatusEffect(blockedEffectEntry)) {
+                    clientPlayer.removeStatusEffect(blockedEffectEntry);
+                }
+            }
         });
     }
 }

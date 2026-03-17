@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:legend_helmet"
+        "recipe": "titanfabric:legend_helmet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -37,7 +37,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:legend_helmet"
+      "titanfabric:legend_helmet"
     ]
   }
 }
