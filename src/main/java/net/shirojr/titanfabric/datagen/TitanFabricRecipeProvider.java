@@ -23,6 +23,7 @@ import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
 import net.shirojr.titanfabric.recipe.builder.EffectRecipeJsonBuilder;
 import net.shirojr.titanfabric.recipe.builder.EffectUpgradeRecipeJsonBuilder;
+import net.shirojr.titanfabric.recipe.builder.ItemUpgradeRecipeJsonBuilder;
 import net.shirojr.titanfabric.recipe.builder.MultiBowUpgradeRecipeJsonBuilder;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.IngredientModule;
@@ -85,6 +86,9 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         offerEffectItems(exporter, Items.BLAZE_POWDER, List.of(4), Items.POTION, List.of(1, 3, 5, 7), TitanFabricItems.ESSENCE, 1);
         offerEffectItems(exporter, Items.ARROW, List.of(1, 3, 5, 7), Items.POTION, List.of(4), TitanFabricItems.EFFECT_ARROW, 2);
 
+        offerLegendBowCrafting(exporter);
+        offerLegendCrossbowCrafting(exporter);
+        offerItemUpgrade(exporter, Items.BOW, TitanFabricItems.EMBER_INGOT, TitanFabricItems.MULTI_BOW_1, "multi_bow_1_upgrade");
         offerMultiBowUpgrade(exporter, TitanFabricItems.MULTI_BOW_1, TitanFabricItems.MULTI_BOW_2);
         offerMultiBowUpgrade(exporter, TitanFabricItems.MULTI_BOW_2, TitanFabricItems.MULTI_BOW_3);
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, TitanFabricItems.MULTI_BOW_1)
@@ -217,6 +221,38 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
         MultiBowUpgradeRecipeJsonBuilder.create(Ingredient.ofItems(base), result.getDefaultStack())
                 .criterion(hasItem(base), conditionsFromItem(base))
                 .offerTo(exporter, TitanFabric.getId(name + "_upgrade"));
+    }
+
+    private static void offerItemUpgrade(RecipeExporter exporter, Item base, Item addition, Item result, String name) {
+        ItemUpgradeRecipeJsonBuilder.create(Ingredient.ofItems(base), Ingredient.ofItems(addition), result.getDefaultStack(), RecipeCategory.COMBAT)
+                .criterion(hasItem(base), conditionsFromItem(base))
+                .criterion(hasItem(addition), conditionsFromItem(addition))
+                .offerTo(exporter, TitanFabric.getId(name));
+    }
+
+    private static void offerLegendBowCrafting(RecipeExporter exporter) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, TitanFabricItems.LEGEND_BOW)
+                .input('#', Items.STICK)
+                .input('X', Items.STRING)
+                .input('&', TitanFabricItems.LEGEND_INGOT)
+                .pattern(" #X")
+                .pattern("& X")
+                .pattern(" #X")
+                .criterion(hasItem(TitanFabricItems.LEGEND_INGOT), conditionsFromItem(TitanFabricItems.LEGEND_INGOT))
+                .offerTo(exporter, TitanFabric.getId("legend_bow_crafting"));
+    }
+
+    private static void offerLegendCrossbowCrafting(RecipeExporter exporter) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, TitanFabricItems.TITAN_CROSSBOW)
+                .input('#', Items.STICK)
+                .input('$', Items.TRIPWIRE_HOOK)
+                .input('&', TitanFabricItems.LEGEND_INGOT)
+                .input('~', Items.STRING)
+                .pattern("#&#")
+                .pattern("~$~")
+                .pattern(" # ")
+                .criterion(hasItem(TitanFabricItems.LEGEND_INGOT), conditionsFromItem(TitanFabricItems.LEGEND_INGOT))
+                .offerTo(exporter, TitanFabric.getId("legend_crossbow_crafting"));
     }
 
     private static void offerArmorPlating(RecipeExporter exporter, Item output, Item ingot) {

@@ -30,7 +30,7 @@ public class TitanFabricPlacedFeatures {
         var configuredFeatures = context.getRegistryLookup(RegistryKeys.CONFIGURED_FEATURE);
 
         register(context, CITRIN_ORE_UPPER, configuredFeatures.getOrThrow(TitanFabricConfiguredFeatures.CITRIN_ORE),
-                TitanFabricOrePlacement.modifiersWithCount(7,
+                TitanFabricOrePlacement.modifiersWithCount(80,
                         HeightRangePlacementModifier.trapezoid(
                                 YOffset.aboveBottom(80),
                                 YOffset.aboveBottom(384)
@@ -38,35 +38,35 @@ public class TitanFabricPlacedFeatures {
                 )
         );
         register(context, CITRIN_ORE_MIDDLE, configuredFeatures.getOrThrow(TitanFabricConfiguredFeatures.CITRIN_ORE),
-                TitanFabricOrePlacement.modifiersWithCount(8,
+                TitanFabricOrePlacement.modifiersWithCount(9,
                         HeightRangePlacementModifier.trapezoid(
                                 YOffset.aboveBottom(0),
-                                YOffset.aboveBottom(48)
+                                YOffset.aboveBottom(56)
                         )
                 )
         );
         register(context, CITRIN_ORE_SMALL, configuredFeatures.getOrThrow(TitanFabricConfiguredFeatures.CITRIN_ORE_SMALL),
-                TitanFabricOrePlacement.modifiersWithCount(8,
-                        HeightRangePlacementModifier.trapezoid(
-                                YOffset.fixed(0),
-                                YOffset.fixed(64)
+                TitanFabricOrePlacement.modifiersWithCount(9,
+                        HeightRangePlacementModifier.uniform(
+                                YOffset.aboveBottom(0),
+                                YOffset.fixed(72)
                         )
                 )
         );
 
         register(context, EMBER_ORE, configuredFeatures.getOrThrow(TitanFabricConfiguredFeatures.EMBER_ORE_BURIED),
-                TitanFabricOrePlacement.modifiersWithCount(2,
-                        HeightRangePlacementModifier.trapezoid(
-                                YOffset.fixed(10),
-                                YOffset.fixed(90)
+                TitanFabricOrePlacement.modifiersWithCount(1,
+                        HeightRangePlacementModifier.uniform(
+                                YOffset.aboveBottom(10),
+                                YOffset.belowTop(10)
                         )
                 )
         );
         register(context, EMBER_ORE_EXTRA, configuredFeatures.getOrThrow(TitanFabricConfiguredFeatures.EMBER_ORE),
-                TitanFabricOrePlacement.modifiersWithCount(30,
+                TitanFabricOrePlacement.modifiersWithCount(8,
                         HeightRangePlacementModifier.uniform(
-                                YOffset.fixed(32),
-                                YOffset.fixed(256)
+                                YOffset.aboveBottom(10),
+                                YOffset.belowTop(10)
                         )
                 )
         );
@@ -75,15 +75,15 @@ public class TitanFabricPlacedFeatures {
                 TitanFabricOrePlacement.modifiersWithCount(7,
                         HeightRangePlacementModifier.trapezoid(
                                 YOffset.aboveBottom(-80),
-                                YOffset.fixed(0)
+                                YOffset.aboveBottom(80)
                         )
                 )
         );
         register(context, LEGEND_ORE_LARGE, configuredFeatures.getOrThrow(TitanFabricConfiguredFeatures.LEGEND_ORE),
-                TitanFabricOrePlacement.modifiersWithCount(9,
+                TitanFabricOrePlacement.modifiersWithRarity(9,
                         HeightRangePlacementModifier.trapezoid(
                                 YOffset.aboveBottom(-80),
-                                YOffset.fixed(0)
+                                YOffset.aboveBottom(80)
                         )
                 )
         );
@@ -91,7 +91,7 @@ public class TitanFabricPlacedFeatures {
                 TitanFabricOrePlacement.modifiersWithCount(4,
                         HeightRangePlacementModifier.trapezoid(
                                 YOffset.aboveBottom(-80),
-                                YOffset.fixed(0)
+                                YOffset.aboveBottom(80)
                         )
                 )
         );

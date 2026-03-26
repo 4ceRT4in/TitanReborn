@@ -135,6 +135,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         addArrowRecipe(registry, Potions.FIRE_RESISTANCE, WeaponEffect.FIRE, "fire_resistance_arrow");
         addArrowRecipe(registry, Potions.HARMING, WeaponEffect.WITHER, "wither_arrow");
         addArrowRecipe(registry, Potions.WEAKNESS, WeaponEffect.WEAK, "weakness_arrow");
+        addGrindstoneEffectRemovalRecipes(registry);
         removeUncraftableFurnaceRecipes(registry);
         addMissingMultiBowSmithingRecipes(registry);
 
@@ -288,6 +289,28 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         ItemStack output = EffectHelper.applyEffectToStack(new ItemStack(TitanFabricItems.EFFECT_ARROW), additionalEffectData, false);
 
         registry.addRecipe(new EmiCraftingRecipe(inputs, EmiStack.of(output, 2), TitanFabric.getId("/" + id), false));
+    }
+
+    private void addGrindstoneEffectRemovalRecipes(EmiRegistry registry) {
+        for (SwordItem swordItem : TitanFabricItems.EFFECT_SWORDS) {
+            Identifier itemId = Registries.ITEM.getId(swordItem);
+            for (ItemStack inputStack : EffectHelper.generateSwordsStacks(swordItem, false)) {
+                var additionalEffect = WeaponEffectData.get(inputStack, WeaponEffectType.ADDITIONAL_EFFECT);
+                if (additionalEffect.isEmpty()) {
+                    continue;
+                }
+
+                ItemStack outputStack = inputStack.copy();
+                EffectHelper.removeAdditionalEffectsFromStack(outputStack);
+
+                WeaponEffectData effectData = additionalEffect.get();
+                registry.addRecipe(new GrindstoneEffectRemovalRecipe(
+                        EmiStack.of(inputStack),
+                        EmiStack.of(outputStack),
+                        TitanFabric.getId("/grindstone/" + itemId.getPath() + "/" + effectData.weaponEffect().getId() + "_" + effectData.strength() + "_effect_removal")
+                ));
+            }
+        }
     }
 }
 

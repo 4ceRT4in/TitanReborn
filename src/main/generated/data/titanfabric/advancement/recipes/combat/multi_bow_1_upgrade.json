@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_bow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:bow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_ember_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "titanfabric:ember_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "titanfabric:multi_bow_1_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_bow",
+      "has_ember_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "titanfabric:multi_bow_1_upgrade"
+    ]
+  }
+}

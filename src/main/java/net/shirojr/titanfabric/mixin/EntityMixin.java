@@ -24,16 +24,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityMixin implements EntityAccessor {
 
     @Unique
-    private boolean titan$soulBurning;
+    private boolean titanfabric$soulBurning;
 
     @Override
     public boolean titanfabric$isSoulBurning() {
-        return this.titan$soulBurning;
+        return this.titanfabric$soulBurning;
     }
 
     @Override
     public void titanfabric$setSoulBurning(boolean value) {
-        this.titan$soulBurning = value;
+        this.titanfabric$soulBurning = value;
     }
 
     @ModifyArg(
@@ -45,14 +45,19 @@ public class EntityMixin implements EntityAccessor {
             index = 1
     )
     private float baseTick(float amount) {
-        return this.titan$soulBurning ? 2.0F : amount;
+        return titanfabric$isSoulBurning() ? 2.0F : amount;
     }
 
     @Inject(method = "baseTick", at = @At("TAIL"))
     private void baseTick(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
-        if (self.getFireTicks() <= 0) {
-            this.titan$soulBurning = false;
+        if (self.getWorld().isClient()) {
+            if (!self.isOnFire()) {
+                titanfabric$setSoulBurning(false);
+                handleClientSide(self);
+            }
+        } else if (self.getFireTicks() <= 0) {
+            titanfabric$setSoulBurning(false);
         }
     }
 
@@ -66,8 +71,8 @@ public class EntityMixin implements EntityAccessor {
     private void updateMovementInFluid(TagKey<Fluid> tag, double speed, CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (Entity)(Object)this;
         World world = entity.getWorld();
-        if(!world.isClient()) return;
         if (!(world.getFluidState(entity.getBlockPos()).getFluid() == Fluids.LAVA || world.getFluidState(entity.getBlockPos()).getFluid() == Fluids.FLOWING_LAVA)) return;
+        titanfabric$setSoulBurning(false);
         if (world.isClient()) {
             handleClientSide(entity);
         }

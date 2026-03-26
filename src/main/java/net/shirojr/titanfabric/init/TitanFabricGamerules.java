@@ -12,13 +12,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.BiConsumer;
 
 public interface TitanFabricGamerules {
-    GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("TitanFabric.legacyCombat", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> LEGACY_ABSORPTION = registerBooleanGamerule("TitanFabric.legacyAbsorption", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.legacyFoodRegeneration", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.disableElytraBoosting", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.greatSwordCooldown", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("TitanFabric.LegacyCombat", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> LEGACY_ABSORPTION = registerBooleanGamerule("TitanFabric.LegacyAbsorption", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.LegacyFoodRegeneration", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.DisableElytraBoosting", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.GreatSwordCooldown", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> ARMOR_HUD_OVERLAY = registerBooleanGamerule(
-            "titanfabric.ArmorHudOverlay",
+            "TitanFabric.ArmorHudOverlay",
             GameRules.Category.PLAYER,
             true,
             (server, rule) -> {
@@ -29,7 +29,7 @@ public interface TitanFabricGamerules {
             }
     );
     GameRules.Key<GameRules.BooleanRule> DISABLE_SWIMMING = registerBooleanGamerule(
-            "titanfabric.DisableSwimming",
+            "TitanFabric.DisableSwimming",
             GameRules.Category.PLAYER,
             true,
             (server, rule) -> {
@@ -40,7 +40,7 @@ public interface TitanFabricGamerules {
             }
     );
     GameRules.Key<GameRules.BooleanRule> DISABLE_FIRE_ENCHANTMENTS = registerBooleanGamerule(
-            "titanfabric.DisableFireEnchantments",
+            "TitanFabric.DisableFireEnchantments",
             GameRules.Category.PLAYER,
             true
     );

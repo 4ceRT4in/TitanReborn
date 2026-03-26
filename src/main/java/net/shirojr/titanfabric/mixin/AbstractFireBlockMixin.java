@@ -34,16 +34,14 @@ public abstract class AbstractFireBlockMixin extends Block {
         boolean soulFire = state.isOf(Blocks.SOUL_FIRE);
         boolean fire = state.isOf(Blocks.FIRE);
 
-        if (world.isClient) {
-            handleClientSide(soulFire, fire, entity);
+        if (soulFire) {
+            ((EntityAccessor) entity).titanfabric$setSoulBurning(true);
+        } else if (fire) {
+            ((EntityAccessor) entity).titanfabric$setSoulBurning(false);
         }
 
-        if (!world.isClient) {
-            if (soulFire) {
-                ((EntityAccessor) entity).titanfabric$setSoulBurning(true);
-            } else if (fire) {
-                ((EntityAccessor) entity).titanfabric$setSoulBurning(false);
-            }
+        if (world.isClient) {
+            handleClientSide(soulFire, fire, entity);
         }
     }
 

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "&": {
+      "item": "titanfabric:legend_ingot"
+    },
+    "X": {
+      "item": "minecraft:string"
+    }
+  },
+  "pattern": [
+    " #X",
+    "& X",
+    " #X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:legend_bow"
+  }
+}

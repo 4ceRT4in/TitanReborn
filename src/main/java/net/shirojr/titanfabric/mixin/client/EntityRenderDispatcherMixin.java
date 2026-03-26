@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.shirojr.titanfabric.TitanFabricClient;
+import net.shirojr.titanfabric.access.EntityAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,7 +40,7 @@ public class EntityRenderDispatcherMixin {
 
             if (state.isOf(Blocks.SOUL_FIRE)) {
                 TitanFabricClient.SOUL_FIRE_ENTITIES.add(entity.getUuid());
-            } else if (state.isOf(Blocks.FIRE)) {
+            } else if (state.isOf(Blocks.FIRE) || !((EntityAccessor) entity).titanfabric$isSoulBurning()) {
                 TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
             }
         }
@@ -47,7 +48,7 @@ public class EntityRenderDispatcherMixin {
 
     @WrapOperation(method = "renderFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;", ordinal = 1))
     private Sprite getSprite1(SpriteIdentifier obj, Operation<Sprite> original, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity) {
-        if (TitanFabricClient.SOUL_FIRE_ENTITIES.contains(entity.getUuid())) {
+        if (titanfabric$shouldRenderSoulFire(entity)) {
             return TEXTURE_1.getSprite();
         }
         return original.call(obj);
@@ -55,9 +56,14 @@ public class EntityRenderDispatcherMixin {
 
     @WrapOperation(method = "renderFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SpriteIdentifier;getSprite()Lnet/minecraft/client/texture/Sprite;", ordinal = 0))
     private Sprite getSprite0(SpriteIdentifier obj, Operation<Sprite> original, MatrixStack matrices, VertexConsumerProvider vertexConsumers, Entity entity) {
-        if (TitanFabricClient.SOUL_FIRE_ENTITIES.contains(entity.getUuid())) {
+        if (titanfabric$shouldRenderSoulFire(entity)) {
             return TEXTURE_0.getSprite();
         }
         return original.call(obj);
+    }
+
+    @Unique
+    private boolean titanfabric$shouldRenderSoulFire(Entity entity) {
+        return ((EntityAccessor) entity).titanfabric$isSoulBurning() || TitanFabricClient.SOUL_FIRE_ENTITIES.contains(entity.getUuid());
     }
 }

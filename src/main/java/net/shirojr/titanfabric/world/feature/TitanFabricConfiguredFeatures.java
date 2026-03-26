@@ -44,7 +44,7 @@ public class TitanFabricConfiguredFeatures {
         register(context, CITRIN_ORE_SMALL, Feature.ORE, new OreFeatureConfig(overworldCitrinOres, 4));
         register(context, EMBER_ORE, Feature.ORE, new OreFeatureConfig(netherEmberOres, 9));
         register(context, EMBER_ORE_BURIED, Feature.ORE, new OreFeatureConfig(netherEmberOres, 9, 0.5f));
-        register(context, LEGEND_ORE, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 6, 0.7f));
+        register(context, LEGEND_ORE, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 12, 0.7f));
         register(context, LEGEND_ORE_SMALL, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 4, 0.5f));
         register(context, LEGEND_ORE_BURIED, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 8, 1.0f));
     }

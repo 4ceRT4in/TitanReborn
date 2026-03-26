@@ -1,0 +1,13 @@
+{
+  "type": "titanfabric:item_upgrade",
+  "addition": {
+    "item": "titanfabric:ember_ingot"
+  },
+  "base": {
+    "item": "minecraft:bow"
+  },
+  "result": {
+    "count": 1,
+    "id": "titanfabric:multi_bow_1"
+  }
+}

@@ -8,6 +8,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.World;
@@ -39,6 +40,10 @@ public final class FireEnchantmentBanHelper {
         return isFireEnchantmentBanEnabled(world) && isRestrictedCombatItem(stack);
     }
 
+    public static boolean shouldRestrictLootEnchantmentGeneration(@Nullable World world, ItemStack stack) {
+        return isFireEnchantmentBanEnabled(world) && (isRestrictedCombatItem(stack) || isLootBook(stack));
+    }
+
     public static List<EnchantmentLevelEntry> filterFireEnchantments(List<EnchantmentLevelEntry> entries) {
         return entries.stream()
                 .filter(entry -> !isFireEnchantment(entry.enchantment))
@@ -62,6 +67,22 @@ public final class FireEnchantmentBanHelper {
         return sanitized;
     }
 
+    public static ItemStack getSanitizedLootStack(@Nullable World world, ItemStack original) {
+        if (!isFireEnchantmentBanEnabled(world)) return original;
+        if (!shouldSanitizeLootStack(original)) return original;
+        if (original.isOf(Items.ENCHANTED_BOOK) && !hasStoredEnchantments(original)) {
+            return original.copyComponentsToNewStack(Items.BOOK, original.getCount());
+        }
+        if (!hasBlockedFireEnchantment(original)) return original;
+
+        ItemStack sanitized = original.copy();
+        stripFireEnchantments(sanitized);
+        if (sanitized.isOf(Items.ENCHANTED_BOOK) && !hasStoredEnchantments(sanitized)) {
+            return sanitized.copyComponentsToNewStack(Items.BOOK, sanitized.getCount());
+        }
+        return sanitized;
+    }
+
     public static boolean stripFireEnchantments(ItemStack stack) {
         if (!shouldSanitizeStack(stack)) return false;
 
@@ -73,6 +94,19 @@ public final class FireEnchantmentBanHelper {
 
     private static boolean shouldSanitizeStack(ItemStack stack) {
         return stack.getItem() instanceof EnchantedBookItem || isRestrictedCombatItem(stack);
+    }
+
+    private static boolean shouldSanitizeLootStack(ItemStack stack) {
+        return shouldSanitizeStack(stack) || isLootBook(stack);
+    }
+
+    private static boolean isLootBook(ItemStack stack) {
+        return stack.isOf(Items.BOOK) || stack.isOf(Items.ENCHANTED_BOOK);
+    }
+
+    private static boolean hasStoredEnchantments(ItemStack stack) {
+        ItemEnchantmentsComponent storedEnchantments = stack.get(DataComponentTypes.STORED_ENCHANTMENTS);
+        return storedEnchantments != null && !storedEnchantments.isEmpty();
     }
 
     private static boolean hasBlockedFireEnchantment(@Nullable ItemEnchantmentsComponent component) {
