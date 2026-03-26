@@ -2,11 +2,15 @@ package net.shirojr.titanfabric;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
+import net.shirojr.titanfabric.cca.component.RecoveryBufferComponent;
+import net.shirojr.titanfabric.cca.implementation.DiamondAbsorptionComponentImpl;
 import net.shirojr.titanfabric.cca.implementation.EntityExtendedInventoryImpl;
 import net.shirojr.titanfabric.cca.implementation.FrostburnComponentImpl;
 import net.shirojr.titanfabric.cca.implementation.GlobalExtendedInventoryImpl;
+import net.shirojr.titanfabric.cca.implementation.RecoveryBufferComponentImpl;
 import net.shirojr.titanfabric.cca.implementation.TeamExtendedInventoryImpl;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
@@ -80,6 +84,10 @@ public class TitanFabricComponents implements EntityComponentInitializer, Scoreb
 
     public static final ComponentKey<FrostburnComponent> FROSTBURN =
             ComponentRegistry.getOrCreate(FrostburnComponent.IDENTIFIER, FrostburnComponent.class);
+    public static final ComponentKey<DiamondAbsorptionComponent> DIAMOND_ABSORPTION =
+            ComponentRegistry.getOrCreate(DiamondAbsorptionComponent.IDENTIFIER, DiamondAbsorptionComponent.class);
+    public static final ComponentKey<RecoveryBufferComponent> RECOVERY_BUFFER =
+            ComponentRegistry.getOrCreate(RecoveryBufferComponent.IDENTIFIER, RecoveryBufferComponent.class);
 
 
     @Override
@@ -92,5 +100,7 @@ public class TitanFabricComponents implements EntityComponentInitializer, Scoreb
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(LivingEntity.class, EXTENDED_INVENTORY_ENTITY, EntityExtendedInventoryImpl::new);
         registry.registerFor(LivingEntity.class, FROSTBURN, FrostburnComponentImpl::new);
+        registry.registerFor(LivingEntity.class, DIAMOND_ABSORPTION, DiamondAbsorptionComponentImpl::new);
+        registry.registerFor(LivingEntity.class, RECOVERY_BUFFER, RecoveryBufferComponentImpl::new);
     }
 }

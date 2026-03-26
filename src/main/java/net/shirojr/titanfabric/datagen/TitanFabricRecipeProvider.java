@@ -85,6 +85,7 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
 
         offerEffectItems(exporter, Items.BLAZE_POWDER, List.of(4), Items.POTION, List.of(1, 3, 5, 7), TitanFabricItems.ESSENCE, 1);
         offerEffectItems(exporter, Items.ARROW, List.of(1, 3, 5, 7), Items.POTION, List.of(4), TitanFabricItems.EFFECT_ARROW, 2);
+        offerEnchantedDiamondApple(exporter);
 
         offerLegendBowCrafting(exporter);
         offerLegendCrossbowCrafting(exporter);
@@ -269,5 +270,17 @@ public class TitanFabricRecipeProvider extends FabricRecipeProvider {
                 .pattern(" i ").pattern("ioi").pattern(" i ")
                 .criterion(hasItem(ingot), conditionsFromItem(ingot))
                 .offerTo(exporter, TitanFabric.getId(name + "_increased"));
+    }
+
+    private static void offerEnchantedDiamondApple(RecipeExporter exporter) {
+        ShapedRecipeJsonBuilder.create(RecipeCategory.FOOD, TitanFabricItems.ENCHANTED_DIAMOND_APPLE)
+                .input('D', Items.DIAMOND_BLOCK)
+                .input('A', TitanFabricItems.DIAMOND_APPLE)
+                .pattern(" D ")
+                .pattern("DAD")
+                .pattern(" D ")
+                .criterion(hasItem(TitanFabricItems.DIAMOND_APPLE), conditionsFromItem(TitanFabricItems.DIAMOND_APPLE))
+                .criterion(hasItem(Items.DIAMOND_BLOCK), conditionsFromItem(Items.DIAMOND_BLOCK))
+                .offerTo(exporter, TitanFabric.getId("enchanted_diamond_apple"));
     }
 }

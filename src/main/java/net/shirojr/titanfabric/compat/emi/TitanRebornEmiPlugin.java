@@ -135,6 +135,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         addArrowRecipe(registry, Potions.FIRE_RESISTANCE, WeaponEffect.FIRE, "fire_resistance_arrow");
         addArrowRecipe(registry, Potions.HARMING, WeaponEffect.WITHER, "wither_arrow");
         addArrowRecipe(registry, Potions.WEAKNESS, WeaponEffect.WEAK, "weakness_arrow");
+        addEnchantedDiamondAppleRepairRecipes(registry);
         addGrindstoneEffectRemovalRecipes(registry);
         removeUncraftableFurnaceRecipes(registry);
         addMissingMultiBowSmithingRecipes(registry);
@@ -289,6 +290,26 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         ItemStack output = EffectHelper.applyEffectToStack(new ItemStack(TitanFabricItems.EFFECT_ARROW), additionalEffectData, false);
 
         registry.addRecipe(new EmiCraftingRecipe(inputs, EmiStack.of(output, 2), TitanFabric.getId("/" + id), false));
+    }
+
+    private void addEnchantedDiamondAppleRepairRecipes(EmiRegistry registry) {
+        for (int damage = 1; damage <= 2; damage++) {
+            ItemStack inputApple = TitanFabricItems.ENCHANTED_DIAMOND_APPLE.getDefaultStack();
+            inputApple.setDamage(damage);
+
+            ItemStack outputApple = inputApple.copy();
+            outputApple.setDamage(damage - 1);
+
+            registry.addRecipe(new EmiCraftingRecipe(
+                    List.of(
+                            EmiStack.of(inputApple),
+                            EmiStack.of(Items.DIAMOND_BLOCK)
+                    ),
+                    EmiStack.of(outputApple),
+                    TitanFabric.getId("/enchanted_diamond_apple_repair_" + damage),
+                    true
+            ));
+        }
     }
 
     private void addGrindstoneEffectRemovalRecipes(EmiRegistry registry) {

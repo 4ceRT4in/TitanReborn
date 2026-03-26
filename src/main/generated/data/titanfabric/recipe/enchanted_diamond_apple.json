@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "titanfabric:diamond_apple"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    }
+  },
+  "pattern": [
+    " D ",
+    "DAD",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "titanfabric:enchanted_diamond_apple"
+  }
+}

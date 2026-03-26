@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.GrindstoneScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.shirojr.titanfabric.access.GrindstoneScreenHandlerAccessor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +23,7 @@ public abstract class GrindstoneResultSlotMixin extends Slot {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void init(GrindstoneScreenHandler grindstoneScreenHandler, Inventory inventory, int i, int j, int k, ScreenHandlerContext screenHandlerContext, CallbackInfo ci) {
+    private void init(GrindstoneScreenHandler grindstoneScreenHandler, Inventory inventory, int i, int j, int k, net.minecraft.screen.ScreenHandlerContext screenHandlerContext, CallbackInfo ci) {
         this.owner = grindstoneScreenHandler;
     }
 

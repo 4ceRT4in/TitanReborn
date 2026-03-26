@@ -23,9 +23,11 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
+import net.shirojr.titanfabric.util.effects.DiamondAbsorptionHelper;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
@@ -293,6 +295,19 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setAbsorptionAmount(F)V"))
     private void avoidAbsorptionResetOnFrostburnDamage(PlayerEntity instance, float amount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
         if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
-        original.call(instance, amount);
+
+        float totalAbsorptionBefore = instance.getAbsorptionAmount();
+        float diamondAbsorptionBefore = Math.min(DiamondAbsorptionComponent.get(instance).getDiamondAbsorptionAmount(), totalAbsorptionBefore);
+        if (diamondAbsorptionBefore <= 0.01f) {
+            original.call(instance, amount);
+            return;
+        }
+
+        float yellowAbsorptionBefore = Math.max(0.0f, totalAbsorptionBefore - diamondAbsorptionBefore);
+        float absorbedAmount = Math.max(0.0f, totalAbsorptionBefore - amount);
+        float convertedDiamondAmount = Math.max(0.0f, Math.min(diamondAbsorptionBefore, absorbedAmount - yellowAbsorptionBefore));
+
+        original.call(instance, amount + convertedDiamondAmount);
+        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, diamondAbsorptionBefore - convertedDiamondAmount);
     }
 }

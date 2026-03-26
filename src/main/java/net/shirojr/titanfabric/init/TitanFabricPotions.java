@@ -33,6 +33,15 @@ public class TitanFabricPotions {
     public static RegistryEntry<Potion> LONG_IMMUNITY_POTION =
             registerPotion("long_immunity_potion", TitanFabricStatusEffects.IMMUNITY,
                     3600, 0, IMMUNITY_POTION, Items.REDSTONE);
+    public static RegistryEntry<Potion> RECOVERY_POTION =
+            registerPotion("recovery_potion", TitanFabricStatusEffects.RECOVERY,
+                    900, 0, Potions.AWKWARD, Items.GOLDEN_APPLE);
+    public static RegistryEntry<Potion> STRONG_RECOVERY_POTION =
+            registerPotion("strong_recovery_potion", TitanFabricStatusEffects.STRONG_RECOVERY,
+                    900, 0, RECOVERY_POTION, Items.GLOWSTONE_DUST);
+    public static RegistryEntry<Potion> LONG_RECOVERY_POTION =
+            registerPotion("long_recovery_potion", TitanFabricStatusEffects.LONG_RECOVERY,
+                    1800, 0, RECOVERY_POTION, Items.REDSTONE);
 
     public static RegistryEntry<Potion> registerPotion(String id, RegistryEntry<StatusEffect> effect, int duration, int amplifier, RegistryEntry<Potion> input, Item ingredient) {
         Potion potion = Registry.register(Registries.POTION, TitanFabric.getId(id), new Potion(new StatusEffectInstance(effect, duration, amplifier)));

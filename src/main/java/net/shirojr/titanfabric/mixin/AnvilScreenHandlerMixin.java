@@ -66,9 +66,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
     @Inject(method = "updateResult", at = @At("RETURN"))
     private void updateResultReturn(CallbackInfo ci) {
         ItemStack result = this.output.getStack(0);
+        ItemStack baseInput = this.input.getStack(0);
+        ItemStack sacrificeInput = this.input.getStack(1);
+
         if (fireEnchantmentBanEnabled && !result.isEmpty()) {
-            ItemStack baseInput = this.input.getStack(0);
-            ItemStack sacrificeInput = this.input.getStack(1);
             if (FireEnchantmentBanHelper.isRestrictedCombatItem(baseInput)
                     && FireEnchantmentBanHelper.hasBlockedFireEnchantment(sacrificeInput)) {
                 this.output.setStack(0, ItemStack.EMPTY);

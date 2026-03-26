@@ -16,6 +16,10 @@
         {
             "predicate": { "indestructible": 1.0 },
             "model": "titanfabric:item/indestructible_potion"
+        },
+        {
+            "predicate": { "recovery": 1.0 },
+            "model": "titanfabric:item/recovery_potion"
         }
     ]
 }

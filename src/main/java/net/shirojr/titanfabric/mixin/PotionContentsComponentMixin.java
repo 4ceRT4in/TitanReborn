@@ -13,7 +13,9 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
+import net.shirojr.titanfabric.effect.RecoveryStatusEffect;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.util.effects.RecoveryProfile;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -44,12 +46,28 @@ public class PotionContentsComponentMixin {
             amplifier = effect.getAmplifier();
             break;
         }
-        if (!hasEffect) return originalEvaluation;
+        if (hasEffect) {
+            tooltip.accept(ScreenTexts.EMPTY);
+            tooltip.accept(Text.translatable("potion.whenDrank").formatted(Formatting.DARK_PURPLE));
+            tooltip.accept(Text.translatable("tooltip.titanfabric.potion.frostburn", amplifier).formatted(Formatting.RED));
+        }
 
-        tooltip.accept(ScreenTexts.EMPTY);
-        tooltip.accept(Text.translatable("potion.whenDrank").formatted(Formatting.DARK_PURPLE));
-
-        tooltip.accept(Text.translatable("tooltip.titanfabric.potion.frostburn", amplifier).formatted(Formatting.RED));
+        appendRecoveryTooltip(effects, tooltip);
         return originalEvaluation;
+    }
+
+    private static void appendRecoveryTooltip(Iterable<StatusEffectInstance> effects, Consumer<Text> tooltip) {
+        for (StatusEffectInstance effect : effects) {
+            if (!(effect.getEffectType().value() instanceof RecoveryStatusEffect recoveryStatusEffect)) continue;
+
+            RecoveryProfile profile = recoveryStatusEffect.getProfile();
+
+            tooltip.accept(ScreenTexts.EMPTY);
+            tooltip.accept(Text.translatable("potion.whenDrank").formatted(Formatting.DARK_PURPLE));
+            tooltip.accept(Text.translatable("tooltip.titanfabric.potion.recovery.buffer", profile.getMaxBufferAmount() / 2.0f).formatted(Formatting.GREEN));
+            tooltip.accept(Text.translatable("tooltip.titanfabric.potion.recovery.threshold", profile.getTriggerThresholdHealth() / 2.0f).formatted(Formatting.GREEN));
+            tooltip.accept(Text.translatable("tooltip.titanfabric.potion.recovery.refill", profile.getRefillAmount() / 2.0f).formatted(Formatting.GRAY));
+            return;
+        }
     }
 }

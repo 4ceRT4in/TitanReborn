@@ -34,6 +34,7 @@ import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
+import net.minecraft.util.Rarity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -171,11 +172,11 @@ public interface TitanFabricItems {
     Item SWORD_HANDLE = register("sword_handle",
             new Item(new Item.Settings().maxCount(16)));
     Item DIAMOND_APPLE = register("diamond_apple",
-            new Item(new Item.Settings().maxCount(16)
-                    .food((new FoodComponent.Builder()).nutrition(4).saturationModifier(1.2f).alwaysEdible()
-                            .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2), 1.0F)
-                            .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 1200, 1), 1.0F)
-                            .build())));
+            new DiamondAppleItem(new Item.Settings().maxCount(16)
+                    .food(new FoodComponent.Builder().nutrition(4).saturationModifier(1.2f).alwaysEdible().build()), 0, 1800));
+    Item ENCHANTED_DIAMOND_APPLE = register("enchanted_diamond_apple",
+            new EnchantedDiamondAppleItem(new Item.Settings().maxCount(1).maxDamage(3).rarity(Rarity.EPIC)
+                    .food(new FoodComponent(4, 1.2f, true, 2.4f, java.util.Optional.empty(), java.util.List.of()))));
 
     BackPackItem POTION_BUNDLE = register("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.POTION));
 

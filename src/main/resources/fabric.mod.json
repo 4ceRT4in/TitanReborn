@@ -57,7 +57,9 @@
       "titanfabric:extended_inventory_entity",
       "titanfabric:extended_inventory_global",
       "titanfabric:extended_inventory_team",
-      "titanfabric:frostburn"
+      "titanfabric:frostburn",
+      "titanfabric:diamond_absorption",
+      "titanfabric:recovery_buffer"
     ]
   }
 }

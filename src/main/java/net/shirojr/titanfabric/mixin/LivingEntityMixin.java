@@ -23,6 +23,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.HealthAccessor;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
+import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
@@ -30,6 +31,7 @@ import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
+import net.shirojr.titanfabric.util.effects.DiamondAbsorptionHelper;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
@@ -192,6 +194,13 @@ public abstract class LivingEntityMixin implements HealthAccessor {
     private void titanfabric$onStatusEffectRemoved(StatusEffectInstance effect, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) (Object) this;
         if (self.getWorld().isClient()) return;
+        if (effect.getEffectType().equals(TitanFabricStatusEffects.DIAMOND_ABSORPTION)) {
+            DiamondAbsorptionComponent.get(self).setDiamondAbsorptionAmount(0.0f, true);
+            if (self.getAbsorptionAmount() <= 0.01f) {
+                DiamondAbsorptionHelper.clearMaxAbsorptionModifier(self);
+            }
+            return;
+        }
         if (!effect.getEffectType().equals(TitanFabricStatusEffects.IMMUNITY)) return;
         ImmunityEffect.resetImmunity(self);
     }
@@ -324,7 +333,20 @@ public abstract class LivingEntityMixin implements HealthAccessor {
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V"))
     private void absorptionFrostburnBypass(LivingEntity instance, float absorptionAmount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
         if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
-        original.call(instance, absorptionAmount);
+
+        float totalAbsorptionBefore = instance.getAbsorptionAmount();
+        float diamondAbsorptionBefore = Math.min(DiamondAbsorptionComponent.get(instance).getDiamondAbsorptionAmount(), totalAbsorptionBefore);
+        if (diamondAbsorptionBefore <= 0.01f) {
+            original.call(instance, absorptionAmount);
+            return;
+        }
+
+        float yellowAbsorptionBefore = Math.max(0.0f, totalAbsorptionBefore - diamondAbsorptionBefore);
+        float absorbedAmount = Math.max(0.0f, totalAbsorptionBefore - absorptionAmount);
+        float convertedDiamondAmount = Math.max(0.0f, Math.min(diamondAbsorptionBefore, absorbedAmount - yellowAbsorptionBefore));
+
+        original.call(instance, absorptionAmount + convertedDiamondAmount);
+        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, diamondAbsorptionBefore - convertedDiamondAmount);
     }
 
     @Debug(export = true)

@@ -6,10 +6,13 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
+import net.shirojr.titanfabric.effect.DiamondAbsorptionStatusEffect;
 import net.shirojr.titanfabric.effect.FrostburnStatusEffect;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.effect.IndestructibileStatusEffect;
+import net.shirojr.titanfabric.effect.RecoveryStatusEffect;
 import net.shirojr.titanfabric.effect.SafeFallingStatusEffect;
+import net.shirojr.titanfabric.util.effects.RecoveryProfile;
 
 public interface TitanFabricStatusEffects {
     RegistryEntry<StatusEffect> INDESTRUCTIBILITY = registerStatusEffect(
@@ -27,6 +30,22 @@ public interface TitanFabricStatusEffects {
     RegistryEntry<StatusEffect> SAFE_FALLING = registerStatusEffect(
             "safe_falling",
             new SafeFallingStatusEffect(StatusEffectCategory.BENEFICIAL, 0x34ABEB)
+    );
+    RegistryEntry<StatusEffect> DIAMOND_ABSORPTION = registerStatusEffect(
+            "diamond_absorption",
+            new DiamondAbsorptionStatusEffect(StatusEffectCategory.BENEFICIAL, 0x4ACBFF)
+    );
+    RegistryEntry<StatusEffect> RECOVERY = registerStatusEffect(
+            "recovery",
+            new RecoveryStatusEffect(StatusEffectCategory.BENEFICIAL, 0xDF7536, RecoveryProfile.BASE)
+    );
+    RegistryEntry<StatusEffect> STRONG_RECOVERY = registerStatusEffect(
+            "strong_recovery",
+            new RecoveryStatusEffect(StatusEffectCategory.BENEFICIAL, 0x9C4130, RecoveryProfile.STRONG)
+    );
+    RegistryEntry<StatusEffect> LONG_RECOVERY = registerStatusEffect(
+            "long_recovery",
+            new RecoveryStatusEffect(StatusEffectCategory.BENEFICIAL, 0xC77A5E, RecoveryProfile.LONG)
     );
 
     private static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect statusEffect) {

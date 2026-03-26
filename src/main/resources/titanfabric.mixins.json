@@ -67,6 +67,7 @@
     "client.EntityRenderDispatcherMixin",
     "client.HandledScreenMixin",
     "client.HeldItemRendererMixin",
+    "client.InGameHudDiamondAbsorptionMixin",
     "client.InGameHudMixin",
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",

@@ -97,7 +97,8 @@ public class TitanFabricItemGroups {
                     TitanFabricItems.FLINT_AND_EMBER,
                     TitanFabricItems.PARACHUTE,
                     TitanFabricItems.CITRIN_STAR,
-                    TitanFabricItems.DIAMOND_APPLE
+                    TitanFabricItems.DIAMOND_APPLE,
+                    TitanFabricItems.ENCHANTED_DIAMOND_APPLE
             );
 
             // enchantment books
@@ -111,6 +112,7 @@ public class TitanFabricItemGroups {
             addPotionFamily(entries, TitanFabricPotions.INDESTRUCTIBLE_POTION, TitanFabricPotions.LONG_INDESTRUCTIBLE_POTION);
             addPotionFamily(entries, TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.STRONG_FROSTBURN_POTION);
             addPotionFamily(entries, TitanFabricPotions.IMMUNITY_POTION, TitanFabricPotions.LONG_IMMUNITY_POTION);
+            addPotionFamily(entries, TitanFabricPotions.RECOVERY_POTION, TitanFabricPotions.STRONG_RECOVERY_POTION, TitanFabricPotions.LONG_RECOVERY_POTION);
 
             // block entities
             addRaw(entries, TitanFabricBlocks.DIAMOND_FURNACE, TitanFabricBlocks.NETHERITE_ANVIL);
@@ -146,13 +148,13 @@ public class TitanFabricItemGroups {
         });
     }
 
-    private static void addPotionFamily(FabricItemGroupEntries entries, RegistryEntry<Potion> level1, RegistryEntry<Potion> level2) {
-        entries.add(PotionContentsComponent.createStack(Items.POTION, level1));
-        entries.add(PotionContentsComponent.createStack(Items.POTION, level2));
-        entries.add(PotionContentsComponent.createStack(Items.SPLASH_POTION, level1));
-        entries.add(PotionContentsComponent.createStack(Items.SPLASH_POTION, level2));
-        entries.add(PotionContentsComponent.createStack(Items.LINGERING_POTION, level1));
-        entries.add(PotionContentsComponent.createStack(Items.LINGERING_POTION, level2));
+    @SafeVarargs
+    private static void addPotionFamily(FabricItemGroupEntries entries, RegistryEntry<Potion>... potions) {
+        for (RegistryEntry<Potion> potion : potions) {
+            entries.add(PotionContentsComponent.createStack(Items.POTION, potion));
+            entries.add(PotionContentsComponent.createStack(Items.SPLASH_POTION, potion));
+            entries.add(PotionContentsComponent.createStack(Items.LINGERING_POTION, potion));
+        }
     }
 
     @SuppressWarnings("SameParameterValue")

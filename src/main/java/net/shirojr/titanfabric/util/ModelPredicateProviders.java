@@ -13,6 +13,7 @@ import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.effect.RecoveryStatusEffect;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.misc.BackPackItem;
@@ -225,6 +226,20 @@ public class ModelPredicateProviders {
                         if (contents != null) {
                             for (StatusEffectInstance effect : contents.getEffects()) {
                                 if (effect.getEffectType() == TitanFabricStatusEffects.INDESTRUCTIBILITY) {
+                                    return 1.0f;
+                                }
+                            }
+                        }
+                    }
+                    return 0.0f;
+                });
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("recovery"),
+                (stack, world, entity, seed) -> {
+                    if (stack.getItem() instanceof PotionItem || stack.getItem() instanceof SplashPotionItem || stack.getItem() instanceof LingeringPotionItem) {
+                        PotionContentsComponent contents = stack.get(DataComponentTypes.POTION_CONTENTS);
+                        if (contents != null) {
+                            for (StatusEffectInstance effect : contents.getEffects()) {
+                                if (effect.getEffectType().value() instanceof RecoveryStatusEffect) {
                                     return 1.0f;
                                 }
                             }
