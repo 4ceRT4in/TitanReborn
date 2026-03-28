@@ -52,7 +52,11 @@ public interface TitanFabricBlocks {
     }
 
     private static void registerBlockItem(String name, Block block) {
-        Item registeredEntry = Registry.register(Registries.ITEM, TitanFabric.getId(name), new BlockItem(block, new Item.Settings()));
+        Item.Settings settings = new Item.Settings();
+        if ("ember_block".equals(name)) {
+            settings = settings.fireproof();
+        }
+        Item registeredEntry = Registry.register(Registries.ITEM, TitanFabric.getId(name), new BlockItem(block, settings));
         TitanFabricItems.ALL_ITEMS.add(registeredEntry);
     }
 

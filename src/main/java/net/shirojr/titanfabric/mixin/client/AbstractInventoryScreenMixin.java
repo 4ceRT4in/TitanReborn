@@ -3,28 +3,29 @@ package net.shirojr.titanfabric.mixin.client;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.StatusEffectSpriteManager;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 @Mixin(AbstractInventoryScreen.class)
@@ -45,31 +46,42 @@ public abstract class AbstractInventoryScreenMixin<T extends ScreenHandler>
         return false;
     }
 
-    @Inject(method = "render", at = @At("TAIL"))
-    public void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        renderImmunity(context);
+    @ModifyReturnValue(method = "getStatusEffectDescription", at = @At("RETURN"))
+    private Text appendBlockedImmunityText(Text original, StatusEffectInstance effect) {
+        if (client == null || client.player == null) return original;
+        if (!effect.getEffectType().equals(TitanFabricStatusEffects.IMMUNITY)) {
+            return original;
+        }
+        StatusEffect blocked = ImmunityEffect.getBlockedEffects(client.player.getUuid());
+        if (blocked == null) return original;
+        return Text.empty()
+                .append(original)
+                .append(Text.literal(" ("))
+                .append(blocked.getName().copy().formatted(Formatting.RED))
+                .append(Text.literal(")"));
     }
 
-    @Deprecated
-    @WrapOperation(method = "drawStatusEffectDescriptions", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffectUtil;getDurationText(Lnet/minecraft/entity/effect/StatusEffectInstance;FF)Lnet/minecraft/text/Text;"))
-    private Text drawStatusEffectDescriptions(StatusEffectInstance effect, float multiplier, float tickRate, Operation<Text> original) {
-        return original.call(effect, multiplier, tickRate);
-    }
+    @Inject(method = "drawStatusEffectSprites", at = @At("TAIL"))
+    private void drawBlockedImmunityIcon(DrawContext context, int x, int height, Iterable<StatusEffectInstance> effects,
+                                         boolean wide, CallbackInfo ci) {
+        if (client == null || client.player == null) return;
 
-    @Unique
-    private void renderImmunity(DrawContext context) {
-        if (client != null && client.player != null && !client.player.getStatusEffects().isEmpty()) {
-            UUID uuid = client.player.getUuid();
-            StatusEffectInstance immunityInstance = client.player.getStatusEffect(TitanFabricStatusEffects.IMMUNITY);
-            StatusEffect blocked = ImmunityEffect.getBlockedEffects(uuid);
+        StatusEffect blocked = ImmunityEffect.getBlockedEffects(client.player.getUuid());
+        if (blocked == null) return;
 
-            if (immunityInstance != null && blocked != null) {
-                String blockedName = "Immune: " + blocked.getName().getString();
-                int width = textRenderer.getWidth(blockedName);
-                int x = this.x + (this.backgroundWidth / 2) - (width / 2);
-                int y = this.y - 50;
-                context.drawTextWithShadow(textRenderer, blockedName, x, y, 0x55FF55);
+        StatusEffectSpriteManager spriteManager = client.getStatusEffectSpriteManager();
+        RegistryEntry<StatusEffect> blockedEntry = Registries.STATUS_EFFECT.getEntry(blocked);
+        Sprite blockedSprite = spriteManager.getSprite(blockedEntry);
+
+        int currentY = this.y;
+        int iconX = x + (wide ? 6 : 7);
+        for (StatusEffectInstance effect : effects) {
+            if (effect.getEffectType().equals(TitanFabricStatusEffects.IMMUNITY)) {
+                int iconY = currentY + 7;
+                context.drawSprite(iconX + 10, iconY + 10, 1, 10, 10, blockedSprite);
+                return;
             }
+            currentY += height;
         }
     }
 }

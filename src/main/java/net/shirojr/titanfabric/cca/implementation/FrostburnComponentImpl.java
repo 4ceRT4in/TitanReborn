@@ -13,12 +13,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.biome.Biome;
 import net.shirojr.titanfabric.TitanFabricComponents;
 import net.shirojr.titanfabric.cca.component.FrostburnComponent;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
-import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.init.TitanFabricTags;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
@@ -29,6 +27,7 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedComponent {
+
     private final LivingEntity provider;
 
     private float frostburn;
@@ -68,7 +67,6 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     @Override
     public void setFrostburnTickSpeedIncrease(int speed) {
         this.frostburnTickSpeedIncrease = Math.max(0, speed);
-        LoggerUtil.devLogger("set frostburn speed to " + this.frostburnTickSpeedIncrease);
     }
 
     @Override
@@ -96,9 +94,6 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
         this.frostburn = limitAmount ? MathHelper.clamp(newAmount, 0, getMaxAllowedFrostburn()) : newAmount;
         if (shouldSync) {
             sync();
-        }
-        if (!provider.getWorld().isClient()) {
-            LoggerUtil.devLogger("set frostburn value to " + this.frostburn);
         }
     }
 
@@ -154,62 +149,15 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
     }
 
     @Override
-    public boolean shouldMaintainFrostburn(int hotBlocksSearchRange, int hotBlocksAmountForThawing, Predicate<BlockState> isHotBlock) {
+    public boolean shouldMaintainFrostburn() {
         if (this.getFrostburnTickSpeedIncrease() <= 0) return true;
-        boolean advancedThawing = provider.getWorld().getGameRules().getBoolean(TitanFabricGamerules.ADVANCED_FROSTBURN_THAWING);
-        if (advancedThawing) {
-            if (provider.isFrozen()) return true;
-            if (provider.isOnFire()) return false;
-        }
-        if (provider.hasStatusEffect(TitanFabricStatusEffects.FROSTBURN)) return true;
-        if (!advancedThawing) return false;
 
-        RegistryEntry<Biome> currentBiome = provider.getWorld().getBiome(provider.getBlockPos());
-        if (currentBiome.isIn(ConventionalBiomeTags.IS_HOT)) {
-            return false;
-        }
-        if (currentBiome.isIn(ConventionalBiomeTags.IS_COLD)) {
-            if (hotBlocksSearchRange <= 0) {
-                return true;
-            }
-            int necessaryBlockAmount = Math.max(1, hotBlocksAmountForThawing);
-            int blockCount = 0;
-            Iterator<BlockPos> searchIterator = BlockPos.iterateOutwards(
-                    provider.getBlockPos(),
-                    hotBlocksSearchRange, hotBlocksSearchRange, hotBlocksSearchRange
-            ).iterator();
-            while (searchIterator.hasNext() && blockCount < necessaryBlockAmount) {
-                BlockState state = provider.getWorld().getBlockState(searchIterator.next());
-                if (isHotBlock.test(state)) {
-                    blockCount++;
-                }
-            }
-            return blockCount < necessaryBlockAmount;
-        }
+        if (provider.hasStatusEffect(TitanFabricStatusEffects.FROSTBURN)) return true;
+
+
         return false;
     }
 
-    @Override
-    public boolean shouldMaintainFrostburn() {
-        if (provider.hasStatusEffect(TitanFabricStatusEffects.IMMUNITY)) return false;
-        GameRules gameRules = provider.getWorld().getGameRules();
-        if (!gameRules.getBoolean(TitanFabricGamerules.ADVANCED_FROSTBURN_THAWING)) {
-            return this.shouldMaintainFrostburn(-1, 1, blockState -> true);
-        }
-        int hotBlocksSearchRange = gameRules.getInt(TitanFabricGamerules.HOT_BLOCK_SEARCH_RANGE);
-        int minHotBlockAmount = gameRules.getInt(TitanFabricGamerules.HOT_BLOCK_AMOUNT_FOR_THAWING);
-        Predicate<BlockState> isHotBlock = blockState -> {
-            boolean hasHotTag = blockState.isIn(TitanFabricTags.Blocks.HOT_BLOCKS);
-            if (blockState.contains(Properties.LIT)) {
-                if (blockState.get(Properties.LIT)) {
-                    return hasHotTag;
-                }
-                return false;
-            }
-            return hasHotTag;
-        };
-        return this.shouldMaintainFrostburn(hotBlocksSearchRange, minHotBlockAmount, isHotBlock);
-    }
 
     @Override
     public void equipmentChange(LivingEntity user, ItemStack oldStack, ItemStack newStack) {

@@ -10,6 +10,7 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabricClient;
+import net.shirojr.titanfabric.access.EntityAccessor;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,7 +35,7 @@ public abstract class InGameOverlayRendererMixin {
     @ModifyVariable(method = "renderFireOverlay", at = @At("STORE"), ordinal = 0)
     private static Sprite renderFireOverlay(Sprite original, MinecraftClient client, MatrixStack matrices) {
         if(client.player == null) return original;
-        if (TitanFabricClient.SOUL_FIRE_ENTITIES.contains(client.player.getUuid())) {
+        if (((EntityAccessor) client.player).titanfabric$isSoulBurning() || TitanFabricClient.SOUL_FIRE_ENTITIES.contains(client.player.getUuid())) {
             return TEXTURE.getSprite();
         }
         return original;

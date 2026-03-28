@@ -3,12 +3,17 @@ package net.shirojr.titanfabric.event.custom;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricArrowItem;
 import net.shirojr.titanfabric.network.packet.ArrowSelectionPacket;
 import net.shirojr.titanfabric.registry.KeyBindRegistry;
@@ -76,6 +81,8 @@ public class TitanFabricClientTickEvents {
 
     private static void handleKeyBindEvent(MinecraftClient client) {
         if (client.player == null) return;
+        cleanupImmunityStatusDesync(client);
+
         KeyBindRegistry keyBinds = KeyBindRegistry.getInstance();
         int selectedSlot = client.player.getInventory().selectedSlot;
 
@@ -86,6 +93,28 @@ public class TitanFabricClientTickEvents {
             }
         } else {
             keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, false);
+        }
+    }
+
+    private static void cleanupImmunityStatusDesync(MinecraftClient client) {
+        if (client.player == null) return;
+
+        var player = client.player;
+        var playerUuid = player.getUuid();
+        StatusEffect blockedEffect = ImmunityEffect.getBlockedEffects(playerUuid);
+        boolean hasImmunity = player.hasStatusEffect(TitanFabricStatusEffects.IMMUNITY);
+
+        if (!hasImmunity) {
+            if (blockedEffect != null) {
+                ImmunityEffect.clearBlockedEffect(playerUuid);
+            }
+            return;
+        }
+        if (blockedEffect == null) return;
+
+        RegistryEntry<StatusEffect> blockedEffectEntry = Registries.STATUS_EFFECT.getEntry(blockedEffect);
+        if (player.hasStatusEffect(blockedEffectEntry)) {
+            player.removeStatusEffect(blockedEffectEntry);
         }
     }
 }

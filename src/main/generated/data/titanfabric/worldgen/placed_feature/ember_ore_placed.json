@@ -3,19 +3,25 @@
   "placement": [
     {
       "type": "minecraft:count",
-      "count": 2
+      "count": 1
+    },
+    {
+      "type": "minecraft:in_square"
     },
     {
       "type": "minecraft:height_range",
       "height": {
-        "type": "minecraft:trapezoid",
+        "type": "minecraft:uniform",
         "max_inclusive": {
-          "absolute": 90
+          "below_top": 10
         },
         "min_inclusive": {
-          "absolute": 10
+          "above_bottom": 10
         }
       }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

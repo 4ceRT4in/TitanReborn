@@ -10,6 +10,7 @@ import net.shirojr.titanfabric.recipe.custom.*;
 public interface TitanFabricRecipeSerializers {
     RecipeSerializer<EffectRecipe> EFFECT = register("effect", new EffectRecipe.Serializer());
     RecipeSerializer<EffectUpgradeRecipe> EFFECT_UPGRADE = register("effect_upgrade", new EffectUpgradeRecipe.Serializer());
+    RecipeSerializer<ItemUpgradeRecipe> ITEM_UPGRADE = register("item_upgrade", new ItemUpgradeRecipe.Serializer());
     RecipeSerializer<MultiBowUpgradeRecipe> MULTI_BOW_UPGRADE = register("multi_bow_upgrade", new MultiBowUpgradeRecipe.Serializer());
     RecipeSerializer<ArmorPlatingRecipe> ARMOR_PLATING = register("armor_plating", new ArmorPlatingRecipe.Serializer());
     RecipeSerializer<DyeableRecipe> DYEABLE_RECIPE = register("dyeable_recipe", new DyeableRecipe.Serializer());

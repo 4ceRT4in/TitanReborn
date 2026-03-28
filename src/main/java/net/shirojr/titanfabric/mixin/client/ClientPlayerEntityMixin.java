@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
+import net.shirojr.titanfabric.network.packet.DisableSwimmingPacket;
 import net.shirojr.titanfabric.util.DamageTiltAvoider;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements DamageTiltAvoider {
@@ -63,6 +65,17 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         ci.cancel();
     }
 
+    @Inject(method = "tickMovement", at = @At("HEAD"))
+    private void titanfabric$disableSwimmingClient(CallbackInfo ci) {
+        if (!DisableSwimmingPacket.isClientEnabled()) return;
+        if (this.isSwimming()) {
+            this.setSwimming(false);
+        }
+        if ((this.isTouchingWater() || this.isSubmergedInWater()) && this.isSprinting()) {
+            this.setSprinting(false);
+        }
+    }
+
     @WrapOperation(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
     private boolean addMultiBowUsageSlowness(ClientPlayerEntity player, Operation<Boolean> original) {
         boolean originalEvaluation = original.call(player);
@@ -84,5 +97,13 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     )
     private boolean sprintableBlindness(boolean original) {
         return false;
+    }
+
+    @Inject(method = "canStartSprinting", at = @At("RETURN"), cancellable = true)
+    private void titanfabric$disableWaterSprint(CallbackInfoReturnable<Boolean> cir) {
+        if (!DisableSwimmingPacket.isClientEnabled()) return;
+        if (this.isTouchingWater() || this.isSubmergedInWater()) {
+            cir.setReturnValue(false);
+        }
     }
 }

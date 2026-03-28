@@ -1,47 +1,34 @@
 package net.shirojr.titanfabric.mixin;
 
-import net.minecraft.enchantment.Enchantment;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.shirojr.titanfabric.config.TitanConfig;
+import net.minecraft.server.world.ServerWorld;
+import net.shirojr.titanfabric.util.items.FireEnchantmentBanHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mixin(EnchantmentHelper.class)
 public abstract class EnchantmentHelperMixin {
 
-    @Inject(method = "getPossibleEntries", at = @At("RETURN"), cancellable = true)
-    private static void getPossibleEntries(int level, ItemStack stack, Stream<RegistryEntry<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
-        var originalEntries = cir.getReturnValue();
-        var blockedEnchants = TitanConfig.getBlockedEnchantments();
-        /*
-        LoggerUtil.devLogger("origin enchantment entries: " + originalEntries.size());
-        LoggerUtil.devLogger("blocked enchantment entries: " + blockedEnchants);
-         */
-        var filteredEntries = originalEntries.stream()
-                .filter(entry -> {
-                    Identifier enchantId = entry.enchantment.getKey().get().getValue();
-                    String enchantIdString = enchantId.toString();
-                    boolean isBlocked = blockedEnchants.contains(enchantIdString);
-
-                    /*
-                    if (isBlocked) {
-                        LoggerUtil.devLogger("blocked enchantment from showing up: " + enchantIdString);
-                    }
-                     */
-
-                    return !isBlocked;
-                })
-                .collect(Collectors.toCollection(java.util.ArrayList::new));
-        cir.setReturnValue(filteredEntries);
+    @WrapOperation(
+            method = "onTargetDamaged(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/enchantment/EnchantmentHelper;onTargetDamaged(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;Lnet/minecraft/item/ItemStack;)V"
+            )
+    )
+    private static void titanfabric$removeFireEnchantmentDamageEffects(
+            ServerWorld world,
+            Entity target,
+            DamageSource source,
+            ItemStack stack,
+            Operation<Void> original
+    ) {
+        ItemStack sanitized = FireEnchantmentBanHelper.getSanitizedCombatStackForEffects(world, stack);
+        original.call(world, target, source, sanitized);
     }
 }

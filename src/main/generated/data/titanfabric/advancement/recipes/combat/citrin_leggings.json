@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:citrin_leggings"
+        "recipe": "titanfabric:citrin_leggings"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:citrin_leggings"
+      "titanfabric:citrin_leggings"
     ]
   }
 }

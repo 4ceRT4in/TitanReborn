@@ -12,7 +12,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.TitanFabricComponents;
-import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricTags;
 import org.ladysnake.cca.api.v3.component.Component;
 import org.ladysnake.cca.api.v3.component.tick.ServerTickingComponent;
@@ -87,21 +86,6 @@ public interface FrostburnComponent extends Component, ServerTickingComponent {
 
     void setPhase(Phase phase);
 
-    /**
-     * @param hotBlocksSearchRange use <code>range <= 0</code> to disable search
-     * @return Specifies if {@link #getProvider() provider} should maintain the current frostburn value
-     */
-    boolean shouldMaintainFrostburn(int hotBlocksSearchRange, int hotBlocksAmountForThawing, Predicate<BlockState> isHotBlock);
-
-    /**
-     * <ul>
-     *     <li>Hot Block Search range is handled by {@link TitanFabricGamerules#HOT_BLOCK_SEARCH_RANGE}</li>
-     *     <li>Hot Block amount is handled by {@link TitanFabricGamerules#HOT_BLOCK_AMOUNT_FOR_THAWING}</li>
-     *     <li>Hot Blocks are defined by {@link TitanFabricTags.Blocks#HOT_BLOCKS}</li>
-     * </ul>
-     *
-     * @see #shouldMaintainFrostburn(int, int, Predicate)
-     */
     boolean shouldMaintainFrostburn();
 
     float getMaxAllowedFrostburn();

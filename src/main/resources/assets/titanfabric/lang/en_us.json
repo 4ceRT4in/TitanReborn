@@ -77,9 +77,9 @@
   "item.titanfabric.diamond_sword": "§bDiamond Sword",
   "item.titanfabric.potion_bundle": "§cPotion Bundle",
   "item.titanfabric.potion_bundle_screen": "Potion Bundle",
-  "item.titanfabric.backpack_small": "Small Backpack",
-  "item.titanfabric.backpack_medium": "Medium Backpack",
-  "item.titanfabric.backpack_big": "Big Backpack",
+  "item.titanfabric.small_backpack": "Small Backpack",
+  "item.titanfabric.medium_backpack": "Medium Backpack",
+  "item.titanfabric.big_backpack": "Big Backpack",
 
   "item.minecraft.diamond_sword": "§bDiamond Sword",
   "item.minecraft.netherite_sword": "§8Netherite Sword",

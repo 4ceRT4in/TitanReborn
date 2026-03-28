@@ -32,23 +32,16 @@ public class TitanFabricItemGroups {
 
     static {
         ItemGroupEvents.modifyEntriesEvent(TITAN).register(entries -> {
+            // ores/materials
             addRaw(entries,
                     TitanFabricBlocks.CITRIN_ORE, TitanFabricItems.CITRIN_SHARD, TitanFabricBlocks.CITRIN_BLOCK,
                     TitanFabricBlocks.EMBER_ORE, TitanFabricItems.EMBER_SHARD, TitanFabricItems.EMBER_INGOT, TitanFabricBlocks.EMBER_BLOCK,
                     TitanFabricBlocks.DEEPSLATE_LEGEND_ORE, TitanFabricBlocks.LEGEND_CRYSTAL, TitanFabricItems.LEGEND_POWDER, TitanFabricItems.LEGEND_INGOT, TitanFabricBlocks.LEGEND_BLOCK,
-                    TitanFabricItems.CITRIN_HELMET, TitanFabricItems.CITRIN_CHESTPLATE, TitanFabricItems.CITRIN_LEGGINGS, TitanFabricItems.CITRIN_BOOTS,
-                    TitanFabricItems.EMBER_HELMET, TitanFabricItems.EMBER_CHESTPLATE, TitanFabricItems.EMBER_LEGGINGS, TitanFabricItems.EMBER_BOOTS,
-                    TitanFabricItems.LEGEND_HELMET, TitanFabricItems.LEGEND_CHESTPLATE, TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS,
-                    TitanFabricItems.CITRIN_ARMOR_PLATING, TitanFabricItems.EMBER_ARMOR_PLATING, TitanFabricItems.DIAMOND_ARMOR_PLATING, TitanFabricItems.NETHERITE_ARMOR_PLATING, TitanFabricItems.LEGEND_ARMOR_PLATING,
-                    TitanFabricItems.DIAMOND_SHIELD, TitanFabricItems.NETHERITE_SHIELD, TitanFabricItems.LEGEND_SHIELD,
-                    TitanFabricItems.MULTI_BOW_1, TitanFabricItems.MULTI_BOW_2, TitanFabricItems.MULTI_BOW_3,
-                    TitanFabricItems.LEGEND_BOW, TitanFabricItems.TITAN_CROSSBOW
+                    TitanFabricItems.SWORD_HANDLE
             );
 
-            addVar(entries, TitanFabricItems.EFFECT_ARROW);
-
+            // swords
             addRaw(entries,
-                    TitanFabricItems.SWORD_HANDLE,
                     TitanFabricItems.CITRIN_SWORD, TitanFabricItems.CITRIN_GREATSWORD,
                     TitanFabricItems.EMBER_SWORD, TitanFabricItems.EMBER_GREATSWORD,
                     TitanFabricItems.DIAMOND_GREATSWORD,
@@ -65,27 +58,62 @@ public class TitanFabricItemGroups {
             addEffectSwords(entries, LegendSwordItem.class, SwordType.DEFAULT);
             addEffectSwords(entries, LegendSwordItem.class, SwordType.GREAT_SWORD);
 
+            // essences
             addVar(entries, TitanFabricItems.ESSENCE);
 
+            // bows
             addRaw(entries,
-                    TitanFabricItems.BACKPACK_SMALL, TitanFabricItems.BACKPACK_MEDIUM, TitanFabricItems.BACKPACK_BIG,
-                    TitanFabricItems.POTION_BUNDLE,
+                    TitanFabricItems.MULTI_BOW_1, TitanFabricItems.MULTI_BOW_2, TitanFabricItems.MULTI_BOW_3,
+                    TitanFabricItems.LEGEND_BOW, TitanFabricItems.TITAN_CROSSBOW
+            );
+
+            // arrows
+            addVar(entries, TitanFabricItems.EFFECT_ARROW);
+
+            // shields
+            addRaw(entries,
+                    TitanFabricItems.DIAMOND_SHIELD, TitanFabricItems.LEGEND_SHIELD, TitanFabricItems.NETHERITE_SHIELD
+            );
+
+            // armors
+            addRaw(entries,
+                    TitanFabricItems.CITRIN_HELMET, TitanFabricItems.CITRIN_CHESTPLATE, TitanFabricItems.CITRIN_LEGGINGS, TitanFabricItems.CITRIN_BOOTS,
+                    TitanFabricItems.EMBER_HELMET, TitanFabricItems.EMBER_CHESTPLATE, TitanFabricItems.EMBER_LEGGINGS, TitanFabricItems.EMBER_BOOTS,
+                    TitanFabricItems.LEGEND_HELMET, TitanFabricItems.LEGEND_CHESTPLATE, TitanFabricItems.LEGEND_LEGGINGS, TitanFabricItems.LEGEND_BOOTS
+            );
+
+            // platings
+            addRaw(entries,
+                    TitanFabricItems.CITRIN_ARMOR_PLATING, TitanFabricItems.EMBER_ARMOR_PLATING, TitanFabricItems.DIAMOND_ARMOR_PLATING, TitanFabricItems.LEGEND_ARMOR_PLATING, TitanFabricItems.NETHERITE_ARMOR_PLATING
+            );
+
+            // backpacks
+            addRaw(entries,
+                    TitanFabricItems.BACKPACK_SMALL, TitanFabricItems.BACKPACK_MEDIUM, TitanFabricItems.BACKPACK_BIG, TitanFabricItems.POTION_BUNDLE
+            );
+
+            // misc items
+            addRaw(entries,
                     TitanFabricItems.FLINT_AND_EMBER,
                     TitanFabricItems.PARACHUTE,
                     TitanFabricItems.CITRIN_STAR,
-                    TitanFabricItems.DIAMOND_APPLE,
-                    TitanFabricBlocks.DIAMOND_FURNACE,
-                    TitanFabricBlocks.NETHERITE_ANVIL
+                    TitanFabricItems.DIAMOND_APPLE
             );
 
+            // enchantment books
             entries.getContext().lookup().getOptionalWrapper(RegistryKeys.ENCHANTMENT).ifPresent(wrapper -> {
                 addEnchBook(entries, wrapper, Enchantments.POWER, 6);
                 addEnchBook(entries, wrapper, Enchantments.PROTECTION, 5);
                 addEnchBook(entries, wrapper, Enchantments.SHARPNESS, 6);
             });
+
+            // potions
             addPotionFamily(entries, TitanFabricPotions.INDESTRUCTIBLE_POTION, TitanFabricPotions.LONG_INDESTRUCTIBLE_POTION);
             addPotionFamily(entries, TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.STRONG_FROSTBURN_POTION);
             addPotionFamily(entries, TitanFabricPotions.IMMUNITY_POTION, TitanFabricPotions.LONG_IMMUNITY_POTION);
+
+            // block entities
+            addRaw(entries, TitanFabricBlocks.DIAMOND_FURNACE, TitanFabricBlocks.NETHERITE_ANVIL);
         });
     }
 

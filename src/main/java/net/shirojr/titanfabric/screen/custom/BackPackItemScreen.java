@@ -24,7 +24,7 @@ public class BackPackItemScreen extends HandledScreen<BackPackItemScreenHandler>
     @Override
     protected void init() {
         super.init();
-        // adjust title position here using titleX, if needed
+        this.titleX = Math.max(0, (this.backgroundWidth - this.textRenderer.getWidth(this.title)) / 2);
     }
 
     @Override

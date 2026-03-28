@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:legend_crystal_from_smelting_deepslate_legend_ore"
+        "recipe": "titanfabric:legend_crystal_from_smelting_deepslate_legend_ore"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:legend_crystal_from_smelting_deepslate_legend_ore"
+      "titanfabric:legend_crystal_from_smelting_deepslate_legend_ore"
     ]
   }
 }

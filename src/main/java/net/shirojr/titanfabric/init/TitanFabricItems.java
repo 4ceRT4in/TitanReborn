@@ -179,11 +179,11 @@ public interface TitanFabricItems {
 
     BackPackItem POTION_BUNDLE = register("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.POTION));
 
-    BackPackItem BACKPACK_SMALL = register("backpack_small", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.SMALL));
+    BackPackItem BACKPACK_SMALL = register("small_backpack", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.SMALL));
 
-    BackPackItem BACKPACK_MEDIUM = register("backpack_medium", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.MEDIUM));
+    BackPackItem BACKPACK_MEDIUM = register("medium_backpack", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.MEDIUM));
 
-    BackPackItem BACKPACK_BIG = register("backpack_big", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.BIG));
+    BackPackItem BACKPACK_BIG = register("big_backpack", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.BIG));
 
 
     private static <T extends Item> T register(String name, T item) {

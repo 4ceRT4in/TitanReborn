@@ -17,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
@@ -57,9 +56,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     }
 
     @Shadow
-    public abstract void setFireTicks(int fireTicks);
-
-    @Shadow
     public abstract void incrementStat(Stat<?> stat);
 
     @Shadow
@@ -74,6 +70,28 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void titanfabric$appendSelectedArrowDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
         builder.add(SHOOTING_ARROWS, false);
+    }
+
+    @Inject(method = "shouldSwimInFluids", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$disableSwimmingDecision(CallbackInfoReturnable<Boolean> cir) {
+        if (!this.getWorld().isClient() && titanfabric$isDisableSwimmingEnabledServer()) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "updateSwimming", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$disableSwimmingState(CallbackInfo ci) {
+        if (this.getWorld().isClient()) return;
+        if (!titanfabric$isDisableSwimmingEnabledServer()) return;
+
+        if (this.isSwimming()) {
+            this.setSwimming(false);
+        }
+        if ((this.isTouchingWater() || this.isSubmergedInWater()) && this.isSprinting()) {
+            this.setSprinting(false);
+        }
+
+        ci.cancel();
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At(value = "TAIL"))
@@ -94,6 +112,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @Override
     public void titanfabric$shootsArrows(boolean shootsArrows) {
         this.dataTracker.set(SHOOTING_ARROWS, shootsArrows);
+    }
+
+    @Unique
+    private boolean titanfabric$isDisableSwimmingEnabledServer() {
+        return this.getWorld().getGameRules().getBoolean(TitanFabricGamerules.DISABLE_SWIMMING);
     }
 
 
@@ -161,26 +184,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         return amount;
     }
 
-    @Inject(method = "damage", at = @At(value = "TAIL", shift = At.Shift.BEFORE) /* leave that in order for ember armor to work */, cancellable = true)
+    @Inject(method = "damage", at = @At(value = "TAIL", shift = At.Shift.BEFORE), cancellable = true)
     private void titanfabric$damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (amount > 0.00001f && (this.timeUntilRegen <= 10 || amount > this.lastDamageTaken)) {
             PlayerEntity player = (PlayerEntity) (Object) this;
-            if ((source.isOf(DamageTypes.HOT_FLOOR) || source.isOf(DamageTypes.LAVA) || source.isIn(DamageTypeTags.IS_FIRE))) {
-                int netherArmorCount = ArmorHelper.getEmberArmorCount(player);
-                if (netherArmorCount > 0) {
-
-                    if (netherArmorCount == 4) {
-                        player.setFireTicks(0);
-                        cir.setReturnValue(false);
-                    } else {
-                        if (EffectHelper.shouldEffectApply(player.getWorld().getRandom(), netherArmorCount)) {
-                            this.timeUntilRegen = 20;
-                            this.lastDamageTaken = amount;
-                            cir.setReturnValue(false);
-                        }
-                    }
-                }
-            } else if (source.isOf(DamageTypes.WITHER) || source.isOf(DamageTypes.MAGIC)) {
+            if (source.isOf(DamageTypes.WITHER) || source.isOf(DamageTypes.MAGIC)) {
                 int citrinArmorCount = Math.min(4, ArmorHelper.getCitrinArmorCount(player));
                 if (citrinArmorCount > 0) {
                     if (citrinArmorCount == 4) {

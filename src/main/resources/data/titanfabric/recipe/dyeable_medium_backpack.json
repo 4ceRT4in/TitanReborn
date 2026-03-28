@@ -2,7 +2,7 @@
   "type": "titanfabric:dyeable_recipe",
   "ingredients": [
     {
-      "item": "titanfabric:backpack_small"
+      "item": "titanfabric:medium_backpack"
     },
     {
       "tag": "titanfabric:dye"
@@ -10,6 +10,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "titanfabric:backpack_small"
+    "id": "titanfabric:medium_backpack"
   }
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:ember_sword"
+        "recipe": "titanfabric:ember_sword"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:ember_sword"
+      "titanfabric:ember_sword"
     ]
   }
 }
