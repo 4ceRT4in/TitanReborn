@@ -201,6 +201,20 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         LivingEntity entity = (LivingEntity) (Object) this;
         if (entity.getWorld() == null || entity.getWorld().isClient() || source == null) return amount;
 
+        if (source.isIn(DamageTypeTags.IS_FIRE)) {
+            int totalArmor = 0;
+            for (ItemStack armorStack : entity.getArmorItems()) {
+                if (!armorStack.isEmpty() && armorStack.getItem() instanceof ArmorItem armorItem) {
+                    totalArmor += armorItem.getProtection();
+                }
+            }
+            if (totalArmor > 0) {
+                float multiplier = 1.0F - (totalArmor * 0.04F);
+                multiplier = Math.max(0.0F, multiplier);
+                amount = (amount * multiplier) + 0.5F;
+            }
+        }
+
         int emberArmorCount = ArmorHelper.getEmberArmorCount(entity);
         if (emberArmorCount <= 0) return amount;
         if (!source.isOf(net.minecraft.entity.damage.DamageTypes.LAVA)) return amount;
