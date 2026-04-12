@@ -18,10 +18,12 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
     private final LivingEntity provider;
 
     private float diamondAbsorptionAmount;
+    private float effectAbsorptionAmount;
     private float retainedAbsorptionCap;
     private float lastObservedAbsorptionAmount;
     private int lastObservedEffectAmplifier = -1;
     private int lastObservedEffectDuration;
+    private boolean preserveAbsorptionOnRemoval;
 
     public DiamondAbsorptionComponentImpl(LivingEntity provider) {
         this.provider = provider;
@@ -44,8 +46,36 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
     }
 
     @Override
+    public float getEffectAbsorptionAmount() {
+        return effectAbsorptionAmount;
+    }
+
+    @Override
+    public void setEffectAbsorptionAmount(float amount, boolean shouldSync) {
+        float sanitized = Math.max(0.0f, amount);
+        if (Math.abs(this.effectAbsorptionAmount - sanitized) < EPSILON) return;
+
+        this.effectAbsorptionAmount = sanitized;
+        if (shouldSync) {
+            sync();
+        }
+    }
+
+    @Override
     public void sync() {
         TitanFabricComponents.DIAMOND_ABSORPTION.sync(provider);
+    }
+
+    @Override
+    public void markPreserveAbsorptionOnRemoval() {
+        this.preserveAbsorptionOnRemoval = true;
+    }
+
+    @Override
+    public boolean consumePreserveAbsorptionOnRemoval() {
+        boolean shouldPreserve = this.preserveAbsorptionOnRemoval;
+        this.preserveAbsorptionOnRemoval = false;
+        return shouldPreserve;
     }
 
     @Override
@@ -54,6 +84,7 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
         float currentAbsorption = provider.getAbsorptionAmount();
 
         if (effectInstance != null) {
+            this.preserveAbsorptionOnRemoval = false;
             int amplifier = effectInstance.getAmplifier();
             int duration = effectInstance.getDuration();
             float targetAmount = DiamondAbsorptionHelper.getAbsorptionAmount(amplifier);
@@ -67,7 +98,9 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
                     currentAbsorption = provider.getAbsorptionAmount();
                 }
 
-                setDiamondAbsorptionAmount(Math.min(currentAbsorption, targetAmount), true);
+                float effectAmount = Math.min(currentAbsorption, targetAmount);
+                setDiamondAbsorptionAmount(effectAmount, true);
+                setEffectAbsorptionAmount(effectAmount, true);
                 this.lastObservedAbsorptionAmount = currentAbsorption;
             }
 
@@ -79,6 +112,8 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
             if (this.diamondAbsorptionAmount > 0.0f) {
                 setDiamondAbsorptionAmount(0.0f, true);
             }
+            setEffectAbsorptionAmount(0.0f, true);
+            this.preserveAbsorptionOnRemoval = false;
 
             if (this.retainedAbsorptionCap > EPSILON && currentAbsorption > EPSILON) {
                 this.retainedAbsorptionCap = currentAbsorption;
@@ -92,6 +127,9 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
         if (this.diamondAbsorptionAmount > currentAbsorption + EPSILON) {
             setDiamondAbsorptionAmount(currentAbsorption, true);
         }
+        if (this.effectAbsorptionAmount > currentAbsorption + EPSILON) {
+            setEffectAbsorptionAmount(currentAbsorption, true);
+        }
 
         this.lastObservedAbsorptionAmount = currentAbsorption;
     }
@@ -102,6 +140,7 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
 
         NbtCompound data = nbt.getCompound("diamond_absorption");
         this.diamondAbsorptionAmount = data.getFloat("amount");
+        this.effectAbsorptionAmount = data.getFloat("effect_amount");
         this.retainedAbsorptionCap = data.getFloat("retained_cap");
         this.lastObservedAbsorptionAmount = data.getFloat("last_absorption");
         this.lastObservedEffectAmplifier = data.getInt("last_amplifier");
@@ -112,6 +151,7 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
     public void writeToNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup wrapperLookup) {
         NbtCompound data = new NbtCompound();
         data.putFloat("amount", this.diamondAbsorptionAmount);
+        data.putFloat("effect_amount", this.effectAbsorptionAmount);
         data.putFloat("retained_cap", this.retainedAbsorptionCap);
         data.putFloat("last_absorption", this.lastObservedAbsorptionAmount);
         data.putInt("last_amplifier", this.lastObservedEffectAmplifier);
@@ -122,11 +162,13 @@ public class DiamondAbsorptionComponentImpl implements DiamondAbsorptionComponen
     @Override
     public void writeSyncPacket(RegistryByteBuf buf, ServerPlayerEntity recipient) {
         buf.writeFloat(this.diamondAbsorptionAmount);
+        buf.writeFloat(this.effectAbsorptionAmount);
     }
 
     @Override
     public void applySyncPacket(RegistryByteBuf buf) {
         this.diamondAbsorptionAmount = buf.readFloat();
+        this.effectAbsorptionAmount = buf.readFloat();
     }
 
     @Override

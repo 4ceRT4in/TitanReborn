@@ -22,10 +22,13 @@ public class TitanFabricPotions {
 
     public static RegistryEntry<Potion> FROSTBURN_POTION =
             registerPotion("frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
-                    600, 6, Potions.AWKWARD, Items.SNOWBALL);
+                    400, 6, Potions.AWKWARD, Items.SNOWBALL);
     public static RegistryEntry<Potion> STRONG_FROSTBURN_POTION =
             registerPotion("strong_frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
                     300, 12, FROSTBURN_POTION, Items.GLOWSTONE_DUST);
+    public static RegistryEntry<Potion> LONG_FROSTBURN_POTION =
+            registerPotion("long_frostburn_potion", TitanFabricStatusEffects.FROSTBURN,
+                    600, 6, FROSTBURN_POTION, Items.REDSTONE);
 
     public static RegistryEntry<Potion> IMMUNITY_POTION =
             registerPotion("immunity_potion", TitanFabricStatusEffects.IMMUNITY,
@@ -38,7 +41,7 @@ public class TitanFabricPotions {
                     900, 0, Potions.AWKWARD, Items.GOLDEN_APPLE);
     public static RegistryEntry<Potion> STRONG_RECOVERY_POTION =
             registerPotion("strong_recovery_potion", TitanFabricStatusEffects.STRONG_RECOVERY,
-                    900, 0, RECOVERY_POTION, Items.GLOWSTONE_DUST);
+                    600, 0, RECOVERY_POTION, Items.GLOWSTONE_DUST);
     public static RegistryEntry<Potion> LONG_RECOVERY_POTION =
             registerPotion("long_recovery_potion", TitanFabricStatusEffects.LONG_RECOVERY,
                     1800, 0, RECOVERY_POTION, Items.REDSTONE);

@@ -1,6 +1,6 @@
 # Titan Reborn 0.3 Progress
 
-Stand: 2026-03-26
+Stand: 2026-03-28
 Status: REVIEW
 Version-Ziel: 0.3
 
@@ -32,6 +32,19 @@ Die Umsetzung muss server- und clientseitig konsistent funktionieren, inklusive:
 - korrekte Dauer-/Amplifier-Logik
 - korrektes Verhalten fuer Drink-, Splash- und Lingering-Potions
 - saubere Registrierungen fuer Items, Effects, Potions, Brewing und Creative Tab
+
+## Review-Feedback 2026-03-28
+- [x] Recovery: letztes halbes Herz aus dem Buffer regeneriert jetzt sichtbar und Buffer-Herzen koennen wieder auffuellen, sobald laufende Buffer-Herzen in Heilung umgewandelt werden.
+- [x] Recovery: Buffer-Herzen wandeln in allen 3 Varianten doppelt so schnell in normale Herzen um.
+- [x] Recovery: custom Herz-Textur eingebaut.
+- [x] Recovery: Frostburn-Herzen-"Tauen"-Effekt fuer Recovery uebernommen.
+- [x] Recovery: Tooltips auf Vanilla-nahe blaue `+3.0` / `+6.0 Recovery Health`-Zeile vereinfacht.
+- [x] Recovery: Naming fuer Potions und Arrows auf `Potent` / `Extended` vereinheitlicht.
+- [x] Enchanted Diamond Apple: Damage- und Half-Heart-Logik auf rechts-nach-links mit korrekter Diamond-/Absorption-Mischung ueberarbeitet.
+- [x] Enchanted Diamond Apple: Umwandlung jetzt `diamond > golden > weg`.
+- [x] Gamerule: `LegacyAbsorption` standardmaessig auf `false` gesetzt.
+- [x] Enchanted Diamond Apple: beim Effektablauf verschwinden Diamond-Herzen samt zugehoeriger Effekt-Absorption; Downgrade auf schwaechere Stufen ist unterbunden.
+- [x] Frostburn Potion: Zeiten auf `normal 30s`, `long 45s`, `strong 15s` rebalance.
 
 ## Tickets
 
@@ -70,19 +83,19 @@ Umfang:
 - Level I = `8 HP`, II = `12 HP`, III = `16 HP`
 - Diamond-Herzen werden blau im HUD gerendert
 - Wenn Diamond-Absorption Schaden absorbiert, sollen verbleibende Herzen zu normaler gelber Absorption werden
-- Wenn der Effekt auslaeuft, soll verbleibende Absorption als normale gelbe Absorption bestehen bleiben
+- Wenn der Effekt auslaeuft, verschwinden verbleibende Diamond-Herzen samt zugehoeriger Effekt-Absorption
 - Sync fuer Client und Persistenz bei Save/Load
 
 Akzeptanzkriterien:
 - HUD zeigt blaue Diamond-Herzen solange der Diamond-Absorption-State aktiv ist
 - Schaden auf Diamond-Herzen fuehrt zu gelber Rest-Absorption statt Verlust der Anzeige-Integritaet
-- Nach Ablauf des Effekts bleiben Rest-Herzen als normale Absorption erhalten
+- Nach Ablauf des Effekts bleiben keine Rest-Herzen aus dem Diamond-Effect bestehen
 - Reapply / Upgrade von Level I -> II -> III verhaelt sich stabil
 
 Tests:
 - [ ] Level I/II/III einzeln pruefen
 - [ ] Schaden auf aktive Diamond-Absorption pruefen
-- [ ] Ablauf mit verbleibender Absorption pruefen
+- [ ] Ablauf mit vollstaendigem Entfernen der Effekt-Herzen pruefen
 - [ ] Save/Load oder Rejoin pruefen
 
 ### 34) Diamond Apple Rework
@@ -178,12 +191,13 @@ Tests:
 - 2026-03-26: Diamond-/Enchanted-Diamond-Apple-Balancing nach Kundenentscheid angepasst: Diamond Apple auf 8 Diamanten, Enchanted auf 6/8/10 Diamond-Herzen und Diamond-Block-Reparatur ueber Anvil, Crafting Table und Grindstone.
 - 2026-03-26: `recovery2.png` aus dem Kundenordner entfernt; `strong_recovery` nutzt jetzt wieder bewusst dieselbe Basis-Textur wie `recovery`.
 - 2026-03-26: Enchanted-Diamond-Apple-Reparatur wieder auf Crafting Table reduziert; Anvil/Grindstone-Pfade entfernt und EMI-Crafting-Anzeige fuer den Repair-Flow ergaenzt.
+- 2026-03-28: Review-Feedback abgeschlossen: Recovery heilt/refillt jetzt parallel mit schnellerer Umwandlung, nutzt wieder die Custom-Herzen samt Fade-Effekt und reduzierte Tooltips; Frostburn bekam eine Long-Variante mit neuem Timing; Diamond-Absorption entfernt bei Effektablauf die restlichen Effekt-Herzen, unterbindet Downgrade-Fallbacks und rendert das gemischte Half-Heart korrekt.
 
 
 ## Implementierungsnotizen 2026-03-26
 - `32`: `enchanted_diamond_apple` als eigenes 3-Use-Item mit Durability-Bar, laengerer Eat-Zeit (`2.4s`), Glint, Tooltip fuer Rest-Uses und Shaped-Rezept umgesetzt.
 - `33`: `diamond_absorption` als eigener Status Effect plus synchronisierte Entity-Component umgesetzt. Blaue Herzen werden clientseitig ueber den Vanilla-Absorptionshearts gerendert.
-- `33`: Verhalten fuer Damage/Expiry ist so umgesetzt, dass verbleibende Diamond-Absorption beim ersten Absorptionsschaden oder beim Effekt-Ende in normale gelbe Absorption uebergeht.
+- `33`: Verhalten fuer Damage/Expiry ist so umgesetzt, dass Damage zuerst Diamond-Absorption abbaut und verbliebene Rest-Absorption zu gelb wird; beim Effekt-Ende verschwinden die verbleibenden Effekt-Herzen stattdessen komplett.
 - `33`: Fehlerursache war das Vanilla-`GENERIC_MAX_ABSORPTION`-Clamp. Der Fix setzt das Cap jetzt explizit fuer Diamond Absorption und haelt Rest-Absorption nach Damage, Effekt-Ende und Rejoin serverseitig stabil.
 - `33`: Damage auf Diamond Absorption konvertiert jetzt nur noch den wirklich getroffenen Blue-Absorption-Anteil zu gelber Absorption statt pauschal den kompletten Rest.
 - `33`: Wenn der letzte Diamond-Absorption-Anteil verbraucht wurde, wird der Status Effect sofort entfernt; gelbe Rest-Absorption bleibt erhalten.
@@ -193,11 +207,18 @@ Tests:
 - `35`: Brewing umgesetzt: `Awkward + Golden Apple -> Recovery`, `+ Glowstone -> Strong Recovery`, `+ Redstone -> Long Recovery`.
 - `36`: Custom Potion-Models, Mob-Effect-Icons, Recovery-Tooltip und optionale Buffer-Heart-UI neben der Healthbar umgesetzt. Healing-Particles laufen serverseitig sparsam und farblich passend zum Recovery-Profil.
 - `36`: Kunden-Texturen aus `titanreborn_update_textures` fuer Diamond Absorption und Recovery uebernommen. Recovery nutzt jetzt warmere Orange-/Rot-Toene fuer Effect-Farbe und Heal-Partikel; das Buffer-Half-Heart wurde auf Vanilla-Lesereihenfolge korrigiert.
-- `36`: Recovery-Buffer rendert jetzt Vanilla-rote Herzen inklusive leerer Buffer-Slots im 1x3- bzw. 2x3-Layout direkt rechts neben der normalen Healthbar.
+- `36`: Recovery-Buffer rendert jetzt die Kunden-Herzen inklusive leerer Buffer-Slots im 1x3- bzw. 2x3-Layout direkt rechts neben der normalen Healthbar.
 - `32`: Enchanted Diamond Apple nutzt jetzt bewusst dieselbe Basistextur wie der normale Diamond Apple; der enchanted Look kommt nur noch ueber den Glint.
 - `32`: Diamond-Apple-Balancing nachgezogen: `diamond_apple` Rezept kostet jetzt 8 Diamanten; `enchanted_diamond_apple` nutzt jetzt 6/8/10 Diamond-Herzen ueber die drei Uses.
 - `32`: `enchanted_diamond_apple` laesst sich mit `Diamond Block` um genau 1 Use reparieren. Der Pfad ist fuer Anvil, Crafting Table und Grindstone separat abgesichert.
 - `32`: Repair-Umfang wieder reduziert: `enchanted_diamond_apple` repariert jetzt nur noch ueber das Special-Crafting-Rezept; EMI zeigt dafuer explizit zwei Repair-Stufen an.
+- `35`/`36`: Recovery setzt den Buffer bei blossen Dauerverlaengerungen nicht mehr hart auf voll zurueck, heilt mit doppelter Tickrate, refillt wieder sichtbar waehrend aktiver Umwandlung und nutzt die Custom-Heart-Texturen mit leichtem Fade.
+- `35`/`36`: Recovery-Tooltip auf eine Vanilla-nahe `+X.X Recovery Health`-Zeile reduziert; Naming fuer Potent/Extended Recovery in Potion-, Splash-, Lingering- und Arrow-Texten vereinheitlicht.
+- `33`: Diamond-Absorption behaelt gelbe Rest-Herzen nur noch nach Damage-Depletion; beim natuerlichen Effektablauf werden die verbleibenden Effekt-Herzen entfernt. Hidden-Downgrades auf schwaechere Diamond-Stufen werden dabei unterbunden.
+- `33`: Das gemischte Diamond-/Absorption-Half-Heart rendert jetzt mit Diamond auf der linken statt rechten Haelfte.
+- `32`/`33`: `TitanFabric.LegacyAbsorption` ist jetzt standardmaessig `false`.
+- `35`: Frostburn-Potions auf `30s` / `45s` / `15s` fuer Base / Long / Strong rebalance; die Long-Variante ist jetzt registriert.
+- `37`: `classes` erfolgreich mit Java 21 nach den Review-Anpassungen validiert.
 - `37`: `classes` erfolgreich mit Java 21 validiert.
 - `37`: `runDatagen` erfolgreich ausgefuehrt; Rezept `src/main/generated/data/titanfabric/recipe/enchanted_diamond_apple.json` erzeugt.
 

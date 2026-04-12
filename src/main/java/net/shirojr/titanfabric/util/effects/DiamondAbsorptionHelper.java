@@ -25,6 +25,10 @@ public final class DiamondAbsorptionHelper {
         };
     }
 
+    public static float getVanillaAbsorptionAmount(int amplifier) {
+        return 4.0f * (Math.max(0, amplifier) + 1);
+    }
+
     public static void applyMaxAbsorptionModifier(LivingEntity entity, int amplifier) {
         applyMaxAbsorptionModifier(entity.getAttributes(), getAbsorptionAmount(amplifier));
     }
@@ -47,12 +51,14 @@ public final class DiamondAbsorptionHelper {
         attributeInstance.removeModifier(MAX_ABSORPTION_MODIFIER_ID);
     }
 
-    public static void updateDiamondAbsorptionAfterDamage(LivingEntity entity, float remainingDiamondAbsorption) {
+    public static void updateDiamondAbsorptionAfterDamage(LivingEntity entity, float remainingDiamondAbsorption, float remainingEffectAbsorption) {
         float remainingAmount = Math.max(0.0f, remainingDiamondAbsorption);
-        DiamondAbsorptionComponent.get(entity).setDiamondAbsorptionAmount(remainingAmount, !entity.getWorld().isClient());
+        float remainingEffectAmount = Math.max(0.0f, remainingEffectAbsorption);
+        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(entity);
+        component.setDiamondAbsorptionAmount(remainingAmount, !entity.getWorld().isClient());
+        component.setEffectAbsorptionAmount(remainingEffectAmount, !entity.getWorld().isClient());
 
-        if (entity.getWorld().isClient() || remainingAmount > 0.01f) return;
-
+        if (entity.getWorld().isClient() || remainingEffectAmount > 0.01f) return;
         entity.removeStatusEffect(TitanFabricStatusEffects.DIAMOND_ABSORPTION);
         if (entity.getAbsorptionAmount() > 0.01f) {
             applyMaxAbsorptionModifier(entity.getAttributes(), entity.getAbsorptionAmount());

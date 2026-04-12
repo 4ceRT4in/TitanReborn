@@ -8,7 +8,7 @@ import net.shirojr.titanfabric.effect.RecoveryStatusEffect;
 
 public enum RecoveryProfile {
     BASE("base", 6.0f, 1.0f, 100, 1.0f, 10, 12.0f),
-    STRONG("strong", 12.0f, 1.0f, 100, 1.0f, 10, 6.0f),
+    STRONG("strong", 12.0f, 1.0f, 100, 1.0f, 5, 6.0f),
     LONG("long", 6.0f, 1.0f, 100, 1.0f, 20, 12.0f);
 
     private final String id;

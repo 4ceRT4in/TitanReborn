@@ -28,7 +28,6 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
     private RecoveryProfile lastObservedProfile;
 
     private float bufferAmount;
-    private float activationBudget;
     private boolean healingActive;
     private int refillTicks;
     private int healTicks;
@@ -54,6 +53,11 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
     }
 
     @Override
+    public boolean isHealingActive() {
+        return healingActive;
+    }
+
+    @Override
     public void sync() {
         TitanFabricComponents.RECOVERY_BUFFER.sync(provider);
     }
@@ -70,10 +74,9 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
         int duration = activeRecovery.duration();
         pruneSecondaryRecoveryEffects(activeRecovery);
 
-        if (profile != this.lastObservedProfile || duration > this.lastObservedEffectDuration) {
+        if (profile != this.lastObservedProfile || this.activeProfile == null) {
             this.activeProfile = profile;
             this.bufferAmount = profile.getMaxBufferAmount();
-            this.activationBudget = 0.0f;
             this.healingActive = false;
             this.refillTicks = 0;
             this.healTicks = 0;
@@ -85,8 +88,8 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
         this.lastObservedProfile = profile;
         this.lastObservedEffectDuration = duration;
 
-        tickRefill(profile);
         tickHealing(profile);
+        tickRefill(profile);
     }
 
     private void pruneSecondaryRecoveryEffects(RecoveryProfile.ActiveRecovery activeRecovery) {
@@ -112,13 +115,13 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
     private void tickHealing(RecoveryProfile profile) {
         if (!this.healingActive && canTriggerHealing(profile)) {
             this.healingActive = true;
-            this.activationBudget = this.bufferAmount;
             this.healTicks = 0;
+            sync();
         }
 
         if (!this.healingActive) return;
-        if (shouldStopHealing()) {
-            stopHealing();
+        if (shouldStopHealing(profile)) {
+            stopHealing(true);
             return;
         }
 
@@ -126,23 +129,22 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
         if (this.healTicks < profile.getHealIntervalTicks()) return;
         this.healTicks = 0;
 
-        float healAmount = Math.min(profile.getHealAmount(), Math.min(this.bufferAmount, this.activationBudget));
+        float healAmount = Math.min(profile.getHealAmount(), this.bufferAmount);
         healAmount = Math.min(healAmount, provider.getMaxHealth() - provider.getHealth());
 
         if (healAmount <= EPSILON) {
-            stopHealing();
+            stopHealing(true);
             return;
         }
 
         provider.heal(healAmount);
         this.bufferAmount = Math.max(0.0f, this.bufferAmount - healAmount);
-        this.activationBudget = Math.max(0.0f, this.activationBudget - healAmount);
         spawnHealParticles();
-        sync();
-
-        if (shouldStopHealing()) {
-            stopHealing();
+        if (shouldStopHealing(profile)) {
+            this.healingActive = false;
+            this.healTicks = 0;
         }
+        sync();
     }
 
     private boolean canTriggerHealing(RecoveryProfile profile) {
@@ -151,17 +153,19 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
                 && provider.getHealth() < provider.getMaxHealth();
     }
 
-    private boolean shouldStopHealing() {
+    private boolean shouldStopHealing(RecoveryProfile profile) {
         return this.bufferAmount <= EPSILON
-                || this.activationBudget <= EPSILON
                 || provider.getHealth() >= provider.getMaxHealth()
                 || this.activeProfile == null;
     }
 
-    private void stopHealing() {
+    private void stopHealing(boolean shouldSync) {
+        boolean wasHealing = this.healingActive;
         this.healingActive = false;
-        this.activationBudget = 0.0f;
         this.healTicks = 0;
+        if (shouldSync && wasHealing) {
+            sync();
+        }
     }
 
     private void clearState(boolean shouldSync) {
@@ -170,7 +174,6 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
         this.activeProfile = null;
         this.lastObservedProfile = null;
         this.bufferAmount = 0.0f;
-        this.activationBudget = 0.0f;
         this.healingActive = false;
         this.refillTicks = 0;
         this.healTicks = 0;
@@ -221,7 +224,6 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
         this.activeProfile = data.contains("profile") ? RecoveryProfile.byId(data.getString("profile")) : null;
         this.lastObservedProfile = data.contains("last_profile") ? RecoveryProfile.byId(data.getString("last_profile")) : null;
         this.bufferAmount = data.getFloat("buffer");
-        this.activationBudget = data.getFloat("activation_budget");
         this.healingActive = data.getBoolean("healing_active");
         this.refillTicks = data.getInt("refill_ticks");
         this.healTicks = data.getInt("heal_ticks");
@@ -238,7 +240,6 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
             data.putString("last_profile", this.lastObservedProfile.getId());
         }
         data.putFloat("buffer", this.bufferAmount);
-        data.putFloat("activation_budget", this.activationBudget);
         data.putBoolean("healing_active", this.healingActive);
         data.putInt("refill_ticks", this.refillTicks);
         data.putInt("heal_ticks", this.healTicks);
@@ -250,6 +251,7 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
     public void writeSyncPacket(RegistryByteBuf buf, ServerPlayerEntity recipient) {
         buf.writeInt(this.activeProfile == null ? -1 : this.activeProfile.ordinal());
         buf.writeFloat(this.bufferAmount);
+        buf.writeBoolean(this.healingActive);
     }
 
     @Override
@@ -257,6 +259,7 @@ public class RecoveryBufferComponentImpl implements RecoveryBufferComponent, Aut
         int profileOrdinal = buf.readInt();
         this.activeProfile = profileOrdinal < 0 ? null : RecoveryProfile.values()[profileOrdinal];
         this.bufferAmount = buf.readFloat();
+        this.healingActive = buf.readBoolean();
     }
 
     @Override

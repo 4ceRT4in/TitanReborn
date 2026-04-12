@@ -23,5 +23,7 @@ public interface RecoveryBufferComponent extends Component, ServerTickingCompone
     @Nullable
     RecoveryProfile getActiveProfile();
 
+    boolean isHealingActive();
+
     void sync();
 }

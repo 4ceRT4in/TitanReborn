@@ -297,17 +297,21 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
 
         float totalAbsorptionBefore = instance.getAbsorptionAmount();
-        float diamondAbsorptionBefore = Math.min(DiamondAbsorptionComponent.get(instance).getDiamondAbsorptionAmount(), totalAbsorptionBefore);
-        if (diamondAbsorptionBefore <= 0.01f) {
+        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(instance);
+        float diamondAbsorptionBefore = Math.min(component.getDiamondAbsorptionAmount(), totalAbsorptionBefore);
+        float effectAbsorptionBefore = Math.min(component.getEffectAbsorptionAmount(), totalAbsorptionBefore);
+        if (effectAbsorptionBefore <= 0.01f) {
             original.call(instance, amount);
             return;
         }
 
-        float yellowAbsorptionBefore = Math.max(0.0f, totalAbsorptionBefore - diamondAbsorptionBefore);
         float absorbedAmount = Math.max(0.0f, totalAbsorptionBefore - amount);
-        float convertedDiamondAmount = Math.max(0.0f, Math.min(diamondAbsorptionBefore, absorbedAmount - yellowAbsorptionBefore));
+        float convertedDiamondAmount = Math.min(diamondAbsorptionBefore, absorbedAmount);
+        float consumedEffectYellowAmount = Math.max(0.0f, absorbedAmount - diamondAbsorptionBefore);
+        float remainingDiamondAmount = Math.max(0.0f, diamondAbsorptionBefore - convertedDiamondAmount);
+        float remainingEffectAmount = Math.max(0.0f, effectAbsorptionBefore - consumedEffectYellowAmount);
 
         original.call(instance, amount + convertedDiamondAmount);
-        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, diamondAbsorptionBefore - convertedDiamondAmount);
+        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, remainingDiamondAmount, remainingEffectAmount);
     }
 }

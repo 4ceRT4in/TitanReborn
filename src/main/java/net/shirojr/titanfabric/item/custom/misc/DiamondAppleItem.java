@@ -50,6 +50,9 @@ public class DiamondAppleItem extends Item {
 
         float targetAbsorption = DiamondAbsorptionHelper.getAbsorptionAmount(amplifier);
         user.setAbsorptionAmount(Math.max(user.getAbsorptionAmount(), targetAbsorption));
-        DiamondAbsorptionComponent.get(user).setDiamondAbsorptionAmount(Math.min(user.getAbsorptionAmount(), targetAbsorption), true);
+        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(user);
+        float effectAmount = Math.min(user.getAbsorptionAmount(), targetAbsorption);
+        component.setDiamondAbsorptionAmount(effectAmount, true);
+        component.setEffectAbsorptionAmount(effectAmount, true);
     }
 }

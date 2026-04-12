@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 @Mixin(PotionContentsComponent.class)
@@ -64,9 +65,10 @@ public class PotionContentsComponentMixin {
 
             tooltip.accept(ScreenTexts.EMPTY);
             tooltip.accept(Text.translatable("potion.whenDrank").formatted(Formatting.DARK_PURPLE));
-            tooltip.accept(Text.translatable("tooltip.titanfabric.potion.recovery.buffer", profile.getMaxBufferAmount() / 2.0f).formatted(Formatting.GREEN));
-            tooltip.accept(Text.translatable("tooltip.titanfabric.potion.recovery.threshold", profile.getTriggerThresholdHealth() / 2.0f).formatted(Formatting.GREEN));
-            tooltip.accept(Text.translatable("tooltip.titanfabric.potion.recovery.refill", profile.getRefillAmount() / 2.0f).formatted(Formatting.GRAY));
+            tooltip.accept(Text.translatable(
+                    "tooltip.titanfabric.potion.recovery.health",
+                    String.format(Locale.ROOT, "%.1f", profile.getMaxBufferAmount() / 2.0f)
+            ).formatted(Formatting.BLUE));
             return;
         }
     }

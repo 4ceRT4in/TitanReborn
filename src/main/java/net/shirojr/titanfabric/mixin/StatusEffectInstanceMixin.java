@@ -9,7 +9,9 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
+import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.data.BufferStatusEffectInstance;
+import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,6 +32,9 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
     @Shadow
     @Final
     private RegistryEntry<StatusEffect> type;
+    @Shadow
+    @Nullable
+    private StatusEffectInstance hiddenEffect;
     @Unique
     private StatusEffectInstance previousStatusEffectInstance = null;
 
@@ -61,6 +66,13 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
         }
     }
 
+    @Inject(method = "upgrade", at = @At("TAIL"))
+    private void titanfabric$clearDiamondAbsorptionFallback(StatusEffectInstance effect, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue()) return;
+        if (!this.type.equals(TitanFabricStatusEffects.DIAMOND_ABSORPTION)) return;
+        this.hiddenEffect = null;
+    }
+
     @Redirect(method = "update", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/effect/StatusEffect;canApplyUpdateEffect(II)Z"))
     private boolean updateMixin(StatusEffect effect, int duration, int amplifier,
@@ -79,6 +91,15 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
     @Inject(method = "update", at = @At("RETURN"))
     private void updateMixin(LivingEntity entity, Runnable overwriteCallback,
                              CallbackInfoReturnable<Boolean> info) {
+        if (!info.getReturnValue() && this.type.equals(TitanFabricStatusEffects.DIAMOND_ABSORPTION)) {
+            DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(entity);
+            if (component.getEffectAbsorptionAmount() > 0.01f) {
+                this.duration = 1;
+                info.setReturnValue(true);
+                return;
+            }
+        }
+
         if (this.previousStatusEffectInstance != null &&
                 !info.getReturnValue() &&
                 !this.appliedPreviousStatusEffectInstance &&

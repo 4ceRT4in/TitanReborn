@@ -18,5 +18,13 @@ public interface DiamondAbsorptionComponent extends Component, ServerTickingComp
 
     void setDiamondAbsorptionAmount(float amount, boolean shouldSync);
 
+    float getEffectAbsorptionAmount();
+
+    void setEffectAbsorptionAmount(float amount, boolean shouldSync);
+
+    void markPreserveAbsorptionOnRemoval();
+
+    boolean consumePreserveAbsorptionOnRemoval();
+
     void sync();
 }

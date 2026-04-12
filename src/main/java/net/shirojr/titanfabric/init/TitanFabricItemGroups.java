@@ -21,6 +21,7 @@ import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.VariationHolder;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class TitanFabricItemGroups {
@@ -109,10 +110,12 @@ public class TitanFabricItemGroups {
             });
 
             // potions
-            addPotionFamily(entries, TitanFabricPotions.INDESTRUCTIBLE_POTION, TitanFabricPotions.LONG_INDESTRUCTIBLE_POTION);
-            addPotionFamily(entries, TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.STRONG_FROSTBURN_POTION);
-            addPotionFamily(entries, TitanFabricPotions.IMMUNITY_POTION, TitanFabricPotions.LONG_IMMUNITY_POTION);
-            addPotionFamily(entries, TitanFabricPotions.RECOVERY_POTION, TitanFabricPotions.STRONG_RECOVERY_POTION, TitanFabricPotions.LONG_RECOVERY_POTION);
+            addPotionFamilies(entries,
+                    List.of(TitanFabricPotions.INDESTRUCTIBLE_POTION, TitanFabricPotions.LONG_INDESTRUCTIBLE_POTION),
+                    List.of(TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.LONG_FROSTBURN_POTION, TitanFabricPotions.STRONG_FROSTBURN_POTION),
+                    List.of(TitanFabricPotions.IMMUNITY_POTION, TitanFabricPotions.LONG_IMMUNITY_POTION),
+                    List.of(TitanFabricPotions.RECOVERY_POTION, TitanFabricPotions.LONG_RECOVERY_POTION, TitanFabricPotions.STRONG_RECOVERY_POTION)
+            );
 
             // block entities
             addRaw(entries, TitanFabricBlocks.DIAMOND_FURNACE, TitanFabricBlocks.NETHERITE_ANVIL);
@@ -149,11 +152,18 @@ public class TitanFabricItemGroups {
     }
 
     @SafeVarargs
-    private static void addPotionFamily(FabricItemGroupEntries entries, RegistryEntry<Potion>... potions) {
-        for (RegistryEntry<Potion> potion : potions) {
-            entries.add(PotionContentsComponent.createStack(Items.POTION, potion));
-            entries.add(PotionContentsComponent.createStack(Items.SPLASH_POTION, potion));
-            entries.add(PotionContentsComponent.createStack(Items.LINGERING_POTION, potion));
+    private static void addPotionFamilies(FabricItemGroupEntries entries, List<RegistryEntry<Potion>>... potionFamilies) {
+        addPotionType(entries, Items.POTION, potionFamilies);
+        addPotionType(entries, Items.SPLASH_POTION, potionFamilies);
+        addPotionType(entries, Items.LINGERING_POTION, potionFamilies);
+    }
+
+    @SafeVarargs
+    private static void addPotionType(FabricItemGroupEntries entries, Item potionItem, List<RegistryEntry<Potion>>... potionFamilies) {
+        for (List<RegistryEntry<Potion>> potionFamily : potionFamilies) {
+            for (RegistryEntry<Potion> potion : potionFamily) {
+                entries.add(PotionContentsComponent.createStack(potionItem, potion));
+            }
         }
     }
 

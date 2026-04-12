@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
 
 public interface TitanFabricGamerules {
     GameRules.Key<GameRules.BooleanRule> LEGACY_COMBAT = registerBooleanGamerule("TitanFabric.LegacyCombat", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> LEGACY_ABSORPTION = registerBooleanGamerule("TitanFabric.LegacyAbsorption", GameRules.Category.PLAYER, true);
+    GameRules.Key<GameRules.BooleanRule> LEGACY_ABSORPTION = registerBooleanGamerule("TitanFabric.LegacyAbsorption", GameRules.Category.PLAYER, false);
     GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.LegacyFoodRegeneration", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.DisableElytraBoosting", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.GreatSwordCooldown", GameRules.Category.PLAYER, true);

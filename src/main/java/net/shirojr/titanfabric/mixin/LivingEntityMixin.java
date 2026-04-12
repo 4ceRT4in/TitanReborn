@@ -195,9 +195,20 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         LivingEntity self = (LivingEntity) (Object) this;
         if (self.getWorld().isClient()) return;
         if (effect.getEffectType().equals(TitanFabricStatusEffects.DIAMOND_ABSORPTION)) {
-            DiamondAbsorptionComponent.get(self).setDiamondAbsorptionAmount(0.0f, true);
-            if (self.getAbsorptionAmount() <= 0.01f) {
+            DiamondAbsorptionComponent diamondAbsorptionComponent = DiamondAbsorptionComponent.get(self);
+            boolean preserveConvertedAbsorption = diamondAbsorptionComponent.consumePreserveAbsorptionOnRemoval();
+            float preservedAbsorption = preserveConvertedAbsorption
+                    ? self.getAbsorptionAmount()
+                    : titanfabric$getVanillaAbsorptionToPreserve(self);
+
+            diamondAbsorptionComponent.setDiamondAbsorptionAmount(0.0f, true);
+            diamondAbsorptionComponent.setEffectAbsorptionAmount(0.0f, true);
+            self.setAbsorptionAmount(preservedAbsorption);
+
+            if (preservedAbsorption <= 0.01f) {
                 DiamondAbsorptionHelper.clearMaxAbsorptionModifier(self);
+            } else {
+                DiamondAbsorptionHelper.applyMaxAbsorptionModifier(self.getAttributes(), preservedAbsorption);
             }
             return;
         }
@@ -238,6 +249,13 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         return source.isOf(net.minecraft.entity.damage.DamageTypes.LAVA)
                 || source.isOf(net.minecraft.entity.damage.DamageTypes.HOT_FLOOR)
                 || source.isIn(DamageTypeTags.IS_FIRE);
+    }
+
+    @Unique
+    private static float titanfabric$getVanillaAbsorptionToPreserve(LivingEntity entity) {
+        StatusEffectInstance absorptionEffect = entity.getStatusEffect(StatusEffects.ABSORPTION);
+        if (absorptionEffect == null) return 0.0f;
+        return Math.min(entity.getAbsorptionAmount(), DiamondAbsorptionHelper.getVanillaAbsorptionAmount(absorptionEffect.getAmplifier()));
     }
 
     @ModifyVariable(method = "applyMovementInput", at = @At("HEAD"), ordinal = 0, argsOnly = true)
@@ -349,18 +367,22 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
 
         float totalAbsorptionBefore = instance.getAbsorptionAmount();
-        float diamondAbsorptionBefore = Math.min(DiamondAbsorptionComponent.get(instance).getDiamondAbsorptionAmount(), totalAbsorptionBefore);
-        if (diamondAbsorptionBefore <= 0.01f) {
+        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(instance);
+        float diamondAbsorptionBefore = Math.min(component.getDiamondAbsorptionAmount(), totalAbsorptionBefore);
+        float effectAbsorptionBefore = Math.min(component.getEffectAbsorptionAmount(), totalAbsorptionBefore);
+        if (effectAbsorptionBefore <= 0.01f) {
             original.call(instance, absorptionAmount);
             return;
         }
 
-        float yellowAbsorptionBefore = Math.max(0.0f, totalAbsorptionBefore - diamondAbsorptionBefore);
         float absorbedAmount = Math.max(0.0f, totalAbsorptionBefore - absorptionAmount);
-        float convertedDiamondAmount = Math.max(0.0f, Math.min(diamondAbsorptionBefore, absorbedAmount - yellowAbsorptionBefore));
+        float convertedDiamondAmount = Math.min(diamondAbsorptionBefore, absorbedAmount);
+        float consumedEffectYellowAmount = Math.max(0.0f, absorbedAmount - diamondAbsorptionBefore);
+        float remainingDiamondAmount = Math.max(0.0f, diamondAbsorptionBefore - convertedDiamondAmount);
+        float remainingEffectAmount = Math.max(0.0f, effectAbsorptionBefore - consumedEffectYellowAmount);
 
         original.call(instance, absorptionAmount + convertedDiamondAmount);
-        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, diamondAbsorptionBefore - convertedDiamondAmount);
+        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, remainingDiamondAmount, remainingEffectAmount);
     }
 
     @Debug(export = true)

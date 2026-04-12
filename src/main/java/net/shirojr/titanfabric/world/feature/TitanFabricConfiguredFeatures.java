@@ -22,6 +22,7 @@ public class TitanFabricConfiguredFeatures {
     public static final RegistryKey<ConfiguredFeature<?, ?>> EMBER_ORE_BURIED = getKey("ember_ore_buried");
     public static final RegistryKey<ConfiguredFeature<?, ?>> LEGEND_ORE = getKey("legend_ore");
     public static final RegistryKey<ConfiguredFeature<?, ?>> LEGEND_ORE_SMALL = getKey("legend_ore_small");
+    public static final RegistryKey<ConfiguredFeature<?, ?>> LEGEND_ORE_MEDIUM = getKey("legend_ore_medium");
     public static final RegistryKey<ConfiguredFeature<?, ?>> LEGEND_ORE_BURIED = getKey("legend_ore_buried");
 
     public static void bootstrap(Registerable<ConfiguredFeature<?, ?>> context) {
@@ -42,10 +43,11 @@ public class TitanFabricConfiguredFeatures {
 
         register(context, CITRIN_ORE, Feature.ORE, new OreFeatureConfig(overworldCitrinOres, 9));
         register(context, CITRIN_ORE_SMALL, Feature.ORE, new OreFeatureConfig(overworldCitrinOres, 4));
-        register(context, EMBER_ORE, Feature.ORE, new OreFeatureConfig(netherEmberOres, 9));
-        register(context, EMBER_ORE_BURIED, Feature.ORE, new OreFeatureConfig(netherEmberOres, 9, 0.5f));
+        register(context, EMBER_ORE, Feature.ORE, new OreFeatureConfig(netherEmberOres, 8));
+        register(context, EMBER_ORE_BURIED, Feature.ORE, new OreFeatureConfig(netherEmberOres, 8, 0.5f));
         register(context, LEGEND_ORE, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 12, 0.7f));
         register(context, LEGEND_ORE_SMALL, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 4, 0.5f));
+        register(context, LEGEND_ORE_MEDIUM, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 8, 0.5f));
         register(context, LEGEND_ORE_BURIED, Feature.ORE, new OreFeatureConfig(overworldLegendOres, 8, 1.0f));
     }
 

@@ -1,5 +1,6 @@
 package net.shirojr.titanfabric.world.feature;
 
+import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.world.gen.placementmodifier.*;
 
 import java.util.List;
@@ -10,6 +11,10 @@ public class TitanFabricOrePlacement {
     }
 
     public static List<PlacementModifier> modifiersWithCount(int count, PlacementModifier heightModifier) {
+        return modifiers(CountPlacementModifier.of(count), heightModifier);
+    }
+
+    public static List<PlacementModifier> modifiersWithCount(IntProvider count, PlacementModifier heightModifier) {
         return modifiers(CountPlacementModifier.of(count), heightModifier);
     }
 
