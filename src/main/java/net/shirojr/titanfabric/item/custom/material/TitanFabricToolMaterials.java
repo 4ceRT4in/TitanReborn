@@ -27,9 +27,9 @@ public enum TitanFabricToolMaterials implements ToolMaterial {
     NETHERITE(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2031, 5.0f, 0.0f, 15,
             Ingredient.ofItems(Items.NETHERITE_INGOT)),
 
-    CITRIN(BlockTags.INCORRECT_FOR_IRON_TOOL, 250, 3.0f, 0.0f, 14,
+    CITRIN(BlockTags.INCORRECT_FOR_IRON_TOOL, 500, 3.0f, 0.0f, 14,
             Ingredient.ofItems(TitanFabricItems.CITRIN_SHARD)),
-    EMBER(BlockTags.INCORRECT_FOR_IRON_TOOL, 375, 3.0f, 0.0f, 18,
+    EMBER(BlockTags.INCORRECT_FOR_IRON_TOOL, 1000, 3.0f, 0.0f, 18,
             Ingredient.ofItems(TitanFabricItems.EMBER_INGOT)),
     LEGEND(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 0, 4.0f, 0.0f, 22,
             Ingredient.ofItems(TitanFabricItems.LEGEND_INGOT)),
