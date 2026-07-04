@@ -48,7 +48,7 @@
 
   "item.titanfabric.arrow": "§7Arrow",
   "item.titanfabric.weakness_arrow": "§7Weakness Arrow",
-  "item.titanfabric.poison_arrow": "§2Poison Arrow",
+  "item.titanfabric.poison_arrow": "§aPoison Arrow",
   "item.titanfabric.wither_arrow": "§8Wither Arrow",
   "item.titanfabric.fire_arrow": "§6Fire Arrow",
   "item.titanfabric.blindness_arrow": "§1Blindness Arrow",
@@ -78,7 +78,7 @@
   "item.titanfabric.essence": "Essence",
   "item.titanfabric.blindness_essence": "§1Blindness Essence",
   "item.titanfabric.fire_essence": "§6Fire Essence",
-  "item.titanfabric.poison_essence": "§2Poison Essence",
+  "item.titanfabric.poison_essence": "§aPoison Essence",
   "item.titanfabric.weakness_essence": "§7Weakness Essence",
   "item.titanfabric.wither_essence": "§8Wither Essence",
 
@@ -136,7 +136,7 @@
   "tooltip.titanfabric.legendHelmetItem": "§5+2 Max Health",
   "tooltip.titanfabric.diamondArmor": "§b+25% Crit Protection",
   "tooltip.titanfabric.netherArmor": "§6+25% Fire Protection",
-  "tooltip.titanfabric.citrinArmor": "§2+25% Magic Protection",
+  "tooltip.titanfabric.citrinArmor": "§a+25% Magic Protection",
 
   "tooltip.titanfabric.legendBowKeybind": "§7Use Keybind to cycle §fEffect Arrows",
   "tooltip.titanfabric.legendCrossBowKeybind": "§7Use Keybind to cycle §fSplash & §fLingering Potions",
@@ -186,18 +186,18 @@
   "tooltip.titanfabric.legendArmorHealth": "+%s Max Health",
   "tooltip.titanfabric.blindnessEssenceItem": "Applies §1+25% Blindness Chance §ron Swords",
   "tooltip.titanfabric.fireEssenceItem": "Applies §6+25% Fire Chance §ron Swords",
-  "tooltip.titanfabric.poisonEssenceItem": "Applies §2+25% Poison Chance §ron Swords",
+  "tooltip.titanfabric.poisonEssenceItem": "Applies §a+25% Poison Chance §ron Swords",
   "tooltip.titanfabric.weaknessEssenceItem": "Applies §7+25% Weakness Chance §ron Swords",
   "tooltip.titanfabric.witherEssenceItem": "Applies §8+25% Wither Chance §ron Swords",
 
   "tooltip.titanfabric.blindnessArrowEffect": "Applies §1Blindness II §rfor 5 Seconds",
-  "tooltip.titanfabric.poisonArrowEffect": "Applies §2Poison II §rfor 5 Seconds",
+  "tooltip.titanfabric.poisonArrowEffect": "Applies §aPoison II §rfor 5 Seconds",
   "tooltip.titanfabric.weaknessArrowEffect": "Applies §7Weakness II §rfor 5 Seconds",
   "tooltip.titanfabric.witherArrowEffect": "Applies §8Wither II §rfor 5 Seconds",
   "tooltip.titanfabric.fireArrowEffect": "Applies §6Fire §rfor 5 Seconds",
 
   "tooltip.titanfabric.blindnessArrowItem":"Applies §1Blindness II §rfor 5 Seconds",
-  "tooltip.titanfabric.poisonArrowItem":"Applies §2Poison II §rfor 5 Seconds",
+  "tooltip.titanfabric.poisonArrowItem":"Applies §aPoison II §rfor 5 Seconds",
   "tooltip.titanfabric.weaknessArrowItem":"Applies §7Weakness II §rfor 5 Seconds",
   "tooltip.titanfabric.witherArrowItem":"Applies §8Wither II §rfor 5 Seconds",
   "tooltip.titanfabric.netherite_effect": "§dFull Set: Resistance I",
