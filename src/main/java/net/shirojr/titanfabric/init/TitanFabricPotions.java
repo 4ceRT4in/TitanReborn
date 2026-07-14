@@ -3,6 +3,7 @@ package net.shirojr.titanfabric.init;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
@@ -13,6 +14,13 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
 
 public class TitanFabricPotions {
+    public static RegistryEntry<Potion> EMBER_BURNING =
+            registerPotion("ember_burning", TitanFabricStatusEffects.EMBER_BURNING, 1, 0, Potions.AWKWARD, Items.BLAZE_POWDER);
+    /** Separate registered variants keep brewing, splash and lingering contents identical. */
+    public static RegistryEntry<Potion> STRONG_FIRE_RESISTANCE =
+            registerPotion("strong_fire_resistance", StatusEffects.FIRE_RESISTANCE, 900, 0, Potions.FIRE_RESISTANCE, Items.GLOWSTONE_DUST);
+    public static RegistryEntry<Potion> STRONG_WEAKNESS =
+            registerPotion("strong_weakness", TitanFabricStatusEffects.STRONG_WEAKNESS, 300, 0, Potions.WEAKNESS, Items.GLOWSTONE_DUST);
     public static RegistryEntry<Potion> INDESTRUCTIBLE_POTION =
             registerPotion("indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
                     1800, 0, Potions.AWKWARD, TitanFabricBlocks.LEGEND_CRYSTAL.asItem());

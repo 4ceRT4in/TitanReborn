@@ -29,6 +29,8 @@ import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
+import net.shirojr.titanfabric.item.custom.spear.SpearTier;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
@@ -46,6 +48,7 @@ public interface TitanFabricItems {
     List<Item> ALL_ITEMS = new ArrayList<>();
 
     List<SwordItem> EFFECT_SWORDS = new ArrayList<>();
+    List<TitanFabricSpearItem> EFFECT_SPEARS = new ArrayList<>();
     List<CitrinArmorItem> CITRIN_ARMOR_ITEMS = new ArrayList<>();
     List<EmberArmorItem> EMBER_ARMOR_ITEMS = new ArrayList<>();
     List<LegendArmorItem> LEGEND_ARMOR_ITEMS = new ArrayList<>();
@@ -60,6 +63,8 @@ public interface TitanFabricItems {
             new Item(new Item.Settings().maxCount(64)));
     Item EMBER_SHARD = register("ember_shard",
             new Item(new Item.Settings().fireproof().maxCount(64)));
+    Item SPEAR_POLE = register("spear_pole",
+            new Item(new Item.Settings().maxCount(16)));
 
     //region armor
     CitrinArmorItem CITRIN_HELMET = registerArmor("citrin_helmet",
@@ -115,6 +120,12 @@ public interface TitanFabricItems {
             new Item.Settings().fireproof().attributeModifiers(SwordItem.createAttributeModifiers(TitanFabricToolMaterials.NETHERITE, removeBaseDamage(9), -2.4f)));  // registered in ItemsMixin class
     TitanFabricSwordItem NETHERITE_GREATSWORD = register("netherite_greatsword",
             new TitanFabricSwordItem(false, TitanFabricToolMaterials.NETHERITE_GREAT, removeBaseDamage(10), -3f, SwordType.GREAT_SWORD, null, new Item.Settings().fireproof()));
+
+    TitanFabricSpearItem CITRIN_SPEAR = registerEffectSpear("citrin_spear", new TitanFabricSpearItem(SpearTier.CITRIN, new Item.Settings()));
+    TitanFabricSpearItem EMBER_SPEAR = registerEffectSpear("ember_spear", new TitanFabricSpearItem(SpearTier.EMBER, new Item.Settings().fireproof()));
+    TitanFabricSpearItem DIAMOND_SPEAR = registerEffectSpear("diamond_spear", new TitanFabricSpearItem(SpearTier.DIAMOND, new Item.Settings()));
+    TitanFabricSpearItem TITAN_SPEAR = registerEffectSpear("titan_spear", new TitanFabricSpearItem(SpearTier.TITAN, new Item.Settings()));
+    TitanFabricSpearItem NETHERITE_SPEAR = register("netherite_spear", new TitanFabricSpearItem(SpearTier.NETHERITE, new Item.Settings().fireproof()));
 
     TitanCrossBowItem TITAN_CROSSBOW = register("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1)
             .component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT)
@@ -196,6 +207,12 @@ public interface TitanFabricItems {
     private static <T extends SwordItem> T registerEffectSword(String name, T item) {
         register(name, item);
         EFFECT_SWORDS.add(item);
+        return item;
+    }
+
+    private static <T extends TitanFabricSpearItem> T registerEffectSpear(String name, T item) {
+        register(name, item);
+        EFFECT_SPEARS.add(item);
         return item;
     }
 

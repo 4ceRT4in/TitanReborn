@@ -19,6 +19,7 @@ import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
+import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -50,7 +51,8 @@ public class EffectUpgradeRecipe implements SmithingRecipe {
         if (!testBase(input.base()) || !testAddition(input.addition())) return ItemStack.EMPTY;
         WeaponEffectData modifierInnateEffect = getEffectData(input.addition(), WeaponEffectType.INNATE_EFFECT);
         WeaponEffectData baseAdditionalEffect = getEffectData(input.base(), WeaponEffectType.ADDITIONAL_EFFECT);
-        if (modifierInnateEffect == null) return ItemStack.EMPTY;
+        if (modifierInnateEffect == null || !(this.result.getItem() instanceof WeaponEffectCrafting weapon) ||
+                !weapon.supportedEffects().contains(modifierInnateEffect.weaponEffect())) return ItemStack.EMPTY;
 
         boolean invalidProduct = false;
         HashSet<WeaponEffectData> outputWeaponEffects = new HashSet<>(this.result.getOrDefault(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>()));

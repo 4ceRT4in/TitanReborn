@@ -8,8 +8,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
+import net.minecraft.client.render.entity.TntEntityRenderer;
 import net.shirojr.titanfabric.color.TitanFabricColorProviders;
 import net.shirojr.titanfabric.entity.client.ArrowItemRenderer;
+import net.shirojr.titanfabric.entity.client.SpearEntityRenderer;
 import net.shirojr.titanfabric.event.TitanFabricEvents;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.init.TitanFabricEntities;
@@ -53,5 +55,7 @@ public class TitanFabricClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(TitanFabricEntities.ARROW_ITEM, ArrowItemRenderer::new);
         EntityRendererRegistry.register(TitanFabricEntities.CITRIN_STAR, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(TitanFabricEntities.SPEAR, SpearEntityRenderer::new);
+        EntityRendererRegistry.register(TitanFabricEntities.BARREL_BOMB, TntEntityRenderer::new);
     }
 }

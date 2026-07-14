@@ -84,6 +84,7 @@ public abstract class AbstractFireBlockMixin extends Block {
             Entity entity
     ) {
         if (state.isOf(Blocks.SOUL_FIRE)) {
+            original.call(instance, titanfabric$getSoulFireBaseTicks(entity) / 20.0F);
             return;
         }
         original.call(instance, seconds);

@@ -39,6 +39,7 @@
     "OreFeatureMixin",
     "PlayerEntityMixin",
     "PotionContentsComponentMixin",
+    "PotionsMixin",
     "PotionEntityMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",

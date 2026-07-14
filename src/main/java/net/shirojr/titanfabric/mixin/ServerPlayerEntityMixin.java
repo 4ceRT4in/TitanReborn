@@ -5,6 +5,7 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,6 +15,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin {
+
+    @Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$preventDroppingThrownSpear(boolean entireStack, CallbackInfoReturnable<Boolean> cir) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (TitanFabricSpearItem.isThrowLocked(player, player.getMainHandStack())) {
+            cir.setReturnValue(false);
+        }
+    }
 
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void titanfabric$onDeath(DamageSource source, CallbackInfo ci) {

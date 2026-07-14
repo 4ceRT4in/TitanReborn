@@ -88,7 +88,7 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
         return this.type.value().canApplyUpdateEffect(duration, amplifier);
     }
 
-    @Inject(method = "update", at = @At("RETURN"))
+    @Inject(method = "update", at = @At("RETURN"), cancellable = true)
     private void updateMixin(LivingEntity entity, Runnable overwriteCallback,
                              CallbackInfoReturnable<Boolean> info) {
         if (!info.getReturnValue() && this.type.equals(TitanFabricStatusEffects.DIAMOND_ABSORPTION)) {

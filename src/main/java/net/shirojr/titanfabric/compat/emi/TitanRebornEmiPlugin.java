@@ -30,6 +30,7 @@ import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
@@ -140,13 +141,16 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         removeUncraftableFurnaceRecipes(registry);
         addMissingMultiBowSmithingRecipes(registry);
 
-        for (SwordItem effectSword : TitanFabricItems.EFFECT_SWORDS) {
-            Identifier id = Registries.ITEM.getId(effectSword);
+        List<Item> effectWeapons = new java.util.ArrayList<>(TitanFabricItems.EFFECT_SWORDS);
+        effectWeapons.addAll(TitanFabricItems.EFFECT_SPEARS);
+        for (Item effectWeapon : effectWeapons) {
+            if (!(effectWeapon instanceof net.shirojr.titanfabric.util.items.WeaponEffectCrafting weaponEffectHandler)) continue;
+            Identifier id = Registries.ITEM.getId(effectWeapon);
 
-            for (WeaponEffect weaponEffect : WeaponEffect.values()) {
+            for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
                 for (int i = 1; i <= 2; i++) {
 
-                    ItemStack output = new ItemStack(effectSword);
+                    ItemStack output = effectWeapon.getDefaultStack();
                     HashSet<WeaponEffectData> outputWeaponEffects = new HashSet<>(output.getOrDefault(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>()));
 
                     if (output.getItem() instanceof CitrinSwordItem) {
@@ -158,7 +162,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
 
                     output.set(TitanFabricDataComponents.WEAPON_EFFECTS, outputWeaponEffects);
 
-                    ItemStack input = new ItemStack(effectSword);
+                    ItemStack input = effectWeapon.getDefaultStack();
                     if (i == 2) {
                         HashSet<WeaponEffectData> inputWeaponEffects = new HashSet<>(input.getOrDefault(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>()));
 

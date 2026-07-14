@@ -11,6 +11,8 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.block.custom.AdvancedAnvilBlock;
 import net.shirojr.titanfabric.block.custom.DiamondFurnaceBlock;
 import net.shirojr.titanfabric.block.custom.TitanFabricOreBlock;
+import net.shirojr.titanfabric.block.custom.BarrelBombBlock;
+import net.shirojr.titanfabric.entity.BarrelBombEntity;
 
 @SuppressWarnings("unused")
 public interface TitanFabricBlocks {
@@ -44,6 +46,10 @@ public interface TitanFabricBlocks {
     Block NETHERITE_ANVIL = registerBlock("netherite_anvil",
             new AdvancedAnvilBlock(AbstractBlock.Settings.create().mapColor(DyeColor.BLACK).nonOpaque()
                     .requiresTool().strength(5.0f, 1200.0f).sounds(BlockSoundGroup.ANVIL)));
+    Block CITRIN_BARREL_BOMB = registerBlock("citrin_barrel_bomb",
+            new BarrelBombBlock(AbstractBlock.Settings.copy(Blocks.TNT), BarrelBombEntity.Type.CITRIN));
+    Block EMBER_BARREL_BOMB = registerBlock("ember_barrel_bomb",
+            new BarrelBombBlock(AbstractBlock.Settings.copy(Blocks.TNT), BarrelBombEntity.Type.EMBER));
 
 
     private static Block registerBlock(String name, Block block) {
@@ -53,7 +59,7 @@ public interface TitanFabricBlocks {
 
     private static void registerBlockItem(String name, Block block) {
         Item.Settings settings = new Item.Settings();
-        if ("ember_block".equals(name)) {
+        if ("ember_block".equals(name) || "ember_barrel_bomb".equals(name)) {
             settings = settings.fireproof();
         }
         Item registeredEntry = Registry.register(Registries.ITEM, TitanFabric.getId(name), new BlockItem(block, settings));

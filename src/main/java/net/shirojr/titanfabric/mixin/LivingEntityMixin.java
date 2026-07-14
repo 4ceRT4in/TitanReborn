@@ -26,10 +26,12 @@ import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
+import net.shirojr.titanfabric.effect.RecoveryStatusEffect;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.util.effects.DiamondAbsorptionHelper;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
@@ -111,6 +113,13 @@ public abstract class LivingEntityMixin implements HealthAccessor {
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z", cancellable = true, at = @At("HEAD"))
     private void titanfabric$addStatusEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (LivingEntity) (Object) this;
+        if (effect.getEffectType().value() instanceof RecoveryStatusEffect incomingRecovery) {
+            for (StatusEffectInstance activeEffect : List.copyOf(activeStatusEffects.values())) {
+                if (!(activeEffect.getEffectType().value() instanceof RecoveryStatusEffect activeRecovery)) continue;
+                if (incomingRecovery.getProfile().getMaxBufferAmount() <= activeRecovery.getProfile().getMaxBufferAmount()) continue;
+                ((LivingEntity) (Object) this).removeStatusEffect(activeEffect.getEffectType());
+            }
+        }
         if (!(entity instanceof PlayerEntity player))
             return;
         if (!canHaveStatusEffect(effect))
@@ -167,7 +176,7 @@ public abstract class LivingEntityMixin implements HealthAccessor {
 
     @WrapOperation(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getFinalGravity()D"))
     private double modifyGravityForParachute(LivingEntity instance, Operation<Double> original) {
-        if (instance.getVelocity().getY() >= 0 || !ParachuteItem.isParachuteActivated(instance)) {
+        if (instance.isTouchingWater() || instance.getVelocity().getY() >= 0 || !ParachuteItem.isParachuteActivated(instance)) {
             return original.call(instance);
         }
         instance.onLanding();
@@ -271,9 +280,12 @@ public abstract class LivingEntityMixin implements HealthAccessor {
     private void titanfabric$matchHandSwingWithItemCooldown(CallbackInfoReturnable<Integer> cir) {
         if (!((LivingEntity) (Object) this instanceof PlayerEntity player)) return;
         ItemStack stack = player.getMainHandStack();
-        if (!(stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem)) return;
         int defaultCooldown = cir.getReturnValue();
-        cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
+        if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
+            cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
+        } else if (stack.getItem() instanceof TitanFabricSpearItem) {
+            cir.setReturnValue(defaultCooldown + 6);
+        }
     }
 
     @Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
@@ -364,8 +376,6 @@ public abstract class LivingEntityMixin implements HealthAccessor {
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V"))
     private void absorptionFrostburnBypass(LivingEntity instance, float absorptionAmount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
-        if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
-
         float totalAbsorptionBefore = instance.getAbsorptionAmount();
         DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(instance);
         float diamondAbsorptionBefore = Math.min(component.getDiamondAbsorptionAmount(), totalAbsorptionBefore);

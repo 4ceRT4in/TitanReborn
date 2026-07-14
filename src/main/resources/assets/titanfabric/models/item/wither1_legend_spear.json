@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": { "layer0": "titanfabric:item/wither1_legend_spear" }
+}

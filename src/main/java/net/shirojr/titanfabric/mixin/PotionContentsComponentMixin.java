@@ -67,7 +67,7 @@ public class PotionContentsComponentMixin {
             tooltip.accept(Text.translatable("potion.whenDrank").formatted(Formatting.DARK_PURPLE));
             tooltip.accept(Text.translatable(
                     "tooltip.titanfabric.potion.recovery.health",
-                    String.format(Locale.ROOT, "%.1f", profile.getMaxBufferAmount() / 2.0f)
+                    String.format(Locale.ROOT, "%.1f", profile.getMaxBufferAmount())
             ).formatted(Formatting.BLUE));
             return;
         }

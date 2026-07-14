@@ -288,14 +288,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @Debug(export = true)
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAbsorptionAmount()F"))
     private float absorptionFrostburnBypass(PlayerEntity instance, Operation<Float> original, @Local(argsOnly = true) DamageSource source) {
-        if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return 0;
         return original.call(instance);
     }
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setAbsorptionAmount(F)V"))
     private void avoidAbsorptionResetOnFrostburnDamage(PlayerEntity instance, float amount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
-        if (source.isOf(TitanFabricDamageTypes.FROSTBURN.get())) return;
-
         float totalAbsorptionBefore = instance.getAbsorptionAmount();
         DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(instance);
         float diamondAbsorptionBefore = Math.min(component.getDiamondAbsorptionAmount(), totalAbsorptionBefore);

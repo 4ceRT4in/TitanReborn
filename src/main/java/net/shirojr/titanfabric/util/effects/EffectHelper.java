@@ -155,16 +155,19 @@ public final class EffectHelper {
     }
 
     public static <T extends SwordItem> List<ItemStack> generateSwordsStacks(T swordItem, boolean addBaseItem) {
-        if (!(swordItem instanceof WeaponEffectCrafting weaponEffectHandler)) {
-            return List.of(swordItem.getDefaultStack());
-        }
+        return generateWeaponEffectStacks(swordItem, addBaseItem);
+    }
+
+    /** Creates the creative/recipe-view variants for every weapon that accepts essence effects. */
+    public static List<ItemStack> generateWeaponEffectStacks(Item item, boolean addBaseItem) {
+        if (!(item instanceof WeaponEffectCrafting weaponEffectHandler)) return List.of(item.getDefaultStack());
         List<ItemStack> stacks = new ArrayList<>();
         if (addBaseItem) {
-            stacks.add(swordItem.getDefaultStack());
+            stacks.add(item.getDefaultStack());
         }
         for (WeaponEffect weaponEffect : weaponEffectHandler.supportedEffects()) {
             for (int effectStrength = 1; effectStrength < 3; effectStrength++) {
-                ItemStack swordStack = swordItem.getDefaultStack();
+                ItemStack swordStack = item.getDefaultStack();
                 if (weaponEffectHandler.getBaseEffect() != null) {
                     EffectHelper.applyEffectToStack(swordStack, weaponEffectHandler.getBaseEffect(), false);
                 }

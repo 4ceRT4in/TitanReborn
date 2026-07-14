@@ -18,6 +18,8 @@ import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
+import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.VariationHolder;
 
@@ -50,6 +52,14 @@ public class TitanFabricItemGroups {
                     TitanFabricItems.NETHERITE_GREATSWORD
             );
 
+            // spears
+            addRaw(entries,
+                    TitanFabricItems.SPEAR_POLE,
+                    TitanFabricItems.CITRIN_SPEAR, TitanFabricItems.EMBER_SPEAR,
+                    TitanFabricItems.DIAMOND_SPEAR, TitanFabricItems.TITAN_SPEAR,
+                    TitanFabricItems.NETHERITE_SPEAR
+            );
+
             addEffectSwords(entries, CitrinSwordItem.class, SwordType.DEFAULT);
             addEffectSwords(entries, CitrinSwordItem.class, SwordType.GREAT_SWORD);
             addEffectSwords(entries, EmberSwordItem.class, SwordType.DEFAULT);
@@ -58,6 +68,7 @@ public class TitanFabricItemGroups {
             addEffectSwords(entries, DiamondSwordItem.class, SwordType.GREAT_SWORD);
             addEffectSwords(entries, LegendSwordItem.class, SwordType.DEFAULT);
             addEffectSwords(entries, LegendSwordItem.class, SwordType.GREAT_SWORD);
+            addEffectSpears(entries);
 
             // essences
             addVar(entries, TitanFabricItems.ESSENCE);
@@ -111,19 +122,24 @@ public class TitanFabricItemGroups {
 
             // potions
             addPotionFamilies(entries,
+                    List.of(TitanFabricPotions.STRONG_FIRE_RESISTANCE),
+                    List.of(TitanFabricPotions.STRONG_WEAKNESS),
                     List.of(TitanFabricPotions.INDESTRUCTIBLE_POTION, TitanFabricPotions.LONG_INDESTRUCTIBLE_POTION),
                     List.of(TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.LONG_FROSTBURN_POTION, TitanFabricPotions.STRONG_FROSTBURN_POTION),
                     List.of(TitanFabricPotions.IMMUNITY_POTION, TitanFabricPotions.LONG_IMMUNITY_POTION),
                     List.of(TitanFabricPotions.RECOVERY_POTION, TitanFabricPotions.LONG_RECOVERY_POTION, TitanFabricPotions.STRONG_RECOVERY_POTION)
             );
 
-            // block entities
-            addRaw(entries, TitanFabricBlocks.DIAMOND_FURNACE, TitanFabricBlocks.NETHERITE_ANVIL);
+            // blocks
+            addRaw(entries,
+                    TitanFabricBlocks.DIAMOND_FURNACE, TitanFabricBlocks.NETHERITE_ANVIL,
+                    TitanFabricBlocks.CITRIN_BARREL_BOMB, TitanFabricBlocks.EMBER_BARREL_BOMB
+            );
         });
     }
 
     private static void addRaw(FabricItemGroupEntries entries, ItemConvertible... items) {
-        for (ItemConvertible item : items) entries.add(new ItemStack(item));
+        for (ItemConvertible item : items) entries.add(item.asItem().getDefaultStack());
     }
 
     private static void addVar(FabricItemGroupEntries entries, ItemConvertible item) {
@@ -149,6 +165,12 @@ public class TitanFabricItemGroups {
             ItemStack stack = EnchantedBookItem.forEnchantment(new EnchantmentLevelEntry(entry, level));
             entries.add(stack);
         });
+    }
+
+    private static void addEffectSpears(FabricItemGroupEntries entries) {
+        for (TitanFabricSpearItem spear : TitanFabricItems.EFFECT_SPEARS) {
+            for (ItemStack stack : EffectHelper.generateWeaponEffectStacks(spear, false)) entries.add(stack);
+        }
     }
 
     @SafeVarargs
