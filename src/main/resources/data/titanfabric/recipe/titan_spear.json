@@ -7,13 +7,13 @@
   ],
   "key": {
     "#": {
-      "item": "titanfabric:citrin_shard"
+      "item": "titanfabric:legend_ingot"
     },
     "/": {
       "item": "titanfabric:spear_pole"
    }
   },
   "result": {
-    "id": "titanfabric:citrin_spear"
+    "id": "titanfabric:titan_spear"
   }
 }

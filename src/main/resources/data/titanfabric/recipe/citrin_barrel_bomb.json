@@ -1,1 +1,22 @@
-{"type":"minecraft:crafting_shaped","pattern":["CCC","CTC","CCC"],"key":{"C":{"item":"titanfabric:citrin_shard"},"T":{"item":"minecraft:tnt"}},"result":{"id":"titanfabric:citrin_barrel_bomb","count":1}}
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "=#=",
+    "#B#",
+    "=#="
+  ],
+  "key": {
+    "=": {
+      "item": "titanfabric:citrin_shard"
+    },
+    "#": {
+      "item": "minecraft:gunpowder"
+    },
+    "B": {
+      "item": "minecraft:barrel"
+    }
+  },
+  "result": {
+    "id": "titanfabric:citrin_barrel_bomb"
+  }
+}

@@ -1,1 +1,19 @@
-{"type":"minecraft:crafting_shaped","pattern":[" D "," DS","S  "],"key":{"D":{"item":"minecraft:diamond"},"S":{"item":"minecraft:stick"}},"result":{"id":"titanfabric:diamond_spear"}}
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " ##",
+    " /#",
+    "/  "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "/": {
+      "item": "titanfabric:spear_pole"
+    }
+  },
+  "result": {
+    "id": "titanfabric:diamond_spear"
+  }
+}

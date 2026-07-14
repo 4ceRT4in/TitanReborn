@@ -1,1 +1,22 @@
-{"type":"minecraft:crafting_shaped","pattern":["EEE","ETE","EEE"],"key":{"E":{"item":"titanfabric:ember_ingot"},"T":{"item":"minecraft:tnt"}},"result":{"id":"titanfabric:ember_barrel_bomb","count":1}}
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "=#=",
+    "#B#",
+    "=#="
+  ],
+  "key": {
+    "=": {
+      "item": "titanfabric:ember_ingot"
+    },
+    "#": {
+      "item": "minecraft:gunpowder"
+    },
+    "B": {
+      "item": "minecraft:barrel"
+    }
+  },
+  "result": {
+    "id": "titanfabric:ember_barrel_bomb"
+  }
+}

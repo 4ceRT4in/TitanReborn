@@ -1,1 +1,19 @@
-{"type":"minecraft:crafting_shaped","pattern":[" E "," ES","S  "],"key":{"E":{"item":"titanfabric:ember_ingot"},"S":{"item":"minecraft:stick"}},"result":{"id":"titanfabric:ember_spear"}}
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " ##",
+    " /#",
+    "/  "
+  ],
+  "key": {
+    "#": {
+      "item": "titanfabric:ember_ingot"
+    },
+    "/": {
+      "item": "titanfabric:spear_pole"
+    }
+  },
+  "result": {
+    "id": "titanfabric:ember_spear"
+  }
+}
