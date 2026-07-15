@@ -3,18 +3,28 @@ package net.shirojr.titanfabric.mixin;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 /** Rebalances vanilla potion definitions once, before every potion item form reads them. */
 @Mixin(Potions.class)
 public abstract class PotionsMixin {
-    @Redirect(method = "<clinit>", at = @At(value = "NEW", target = "net/minecraft/entity/effect/StatusEffectInstance"))
-    private static StatusEffectInstance titanfabric$rebalancePotionDuration(RegistryEntry<StatusEffect> effect, int duration, int amplifier) {
-        return new StatusEffectInstance(effect, titanfabric$duration(effect, duration, amplifier), amplifier);
+    @ModifyArg(
+            method = "<clinit>",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/potion/Potions;register(Ljava/lang/String;Lnet/minecraft/potion/Potion;)Lnet/minecraft/registry/entry/RegistryEntry;"),
+            index = 1
+    )
+    private static Potion titanfabric$rebalancePotionDuration(Potion potion) {
+        for (StatusEffectInstance effect : potion.getEffects()) {
+            int duration = titanfabric$duration(effect.getEffectType(), effect.getDuration(), effect.getAmplifier());
+            ((StatusEffectInstanceAccessor) effect).titanfabric$setDuration(duration);
+        }
+        return potion;
     }
 
     private static int titanfabric$duration(RegistryEntry<StatusEffect> effect, int vanillaDuration, int amplifier) {

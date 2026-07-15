@@ -23,7 +23,6 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
@@ -31,6 +30,8 @@ import net.shirojr.titanfabric.util.effects.DiamondAbsorptionHelper;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
+import net.shirojr.titanfabric.item.custom.spear.SpearTier;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.util.effects.ArmorPlateType;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
@@ -52,6 +53,8 @@ import java.util.Map;
 public abstract class PlayerEntityMixin extends LivingEntity implements ArrowShootingHandler {
     @Unique
     private static final TrackedData<Boolean> SHOOTING_ARROWS = DataTracker.registerData(PlayerEntityMixin.class, TrackedDataHandlerRegistry.BOOLEAN);
+    @Unique
+    private int titanfabric$spearMeleeCooldownEnd;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -138,8 +141,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
 
         ItemStack stack = self.getStackInHand(Hand.MAIN_HAND);
         if (stack == null) return bl3;
-        if (Arrays.asList(Items.DIAMOND_SWORD, TitanFabricItems.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD).contains(stack.getItem())) {
-            if (self.getRandom().nextFloat() < 0.25f) {
+        boolean diamondWeapon = Arrays.asList(Items.DIAMOND_SWORD, TitanFabricItems.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD).contains(stack.getItem())
+                || stack.getItem() instanceof TitanFabricSpearItem spear && spear.getTier() == SpearTier.DIAMOND;
+        if (diamondWeapon) {
+            if (self.getRandom().nextFloat() < 0.5f) {
                 return true;
             }
         }
@@ -219,6 +224,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         float crit;
         if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
             crit = titanFabricSwordItem.getCritMultiplier();
+        } else if (stack.getItem() instanceof TitanFabricSpearItem) {
+            crit = 1.2f;
         } else if (stack.getItem() instanceof SwordItem) {
             crit = 1.2f;
         } else {
@@ -250,9 +257,33 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
             if (!target.getWorld().isClient() && target.getWorld().getGameRules().getBoolean(TitanFabricGamerules.GREATSWORD_COOLDOWN)) {
                 cooldown = titanFabricSwordItem.getCooldownTicks();
             }
+        } else if (stack.getItem() instanceof TitanFabricSpearItem) {
+            if (this.age < this.titanfabric$spearMeleeCooldownEnd) {
+                ci.cancel();
+                return;
+            }
+            this.titanfabric$spearMeleeCooldownEnd = this.age + 6;
+            if (!player.getWorld().isClient()) {
+                // Keep the six-tick melee cooldown visible without shortening an active throw cooldown.
+                if (!TitanFabricSpearItem.hasSpearCooldown(player)) {
+                    TitanFabricSpearItem.setSpearCooldown(player, 6);
+                }
+            }
+            return;
         }
         if (cooldown <= 0) return;
         this.getItemCooldownManager().set(stack.getItem(), cooldown);
+    }
+
+    @Inject(method = "damage", at = @At("RETURN"))
+    private void titanfabric$preventDamageFromPullingPlayerUnderwater(DamageSource source, float amount,
+                                                                      CallbackInfoReturnable<Boolean> cir) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        if (!Boolean.TRUE.equals(cir.getReturnValue()) || !player.isTouchingWater()) return;
+        if (player.getVelocity().y < 0.0) {
+            player.setVelocity(player.getVelocity().x, 0.0, player.getVelocity().z);
+            player.velocityModified = true;
+        }
     }
 
     @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)
@@ -286,29 +317,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     }
 
     @Debug(export = true)
-    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAbsorptionAmount()F"))
+    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAbsorptionAmount()F", ordinal = 0))
     private float absorptionFrostburnBypass(PlayerEntity instance, Operation<Float> original, @Local(argsOnly = true) DamageSource source) {
-        return original.call(instance);
+        return DiamondAbsorptionHelper.getDamageableAbsorption(instance, source);
     }
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setAbsorptionAmount(F)V"))
     private void avoidAbsorptionResetOnFrostburnDamage(PlayerEntity instance, float amount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
-        float totalAbsorptionBefore = instance.getAbsorptionAmount();
-        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(instance);
-        float diamondAbsorptionBefore = Math.min(component.getDiamondAbsorptionAmount(), totalAbsorptionBefore);
-        float effectAbsorptionBefore = Math.min(component.getEffectAbsorptionAmount(), totalAbsorptionBefore);
-        if (effectAbsorptionBefore <= 0.01f) {
-            original.call(instance, amount);
-            return;
-        }
-
-        float absorbedAmount = Math.max(0.0f, totalAbsorptionBefore - amount);
-        float convertedDiamondAmount = Math.min(diamondAbsorptionBefore, absorbedAmount);
-        float consumedEffectYellowAmount = Math.max(0.0f, absorbedAmount - diamondAbsorptionBefore);
-        float remainingDiamondAmount = Math.max(0.0f, diamondAbsorptionBefore - convertedDiamondAmount);
-        float remainingEffectAmount = Math.max(0.0f, effectAbsorptionBefore - consumedEffectYellowAmount);
-
-        original.call(instance, amount + convertedDiamondAmount);
-        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, remainingDiamondAmount, remainingEffectAmount);
+        float before = instance.getAbsorptionAmount();
+        original.call(instance, amount);
+        DiamondAbsorptionHelper.recordAbsorptionDamage(instance, source, before);
     }
 }

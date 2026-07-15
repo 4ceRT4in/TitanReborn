@@ -22,6 +22,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.Vec3d;
 import net.shirojr.titanfabric.access.HealthAccessor;
+import net.shirojr.titanfabric.access.EntityAccessor;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
 import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.cca.component.ExtendedInventoryComponent;
@@ -48,6 +49,25 @@ import java.util.Map;
 public abstract class LivingEntityMixin implements HealthAccessor {
     @Shadow
     public abstract boolean canHaveStatusEffect(StatusEffectInstance effect);
+
+    @WrapOperation(
+            method = "damage",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
+            )
+    )
+    private boolean titanfabric$normalFireResistanceDoesNotBlockSoulFire(
+            LivingEntity instance, RegistryEntry<StatusEffect> effect, Operation<Boolean> original
+    ) {
+        boolean hasEffect = original.call(instance, effect);
+        if (!hasEffect || !effect.equals(StatusEffects.FIRE_RESISTANCE)
+                || !((EntityAccessor) instance).titanfabric$isSoulBurning()) {
+            return hasEffect;
+        }
+        StatusEffectInstance fireResistance = instance.getStatusEffect(StatusEffects.FIRE_RESISTANCE);
+        return fireResistance != null && fireResistance.getAmplifier() > 0;
+    }
 
     @Shadow
     protected abstract void onStatusEffectUpgraded(StatusEffectInstance effect, boolean reapplyEffect, @Nullable Entity source);
@@ -284,7 +304,7 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
             cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
         } else if (stack.getItem() instanceof TitanFabricSpearItem) {
-            cir.setReturnValue(defaultCooldown + 6);
+            cir.setReturnValue(6);
         }
     }
 
@@ -374,25 +394,27 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         return 20.0F;
     }
 
-    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V"))
-    private void absorptionFrostburnBypass(LivingEntity instance, float absorptionAmount, Operation<Void> original, @Local(argsOnly = true) DamageSource source) {
-        float totalAbsorptionBefore = instance.getAbsorptionAmount();
-        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(instance);
-        float diamondAbsorptionBefore = Math.min(component.getDiamondAbsorptionAmount(), totalAbsorptionBefore);
-        float effectAbsorptionBefore = Math.min(component.getEffectAbsorptionAmount(), totalAbsorptionBefore);
-        if (effectAbsorptionBefore <= 0.01f) {
+    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getAbsorptionAmount()F", ordinal = 0))
+    private float titanfabric$excludeDiamondAbsorptionFromFrostburn(LivingEntity instance, Operation<Float> original,
+                                                                    @Local(argsOnly = true) DamageSource source) {
+        return DiamondAbsorptionHelper.getDamageableAbsorption(instance, source);
+    }
+
+    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V", ordinal = 0))
+    private void titanfabric$trackAbsorptionDamage(LivingEntity instance, float absorptionAmount, Operation<Void> original,
+                                                   @Local(argsOnly = true) DamageSource source) {
+        float before = instance.getAbsorptionAmount();
+        original.call(instance, absorptionAmount);
+        DiamondAbsorptionHelper.recordAbsorptionDamage(instance, source, before);
+    }
+
+    @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V", ordinal = 1))
+    private void titanfabric$keepDiamondAbsorptionAfterFrostburnHealthDamage(LivingEntity instance, float absorptionAmount,
+                                                                            Operation<Void> original,
+                                                                            @Local(argsOnly = true) DamageSource source) {
+        if (!DiamondAbsorptionHelper.isFrostburn(source)) {
             original.call(instance, absorptionAmount);
-            return;
         }
-
-        float absorbedAmount = Math.max(0.0f, totalAbsorptionBefore - absorptionAmount);
-        float convertedDiamondAmount = Math.min(diamondAbsorptionBefore, absorbedAmount);
-        float consumedEffectYellowAmount = Math.max(0.0f, absorbedAmount - diamondAbsorptionBefore);
-        float remainingDiamondAmount = Math.max(0.0f, diamondAbsorptionBefore - convertedDiamondAmount);
-        float remainingEffectAmount = Math.max(0.0f, effectAbsorptionBefore - consumedEffectYellowAmount);
-
-        original.call(instance, absorptionAmount + convertedDiamondAmount);
-        DiamondAbsorptionHelper.updateDiamondAbsorptionAfterDamage(instance, remainingDiamondAmount, remainingEffectAmount);
     }
 
     @Debug(export = true)

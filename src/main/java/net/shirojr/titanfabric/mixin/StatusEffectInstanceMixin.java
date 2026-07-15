@@ -9,7 +9,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.access.StatusEffectInstanceAccessor;
-import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
 import net.shirojr.titanfabric.data.BufferStatusEffectInstance;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import org.jetbrains.annotations.Nullable;
@@ -88,18 +87,9 @@ public class StatusEffectInstanceMixin implements StatusEffectInstanceAccessor {
         return this.type.value().canApplyUpdateEffect(duration, amplifier);
     }
 
-    @Inject(method = "update", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "update", at = @At("RETURN"))
     private void updateMixin(LivingEntity entity, Runnable overwriteCallback,
                              CallbackInfoReturnable<Boolean> info) {
-        if (!info.getReturnValue() && this.type.equals(TitanFabricStatusEffects.DIAMOND_ABSORPTION)) {
-            DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(entity);
-            if (component.getEffectAbsorptionAmount() > 0.01f) {
-                this.duration = 1;
-                info.setReturnValue(true);
-                return;
-            }
-        }
-
         if (this.previousStatusEffectInstance != null &&
                 !info.getReturnValue() &&
                 !this.appliedPreviousStatusEffectInstance &&

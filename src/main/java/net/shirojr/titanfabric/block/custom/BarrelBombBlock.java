@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.entity.BarrelBombEntity;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricBlocks;
 
 public class BarrelBombBlock extends Block {
     private final BarrelBombEntity.Type type;
@@ -22,6 +23,10 @@ public class BarrelBombBlock extends Block {
 
     @Override public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         super.onPlaced(world, pos, state, placer, stack);
+        if (!world.isClient && placer instanceof PlayerEntity player) {
+            player.getItemCooldownManager().set(TitanFabricBlocks.CITRIN_BARREL_BOMB.asItem(), 5 * 20);
+            player.getItemCooldownManager().set(TitanFabricBlocks.EMBER_BARREL_BOMB.asItem(), 5 * 20);
+        }
         if (!world.isClient && world.getGameRules().getBoolean(TitanFabricGamerules.SELF_IGNITING_BARREL_BOMBS)) prime(world, pos, placer);
     }
 

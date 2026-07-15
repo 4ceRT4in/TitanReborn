@@ -5,9 +5,11 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.util.Identifier;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.cca.component.DiamondAbsorptionComponent;
+import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 
 public final class DiamondAbsorptionHelper {
@@ -49,6 +51,31 @@ public final class DiamondAbsorptionHelper {
         EntityAttributeInstance attributeInstance = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_ABSORPTION);
         if (attributeInstance == null) return;
         attributeInstance.removeModifier(MAX_ABSORPTION_MODIFIER_ID);
+    }
+
+    public static boolean isFrostburn(DamageSource source) {
+        return source != null && source.isOf(TitanFabricDamageTypes.FROSTBURN.get());
+    }
+
+    /** Diamond hearts do not participate in Frostburn's absorption calculation. */
+    public static float getDamageableAbsorption(LivingEntity entity, DamageSource source) {
+        float total = entity.getAbsorptionAmount();
+        if (!isFrostburn(source)) return total;
+        float diamond = Math.min(DiamondAbsorptionComponent.get(entity).getDiamondAbsorptionAmount(), total);
+        return Math.max(0.0f, total - diamond);
+    }
+
+    /** Keeps component bookkeeping in lockstep with ordinary absorption damage. */
+    public static void recordAbsorptionDamage(LivingEntity entity, DamageSource source, float absorptionBefore) {
+        if (isFrostburn(source)) return;
+        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(entity);
+        float absorbed = Math.max(0.0f, absorptionBefore - entity.getAbsorptionAmount());
+        if (absorbed <= 0.01f) return;
+        updateDiamondAbsorptionAfterDamage(
+                entity,
+                component.getDiamondAbsorptionAmount() - absorbed,
+                component.getEffectAbsorptionAmount() - absorbed
+        );
     }
 
     public static void updateDiamondAbsorptionAfterDamage(LivingEntity entity, float remainingDiamondAbsorption, float remainingEffectAbsorption) {

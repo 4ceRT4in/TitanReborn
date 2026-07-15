@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.registry.tag.TagKey;
@@ -48,16 +49,14 @@ public class EntityMixin implements EntityAccessor {
         return titanfabric$isSoulBurning() ? 2.0F : amount;
     }
 
-    @Inject(method = "baseTick", at = @At("TAIL"))
+    @Inject(method = "baseTick", at = @At("HEAD"))
     private void baseTick(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
+        boolean touchingSoulFire = self.getWorld().getBlockState(self.getBlockPos()).isOf(Blocks.SOUL_FIRE);
+        titanfabric$setSoulBurning(touchingSoulFire);
         if (self.getWorld().isClient()) {
-            if (!self.isOnFire()) {
-                titanfabric$setSoulBurning(false);
-                handleClientSide(self);
-            }
-        } else if (self.getFireTicks() <= 0) {
-            titanfabric$setSoulBurning(false);
+            if (touchingSoulFire) TitanFabricClient.SOUL_FIRE_ENTITIES.add(self.getUuid());
+            else handleClientSide(self);
         }
     }
 

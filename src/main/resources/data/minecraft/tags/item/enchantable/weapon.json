@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    "titanfabric:multi_bow_1",
-    "titanfabric:multi_bow_2",
-    "titanfabric:multi_bow_3",
-    "titanfabric:legend_crossbow",
     "titanfabric:citrin_spear",
     "titanfabric:ember_spear",
     "titanfabric:diamond_spear",

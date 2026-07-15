@@ -46,7 +46,7 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.CITRIN_SPEAR);
         registerWeaponEffects(TitanFabricItems.EMBER_SPEAR);
         registerWeaponEffects(TitanFabricItems.DIAMOND_SPEAR);
-        registerWeaponEffects(TitanFabricItems.TITAN_SPEAR);
+        registerWeaponEffects(TitanFabricItems.LEGEND_SPEAR);
 
         registerBasicInnateItemsProvider(TitanFabricItems.ESSENCE);
         registerBasicInnateItemsProvider(TitanFabricItems.EFFECT_ARROW);

@@ -49,7 +49,8 @@ public abstract class ItemStackMixin implements FabricItemStack {
         Item item = stack.getItem();
         if (item == TitanFabricItems.LEGEND_SWORD || item == TitanFabricItems.LEGEND_GREATSWORD || item == TitanFabricItems.LEGEND_HELMET ||
                 item == TitanFabricItems.LEGEND_CHESTPLATE || item == TitanFabricItems.LEGEND_LEGGINGS || item == TitanFabricItems.LEGEND_BOOTS ||
-                item == TitanFabricItems.TITAN_CROSSBOW || item == TitanFabricItems.LEGEND_BOW || item == TitanFabricItems.LEGEND_SHIELD) {
+                item == TitanFabricItems.TITAN_CROSSBOW || item == TitanFabricItems.LEGEND_BOW || item == TitanFabricItems.LEGEND_SHIELD ||
+                item == TitanFabricItems.LEGEND_SPEAR) {
             cir.getReturnValue().removeIf(text -> text.getString().equals(Text.translatable("item.unbreakable").formatted(Formatting.BLUE).getString()));
         }
     }

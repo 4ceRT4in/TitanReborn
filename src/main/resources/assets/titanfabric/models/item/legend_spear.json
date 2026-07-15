@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": { "layer0": "titanfabric:item/wither1_legend_spear" },
+  "textures": { "layer0": "titanfabric:item/blind2_legend_spear" },
   "overrides": [
     {
       "predicate": { "effect": 0.1, "strength": 0.1 },
