@@ -10,10 +10,12 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.hit.EntityHitResult;
@@ -22,6 +24,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.item.custom.spear.SpearTier;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 
 import java.util.Locale;
@@ -82,45 +85,63 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         Entity entity = hit.getEntity();
         double damage = getDamage();
         double travelled = 0.0;
+        double effectiveTravelled = 0.0;
         int rangeBonus = 0;
+        boolean critical = false;
+        double rangeScaledDamage = damage;
         if (entity instanceof LivingEntity target) {
-            travelled = Math.min(throwStart.distanceTo(target.getPos()), tier.range());
-            rangeBonus = (int) Math.floor((travelled * tier.rangeModifier()) / THROW_DAMAGE_DIVISOR);
+            travelled = throwStart.distanceTo(hit.getPos());
+            effectiveTravelled = Math.min(travelled, tier.range());
+            rangeBonus = (int) Math.floor((effectiveTravelled * tier.rangeModifier()) / THROW_DAMAGE_DIVISOR);
             damage = tier.damage() + rangeBonus;
+            rangeScaledDamage = damage;
+            if (tier == SpearTier.DIAMOND && getRandom().nextFloat() < 0.5f) {
+                damage *= 1.2;
+                critical = true;
+            }
             setDamage(damage);
         }
         Entity owner = getOwner();
-        DamageSource source = getDamageSources().arrow(this, owner == null ? this : owner);
-        double velocity = getVelocity().length();
-        int finalDamage = MathHelper.ceil(MathHelper.clamp(velocity * damage, 0.0, Integer.MAX_VALUE));
+        DamageSource source = getDamageSources().trident(this, owner == null ? this : owner);
+        if (getWorld() instanceof ServerWorld serverWorld) {
+            damage = EnchantmentHelper.getDamage(serverWorld, activeSpearStack(), entity, source, (float) damage);
+        }
+        int finalDamage = MathHelper.ceil(MathHelper.clamp(damage, 0.0, Integer.MAX_VALUE));
         boolean damageAccepted = entity.damage(source, finalDamage);
         if (owner instanceof PlayerEntity player) {
-            sendHitDebugMessage(player, entity, travelled, rangeBonus, damage, velocity, finalDamage, damageAccepted);
+            sendHitDebugMessage(player, entity, travelled, effectiveTravelled, rangeBonus, rangeScaledDamage, damage,
+                    critical, finalDamage, damageAccepted);
         }
         if (damageAccepted && entity instanceof LivingEntity target) {
             EffectHelper.applyWeaponEffectsOnTarget(getWorld(), activeSpearStack(), target);
+            if (getWorld() instanceof ServerWorld serverWorld) {
+                EnchantmentHelper.onTargetDamaged(serverWorld, target, source, activeSpearStack());
+            }
         }
         setVelocity(getVelocity().multiply(-0.01, -0.1, -0.01));
         playSound(SoundEvents.ITEM_TRIDENT_HIT, 1.0f, 1.0f);
     }
 
     /** Sends the throw distance and the exact projectile-damage formula to the thrower. */
-    private void sendHitDebugMessage(PlayerEntity player, Entity target, double travelled, int rangeBonus,
-                                     double baseDamage, double velocity, int finalDamage, boolean damageAccepted) {
+    private void sendHitDebugMessage(PlayerEntity player, Entity target, double travelled, double effectiveTravelled,
+                                     int rangeBonus, double rangeScaledDamage, double modifiedDamage, boolean critical,
+                                     int finalDamage, boolean damageAccepted) {
         String distance = formatDecimal(travelled);
         String range = formatDecimal(tier.range());
         String modifier = formatDecimal(tier.rangeModifier());
-        String projectileDamage = formatDecimal(baseDamage);
-        String speed = formatDecimal(velocity);
+        String effectiveDistance = formatDecimal(effectiveTravelled);
+        String projectileDamage = formatDecimal(rangeScaledDamage);
+        String modifiedProjectileDamage = formatDecimal(modifiedDamage);
 
         player.sendMessage(Text.literal("[Speer] Distanz: " + distance + " / " + range + " Blöcke")
                 .formatted(Formatting.AQUA), false);
         player.sendMessage(Text.literal("[Speer] " + target.getName().getString() + ": "
-                        + tier.damage() + " Grundschaden + floor(" + distance + " * " + modifier + " / "
+                        + tier.damage() + " Grundschaden + floor(" + effectiveDistance + " * " + modifier + " / "
                         + formatDecimal(THROW_DAMAGE_DIVISOR) + ") = +" + rangeBonus + " -> " + projectileDamage)
                 .formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.literal("[Speer] ceil(" + speed + " Geschwindigkeit * " + projectileDamage
-                        + ") = " + finalDamage + " Schaden" + (damageAccepted ? "" : " (nicht angenommen)"))
+        player.sendMessage(Text.literal("[Speer] ceil(" + modifiedProjectileDamage + ")"
+                        + (critical ? " (Krit)" : "")
+                        + " = " + finalDamage + " Schaden" + (damageAccepted ? "" : " (nicht angenommen)"))
                 .formatted(damageAccepted ? Formatting.GREEN : Formatting.RED), false);
     }
 
@@ -159,7 +180,9 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
             return;
         }
         returned = true;
-        player.getItemCooldownManager().remove(activeSpearStack().getItem());
+        TitanFabricSpearItem.clearSpearCooldown(player);
+        getWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_PICKUP,
+                SoundCategory.PLAYERS, 0.2f, 0.9f + getRandom().nextFloat() * 0.2f);
         // The original stack remains in the owner's inventory throughout the throw.
         // Returning only unlocks that stack; adding another one would duplicate it.
         discard();
@@ -188,7 +211,9 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         setStack(spearStack);
         dataTracker.set(RENDER_STACK, spearStack.copy());
         if (nbt.containsUuid("SpearOwner")) ownerUuid = nbt.getUuid("SpearOwner");
-        try { tier = SpearTier.valueOf(nbt.getString("SpearTier")); } catch (IllegalArgumentException ignored) { tier = SpearTier.CITRIN; }
+        String savedTier = nbt.getString("SpearTier");
+        if ("TITAN".equals(savedTier)) savedTier = "LEGEND";
+        try { tier = SpearTier.valueOf(savedTier); } catch (IllegalArgumentException ignored) { tier = SpearTier.CITRIN; }
         throwStart = new Vec3d(nbt.getDouble("SpearStartX"), nbt.getDouble("SpearStartY"), nbt.getDouble("SpearStartZ"));
         returnTicks = nbt.getInt("SpearReturn");
         dealtDamage = nbt.getBoolean("SpearDealtDamage");

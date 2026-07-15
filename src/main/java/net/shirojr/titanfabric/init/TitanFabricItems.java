@@ -95,8 +95,8 @@ public interface TitanFabricItems {
             new LegendArmorItem(ArmorItem.Type.BOOTS, new Item.Settings(), 1.0f), LEGEND_ARMOR_ITEMS);
     //endregion
 
-    HashSet<WeaponEffectData> INNATE_POISON_COMP = new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.POISON, 1)));
-    HashSet<WeaponEffectData> INNATE_FIRE_COMP = new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.FIRE, 1)));
+    HashSet<WeaponEffectData> INNATE_POISON_COMP = new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.POISON, 2)));
+    HashSet<WeaponEffectData> INNATE_FIRE_COMP = new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.FIRE, 2)));
 
     CitrinSwordItem CITRIN_SWORD = registerEffectSword("citrin_sword",
             new CitrinSwordItem(true, TitanFabricToolMaterials.CITRIN, removeBaseDamage(6), -2.4f, SwordType.DEFAULT, new Item.Settings().component(TitanFabricDataComponents.WEAPON_EFFECTS, INNATE_POISON_COMP)));
@@ -124,7 +124,7 @@ public interface TitanFabricItems {
     TitanFabricSpearItem CITRIN_SPEAR = registerEffectSpear("citrin_spear", new TitanFabricSpearItem(SpearTier.CITRIN, new Item.Settings()));
     TitanFabricSpearItem EMBER_SPEAR = registerEffectSpear("ember_spear", new TitanFabricSpearItem(SpearTier.EMBER, new Item.Settings().fireproof()));
     TitanFabricSpearItem DIAMOND_SPEAR = registerEffectSpear("diamond_spear", new TitanFabricSpearItem(SpearTier.DIAMOND, new Item.Settings()));
-    TitanFabricSpearItem TITAN_SPEAR = registerEffectSpear("titan_spear", new TitanFabricSpearItem(SpearTier.TITAN, new Item.Settings()));
+    TitanFabricSpearItem LEGEND_SPEAR = registerEffectSpear("legend_spear", new TitanFabricSpearItem(SpearTier.LEGEND, new Item.Settings()));
     TitanFabricSpearItem NETHERITE_SPEAR = register("netherite_spear", new TitanFabricSpearItem(SpearTier.NETHERITE, new Item.Settings().fireproof()));
 
     TitanCrossBowItem TITAN_CROSSBOW = register("legend_crossbow", new TitanCrossBowItem(new Item.Settings().maxCount(1)

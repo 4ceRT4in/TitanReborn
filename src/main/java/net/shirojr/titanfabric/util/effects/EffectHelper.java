@@ -19,8 +19,10 @@ import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Helper class for TitanFabric {@linkplain WeaponEffect}
@@ -151,7 +153,7 @@ public final class EffectHelper {
     }
 
     public static boolean shouldEffectApply(Random random, int strength) {
-        return random.nextInt(100) <= (25 * strength);
+        return random.nextInt(100) < (25 * strength);
     }
 
     public static <T extends SwordItem> List<ItemStack> generateSwordsStacks(T swordItem, boolean addBaseItem) {
@@ -218,8 +220,17 @@ public final class EffectHelper {
     public static void applyWeaponEffectsOnTarget(World world, ItemStack itemStack, LivingEntity target) {
         var weaponEffects = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
         if (weaponEffects == null) return;
+        Map<WeaponEffect, Integer> combinedStrengths = new EnumMap<>(WeaponEffect.class);
         for (WeaponEffectData entry : weaponEffects) {
-            applyWeaponEffectOnTarget(entry, world, target, itemStack.getItem() instanceof ArrowItem, itemStack.getItem() instanceof ArrowItem);
+            if (entry == null || entry.weaponEffect() == null) continue;
+            combinedStrengths.merge(entry.weaponEffect(), entry.strength(), Integer::sum);
+        }
+        boolean fromArrow = itemStack.getItem() instanceof ArrowItem;
+        for (Map.Entry<WeaponEffect, Integer> entry : combinedStrengths.entrySet()) {
+            applyWeaponEffectOnTarget(
+                    new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, entry.getKey(), entry.getValue()),
+                    world, target, fromArrow, fromArrow
+            );
         }
     }
 

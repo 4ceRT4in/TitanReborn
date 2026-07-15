@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": { "layer0": "titanfabric:item/poison1_citrin_spear" },
+  "textures": { "layer0": "titanfabric:item/poison2_citrin_spear" },
   "overrides": [
     {
       "predicate": { "effect": 0.1, "strength": 0.1 },

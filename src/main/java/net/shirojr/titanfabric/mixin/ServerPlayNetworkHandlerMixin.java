@@ -4,6 +4,7 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.network.listener.ServerPlayPacketListener;
 import net.minecraft.network.listener.TickablePacketListener;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
+import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.s2c.play.InventoryS2CPacket;
 import net.minecraft.screen.slot.SlotActionType;
@@ -71,14 +72,29 @@ public abstract class ServerPlayNetworkHandlerMixin
         ci.cancel();
     }
 
+    @Inject(method = "onCreativeInventoryAction", at = @At("HEAD"), cancellable = true)
+    private void titanfabric$preventCreativeRemovalOfLockedSpear(CreativeInventoryActionC2SPacket packet, CallbackInfo ci) {
+        int slot = packet.slot();
+        boolean replacesLockedSlot = slot >= 1 && slot <= 45
+                && TitanFabricSpearItem.isThrowLocked(player, player.playerScreenHandler.getSlot(slot).getStack());
+        boolean dropsLockedSpear = slot < 0 && TitanFabricSpearItem.isThrowLocked(player, packet.stack());
+        if (!replacesLockedSlot && !dropsLockedSpear) return;
+        markInventoryDirty(player);
+        ci.cancel();
+    }
+
     @Unique
     private boolean titanfabric$triesToMoveLockedSpear(ClickSlotC2SPacket packet) {
         if (TitanFabricSpearItem.isThrowLocked(player, player.currentScreenHandler.getCursorStack())) return true;
         int slot = packet.getSlot();
         if (slot >= 0 && slot < player.currentScreenHandler.slots.size()
                 && TitanFabricSpearItem.isThrowLocked(player, player.currentScreenHandler.getSlot(slot).getStack())) return true;
-        return packet.getActionType() == SlotActionType.SWAP && packet.getButton() >= 0 && packet.getButton() < 9
-                && TitanFabricSpearItem.isThrowLocked(player, player.getInventory().getStack(packet.getButton()));
+        if (packet.getActionType() != SlotActionType.SWAP) return false;
+        int swapSlot = packet.getButton();
+        if (swapSlot >= 0 && swapSlot < 9) {
+            return TitanFabricSpearItem.isThrowLocked(player, player.getInventory().getStack(swapSlot));
+        }
+        return swapSlot == 40 && TitanFabricSpearItem.isThrowLocked(player, player.getOffHandStack());
     }
 
     @Unique

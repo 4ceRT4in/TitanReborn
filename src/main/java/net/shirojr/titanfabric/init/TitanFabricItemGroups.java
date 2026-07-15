@@ -34,6 +34,12 @@ public class TitanFabricItemGroups {
                     .build());
 
     static {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries ->
+                addPotionFamilies(entries,
+                        List.of(TitanFabricPotions.STRONG_FIRE_RESISTANCE),
+                        List.of(TitanFabricPotions.STRONG_WEAKNESS))
+        );
+
         ItemGroupEvents.modifyEntriesEvent(TITAN).register(entries -> {
             // ores/materials
             addRaw(entries,
@@ -56,7 +62,7 @@ public class TitanFabricItemGroups {
             addRaw(entries,
                     TitanFabricItems.SPEAR_POLE,
                     TitanFabricItems.CITRIN_SPEAR, TitanFabricItems.EMBER_SPEAR,
-                    TitanFabricItems.DIAMOND_SPEAR, TitanFabricItems.TITAN_SPEAR,
+                    TitanFabricItems.DIAMOND_SPEAR, TitanFabricItems.LEGEND_SPEAR,
                     TitanFabricItems.NETHERITE_SPEAR
             );
 
@@ -122,8 +128,6 @@ public class TitanFabricItemGroups {
 
             // potions
             addPotionFamilies(entries,
-                    List.of(TitanFabricPotions.STRONG_FIRE_RESISTANCE),
-                    List.of(TitanFabricPotions.STRONG_WEAKNESS),
                     List.of(TitanFabricPotions.INDESTRUCTIBLE_POTION, TitanFabricPotions.LONG_INDESTRUCTIBLE_POTION),
                     List.of(TitanFabricPotions.FROSTBURN_POTION, TitanFabricPotions.LONG_FROSTBURN_POTION, TitanFabricPotions.STRONG_FROSTBURN_POTION),
                     List.of(TitanFabricPotions.IMMUNITY_POTION, TitanFabricPotions.LONG_IMMUNITY_POTION),

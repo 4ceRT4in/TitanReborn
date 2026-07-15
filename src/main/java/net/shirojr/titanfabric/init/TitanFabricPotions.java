@@ -18,9 +18,9 @@ public class TitanFabricPotions {
             registerPotion("ember_burning", TitanFabricStatusEffects.EMBER_BURNING, 1, 0, Potions.AWKWARD, Items.BLAZE_POWDER);
     /** Separate registered variants keep brewing, splash and lingering contents identical. */
     public static RegistryEntry<Potion> STRONG_FIRE_RESISTANCE =
-            registerPotion("strong_fire_resistance", StatusEffects.FIRE_RESISTANCE, 900, 0, Potions.FIRE_RESISTANCE, Items.GLOWSTONE_DUST);
+            registerPotion("strong_fire_resistance", "fire_resistance", StatusEffects.FIRE_RESISTANCE, 900, 1, Potions.FIRE_RESISTANCE, Items.GLOWSTONE_DUST);
     public static RegistryEntry<Potion> STRONG_WEAKNESS =
-            registerPotion("strong_weakness", TitanFabricStatusEffects.STRONG_WEAKNESS, 300, 0, Potions.WEAKNESS, Items.GLOWSTONE_DUST);
+            registerPotion("strong_weakness", "weakness", StatusEffects.WEAKNESS, 300, 3, Potions.WEAKNESS, Items.GLOWSTONE_DUST);
     public static RegistryEntry<Potion> INDESTRUCTIBLE_POTION =
             registerPotion("indestructibility_potion", TitanFabricStatusEffects.INDESTRUCTIBILITY,
                     1800, 0, Potions.AWKWARD, TitanFabricBlocks.LEGEND_CRYSTAL.asItem());
@@ -55,7 +55,11 @@ public class TitanFabricPotions {
                     1800, 0, RECOVERY_POTION, Items.REDSTONE);
 
     public static RegistryEntry<Potion> registerPotion(String id, RegistryEntry<StatusEffect> effect, int duration, int amplifier, RegistryEntry<Potion> input, Item ingredient) {
-        Potion potion = Registry.register(Registries.POTION, TitanFabric.getId(id), new Potion(new StatusEffectInstance(effect, duration, amplifier)));
+        return registerPotion(id, null, effect, duration, amplifier, input, ingredient);
+    }
+
+    public static RegistryEntry<Potion> registerPotion(String id, String baseName, RegistryEntry<StatusEffect> effect, int duration, int amplifier, RegistryEntry<Potion> input, Item ingredient) {
+        Potion potion = Registry.register(Registries.POTION, TitanFabric.getId(id), new Potion(baseName, new StatusEffectInstance(effect, duration, amplifier)));
         RegistryEntry<Potion> entry = Registries.POTION.getEntry(potion);
         registerRecipes(input, ingredient, entry);
         return entry;

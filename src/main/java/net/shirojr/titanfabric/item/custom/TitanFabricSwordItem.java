@@ -72,7 +72,7 @@ public class TitanFabricSwordItem extends SwordItem implements WeaponEffectCraft
     @Override
     public WeaponEffectData getBaseEffect() {
         if (this.baseEffect == null) return null;
-        return new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, this.baseEffect, 1);
+        return new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, this.baseEffect, 2);
     }
 
     @Override

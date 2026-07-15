@@ -22,7 +22,7 @@ public class EmberSwordItem extends TitanFabricSwordItem implements VariationHol
     public EmberSwordItem(boolean hasWeaponEffects, ToolMaterial toolMaterial, int attackDamage, float attackSpeed,
                           SwordType swordType, Item.Settings settings) {
         super(hasWeaponEffects, toolMaterial, attackDamage, attackSpeed, swordType, WeaponEffect.FIRE, settings);
-        settings.component(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.FIRE, 1))));
+        settings.component(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>(Set.of(new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, WeaponEffect.FIRE, 2))));
     }
 
     @Override

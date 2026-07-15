@@ -2,6 +2,8 @@ package net.shirojr.titanfabric.item.custom.spear;
 
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.UnbreakableComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -23,6 +25,8 @@ import net.minecraft.sound.SoundEvents;
 import net.shirojr.titanfabric.entity.SpearEntity;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.entity.attribute.ExtendedEntityAttributes;
+import net.shirojr.titanfabric.init.TitanFabricDataComponents;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
@@ -31,6 +35,8 @@ import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import net.shirojr.titanfabric.util.items.ToolTipHelper;
 
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCrafting {
     public static final int MIN_THROW_CHARGE = 10;
@@ -38,8 +44,23 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     private final SpearTier tier;
 
     public TitanFabricSpearItem(SpearTier tier, Item.Settings settings) {
-        super(settings.maxCount(1).attributeModifiers(attributes(tier.material(), tier.damage())));
+        super(settings(tier, settings));
         this.tier = tier;
+    }
+
+    private static Item.Settings settings(SpearTier tier, Item.Settings settings) {
+        settings.maxCount(1)
+                .maxDamage(Math.max(1, tier.durability()))
+                .attributeModifiers(attributes(tier.material(), tier.damage()));
+        if (tier.durability() <= 0) {
+            settings.component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true));
+        }
+        if (tier.innateEffect() != null) {
+            settings.component(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>(Set.of(
+                    new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, tier.innateEffect(), 2)
+            )));
+        }
+        return settings;
     }
 
     private static AttributeModifiersComponent attributes(ToolMaterial material, int damage) {
@@ -56,12 +77,30 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     public SpearTier getTier() { return tier; }
 
     public static boolean isThrowLocked(PlayerEntity player, ItemStack stack) {
-        return stack.getItem() instanceof TitanFabricSpearItem spear
-                && player.getItemCooldownManager().isCoolingDown(spear);
+        return stack.getItem() instanceof TitanFabricSpearItem && hasSpearCooldown(player);
+    }
+
+    public static boolean hasSpearCooldown(PlayerEntity player) {
+        for (Item item : TitanFabricItems.ALL_ITEMS) {
+            if (item instanceof TitanFabricSpearItem && player.getItemCooldownManager().isCoolingDown(item)) return true;
+        }
+        return false;
+    }
+
+    public static void setSpearCooldown(PlayerEntity player, int ticks) {
+        for (Item item : TitanFabricItems.ALL_ITEMS) {
+            if (item instanceof TitanFabricSpearItem) player.getItemCooldownManager().set(item, ticks);
+        }
+    }
+
+    public static void clearSpearCooldown(PlayerEntity player) {
+        for (Item item : TitanFabricItems.ALL_ITEMS) {
+            if (item instanceof TitanFabricSpearItem) player.getItemCooldownManager().remove(item);
+        }
     }
 
     @Override public List<WeaponEffect> supportedEffects() { return tier.supportedEffects(); }
-    @Override public WeaponEffectData getBaseEffect() { return tier.innateEffect() == null ? null : new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, tier.innateEffect(), 1); }
+    @Override public WeaponEffectData getBaseEffect() { return tier.innateEffect() == null ? null : new WeaponEffectData(WeaponEffectType.INNATE_EFFECT, tier.innateEffect(), 2); }
 
     @Override
     public ItemStack getDefaultStack() {
@@ -73,6 +112,7 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
+        if (hasSpearCooldown(user) || isAboutToBreak(stack)) return TypedActionResult.fail(stack);
         user.setCurrentHand(hand);
         return TypedActionResult.consume(stack);
     }
@@ -80,14 +120,24 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (!(user instanceof PlayerEntity player) || getMaxUseTime(stack, user) - remainingUseTicks < MIN_THROW_CHARGE
-                || world.isClient || player.getItemCooldownManager().isCoolingDown(this)) return;
+                || world.isClient || hasSpearCooldown(player) || isAboutToBreak(stack)) return;
         ItemStack thrown = stack.copy();
         thrown.setCount(1);
+        stack.damage(1, player, LivingEntity.getSlotForHand(player.getActiveHand()));
         SpearEntity entity = new SpearEntity(world, player, thrown, tier);
         entity.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, 2.5f, 1.0f);
         world.spawnEntity(entity);
         world.playSoundFromEntity(null, entity, SoundEvents.ITEM_TRIDENT_THROW.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
-        player.getItemCooldownManager().set(this, tier.throwCooldown());
+        setSpearCooldown(player, tier.throwCooldown());
+    }
+
+    private static boolean isAboutToBreak(ItemStack stack) {
+        return stack.isDamageable() && stack.getDamage() >= stack.getMaxDamage() - 1;
+    }
+
+    @Override
+    public Text getName(ItemStack stack) {
+        return super.getName(stack).copy().formatted(tier.nameColor());
     }
 
     @Override
@@ -98,7 +148,6 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
 
     @Override
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
-        tooltip.add(Text.literal("Titan Reborn").formatted(Formatting.AQUA));
         if (tier.innateEffect() != null) {
             tooltip.add(Text.translatable("tooltip.titanfabric.spear.innate." + tier.innateEffect().getId()));
         } else if (tier == SpearTier.DIAMOND) {
