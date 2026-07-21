@@ -45,12 +45,13 @@ public class OverpoweredEnchantmentsHelper {
 
     /**
      * A new overpowered level must be produced from two copies of the preceding level.
-     * Existing overpowered items may still be renamed or repaired without losing the enchantment.
+     * Existing overpowered levels may be transferred in the Netherite Anvil, and existing items may
+     * still be renamed or repaired without losing the enchantment.
      */
     public static boolean isValidNetheriteAnvilCombination(ItemStack base, ItemStack sacrifice, ItemStack result) {
-        ItemEnchantmentsComponent resultEnchantments = EnchantmentHelper.getEnchantments(result);
-        ItemEnchantmentsComponent baseEnchantments = EnchantmentHelper.getEnchantments(base);
-        ItemEnchantmentsComponent sacrificeEnchantments = EnchantmentHelper.getEnchantments(sacrifice);
+        ItemEnchantmentsComponent resultEnchantments = getEffectiveEnchantments(result);
+        ItemEnchantmentsComponent baseEnchantments = getEffectiveEnchantments(base);
+        ItemEnchantmentsComponent sacrificeEnchantments = getEffectiveEnchantments(sacrifice);
 
         for (RegistryEntry<Enchantment> entry : resultEnchantments.getEnchantments()) {
             int normalMaximum = getNormalMaximum(entry);
@@ -59,13 +60,25 @@ public class OverpoweredEnchantmentsHelper {
 
             int baseLevel = baseEnchantments.getLevel(entry);
             if (baseLevel >= resultLevel) continue;
-            if (resultLevel != normalMaximum + 1
-                    || baseLevel != normalMaximum
-                    || sacrificeEnchantments.getLevel(entry) != normalMaximum) {
+            int sacrificeLevel = sacrificeEnchantments.getLevel(entry);
+            boolean transfersExistingOverpoweredEnchantment = resultLevel == normalMaximum + 1
+                    && sacrificeLevel == resultLevel;
+            boolean combinesTwoNormalMaximums = resultLevel == normalMaximum + 1
+                    && baseLevel == normalMaximum
+                    && sacrificeLevel == normalMaximum;
+            if (!transfersExistingOverpoweredEnchantment && !combinesTwoNormalMaximums) {
                 return false;
             }
         }
         return true;
+    }
+
+    private static ItemEnchantmentsComponent getEffectiveEnchantments(ItemStack stack) {
+        if (stack.getItem() instanceof EnchantedBookItem) {
+            ItemEnchantmentsComponent storedEnchantments = stack.get(DataComponentTypes.STORED_ENCHANTMENTS);
+            return storedEnchantments == null ? ItemEnchantmentsComponent.DEFAULT : storedEnchantments;
+        }
+        return EnchantmentHelper.getEnchantments(stack);
     }
 
     public static boolean isOverpowered(ItemStack stack) {
