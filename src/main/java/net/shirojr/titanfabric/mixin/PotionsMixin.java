@@ -20,6 +20,30 @@ public abstract class PotionsMixin {
             index = 1
     )
     private static Potion titanfabric$rebalancePotionDuration(Potion potion) {
+        boolean turtleMaster = potion.getEffects().stream()
+                .anyMatch(effect -> effect.getEffectType() == StatusEffects.SLOWNESS)
+                && potion.getEffects().stream()
+                .anyMatch(effect -> effect.getEffectType() == StatusEffects.RESISTANCE);
+        if (turtleMaster) {
+            StatusEffectInstance slowness = potion.getEffects().stream()
+                    .filter(effect -> effect.getEffectType() == StatusEffects.SLOWNESS)
+                    .findFirst().orElseThrow();
+            boolean strong = slowness.getAmplifier() >= 5;
+            boolean extended = !strong && slowness.getDuration() > 400;
+            for (StatusEffectInstance effect : potion.getEffects()) {
+                int duration;
+                if (effect.getEffectType() == StatusEffects.SLOWNESS) {
+                    duration = strong ? 300 : extended ? 600 : 400;
+                } else if (effect.getEffectType() == StatusEffects.RESISTANCE) {
+                    duration = strong ? 200 : extended ? 500 : 300;
+                } else {
+                    duration = effect.getDuration();
+                }
+                ((StatusEffectInstanceAccessor) effect).titanfabric$setDuration(duration);
+            }
+            return potion;
+        }
+
         for (StatusEffectInstance effect : potion.getEffects()) {
             int duration = titanfabric$duration(effect.getEffectType(), effect.getDuration(), effect.getAmplifier());
             ((StatusEffectInstanceAccessor) effect).titanfabric$setDuration(duration);
@@ -39,7 +63,7 @@ public abstract class PotionsMixin {
         }
         if (effect == StatusEffects.NIGHT_VISION || effect == StatusEffects.WATER_BREATHING || effect == StatusEffects.SLOW_FALLING
                 || effect == StatusEffects.JUMP_BOOST || effect == StatusEffects.INVISIBILITY) {
-            return vanillaDuration > 1800 ? 1800 : 900;
+            return vanillaDuration > 3600 ? 1800 : 900;
         }
         if (effect == StatusEffects.RESISTANCE && vanillaDuration <= 800) {
             return amplifier > 0 ? 200 : vanillaDuration > 400 ? 600 : 300;

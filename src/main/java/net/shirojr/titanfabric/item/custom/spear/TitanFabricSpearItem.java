@@ -51,6 +51,7 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     private static Item.Settings settings(SpearTier tier, Item.Settings settings) {
         settings.maxCount(1)
                 .maxDamage(Math.max(1, tier.durability()))
+                .component(DataComponentTypes.TOOL, TridentItem.createToolComponent())
                 .attributeModifiers(attributes(tier.material(), tier.damage()));
         if (tier.durability() <= 0) {
             settings.component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true));
@@ -65,7 +66,8 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
 
     private static AttributeModifiersComponent attributes(ToolMaterial material, int damage) {
         return AttributeModifiersComponent.builder()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(BASE_ATTACK_DAMAGE_MODIFIER_ID, damage + material.getAttackDamage(), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND)
+                // Attribute tooltips include the player's intrinsic one attack-damage point.
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, new EntityAttributeModifier(BASE_ATTACK_DAMAGE_MODIFIER_ID, damage - 1.0 + material.getAttackDamage(), EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, new EntityAttributeModifier(BASE_ATTACK_SPEED_MODIFIER_ID, -3.2, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND)
                 .add(ExtendedEntityAttributes.GENERIC_CRIT_MODIFIER, new EntityAttributeModifier(BASE_CRIT_MODIFIER_ID, 1.2, EntityAttributeModifier.Operation.ADD_VALUE), AttributeModifierSlot.MAINHAND)
                 .build();
@@ -155,10 +157,11 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
         }
         ToolTipHelper.appendSwordToolTip(tooltip, stack);
         tooltip.add(Text.empty());
-        tooltip.add(Text.translatable("tooltip.titanfabric.spear.cooldown", tier.throwCooldown() / 20).formatted(Formatting.GRAY));
+        tooltip.add(Text.translatable(
+                "tooltip.titanfabric.spear.cooldown",
+                Text.literal(Integer.toString(tier.throwCooldown() / 20)).formatted(Formatting.WHITE)
+        ).formatted(Formatting.GRAY));
         tooltip.add(Text.empty());
         super.appendTooltip(stack, context, tooltip, type);
-        tooltip.add(Text.translatable("tooltip.titanfabric.spear.range_modifier", String.format(java.util.Locale.ROOT, "%.2f", tier.rangeModifier())).formatted(Formatting.DARK_GREEN));
-        tooltip.add(Text.translatable("tooltip.titanfabric.spear.effective_range", tier.range()).formatted(Formatting.DARK_GREEN));
     }
 }

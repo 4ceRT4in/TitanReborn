@@ -10,6 +10,8 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.util.items.EnchantmentRestrictionHelper;
 import net.shirojr.titanfabric.util.items.FireEnchantmentBanHelper;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
+import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -61,6 +63,12 @@ public class EnchantmentScreenHandlerMixin {
             filteredEntries = FireEnchantmentBanHelper.filterFireEnchantments(filteredEntries);
         }
 
+        filteredEntries = filteredEntries.stream()
+                .filter(entry -> !(stack.getItem() instanceof TitanFabricSpearItem)
+                        || !entry.enchantment.matchesKey(Enchantments.FIRE_ASPECT))
+                .map(EnchantmentScreenHandlerMixin::titanfabric$capTableOnlyLevel)
+                .toList();
+
         cir.setReturnValue(filteredEntries);
     }
 
@@ -77,7 +85,8 @@ public class EnchantmentScreenHandlerMixin {
 
         ItemStack itemStack = changedInventory.getStack(0);
         boolean hasFiltering = EnchantmentRestrictionHelper.shouldBanUnbreakingFromEnchantingTable(itemStack)
-                || FireEnchantmentBanHelper.shouldRestrictGeneration(titanfabric$getContextWorld(), itemStack);
+                || FireEnchantmentBanHelper.shouldRestrictGeneration(titanfabric$getContextWorld(), itemStack)
+                || itemStack.getItem() instanceof TitanFabricSpearItem;
         if (!hasFiltering) return;
 
         for (int i = 0; i < this.enchantmentPower.length; i++) {
@@ -87,5 +96,11 @@ public class EnchantmentScreenHandlerMixin {
             this.enchantmentPower[i] = 0;
             this.enchantmentLevel[i] = -1;
         }
+    }
+
+    @Unique
+    private static EnchantmentLevelEntry titanfabric$capTableOnlyLevel(EnchantmentLevelEntry entry) {
+        int maximum = OverpoweredEnchantmentsHelper.getNormalMaximum(entry.enchantment);
+        return entry.level <= maximum ? entry : new EnchantmentLevelEntry(entry.enchantment, maximum);
     }
 }

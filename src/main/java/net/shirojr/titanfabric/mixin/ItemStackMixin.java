@@ -27,6 +27,7 @@ import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
@@ -65,6 +67,17 @@ public abstract class ItemStackMixin implements FabricItemStack {
                     AttributeModifiersComponent.DECIMAL_FORMAT.format(d),
                     Text.translatable(attribute.value().getTranslationKey())
             ).formatted(Formatting.DARK_GREEN)));
+            ItemStack stack = (ItemStack) (Object) this;
+            if (stack.getItem() instanceof TitanFabricSpearItem spear) {
+                textConsumer.accept(ScreenTexts.space().append(Text.translatable(
+                        "tooltip.titanfabric.spear.range_modifier",
+                        String.format(Locale.ROOT, "%.2f", spear.getTier().rangeModifier())
+                ).formatted(Formatting.DARK_GREEN)));
+                textConsumer.accept(ScreenTexts.space().append(Text.translatable(
+                        "tooltip.titanfabric.spear.effective_range",
+                        spear.getTier().range()
+                ).formatted(Formatting.DARK_GREEN)));
+            }
             ci.cancel();
         }
     }

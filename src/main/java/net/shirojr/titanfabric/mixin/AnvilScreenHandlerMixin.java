@@ -91,6 +91,13 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
             this.sendContentUpdates();
             return;
         }
+        if (isNetherite && !result.isEmpty() && OverpoweredEnchantmentsHelper.isOverpowered(result)
+                && !OverpoweredEnchantmentsHelper.isValidNetheriteAnvilCombination(baseInput, sacrificeInput, result)) {
+            this.output.setStack(0, ItemStack.EMPTY);
+            this.levelCost.set(0);
+            this.sendContentUpdates();
+            return;
+        }
         if (!isNetherite) {
             if (!result.isEmpty() && EnchantmentHelper.canHaveEnchantments(result)) {
                 if (OverpoweredEnchantmentsHelper.isOverpowered(result)) {

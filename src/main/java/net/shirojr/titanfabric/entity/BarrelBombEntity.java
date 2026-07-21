@@ -8,12 +8,13 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.EntityEffectParticleEffect;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricEntities;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
-import net.shirojr.titanfabric.init.TitanFabricPotions;
-import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 
 /** Shared fuse and non-griefing explosion implementation for both barrel variants. */
 public class BarrelBombEntity extends TntEntity {
@@ -33,6 +34,12 @@ public class BarrelBombEntity extends TntEntity {
 
     @Override public void tick() {
         if (getWorld().isClient) return;
+        if (getWorld() instanceof ServerWorld serverWorld) {
+            serverWorld.spawnParticles(
+                    particle(type), getX(), getY() + 0.5, getZ(),
+                    3, 0.25, 0.35, 0.25, 0.02
+            );
+        }
         setFuse(getFuse() - 1);
         if (getFuse() <= 0) explode();
     }
@@ -45,12 +52,15 @@ public class BarrelBombEntity extends TntEntity {
             cloud.setPotionContents(new PotionContentsComponent(net.minecraft.potion.Potions.POISON));
             cloud.addEffect(new StatusEffectInstance(StatusEffects.POISON, 200, 0));
         } else {
-            cloud.setPotionContents(new PotionContentsComponent(TitanFabricPotions.EMBER_BURNING));
-            cloud.addEffect(new StatusEffectInstance(TitanFabricStatusEffects.EMBER_BURNING, 1, 0));
-            cloud.setDurationOnUse(0);
+            cloud.setParticleType(particle(type));
         }
         getWorld().spawnEntity(cloud);
         discard();
+    }
+
+    private static ParticleEffect particle(Type type) {
+        int color = type == Type.CITRIN ? 0xFF4E9331 : 0xFFFF5A19;
+        return EntityEffectParticleEffect.create(ParticleTypes.ENTITY_EFFECT, color);
     }
 
     @Override

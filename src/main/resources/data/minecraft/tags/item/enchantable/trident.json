@@ -1,10 +1,4 @@
 {
   "replace": false,
-  "values": [
-    "titanfabric:citrin_spear",
-    "titanfabric:ember_spear",
-    "titanfabric:diamond_spear",
-    "titanfabric:legend_spear",
-    "titanfabric:netherite_spear"
-  ]
+  "values": []
 }

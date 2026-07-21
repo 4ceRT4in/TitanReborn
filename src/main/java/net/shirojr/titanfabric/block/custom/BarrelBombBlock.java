@@ -50,10 +50,5 @@ public class BarrelBombBlock extends Block {
         world.spawnEntity(bomb);
         world.removeBlock(pos, false);
         world.playSound(null, pos, SoundEvents.ENTITY_CREEPER_PRIMED, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        if (type == BarrelBombEntity.Type.CITRIN) {
-            world.addParticle(net.minecraft.particle.ParticleTypes.HAPPY_VILLAGER, pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, 0, .1, 0);
-        } else {
-            world.addParticle(net.minecraft.particle.ParticleTypes.FLAME, pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5, 0, .1, 0);
-        }
     }
 }

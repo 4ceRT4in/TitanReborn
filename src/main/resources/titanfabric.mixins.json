@@ -26,6 +26,7 @@
     "EnchantWithLevelsLootFunctionMixin",
     "EntityMixin",
     "FireworkRocketItemMixin",
+    "GrindstoneInputSlotMixin",
     "GrindstoneResultSlotMixin",
     "GrindstoneScreenHandlerMixin",
     "HungerManagerMixin",
@@ -44,6 +45,7 @@
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
     "ShieldItemMixin",
+    "SmithingTransformRecipeMixin",
     "SnowballEntityMixin",
     "SoulFireBlockMixin",
     "SplashPotionItemMixin",
@@ -74,6 +76,7 @@
     "client.InventoryScreenMixin",
     "client.ItemRendererMixin",
     "client.PlayerEntityRendererMixin",
-    "client.PlayerHeldItemFeatureRendererMixin"
+    "client.PlayerHeldItemFeatureRendererMixin",
+    "client.StatusEffectSpriteManagerMixin"
   ]
 }

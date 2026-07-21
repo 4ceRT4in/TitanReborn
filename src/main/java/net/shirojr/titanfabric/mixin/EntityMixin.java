@@ -53,9 +53,13 @@ public class EntityMixin implements EntityAccessor {
     private void baseTick(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
         boolean touchingSoulFire = self.getWorld().getBlockState(self.getBlockPos()).isOf(Blocks.SOUL_FIRE);
-        titanfabric$setSoulBurning(touchingSoulFire);
+        if (touchingSoulFire) {
+            titanfabric$setSoulBurning(true);
+        } else if (!self.isOnFire()) {
+            titanfabric$setSoulBurning(false);
+        }
         if (self.getWorld().isClient()) {
-            if (touchingSoulFire) TitanFabricClient.SOUL_FIRE_ENTITIES.add(self.getUuid());
+            if (titanfabric$isSoulBurning()) TitanFabricClient.SOUL_FIRE_ENTITIES.add(self.getUuid());
             else handleClientSide(self);
         }
     }

@@ -304,7 +304,7 @@ public abstract class LivingEntityMixin implements HealthAccessor {
         if (stack.getItem() instanceof TitanFabricSwordItem titanFabricSwordItem) {
             cir.setReturnValue(defaultCooldown + titanFabricSwordItem.getCooldownTicks());
         } else if (stack.getItem() instanceof TitanFabricSpearItem) {
-            cir.setReturnValue(6);
+            cir.setReturnValue(defaultCooldown + 6);
         }
     }
 
@@ -404,17 +404,20 @@ public abstract class LivingEntityMixin implements HealthAccessor {
     private void titanfabric$trackAbsorptionDamage(LivingEntity instance, float absorptionAmount, Operation<Void> original,
                                                    @Local(argsOnly = true) DamageSource source) {
         float before = instance.getAbsorptionAmount();
-        original.call(instance, absorptionAmount);
-        DiamondAbsorptionHelper.recordAbsorptionDamage(instance, source, before);
+        float convertedAmount = DiamondAbsorptionHelper.preserveConvertedDiamondAbsorption(
+                instance, source, before, absorptionAmount
+        );
+        original.call(instance, convertedAmount);
+        DiamondAbsorptionHelper.recordAbsorptionDamage(instance, source, before, absorptionAmount);
     }
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V", ordinal = 1))
-    private void titanfabric$keepDiamondAbsorptionAfterFrostburnHealthDamage(LivingEntity instance, float absorptionAmount,
-                                                                            Operation<Void> original,
-                                                                            @Local(argsOnly = true) DamageSource source) {
-        if (!DiamondAbsorptionHelper.isFrostburn(source)) {
-            original.call(instance, absorptionAmount);
-        }
+    private void titanfabric$keepDiamondAbsorptionAfterHealthDamage(LivingEntity instance, float absorptionAmount,
+                                                                    Operation<Void> original,
+                                                                    @Local(argsOnly = true) DamageSource source) {
+        boolean trackedDiamondAbsorption = DiamondAbsorptionComponent.get(instance).getEffectAbsorptionAmount() > 0.01f;
+        if (DiamondAbsorptionHelper.isFrostburn(source) || trackedDiamondAbsorption) return;
+        original.call(instance, absorptionAmount);
     }
 
     @Debug(export = true)

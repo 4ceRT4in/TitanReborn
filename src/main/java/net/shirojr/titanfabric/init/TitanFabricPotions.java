@@ -14,8 +14,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
 
 public class TitanFabricPotions {
-    public static RegistryEntry<Potion> EMBER_BURNING =
-            registerPotion("ember_burning", TitanFabricStatusEffects.EMBER_BURNING, 1, 0, Potions.AWKWARD, Items.BLAZE_POWDER);
     /** Separate registered variants keep brewing, splash and lingering contents identical. */
     public static RegistryEntry<Potion> STRONG_FIRE_RESISTANCE =
             registerPotion("strong_fire_resistance", "fire_resistance", StatusEffects.FIRE_RESISTANCE, 900, 1, Potions.FIRE_RESISTANCE, Items.GLOWSTONE_DUST);

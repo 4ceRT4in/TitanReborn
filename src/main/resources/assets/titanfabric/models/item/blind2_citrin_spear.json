@@ -1,4 +1,4 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "titanfabric:item/spear_handheld",
   "textures": { "layer0": "titanfabric:item/blind2_citrin_spear" }
 }

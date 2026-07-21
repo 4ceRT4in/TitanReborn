@@ -12,8 +12,11 @@ import net.minecraft.loot.function.EnchantRandomlyLootFunction;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.random.Random;
 import net.shirojr.titanfabric.util.items.FireEnchantmentBanHelper;
+import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +26,13 @@ public abstract class EnchantRandomlyLootFunctionMixin extends ConditionalLootFu
 
     protected EnchantRandomlyLootFunctionMixin(List<LootCondition> conditions) {
         super(conditions);
+    }
+
+    @Inject(method = "process", at = @At("RETURN"))
+    private void titanfabric$capGeneratedLevels(
+            ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir
+    ) {
+        OverpoweredEnchantmentsHelper.capGeneratedLevels(cir.getReturnValue());
     }
 
     @WrapOperation(

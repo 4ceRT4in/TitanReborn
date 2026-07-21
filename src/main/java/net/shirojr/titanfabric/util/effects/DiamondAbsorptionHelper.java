@@ -65,16 +65,42 @@ public final class DiamondAbsorptionHelper {
         return Math.max(0.0f, total - diamond);
     }
 
-    /** Keeps component bookkeeping in lockstep with ordinary absorption damage. */
-    public static void recordAbsorptionDamage(LivingEntity entity, DamageSource source, float absorptionBefore) {
+    /**
+     * Damage converts blue Diamond Absorption hearts into ordinary yellow absorption hearts.
+     * Therefore the total absorption stays unchanged for the part of a hit covered by blue hearts.
+     */
+    public static float preserveConvertedDiamondAbsorption(
+            LivingEntity entity, DamageSource source, float absorptionBefore, float requestedAmount
+    ) {
+        if (isFrostburn(source)) return requestedAmount;
+        DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(entity);
+        float effectBefore = Math.min(component.getEffectAbsorptionAmount(), absorptionBefore);
+        if (effectBefore <= 0.01f) return requestedAmount;
+
+        float absorbed = Math.max(0.0f, absorptionBefore - requestedAmount);
+        float diamondBefore = Math.min(component.getDiamondAbsorptionAmount(), absorptionBefore);
+        float converted = Math.min(diamondBefore, absorbed);
+        return Math.min(absorptionBefore, requestedAmount + converted);
+    }
+
+    /** Keeps component bookkeeping in lockstep with the original, pre-conversion damage amount. */
+    public static void recordAbsorptionDamage(
+            LivingEntity entity, DamageSource source, float absorptionBefore, float requestedAmount
+    ) {
         if (isFrostburn(source)) return;
         DiamondAbsorptionComponent component = DiamondAbsorptionComponent.get(entity);
-        float absorbed = Math.max(0.0f, absorptionBefore - entity.getAbsorptionAmount());
+        float effectBefore = Math.min(component.getEffectAbsorptionAmount(), absorptionBefore);
+        if (effectBefore <= 0.01f) return;
+
+        float absorbed = Math.max(0.0f, absorptionBefore - requestedAmount);
         if (absorbed <= 0.01f) return;
+        float diamondBefore = Math.min(component.getDiamondAbsorptionAmount(), absorptionBefore);
+        float converted = Math.min(diamondBefore, absorbed);
+        float consumedYellowEffect = Math.max(0.0f, absorbed - diamondBefore);
         updateDiamondAbsorptionAfterDamage(
                 entity,
-                component.getDiamondAbsorptionAmount() - absorbed,
-                component.getEffectAbsorptionAmount() - absorbed
+                diamondBefore - converted,
+                effectBefore - consumedYellowEffect
         );
     }
 

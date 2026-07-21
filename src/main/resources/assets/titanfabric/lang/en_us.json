@@ -170,9 +170,9 @@
   "tooltip.titanfabric.1Wither": "§8+25% Wither Chance",
   "tooltip.titanfabric.2Wither": "§8+50% Wither Chance",
 
-  "tooltip.titanfabric.emberSword": "§625% Fire Chance",
-  "tooltip.titanfabric.citrinSword": "§a25% Poison Chance",
-  "tooltip.titanfabric.diamond_sword": "§b25% Crit Chance",
+  "tooltip.titanfabric.emberSword": "§650% Fire Chance",
+  "tooltip.titanfabric.citrinSword": "§a50% Poison Chance",
+  "tooltip.titanfabric.diamond_sword": "§b50% Crit Chance",
 
   "tooltip.titanfabric.legend_bow_arrow": "%s Arrow",
 
@@ -275,12 +275,12 @@
   "item.titanfabric.legend_spear": "§e§kl §r§3Titan Spear §r§e§kl",
   "item.titanfabric.netherite_spear": "Netherite Spear",
   "item.titanfabric.spear_pole": "Spear Pole",
-  "block.titanfabric.citrin_barrel_bomb": "Citrin Barrel Bomb",
-  "block.titanfabric.ember_barrel_bomb": "Ember Barrel Bomb",
+  "block.titanfabric.citrin_barrel_bomb": "§eCitrin Barrel Bomb",
+  "block.titanfabric.ember_barrel_bomb": "§cEmber Barrel Bomb",
   "effect.titanfabric.strong_weakness": "Strong Weakness",
   "tooltip.titanfabric.spear.innate.poison": "§a50% Poison Chance",
   "tooltip.titanfabric.spear.innate.fire": "§650% Fire Chance",
-  "tooltip.titanfabric.spear.innate.crit": "§b50% Critical Chance",
+  "tooltip.titanfabric.spear.innate.crit": "§b50% Crit Chance",
   "tooltip.titanfabric.spear.cooldown": "Cooldown: %s Seconds",
   "tooltip.titanfabric.spear.range_modifier": "%s Range Modifier",
   "tooltip.titanfabric.spear.effective_range": "%s Effective Range"

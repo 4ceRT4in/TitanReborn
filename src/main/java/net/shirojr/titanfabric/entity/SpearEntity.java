@@ -16,8 +16,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -27,7 +25,6 @@ import net.shirojr.titanfabric.item.custom.spear.SpearTier;
 import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 
-import java.util.Locale;
 import java.util.UUID;
 
 /** Visual projectile for a spear that stays safely locked in its owner's inventory. */
@@ -84,20 +81,13 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         dealtDamage = true;
         Entity entity = hit.getEntity();
         double damage = getDamage();
-        double travelled = 0.0;
-        double effectiveTravelled = 0.0;
-        int rangeBonus = 0;
-        boolean critical = false;
-        double rangeScaledDamage = damage;
         if (entity instanceof LivingEntity target) {
-            travelled = throwStart.distanceTo(hit.getPos());
-            effectiveTravelled = Math.min(travelled, tier.range());
-            rangeBonus = (int) Math.floor((effectiveTravelled * tier.rangeModifier()) / THROW_DAMAGE_DIVISOR);
+            double travelled = throwStart.distanceTo(hit.getPos());
+            double effectiveTravelled = Math.min(travelled, tier.range());
+            int rangeBonus = (int) Math.floor((effectiveTravelled * tier.rangeModifier()) / THROW_DAMAGE_DIVISOR);
             damage = tier.damage() + rangeBonus;
-            rangeScaledDamage = damage;
             if (tier == SpearTier.DIAMOND && getRandom().nextFloat() < 0.5f) {
                 damage *= 1.2;
-                critical = true;
             }
             setDamage(damage);
         }
@@ -108,10 +98,6 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         }
         int finalDamage = MathHelper.ceil(MathHelper.clamp(damage, 0.0, Integer.MAX_VALUE));
         boolean damageAccepted = entity.damage(source, finalDamage);
-        if (owner instanceof PlayerEntity player) {
-            sendHitDebugMessage(player, entity, travelled, effectiveTravelled, rangeBonus, rangeScaledDamage, damage,
-                    critical, finalDamage, damageAccepted);
-        }
         if (damageAccepted && entity instanceof LivingEntity target) {
             EffectHelper.applyWeaponEffectsOnTarget(getWorld(), activeSpearStack(), target);
             if (getWorld() instanceof ServerWorld serverWorld) {
@@ -120,33 +106,6 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         }
         setVelocity(getVelocity().multiply(-0.01, -0.1, -0.01));
         playSound(SoundEvents.ITEM_TRIDENT_HIT, 1.0f, 1.0f);
-    }
-
-    /** Sends the throw distance and the exact projectile-damage formula to the thrower. */
-    private void sendHitDebugMessage(PlayerEntity player, Entity target, double travelled, double effectiveTravelled,
-                                     int rangeBonus, double rangeScaledDamage, double modifiedDamage, boolean critical,
-                                     int finalDamage, boolean damageAccepted) {
-        String distance = formatDecimal(travelled);
-        String range = formatDecimal(tier.range());
-        String modifier = formatDecimal(tier.rangeModifier());
-        String effectiveDistance = formatDecimal(effectiveTravelled);
-        String projectileDamage = formatDecimal(rangeScaledDamage);
-        String modifiedProjectileDamage = formatDecimal(modifiedDamage);
-
-        player.sendMessage(Text.literal("[Speer] Distanz: " + distance + " / " + range + " Blöcke")
-                .formatted(Formatting.AQUA), false);
-        player.sendMessage(Text.literal("[Speer] " + target.getName().getString() + ": "
-                        + tier.damage() + " Grundschaden + floor(" + effectiveDistance + " * " + modifier + " / "
-                        + formatDecimal(THROW_DAMAGE_DIVISOR) + ") = +" + rangeBonus + " -> " + projectileDamage)
-                .formatted(Formatting.YELLOW), false);
-        player.sendMessage(Text.literal("[Speer] ceil(" + modifiedProjectileDamage + ")"
-                        + (critical ? " (Krit)" : "")
-                        + " = " + finalDamage + " Schaden" + (damageAccepted ? "" : " (nicht angenommen)"))
-                .formatted(damageAccepted ? Formatting.GREEN : Formatting.RED), false);
-    }
-
-    private static String formatDecimal(double value) {
-        return String.format(Locale.ROOT, "%.2f", value);
     }
 
     @Override

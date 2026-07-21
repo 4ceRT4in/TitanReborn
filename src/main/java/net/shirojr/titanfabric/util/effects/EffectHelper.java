@@ -65,19 +65,24 @@ public final class EffectHelper {
         if (!(itemStack.getItem() instanceof WeaponEffectCrafting weaponEffectHandler)) {
             return itemStack;
         }
-        HashSet<WeaponEffectData> validEffects = new HashSet<>(effectDataList);
+        HashSet<WeaponEffectData> candidates = new HashSet<>(effectDataList);
         if (!overwrite) {
             HashSet<WeaponEffectData> originalEffects = itemStack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
             if (originalEffects != null) {
-                validEffects.addAll(originalEffects);
+                candidates.addAll(originalEffects);
             }
         }
-        for (WeaponEffectData entry : effectDataList) {
+        HashSet<WeaponEffectData> validEffects = new HashSet<>();
+        for (WeaponEffectData entry : candidates) {
             if (entry == null || entry.weaponEffect() == null) continue;
             if (!weaponEffectHandler.supportedEffects().contains(entry.weaponEffect())) continue;
             validEffects.add(entry);
         }
-        itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, validEffects);
+        if (validEffects.isEmpty()) {
+            itemStack.remove(TitanFabricDataComponents.WEAPON_EFFECTS);
+        } else {
+            itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, validEffects);
+        }
         return itemStack;
     }
 
@@ -104,12 +109,16 @@ public final class EffectHelper {
                         .filter(entry -> entry.type().equals(WeaponEffectType.INNATE_EFFECT))
                         .toList()
         );
-        itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, filteredEffects);
+        if (filteredEffects.isEmpty()) {
+            itemStack.remove(TitanFabricDataComponents.WEAPON_EFFECTS);
+        } else {
+            itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, filteredEffects);
+        }
     }
 
     public static void removeEffectsFromStack(ItemStack itemStack) {
         if (!itemStack.contains(TitanFabricDataComponents.WEAPON_EFFECTS)) return;
-        itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>());
+        itemStack.remove(TitanFabricDataComponents.WEAPON_EFFECTS);
     }
 
     @Nullable

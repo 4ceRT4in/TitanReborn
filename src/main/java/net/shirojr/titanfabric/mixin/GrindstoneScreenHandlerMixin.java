@@ -1,7 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.GrindstoneScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -63,7 +62,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
             return out;
         }
 
-        if (inputStack.isIn(ItemTags.SWORDS) && EffectHelper.hasAdditionalWeaponEffects(inputStack)) {
+        if (EffectHelper.hasAdditionalWeaponEffects(inputStack)) {
             ItemStack out = inputStack.copy();
             EffectHelper.removeAdditionalEffectsFromStack(out);
             return out;

@@ -10,7 +10,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.effect.DiamondAbsorptionStatusEffect;
-import net.shirojr.titanfabric.effect.EmberBurningStatusEffect;
 import net.shirojr.titanfabric.effect.FrostburnStatusEffect;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.effect.IndestructibileStatusEffect;
@@ -19,9 +18,6 @@ import net.shirojr.titanfabric.effect.SafeFallingStatusEffect;
 import net.shirojr.titanfabric.util.effects.RecoveryProfile;
 
 public interface TitanFabricStatusEffects {
-    RegistryEntry<StatusEffect> EMBER_BURNING = registerStatusEffect(
-            "ember_burning", new EmberBurningStatusEffect()
-    );
     RegistryEntry<StatusEffect> INDESTRUCTIBILITY = registerStatusEffect(
             "indestructibility",
             new IndestructibileStatusEffect(StatusEffectCategory.BENEFICIAL, 0x8379E0)
