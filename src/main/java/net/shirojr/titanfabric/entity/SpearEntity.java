@@ -29,7 +29,7 @@ import java.util.UUID;
 
 /** Visual projectile for a spear that stays safely locked in its owner's inventory. */
 public class SpearEntity extends PersistentProjectileEntity implements FlyingItemEntity {
-    private static final double THROW_DAMAGE_DIVISOR = 5.0;
+    private static final double THROW_DAMAGE_DIVISOR = 4.0;
     /** Separate tracked stack used by the item renderer on the client. */
     private static final TrackedData<ItemStack> RENDER_STACK =
             DataTracker.registerData(SpearEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
