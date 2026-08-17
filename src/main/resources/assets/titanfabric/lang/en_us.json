@@ -154,7 +154,6 @@
   "tooltip.titanfabric.legend_armor_plating_equipped": "§3+2.5% Titan Weapon Protection",
   "tooltip.titanfabric.netherite_armor_plating_equipped": "§8+2.5% Netherite Weapon Protection",
 
-  "tooltip.titanfabric.netherite_shield": "§7Applies Knockback when blocking Enemy Attacks",
 
   "tooltip.titanfabric.attribute.critModifier": "Crit Modifier",
   "tooltip.titanfabric.attribute.shieldCooldown": "§7Cooldown: §f%s §7Seconds",
@@ -184,11 +183,11 @@
   "tooltip.titanfabric.enchanted_diamond_apple.uses": "Remaining Uses: %s",
 
   "tooltip.titanfabric.legendArmorHealth": "+%s Max Health",
-  "tooltip.titanfabric.blindnessEssenceItem": "Applies §1+25% Blindness Chance §ron Swords",
-  "tooltip.titanfabric.fireEssenceItem": "Applies §6+25% Fire Chance §ron Swords",
-  "tooltip.titanfabric.poisonEssenceItem": "Applies §a+25% Poison Chance §ron Swords",
-  "tooltip.titanfabric.weaknessEssenceItem": "Applies §7+25% Weakness Chance §ron Swords",
-  "tooltip.titanfabric.witherEssenceItem": "Applies §8+25% Wither Chance §ron Swords",
+  "tooltip.titanfabric.blindnessEssenceItem": "Applies §1+25% Blindness Chance §ron Weapons",
+  "tooltip.titanfabric.fireEssenceItem": "Applies §6+25% Fire Chance §ron Weapons",
+  "tooltip.titanfabric.poisonEssenceItem": "Applies §a+25% Poison Chance §ron Weapons",
+  "tooltip.titanfabric.weaknessEssenceItem": "Applies §7+25% Weakness Chance §ron Weapons",
+  "tooltip.titanfabric.witherEssenceItem": "Applies §8+25% Wither Chance §ron Weapons",
 
   "tooltip.titanfabric.blindnessArrowEffect": "Applies §1Blindness II §rfor 5 Seconds",
   "tooltip.titanfabric.poisonArrowEffect": "Applies §aPoison II §rfor 5 Seconds",
@@ -239,7 +238,7 @@
 
   "container.titanfabric.diamond_furnace": "§bDiamond Furnace",
 
-  "itemGroup.titanfabric.titan": "§bTitan Reborn",
+  "itemGroup.titanfabric.titan": "§e§kl §r§3Titan Reborn §e§kl",
   "keys.titanfabric.misc": "Titan Reborn",
   "key.titanfabric.arrow.selection": "Change Arrow Selection For Bows",
 
