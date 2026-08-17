@@ -69,9 +69,9 @@ public class EnchantedDiamondAppleItem extends DiamondAppleItem {
 
     private static int getDurationForUse(int useIndex) {
         return switch (useIndex) {
-            case 0 -> 1800;
-            case 1 -> 1200;
-            default -> 600;
+            case 0 -> 4800;
+            case 1 -> 6000;
+            default -> 7200;
         };
     }
 }
