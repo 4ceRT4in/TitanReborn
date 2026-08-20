@@ -17,7 +17,7 @@ public interface TitanFabricGamerules {
     GameRules.Key<GameRules.BooleanRule> LEGACY_FOOD_REGENERATION = registerBooleanGamerule("TitanFabric.LegacyFoodRegeneration", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> DISABLE_ELYTRA_BOOSTING = registerBooleanGamerule("TitanFabric.DisableElytraBoosting", GameRules.Category.PLAYER, true);
     GameRules.Key<GameRules.BooleanRule> GREATSWORD_COOLDOWN = registerBooleanGamerule("TitanFabric.GreatSwordCooldown", GameRules.Category.PLAYER, true);
-    GameRules.Key<GameRules.BooleanRule> SELF_IGNITING_BARREL_BOMBS = registerBooleanGamerule("titanfabric.SelfIgnitingBarrelBombs", GameRules.Category.MISC, true);
+    GameRules.Key<GameRules.BooleanRule> SELF_IGNITING_BARREL_BOMBS = registerBooleanGamerule("TitanFabric.SelfIgnitingBarrelBombs", GameRules.Category.MISC, true);
     GameRules.Key<GameRules.BooleanRule> ARMOR_HUD_OVERLAY = registerBooleanGamerule(
             "TitanFabric.ArmorHudOverlay",
             GameRules.Category.PLAYER,
