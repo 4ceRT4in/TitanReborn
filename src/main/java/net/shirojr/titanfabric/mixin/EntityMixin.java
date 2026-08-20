@@ -1,8 +1,6 @@
 package net.shirojr.titanfabric.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
@@ -10,7 +8,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabricClient;
+import net.shirojr.titanfabric.SoulFireEntityTracker;
 import net.shirojr.titanfabric.access.EntityAccessor;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -59,15 +57,18 @@ public class EntityMixin implements EntityAccessor {
             titanfabric$setSoulBurning(false);
         }
         if (self.getWorld().isClient()) {
-            if (titanfabric$isSoulBurning()) TitanFabricClient.SOUL_FIRE_ENTITIES.add(self.getUuid());
+            if (titanfabric$isSoulBurning()) SoulFireEntityTracker.SOUL_FIRE_ENTITIES.add(self.getUuid());
             else handleClientSide(self);
         }
     }
 
     @ModifyExpressionValue(method = "doesRenderOnFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isOnFire()Z"))
     private boolean isOnFire(boolean original) {
-        if (!((Entity) (Object) this instanceof LivingEntity livingEntity)) return original;
-        return original && ArmorHelper.getEmberArmorCount(livingEntity) < 4;
+        Entity self = (Entity) (Object) this;
+        boolean soulFire = titanfabric$isSoulBurning()
+                || (self.getWorld().isClient() && SoulFireEntityTracker.SOUL_FIRE_ENTITIES.contains(self.getUuid()));
+        if (!(self instanceof LivingEntity livingEntity)) return original || soulFire;
+        return (original || soulFire) && ArmorHelper.getEmberArmorCount(livingEntity) < 4;
     }
 
     @Inject(method = "updateMovementInFluid", at = @At("HEAD"))
@@ -82,8 +83,7 @@ public class EntityMixin implements EntityAccessor {
     }
 
     @Unique
-    @Environment(EnvType.CLIENT)
     private void handleClientSide(Entity entity) {
-        TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
+        SoulFireEntityTracker.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
     }
 }

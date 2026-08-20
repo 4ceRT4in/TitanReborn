@@ -41,6 +41,10 @@
     {
       "predicate": { "effect": 0.5, "strength": 0.2 },
       "model": "titanfabric:item/wither2_diamond_spear"
+    },
+    {
+      "predicate": { "throwing": 1 },
+      "model": "titanfabric:item/diamond_spear_throwing"
     }
   ]
 }

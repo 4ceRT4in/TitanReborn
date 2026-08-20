@@ -48,27 +48,9 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
 
         world.playSound(player, firePos, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
 
-        int damage = stack.getDamage();
-        int maxDamage = stack.getMaxDamage();
-        int placed = 0;
-
-        if (damage < maxDamage - 28) {
-            placed = placeSoulFireArea(world, firePos, player, 3, 3);
-            if (player != null) {
-                player.getItemCooldownManager().set(stack.getItem(), 30);
-                if (placed > 0) stack.damage(placed, player, LivingEntity.getSlotForHand(context.getHand()));
-            }
-        } else if (damage < maxDamage - 8) {
-            placed = placeSoulFireCross(world, firePos, player);
-            if (player != null) {
-                player.getItemCooldownManager().set(stack.getItem(), 20);
-                if (placed > 0) stack.damage(placed, player, LivingEntity.getSlotForHand(context.getHand()));
-            }
-        } else {
-            placed = tryPlaceSoulFire(world, firePos, player);
-            if (player != null && placed > 0) {
-                stack.damage(placed, player, LivingEntity.getSlotForHand(context.getHand()));
-            }
+        int placed = tryPlaceSoulFire(world, firePos, player);
+        if (player != null && placed > 0) {
+            stack.damage(placed, player, LivingEntity.getSlotForHand(context.getHand()));
         }
 
         if (player instanceof ServerPlayerEntity && placed > 0) {
@@ -111,24 +93,4 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
         return 0;
     }
 
-    private int placeSoulFireArea(World world, BlockPos center, PlayerEntity player, int width, int height) {
-        int offset = width / 2;
-        int placed = 0;
-        for (int x = -offset; x <= offset; x++) {
-            for (int z = -offset; z <= offset; z++) {
-                BlockPos p = center.add(x, 0, z);
-                placed += tryPlaceSoulFire(world, p, player);
-            }
-        }
-        return placed;
-    }
-
-    private int placeSoulFireCross(World world, BlockPos center, PlayerEntity player) {
-        BlockPos[] positions = {center, center.north(), center.south(), center.east(), center.west()};
-        int placed = 0;
-        for (BlockPos p : positions) {
-            placed += tryPlaceSoulFire(world, p, player);
-        }
-        return placed;
-    }
 }

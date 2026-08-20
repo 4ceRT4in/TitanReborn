@@ -2,8 +2,6 @@ package net.shirojr.titanfabric.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,7 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.TitanFabricClient;
+import net.shirojr.titanfabric.SoulFireEntityTracker;
 import net.shirojr.titanfabric.access.EntityAccessor;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -107,12 +105,11 @@ public abstract class AbstractFireBlockMixin extends Block {
     }
 
     @Unique
-    @Environment(EnvType.CLIENT)
     private void handleClientSide(boolean soulFire, boolean fire, Entity entity) {
         if (soulFire) {
-            TitanFabricClient.SOUL_FIRE_ENTITIES.add(entity.getUuid());
+            SoulFireEntityTracker.SOUL_FIRE_ENTITIES.add(entity.getUuid());
         } else if (fire) {
-            TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
+            SoulFireEntityTracker.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
         }
     }
 }

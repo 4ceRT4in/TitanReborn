@@ -15,7 +15,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.shirojr.titanfabric.TitanFabricClient;
+import net.shirojr.titanfabric.SoulFireEntityTracker;
 import net.shirojr.titanfabric.access.EntityAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -39,9 +39,9 @@ public class EntityRenderDispatcherMixin {
             BlockState state = entity.getEntityWorld().getBlockState(pos);
 
             if (state.isOf(Blocks.SOUL_FIRE)) {
-                TitanFabricClient.SOUL_FIRE_ENTITIES.add(entity.getUuid());
+                SoulFireEntityTracker.SOUL_FIRE_ENTITIES.add(entity.getUuid());
             } else if (state.isOf(Blocks.FIRE) || !((EntityAccessor) entity).titanfabric$isSoulBurning()) {
-                TitanFabricClient.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
+                SoulFireEntityTracker.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
             }
         }
     }
@@ -64,6 +64,6 @@ public class EntityRenderDispatcherMixin {
 
     @Unique
     private boolean titanfabric$shouldRenderSoulFire(Entity entity) {
-        return ((EntityAccessor) entity).titanfabric$isSoulBurning() || TitanFabricClient.SOUL_FIRE_ENTITIES.contains(entity.getUuid());
+        return ((EntityAccessor) entity).titanfabric$isSoulBurning() || SoulFireEntityTracker.SOUL_FIRE_ENTITIES.contains(entity.getUuid());
     }
 }

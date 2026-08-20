@@ -19,6 +19,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -31,6 +32,7 @@ import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
+import net.shirojr.titanfabric.util.items.Anvilable;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
 import net.shirojr.titanfabric.util.items.ToolTipHelper;
 
@@ -38,7 +40,7 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCrafting {
+public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCrafting, Anvilable {
     public static final int MIN_THROW_CHARGE = 10;
     private static final Identifier BASE_CRIT_MODIFIER_ID = TitanFabric.getId("base_crit_modifier");
     private final SpearTier tier;
@@ -127,7 +129,14 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
         thrown.setCount(1);
         stack.damage(1, player, LivingEntity.getSlotForHand(player.getActiveHand()));
         SpearEntity entity = new SpearEntity(world, player, thrown, tier);
-        entity.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, 2.5f, 1.0f);
+        // Calculate the direction directly from the player's rotation. The generic
+        // trident helper is unreliable at the lower end of the pitch range because
+        // it also mixes in the owner's movement before the projectile is spawned.
+        Vec3d throwVelocity = player.getRotationVec(1.0f).normalize().multiply(2.5f);
+        if (!player.isOnGround()) {
+            throwVelocity = throwVelocity.add(player.getVelocity());
+        }
+        entity.setVelocity(throwVelocity);
         world.spawnEntity(entity);
         world.playSoundFromEntity(null, entity, SoundEvents.ITEM_TRIDENT_THROW.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
         setSpearCooldown(player, tier.throwCooldown());
@@ -163,5 +172,9 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
         ).formatted(Formatting.GRAY));
         tooltip.add(Text.empty());
         super.appendTooltip(stack, context, tooltip, type);
+    }
+
+    public boolean isLegendary() {
+        return this.tier == SpearTier.LEGEND;
     }
 }

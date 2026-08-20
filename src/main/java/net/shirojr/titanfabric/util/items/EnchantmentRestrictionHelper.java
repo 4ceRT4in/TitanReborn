@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.util.items;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 
 import java.util.Set;
@@ -23,6 +24,7 @@ public final class EnchantmentRestrictionHelper {
     }
 
     public static boolean shouldBanUnbreakingFromEnchantingTable(ItemStack stack) {
-        return UNBREAKING_ENCHANTING_TABLE_BANNED_ITEMS.contains(stack.getItem());
+        return (stack.getItem() instanceof TitanFabricSpearItem && ((TitanFabricSpearItem) stack.getItem()).isLegendary())
+                || UNBREAKING_ENCHANTING_TABLE_BANNED_ITEMS.contains(stack.getItem());
     }
 }

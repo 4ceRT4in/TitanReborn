@@ -14,23 +14,33 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
-import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
-import net.shirojr.titanfabric.item.custom.sword.DiamondSwordItem;
-import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
-import net.shirojr.titanfabric.item.custom.sword.LegendSwordItem;
 import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.SwordType;
 import net.shirojr.titanfabric.util.VariationHolder;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 public class TitanFabricItemGroups {
     public static final RegistryKey<ItemGroup> TITAN = register("titan",
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(TitanFabricBlocks.LEGEND_CRYSTAL))
                     .displayName(Text.translatable("itemGroup.titanfabric.titan"))
+                    .build());
+    public static final RegistryKey<ItemGroup> SWORD_VARIANTS = register("sword_variants",
+            FabricItemGroup.builder()
+                    .icon(() -> new ItemStack(TitanFabricItems.LEGEND_SWORD))
+                    .displayName(Text.translatable("itemGroup.titanfabric.sword_variants"))
+                    .build());
+    public static final RegistryKey<ItemGroup> GREATSWORD_VARIANTS = register("greatsword_variants",
+            FabricItemGroup.builder()
+                    .icon(() -> new ItemStack(TitanFabricItems.LEGEND_GREATSWORD))
+                    .displayName(Text.translatable("itemGroup.titanfabric.greatsword_variants"))
+                    .build());
+    public static final RegistryKey<ItemGroup> SPEAR_VARIANTS = register("spear_variants",
+            FabricItemGroup.builder()
+                    .icon(() -> new ItemStack(TitanFabricItems.LEGEND_SPEAR))
+                    .displayName(Text.translatable("itemGroup.titanfabric.spear_variants"))
                     .build());
 
     static {
@@ -53,8 +63,9 @@ public class TitanFabricItemGroups {
             addRaw(entries,
                     TitanFabricItems.CITRIN_SWORD, TitanFabricItems.CITRIN_GREATSWORD,
                     TitanFabricItems.EMBER_SWORD, TitanFabricItems.EMBER_GREATSWORD,
-                    TitanFabricItems.DIAMOND_GREATSWORD,
+                    TitanFabricItems.DIAMOND_SWORD, TitanFabricItems.DIAMOND_GREATSWORD,
                     TitanFabricItems.LEGEND_SWORD, TitanFabricItems.LEGEND_GREATSWORD,
+                    TitanFabricItems.NETHERITE_SWORD,
                     TitanFabricItems.NETHERITE_GREATSWORD
             );
 
@@ -65,16 +76,6 @@ public class TitanFabricItemGroups {
                     TitanFabricItems.DIAMOND_SPEAR, TitanFabricItems.LEGEND_SPEAR,
                     TitanFabricItems.NETHERITE_SPEAR
             );
-
-            addEffectSwords(entries, CitrinSwordItem.class, SwordType.DEFAULT);
-            addEffectSwords(entries, CitrinSwordItem.class, SwordType.GREAT_SWORD);
-            addEffectSwords(entries, EmberSwordItem.class, SwordType.DEFAULT);
-            addEffectSwords(entries, EmberSwordItem.class, SwordType.GREAT_SWORD);
-            addEffectSwords(entries, DiamondSwordItem.class, SwordType.DEFAULT);
-            addEffectSwords(entries, DiamondSwordItem.class, SwordType.GREAT_SWORD);
-            addEffectSwords(entries, LegendSwordItem.class, SwordType.DEFAULT);
-            addEffectSwords(entries, LegendSwordItem.class, SwordType.GREAT_SWORD);
-            addEffectSpears(entries);
 
             // essences
             addVar(entries, TitanFabricItems.ESSENCE);
@@ -140,6 +141,12 @@ public class TitanFabricItemGroups {
                     TitanFabricBlocks.CITRIN_BARREL_BOMB, TitanFabricBlocks.EMBER_BARREL_BOMB
             );
         });
+
+        ItemGroupEvents.modifyEntriesEvent(SWORD_VARIANTS).register(entries ->
+                addEffectSwords(entries, SwordType.DEFAULT));
+        ItemGroupEvents.modifyEntriesEvent(GREATSWORD_VARIANTS).register(entries ->
+                addEffectSwords(entries, SwordType.GREAT_SWORD));
+        ItemGroupEvents.modifyEntriesEvent(SPEAR_VARIANTS).register(TitanFabricItemGroups::addEffectSpears);
     }
 
     private static void addRaw(FabricItemGroupEntries entries, ItemConvertible... items) {
@@ -154,13 +161,11 @@ public class TitanFabricItemGroups {
         }
     }
 
-    private static void addEffectSwords(FabricItemGroupEntries entries, Class<? extends SwordItem> cls, SwordType type) {
-        addEffectSwords(entries, s -> cls.isInstance(s) && s instanceof TitanFabricSwordItem tf && tf.getSwordType() == type);
-    }
-
-    private static void addEffectSwords(FabricItemGroupEntries entries, Predicate<SwordItem> filter) {
+    private static void addEffectSwords(FabricItemGroupEntries entries, SwordType type) {
         for (SwordItem s : TitanFabricItems.EFFECT_SWORDS) {
-            if (filter.test(s)) addVar(entries, s);
+            if (s instanceof TitanFabricSwordItem tf && tf.getSwordType() == type) {
+                for (ItemStack stack : EffectHelper.generateWeaponEffectStacks(s, false)) entries.add(stack);
+            }
         }
     }
 

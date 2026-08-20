@@ -122,7 +122,12 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
 
     @Override
     public void onPlayerCollision(PlayerEntity player) {
-        if (!getWorld().isClient && ownerUuid != null && ownerUuid.equals(player.getUuid())) {
+        // The projectile is spawned at the owner's eye position.  When it is
+        // aimed sharply downwards, the owner can still be inside its hitbox on
+        // the first tick.  Treating that as a pickup immediately cancels the
+        // throw before the spear has had a chance to fly.
+        if (getWorld().isClient || age < 5 || (!inGround && !isNoClip()) || shake > 0) return;
+        if (ownerUuid != null && ownerUuid.equals(player.getUuid())) {
             returnToOwner();
         }
     }

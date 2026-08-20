@@ -239,6 +239,9 @@
   "container.titanfabric.diamond_furnace": "§bDiamond Furnace",
 
   "itemGroup.titanfabric.titan": "§e§kl §r§3Titan Reborn §e§kl",
+  "itemGroup.titanfabric.sword_variants": "Titan Reborn: Sword Effects",
+  "itemGroup.titanfabric.greatsword_variants": "Titan Reborn: Greatsword Effects",
+  "itemGroup.titanfabric.spear_variants": "Titan Reborn: Spear Effects",
   "keys.titanfabric.misc": "Titan Reborn",
   "key.titanfabric.arrow.selection": "Change Arrow Selection For Bows",
 

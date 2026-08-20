@@ -4,6 +4,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.shirojr.titanfabric.effect.ImmunityEffect;
 import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
@@ -22,6 +23,18 @@ public abstract class ServerPlayerEntityMixin {
         if (TitanFabricSpearItem.isThrowLocked(player, player.getMainHandStack())) {
             cir.setReturnValue(false);
         }
+    }
+
+    @Inject(method = "onHandledScreenClosed", at = @At("HEAD"))
+    private void titanfabric$returnLockedSpearFromCursor(CallbackInfo ci) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        ItemStack cursor = player.currentScreenHandler.getCursorStack();
+        if (!TitanFabricSpearItem.isThrowLocked(player, cursor)) return;
+
+        int emptySlot = player.getInventory().getEmptySlot();
+        if (emptySlot == -1) return;
+        player.getInventory().setStack(emptySlot, cursor);
+        player.currentScreenHandler.setCursorStack(ItemStack.EMPTY);
     }
 
     @Inject(method = "onDeath", at = @At("HEAD"))

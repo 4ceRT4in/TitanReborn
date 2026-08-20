@@ -46,7 +46,9 @@ public class BarrelBombEntity extends TntEntity {
 
     private void explode() {
         getWorld().createExplosion(this, getX(), getY(), getZ(), 4.0f, false, World.ExplosionSourceType.NONE);
-        AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(getWorld(), getX(), getY(), getZ());
+        AreaEffectCloudEntity cloud = type == Type.EMBER
+                ? new EmberBarrelCloudEntity(getWorld(), getX(), getY(), getZ())
+                : new AreaEffectCloudEntity(getWorld(), getX(), getY(), getZ());
         cloud.setDuration(100); cloud.setRadius(3.0f); cloud.setRadiusOnUse(0); cloud.setRadiusGrowth(0);
         if (type == Type.CITRIN) {
             cloud.setPotionContents(new PotionContentsComponent(net.minecraft.potion.Potions.POISON));

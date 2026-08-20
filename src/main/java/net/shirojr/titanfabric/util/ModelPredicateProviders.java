@@ -47,6 +47,11 @@ public class ModelPredicateProviders {
         registerWeaponEffects(TitanFabricItems.EMBER_SPEAR);
         registerWeaponEffects(TitanFabricItems.DIAMOND_SPEAR);
         registerWeaponEffects(TitanFabricItems.LEGEND_SPEAR);
+        registerThrowingProvider(TitanFabricItems.CITRIN_SPEAR);
+        registerThrowingProvider(TitanFabricItems.EMBER_SPEAR);
+        registerThrowingProvider(TitanFabricItems.DIAMOND_SPEAR);
+        registerThrowingProvider(TitanFabricItems.LEGEND_SPEAR);
+        registerThrowingProvider(TitanFabricItems.NETHERITE_SPEAR);
 
         registerBasicInnateItemsProvider(TitanFabricItems.ESSENCE);
         registerBasicInnateItemsProvider(TitanFabricItems.EFFECT_ARROW);
@@ -80,6 +85,13 @@ public class ModelPredicateProviders {
     private static void registerWeaponEffects(Item item) {
         registerEffectProvider(item, Identifier.ofVanilla("effect"));
         registerStrengthProvider(item, Identifier.ofVanilla("strength"));
+    }
+
+    private static void registerThrowingProvider(Item item) {
+        ModelPredicateProviderRegistry.register(item, Identifier.ofVanilla("throwing"),
+                (stack, world, entity, seed) -> entity != null
+                        && entity.isUsingItem()
+                        && entity.getActiveItem() == stack ? 1.0f : 0.0f);
     }
 
     private static void registerBasicInnateItemsProvider(Item item) {

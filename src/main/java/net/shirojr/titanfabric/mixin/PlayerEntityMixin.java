@@ -22,6 +22,7 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
@@ -279,9 +280,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     private void titanfabric$preventDamageFromPullingPlayerUnderwater(DamageSource source, float amount,
                                                                       CallbackInfoReturnable<Boolean> cir) {
         PlayerEntity player = (PlayerEntity) (Object) this;
-        if (!Boolean.TRUE.equals(cir.getReturnValue()) || !player.isTouchingWater()) return;
+        if (!Boolean.TRUE.equals(cir.getReturnValue()) || !(player.isTouchingWater() || player.isInLava())) return;
         if (player.getVelocity().y < 0.0) {
-            player.setVelocity(player.getVelocity().x, 0.0, player.getVelocity().z);
+            Vec3d velocity = player.getVelocity();
+            player.setVelocity(velocity.x, 0.0, velocity.z);
             player.velocityModified = true;
         }
     }

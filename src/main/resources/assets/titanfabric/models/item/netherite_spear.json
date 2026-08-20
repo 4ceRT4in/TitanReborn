@@ -1,1 +1,10 @@
-{"parent":"titanfabric:item/spear_handheld","textures":{"layer0":"titanfabric:item/netherite_spear"}}
+{
+  "parent": "titanfabric:item/spear_handheld",
+  "textures": { "layer0": "titanfabric:item/netherite_spear" },
+  "overrides": [
+    {
+      "predicate": { "throwing": 1 },
+      "model": "titanfabric:item/netherite_spear_throwing"
+    }
+  ]
+}

@@ -121,7 +121,10 @@ public final class MultiBowHelper {
                 break;
             }
         }
-        if (player.isCreative()) {
+        // Creative players still need to fire the explicitly selected projectile.
+        // Falling back to a normal arrow here used to silently disable spectral
+        // arrows for the MultiBow in creative mode.
+        if (player.isCreative() && outputStack.isEmpty()) {
             outputStack = new ItemStack(Items.ARROW);
         }
         return outputStack;
