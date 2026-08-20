@@ -22,6 +22,7 @@ import net.shirojr.titanfabric.util.VariationHolder;
 import java.util.List;
 
 public class TitanFabricItemGroups {
+
     public static final RegistryKey<ItemGroup> TITAN = register("titan",
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(TitanFabricBlocks.LEGEND_CRYSTAL))
@@ -42,7 +43,6 @@ public class TitanFabricItemGroups {
                     .icon(() -> new ItemStack(TitanFabricItems.LEGEND_SPEAR))
                     .displayName(Text.translatable("itemGroup.titanfabric.spear_variants"))
                     .build());
-
     static {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries ->
                 addPotionFamilies(entries,
