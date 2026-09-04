@@ -38,73 +38,163 @@ public class EffectUpgradeRecipe implements SmithingRecipe {
 
     @Override
     public boolean matches(SmithingRecipeInput input, World world) {
-        boolean matches = input.template().isEmpty() && testBase(input.base()) && testAddition(input.addition());
-        this.result = matches ? input.base().copy() : ItemStack.EMPTY;
-        return matches;
+        boolean matches = input.template().isEmpty()
+                && testBase(input.base())
+                && testAddition(input.addition());
+
+        if (!matches) {
+            this.result = ItemStack.EMPTY;
+            return false;
+        }
+
+        // Für die Vorschau im Smithing Table wird das Vanilla-Diamantschwert
+        // ebenfalls in das entsprechende TitanFabric-Schwert umgewandelt.
+        this.result = convertBaseItem(input.base());
+
+        return true;
     }
 
     @Override
     public ItemStack craft(SmithingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        if (!ItemStack.areEqual(this.result, input.base())) {
-            this.result = input.base().copy();
+        if (!testBase(input.base()) || !testAddition(input.addition())) {
+            this.result = ItemStack.EMPTY;
+            return ItemStack.EMPTY;
         }
-        if (!testBase(input.base()) || !testAddition(input.addition())) return ItemStack.EMPTY;
-        WeaponEffectData modifierInnateEffect = getEffectData(input.addition(), WeaponEffectType.INNATE_EFFECT);
-        WeaponEffectData baseAdditionalEffect = getEffectData(input.base(), WeaponEffectType.ADDITIONAL_EFFECT);
-        if (modifierInnateEffect == null || !(this.result.getItem() instanceof WeaponEffectCrafting weapon) ||
-                !weapon.supportedEffects().contains(modifierInnateEffect.weaponEffect())) return ItemStack.EMPTY;
+
+        // Base-Item vorbereiten.
+        // minecraft:diamond_sword wird zu titanfabric:diamond_sword.
+        ItemStack baseStack = convertBaseItem(input.base());
+
+        this.result = baseStack.copy();
+
+        WeaponEffectData modifierInnateEffect =
+                getEffectData(input.addition(), WeaponEffectType.INNATE_EFFECT);
+
+        WeaponEffectData baseAdditionalEffect =
+                getEffectData(baseStack, WeaponEffectType.ADDITIONAL_EFFECT);
+
+        // Das TitanFabric-Schwert muss WeaponEffectCrafting implementieren.
+        if (modifierInnateEffect == null
+                || !(baseStack.getItem() instanceof WeaponEffectCrafting weapon)
+                || !weapon.supportedEffects().contains(modifierInnateEffect.weaponEffect())) {
+            this.result = ItemStack.EMPTY;
+            return ItemStack.EMPTY;
+        }
 
         boolean invalidProduct = false;
-        HashSet<WeaponEffectData> outputWeaponEffects = new HashSet<>(this.result.getOrDefault(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>()));
+
+        HashSet<WeaponEffectData> outputWeaponEffects = new HashSet<>(
+                baseStack.getOrDefault(
+                        TitanFabricDataComponents.WEAPON_EFFECTS,
+                        new HashSet<>()
+                )
+        );
+
         if (baseAdditionalEffect == null) {
-            outputWeaponEffects.add(new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, modifierInnateEffect.weaponEffect(), modifierInnateEffect.strength()));
+            outputWeaponEffects.add(
+                    new WeaponEffectData(
+                            WeaponEffectType.ADDITIONAL_EFFECT,
+                            modifierInnateEffect.weaponEffect(),
+                            modifierInnateEffect.strength()
+                    )
+            );
         } else {
-            outputWeaponEffects.removeIf(effectData -> effectData.type().equals(WeaponEffectType.ADDITIONAL_EFFECT) &&
-                    effectData.weaponEffect().equals(modifierInnateEffect.weaponEffect()));
-            int combinedStrength = baseAdditionalEffect.strength() + modifierInnateEffect.strength();
+            outputWeaponEffects.removeIf(effectData ->
+                    effectData.type().equals(WeaponEffectType.ADDITIONAL_EFFECT)
+                            && effectData.weaponEffect().equals(modifierInnateEffect.weaponEffect())
+            );
+
+            int combinedStrength =
+                    baseAdditionalEffect.strength()
+                            + modifierInnateEffect.strength();
+
             if (combinedStrength > WeaponEffect.MAX_LEVEL) {
                 invalidProduct = true;
             }
-            outputWeaponEffects.add(new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, modifierInnateEffect.weaponEffect(), combinedStrength));
-            if (outputWeaponEffects.stream().filter(effectData -> effectData.type().equals(WeaponEffectType.ADDITIONAL_EFFECT)).count() > 1) {
+
+            outputWeaponEffects.add(
+                    new WeaponEffectData(
+                            WeaponEffectType.ADDITIONAL_EFFECT,
+                            modifierInnateEffect.weaponEffect(),
+                            combinedStrength
+                    )
+            );
+
+            if (outputWeaponEffects.stream()
+                    .filter(effectData ->
+                            effectData.type().equals(WeaponEffectType.ADDITIONAL_EFFECT))
+                    .count() > 1) {
                 invalidProduct = true;
             }
         }
+
         if (invalidProduct) {
             this.result = ItemStack.EMPTY;
-            return this.result;
-        }
-        if (this.result.getItem().equals(Items.DIAMOND_SWORD)) {
-            ItemStack stack = new ItemStack(TitanFabricItems.DIAMOND_SWORD);
-            for (ComponentType<?> type : this.result.getComponents().getTypes()) {
-                copyComponent(stack, this.result, type);
-            }
-            this.result = stack;
+            return ItemStack.EMPTY;
         }
 
-        this.result.set(TitanFabricDataComponents.WEAPON_EFFECTS, outputWeaponEffects);
+        this.result.set(
+                TitanFabricDataComponents.WEAPON_EFFECTS,
+                outputWeaponEffects
+        );
+
         return this.result;
     }
 
-    private static <T> void copyComponent(ItemStack target, ItemStack source, ComponentType<T> type) {
+    /**
+     * Converts supported vanilla base items into their TitanFabric equivalent.
+     *
+     * Currently:
+     * minecraft:diamond_sword -> titanfabric:diamond_sword
+     */
+    private static ItemStack convertBaseItem(ItemStack baseStack) {
+        if (!baseStack.isOf(Items.DIAMOND_SWORD)) {
+            return baseStack.copy();
+        }
+
+        ItemStack stack = new ItemStack(TitanFabricItems.DIAMOND_SWORD);
+
+        for (ComponentType<?> type : baseStack.getComponents().getTypes()) {
+            copyComponent(stack, baseStack, type);
+        }
+
+        return stack;
+    }
+
+    private static <T> void copyComponent(
+            ItemStack target,
+            ItemStack source,
+            ComponentType<T> type
+    ) {
         T value = source.get(type);
+
         if (value != null) {
             target.set(type, value);
         }
     }
 
     @Nullable
-    private static WeaponEffectData getEffectData(ItemStack stack, WeaponEffectType type) {
-        HashSet<WeaponEffectData> weaponEffects = stack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
-        if (weaponEffects == null) return null;
-        WeaponEffectData innateEffect = null;
+    private static WeaponEffectData getEffectData(
+            ItemStack stack,
+            WeaponEffectType type
+    ) {
+        HashSet<WeaponEffectData> weaponEffects =
+                stack.get(TitanFabricDataComponents.WEAPON_EFFECTS);
+
+        if (weaponEffects == null) {
+            return null;
+        }
+
+        WeaponEffectData effect = null;
+
         for (WeaponEffectData entry : weaponEffects) {
             if (entry.type().equals(type)) {
-                innateEffect = entry;
+                effect = entry;
                 break;
             }
         }
-        return innateEffect;
+
+        return effect;
     }
 
     @Override
@@ -134,20 +224,31 @@ public class EffectUpgradeRecipe implements SmithingRecipe {
 
     @Override
     public boolean isEmpty() {
-        return Stream.of(this.base, this.modifier).anyMatch(Ingredient::isEmpty);
+        return Stream.of(this.base, this.modifier)
+                .anyMatch(Ingredient::isEmpty);
     }
 
     public static class Serializer implements RecipeSerializer<EffectUpgradeRecipe> {
-        private static final MapCodec<EffectUpgradeRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                instance -> instance.group(
-                                Ingredient.ALLOW_EMPTY_CODEC.fieldOf("base").forGetter(recipe -> recipe.base),
-                                Ingredient.ALLOW_EMPTY_CODEC.fieldOf("addition").forGetter(recipe -> recipe.modifier)
-                        )
-                        .apply(instance, EffectUpgradeRecipe::new)
-        );
-        public static final PacketCodec<RegistryByteBuf, EffectUpgradeRecipe> PACKET_CODEC = PacketCodec.ofStatic(
-                EffectUpgradeRecipe.Serializer::write, EffectUpgradeRecipe.Serializer::read
-        );
+
+        private static final MapCodec<EffectUpgradeRecipe> CODEC =
+                RecordCodecBuilder.mapCodec(
+                        instance -> instance.group(
+                                        Ingredient.ALLOW_EMPTY_CODEC
+                                                .fieldOf("base")
+                                                .forGetter(recipe -> recipe.base),
+
+                                        Ingredient.ALLOW_EMPTY_CODEC
+                                                .fieldOf("addition")
+                                                .forGetter(recipe -> recipe.modifier)
+                                )
+                                .apply(instance, EffectUpgradeRecipe::new)
+                );
+
+        public static final PacketCodec<RegistryByteBuf, EffectUpgradeRecipe> PACKET_CODEC =
+                PacketCodec.ofStatic(
+                        EffectUpgradeRecipe.Serializer::write,
+                        EffectUpgradeRecipe.Serializer::read
+                );
 
         @Override
         public MapCodec<EffectUpgradeRecipe> codec() {
@@ -160,12 +261,19 @@ public class EffectUpgradeRecipe implements SmithingRecipe {
         }
 
         private static EffectUpgradeRecipe read(RegistryByteBuf buf) {
-            Ingredient ingredient2 = Ingredient.PACKET_CODEC.decode(buf);
-            Ingredient ingredient3 = Ingredient.PACKET_CODEC.decode(buf);
+            Ingredient ingredient2 =
+                    Ingredient.PACKET_CODEC.decode(buf);
+
+            Ingredient ingredient3 =
+                    Ingredient.PACKET_CODEC.decode(buf);
+
             return new EffectUpgradeRecipe(ingredient2, ingredient3);
         }
 
-        private static void write(RegistryByteBuf buf, EffectUpgradeRecipe recipe) {
+        private static void write(
+                RegistryByteBuf buf,
+                EffectUpgradeRecipe recipe
+        ) {
             Ingredient.PACKET_CODEC.encode(buf, recipe.base);
             Ingredient.PACKET_CODEC.encode(buf, recipe.modifier);
         }

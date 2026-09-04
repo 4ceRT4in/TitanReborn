@@ -42,7 +42,7 @@ public class TitanFabric implements ModInitializer {
         TitanFabricEvents.registerEvents();
         TitanFabricCommandArgumentTypes.initialize();
 
-        LOGGER.info("Titans incoming!");
+        LOGGER.info("Titan Reborn initialized!");
         LoggerUtil.devLogger("Initialized Instance in development environment!");
     }
 
