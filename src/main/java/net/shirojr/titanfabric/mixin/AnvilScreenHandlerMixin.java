@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.access.AnvilScreenHandlerAccessor;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import net.shirojr.titanfabric.util.items.Anvilable;
@@ -68,6 +69,16 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler imple
         ItemStack result = this.output.getStack(0);
         ItemStack baseInput = this.input.getStack(0);
         ItemStack sacrificeInput = this.input.getStack(1);
+
+        if (!result.isEmpty()
+                && baseInput.isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE)
+                && sacrificeInput.isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE)
+                && result.getDamage() < baseInput.getDamage()) {
+            this.output.setStack(0, ItemStack.EMPTY);
+            this.levelCost.set(0);
+            this.sendContentUpdates();
+            return;
+        }
 
         if (fireEnchantmentBanEnabled && !result.isEmpty()) {
             if (FireEnchantmentBanHelper.isRestrictedCombatItem(baseInput)

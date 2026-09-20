@@ -22,9 +22,7 @@ import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.DiamondAbsorptionHelper;
@@ -76,13 +74,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void titanfabric$appendSelectedArrowDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
         builder.add(SHOOTING_ARROWS, false);
-    }
-
-    @Inject(method = "shouldSwimInFluids", at = @At("HEAD"), cancellable = true)
-    private void titanfabric$disableSwimmingDecision(CallbackInfoReturnable<Boolean> cir) {
-        if (!this.getWorld().isClient() && titanfabric$isDisableSwimmingEnabledServer()) {
-            cir.setReturnValue(false);
-        }
     }
 
     @Inject(method = "updateSwimming", at = @At("HEAD"), cancellable = true)
@@ -150,6 +141,16 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
             }
         }
         return bl3;
+    }
+
+    /**
+     * Spears use the complete vanilla sweep path (cooldown, enchantment damage,
+     * target filtering, sound and particles). Vanilla only enables that path for
+     * {@link SwordItem}, so extend that single eligibility decision to our spears.
+     */
+    @ModifyVariable(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At("STORE"), ordinal = 3)
+    private boolean titanfabric$allowSpearSweep(boolean original) {
+        return original || this.getMainHandStack().getItem() instanceof TitanFabricSpearItem;
     }
 
     @Unique
@@ -274,18 +275,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
         }
         if (cooldown <= 0) return;
         this.getItemCooldownManager().set(stack.getItem(), cooldown);
-    }
-
-    @Inject(method = "damage", at = @At("RETURN"))
-    private void titanfabric$preventDamageFromPullingPlayerUnderwater(DamageSource source, float amount,
-                                                                      CallbackInfoReturnable<Boolean> cir) {
-        PlayerEntity player = (PlayerEntity) (Object) this;
-        if (!Boolean.TRUE.equals(cir.getReturnValue()) || !(player.isTouchingWater() || player.isInLava())) return;
-        if (player.getVelocity().y < 0.0) {
-            Vec3d velocity = player.getVelocity();
-            player.setVelocity(velocity.x, 0.0, velocity.z);
-            player.velocityModified = true;
-        }
     }
 
     @Inject(method = "getAttackCooldownProgressPerTick", at = @At("HEAD"), cancellable = true)

@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.init;
 
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.shirojr.titanfabric.TitanFabric;
@@ -17,7 +16,7 @@ public interface TitanFabricRecipeSerializers {
     RecipeSerializer<DyeableRecipe> DYEABLE_RECIPE = register("dyeable_recipe", new DyeableRecipe.Serializer());
     RecipeSerializer<EnchantedDiamondAppleRepairRecipe> ENCHANTED_DIAMOND_APPLE_REPAIR = register(
             "enchanted_diamond_apple_repair",
-            new SpecialRecipeSerializer<>(EnchantedDiamondAppleRepairRecipe::new)
+            new EnchantedDiamondAppleRepairRecipe.Serializer()
     );
 
 

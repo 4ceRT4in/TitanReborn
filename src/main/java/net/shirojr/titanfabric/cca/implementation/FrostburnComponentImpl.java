@@ -88,23 +88,26 @@ public class FrostburnComponentImpl implements FrostburnComponent, AutoSyncedCom
 
     @Override
     public void forceFrostburn(float newFrostburnAmount, boolean shouldSync) {
+        newFrostburnAmount = MathHelper.clamp(newFrostburnAmount, 0, getMaxAllowedFrostburn());
         if (newFrostburnAmount > getFrostburn()) {
             setPhase(Phase.INCREASE);
         }
 
-        float damageAmount = newFrostburnAmount > getFrostburn() ? CHANGE_AMOUNT : -CHANGE_AMOUNT;
-        float maxDamageableHealth = provider.getHealth() - SAFETY_THRESHOLD;
-        float trueMissingHealth = provider.getMaxHealth() - provider.getHealth();
-        damageAmount = Math.min(damageAmount, maxDamageableHealth);
-
-        if (damageAmount > 0 && trueMissingHealth + damageAmount <= newFrostburnAmount) {
-            this.provider.damage(
-                    TitanFabricDamageTypes.of(
-                            provider.getWorld(),
-                            TitanFabricDamageTypes.FROSTBURN
-                    ),
-                    damageAmount
-            );
+        if (!provider.getWorld().isClient() && newFrostburnAmount > getFrostburn()) {
+            float maximumHealthAfterFreeze = provider.getMaxHealth() - newFrostburnAmount;
+            if (provider.getHealth() > maximumHealthAfterFreeze) {
+                float damageAmount = provider.getHealth() - maximumHealthAfterFreeze;
+                provider.damage(
+                        TitanFabricDamageTypes.of(provider.getWorld(), TitanFabricDamageTypes.FROSTBURN),
+                        damageAmount
+                );
+                // Damage may be rejected by invulnerability frames or another damage hook.
+                // Frozen health is state, not healing, so keep the authoritative health
+                // value in lockstep with the amount that is hidden by Frostburn.
+                if (provider.getHealth() > maximumHealthAfterFreeze) {
+                    provider.setHealth(maximumHealthAfterFreeze);
+                }
+            }
         }
 
         this.frostburn = newFrostburnAmount;

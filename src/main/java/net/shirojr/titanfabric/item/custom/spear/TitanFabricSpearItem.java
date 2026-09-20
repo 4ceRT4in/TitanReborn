@@ -3,7 +3,6 @@ package net.shirojr.titanfabric.item.custom.spear;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.UnbreakableComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -52,11 +51,10 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
 
     private static Item.Settings settings(SpearTier tier, Item.Settings settings) {
         settings.maxCount(1)
-                .maxDamage(Math.max(1, tier.durability()))
                 .component(DataComponentTypes.TOOL, TridentItem.createToolComponent())
                 .attributeModifiers(attributes(tier.material(), tier.damage()));
-        if (tier.durability() <= 0) {
-            settings.component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true));
+        if (tier.durability() > 0) {
+            settings.maxDamage(tier.durability());
         }
         if (tier.innateEffect() != null) {
             settings.component(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>(Set.of(
@@ -116,7 +114,7 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
-        if (hasSpearCooldown(user) || isAboutToBreak(stack)) return TypedActionResult.fail(stack);
+        if (hasSpearCooldown(user)) return TypedActionResult.fail(stack);
         user.setCurrentHand(hand);
         return TypedActionResult.consume(stack);
     }
@@ -124,10 +122,9 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (!(user instanceof PlayerEntity player) || getMaxUseTime(stack, user) - remainingUseTicks < MIN_THROW_CHARGE
-                || world.isClient || hasSpearCooldown(player) || isAboutToBreak(stack)) return;
+                || world.isClient || hasSpearCooldown(player)) return;
         ItemStack thrown = stack.copy();
         thrown.setCount(1);
-        stack.damage(1, player, LivingEntity.getSlotForHand(player.getActiveHand()));
         SpearEntity entity = new SpearEntity(world, player, thrown, tier);
         // Calculate the direction directly from the player's rotation. The generic
         // trident helper is unreliable at the lower end of the pitch range because
@@ -140,10 +137,6 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
         world.spawnEntity(entity);
         world.playSoundFromEntity(null, entity, SoundEvents.ITEM_TRIDENT_THROW.value(), SoundCategory.PLAYERS, 1.0f, 1.0f);
         setSpearCooldown(player, tier.throwCooldown());
-    }
-
-    private static boolean isAboutToBreak(ItemStack stack) {
-        return stack.isDamageable() && stack.getDamage() >= stack.getMaxDamage() - 1;
     }
 
     @Override

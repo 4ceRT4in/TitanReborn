@@ -1,0 +1,4 @@
+{
+  "parent": "titanfabric:item/spear_throwing",
+  "textures": { "layer0": "titanfabric:item/blind1_citrin_spear" }
+}

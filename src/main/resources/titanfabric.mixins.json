@@ -39,6 +39,7 @@
     "LootTableMixin",
     "OreFeatureMixin",
     "PlayerEntityMixin",
+    "RepairItemRecipeMixin",
     "PotionContentsComponentMixin",
     "PotionsMixin",
     "PotionEntityMixin",

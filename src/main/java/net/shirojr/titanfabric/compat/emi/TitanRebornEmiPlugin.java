@@ -16,6 +16,7 @@ import dev.emi.emi.runtime.EmiReloadLog;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
@@ -28,12 +29,15 @@ import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.init.TitanFabricBlocks;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
+import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.item.custom.armor.ArmorPlatingItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
+import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
@@ -48,6 +52,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
 
     public static final EmiStack DIAMOND_FURNACE_WORKSTATION = EmiStack.of(TitanFabricBlocks.DIAMOND_FURNACE);
     public static final EmiStack NETHERITE_ANVIL_WORKSTATION = EmiStack.of(TitanFabricBlocks.NETHERITE_ANVIL);
+    public static final EmiStack ARMOR_PLATING_WORKSTATION = EmiStack.of(Items.SMITHING_TABLE);
 
     public static final EmiRecipeCategory DIAMOND_FURNACE_CATEGORY = new EmiRecipeCategory(
             TitanFabric.getId("diamond_furnace_recipes"),
@@ -61,12 +66,19 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
             new EmiTexture(TEXTURE, 0, 0, 16, 16)
     );
 
+    public static final EmiRecipeCategory ARMOR_PLATING_CATEGORY = new EmiRecipeCategory(
+            TitanFabric.getId("armor_plating"),
+            ARMOR_PLATING_WORKSTATION
+    );
+
     @Override
     public void register(EmiRegistry registry) {
         registry.addCategory(DIAMOND_FURNACE_CATEGORY);
         registry.addCategory(NETHERITE_ANVIL_CATEGORY);
+        registry.addCategory(ARMOR_PLATING_CATEGORY);
         registry.addWorkstation(DIAMOND_FURNACE_CATEGORY, DIAMOND_FURNACE_WORKSTATION);
         registry.addWorkstation(NETHERITE_ANVIL_CATEGORY, NETHERITE_ANVIL_WORKSTATION);
+        registry.addWorkstation(ARMOR_PLATING_CATEGORY, ARMOR_PLATING_WORKSTATION);
 
         RecipeManager recipeManager = registry.getRecipeManager();
 
@@ -137,7 +149,9 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         addArrowRecipe(registry, Potions.HARMING, WeaponEffect.WITHER, "wither_arrow");
         addArrowRecipe(registry, Potions.WEAKNESS, WeaponEffect.WEAK, "weakness_arrow");
         addEnchantedDiamondAppleRepairRecipes(registry);
+        removeEnchantedDiamondAppleLegacyRepairRecipes(registry);
         addGrindstoneEffectRemovalRecipes(registry);
+        addArmorPlatingRecipes(registry);
         removeUncraftableFurnaceRecipes(registry);
         addMissingMultiBowSmithingRecipes(registry);
 
@@ -162,7 +176,9 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
 
                     output.set(TitanFabricDataComponents.WEAPON_EFFECTS, outputWeaponEffects);
 
-                    ItemStack input = effectWeapon.getDefaultStack();
+                    ItemStack input = i == 1 && effectWeapon == TitanFabricItems.DIAMOND_SWORD
+                            ? Items.DIAMOND_SWORD.getDefaultStack()
+                            : effectWeapon.getDefaultStack();
                     if (i == 2) {
                         HashSet<WeaponEffectData> inputWeaponEffects = new HashSet<>(input.getOrDefault(TitanFabricDataComponents.WEAPON_EFFECTS, new HashSet<>()));
 
@@ -297,29 +313,51 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
     }
 
     private void addEnchantedDiamondAppleRepairRecipes(EmiRegistry registry) {
-        for (int damage = 1; damage <= 2; damage++) {
-            ItemStack inputApple = TitanFabricItems.ENCHANTED_DIAMOND_APPLE.getDefaultStack();
-            inputApple.setDamage(damage);
+        ItemStack onceUsedApple = TitanFabricItems.ENCHANTED_DIAMOND_APPLE.getDefaultStack();
+        onceUsedApple.setDamage(1);
+        ItemStack twiceUsedApple = TitanFabricItems.ENCHANTED_DIAMOND_APPLE.getDefaultStack();
+        twiceUsedApple.setDamage(2);
+        EmiIngredient damagedApples = EmiIngredient.of(List.of(
+                EmiStack.of(onceUsedApple),
+                EmiStack.of(twiceUsedApple)
+        ));
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                damagedApples,
+                damagedApples,
+                EmiStack.of(TitanFabricItems.ENCHANTED_DIAMOND_APPLE),
+                TitanFabric.getId("/enchanted_diamond_apple_smithing_repair")
+        ));
+    }
 
-            ItemStack outputApple = inputApple.copy();
-            outputApple.setDamage(damage - 1);
+    private void removeEnchantedDiamondAppleLegacyRepairRecipes(EmiRegistry registry) {
+        registry.removeRecipes(recipe -> {
+            boolean outputsApple = recipe.getOutputs().stream()
+                    .anyMatch(stack -> stack.getItemStack().isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE));
+            if (!outputsApple) return false;
 
-            registry.addRecipe(new EmiCraftingRecipe(
-                    List.of(
-                            EmiStack.of(inputApple),
-                            EmiStack.of(Items.DIAMOND_BLOCK)
-                    ),
-                    EmiStack.of(outputApple),
-                    TitanFabric.getId("/enchanted_diamond_apple_repair_" + damage),
-                    true
-            ));
-        }
+            if (recipe.getCategory().equals(VanillaEmiRecipeCategories.ANVIL_REPAIRING)) {
+                return true;
+            }
+            if (!recipe.getCategory().equals(VanillaEmiRecipeCategories.CRAFTING)
+                    || recipe.getInputs().size() != 2) {
+                return false;
+            }
+            return recipe.getInputs().stream().allMatch(ingredient ->
+                    !ingredient.isEmpty()
+                            && ingredient.getEmiStacks().stream().allMatch(stack ->
+                            stack.getItemStack().isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE))
+            );
+        });
     }
 
     private void addGrindstoneEffectRemovalRecipes(EmiRegistry registry) {
-        for (SwordItem swordItem : TitanFabricItems.EFFECT_SWORDS) {
-            Identifier itemId = Registries.ITEM.getId(swordItem);
-            for (ItemStack inputStack : EffectHelper.generateSwordsStacks(swordItem, false)) {
+        List<Item> effectWeapons = new java.util.ArrayList<>(TitanFabricItems.EFFECT_SWORDS);
+        effectWeapons.addAll(TitanFabricItems.EFFECT_SPEARS);
+
+        for (Item effectWeapon : effectWeapons) {
+            Identifier itemId = Registries.ITEM.getId(effectWeapon);
+            for (ItemStack inputStack : EffectHelper.generateWeaponEffectStacks(effectWeapon, false)) {
                 var additionalEffect = WeaponEffectData.get(inputStack, WeaponEffectType.ADDITIONAL_EFFECT);
                 if (additionalEffect.isEmpty()) {
                     continue;
@@ -333,6 +371,47 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
                         EmiStack.of(inputStack),
                         EmiStack.of(outputStack),
                         TitanFabric.getId("/grindstone/" + itemId.getPath() + "/" + effectData.weaponEffect().getId() + "_" + effectData.strength() + "_effect_removal")
+                ));
+            }
+        }
+    }
+
+    private void addArmorPlatingRecipes(EmiRegistry registry) {
+        Enchantment displayEnchantment = EmiPort.getEnchantmentRegistry().stream()
+                .filter(enchantment -> Enchantments.PROTECTION.getValue().equals(
+                        EmiPort.getEnchantmentRegistry().getId(enchantment)))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Protection enchantment is missing"));
+        RegistryEntry<Enchantment> displayEnchantmentEntry = EmiPort.getEnchantmentRegistry().getEntry(displayEnchantment);
+
+        List<Item> plateableArmor = Registries.ITEM.stream()
+                .filter(item -> item.getDefaultStack().isIn(TitanFabricTags.Items.PLATEABLE_ARMOR))
+                .toList();
+        List<ArmorPlatingItem> armorPlatings = Registries.ITEM.stream()
+                .filter(item -> item instanceof ArmorPlatingItem)
+                .map(item -> (ArmorPlatingItem) item)
+                .filter(item -> item.getDefaultStack().isIn(TitanFabricTags.Items.ARMOR_PLATING))
+                .toList();
+
+        for (Item armorItem : plateableArmor) {
+            for (ArmorPlatingItem platingItem : armorPlatings) {
+                ItemStack armorStack = armorItem.getDefaultStack();
+                armorStack.addEnchantment(displayEnchantmentEntry, 1);
+                ItemStack outputStack = armorStack.copy();
+                ArmorPlatingHelper.applyArmorPlate(outputStack, platingItem.getPlateType());
+
+                Identifier armorId = Registries.ITEM.getId(armorItem);
+                Identifier platingId = Registries.ITEM.getId(platingItem);
+                registry.addRecipe(new ArmorPlatingEmiRecipe(
+                        armorStack,
+                        platingItem.getDefaultStack(),
+                        outputStack,
+                        TitanFabric.getId("/armor_plating/" + armorId.getPath() + "/" + platingId.getPath())
+                ));
+                registry.addRecipe(new GrindstoneEffectRemovalRecipe(
+                        EmiStack.of(outputStack),
+                        EmiStack.of(armorStack),
+                        TitanFabric.getId("/grindstone/" + armorId.getPath() + "/" + platingId.getPath() + "_plating_removal")
                 ));
             }
         }

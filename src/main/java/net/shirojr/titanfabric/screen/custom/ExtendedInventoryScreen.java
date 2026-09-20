@@ -16,13 +16,19 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.client.util.InputUtil;
 import net.shirojr.titanfabric.TitanFabric;
 import net.shirojr.titanfabric.screen.handler.ExtendedInventoryScreenHandler;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
 public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInventoryScreenHandler> implements RecipeBookProvider {
     public static final Identifier TEXTURE = TitanFabric.getId("textures/gui/extended_inventory.png");
+
+    private static boolean cursorPositionPending;
+    private static double pendingCursorX;
+    private static double pendingCursorY;
 
     private static class FakeRecipeBookWidget extends RecipeBookWidget {
         private boolean open;
@@ -111,9 +117,29 @@ public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInv
         this.backgroundHeight = 166;
     }
 
+    public static void rememberCursorPosition(MinecraftClient client) {
+        if (client.mouse == null) return;
+        pendingCursorX = client.mouse.getX();
+        pendingCursorY = client.mouse.getY();
+        cursorPositionPending = true;
+    }
+
+    private void restoreCursorPosition() {
+        if (!cursorPositionPending || this.client == null || this.client.mouse == null) return;
+        cursorPositionPending = false;
+        this.client.mouse.setResolutionChanged();
+        InputUtil.setCursorParameters(
+                this.client.getWindow().getHandle(),
+                GLFW.GLFW_CURSOR_NORMAL,
+                pendingCursorX,
+                pendingCursorY
+        );
+    }
+
     @Override
     protected void init() {
         super.init();
+        this.restoreCursorPosition();
         this.titleX = 86;
         this.titleY = 6;
         this.playerInventoryTitleX = this.titleX;
@@ -132,7 +158,6 @@ public class ExtendedInventoryScreen extends AbstractInventoryScreen<ExtendedInv
             this.mouseDown = true;
         }));
         ButtonWidget buttonWidget = ButtonWidget.builder(Text.translatable("screen.titanfabric.save_inventory_arrow2"), button -> {
-            if (this.client.mouse != null) this.client.mouse.unlockCursor();
             this.client.setScreen(new InventoryScreen(this.client.player));
         }).dimensions(this.x + 2, this.height / 2 - 106, 20, 20).build();
         this.addDrawableChild(buttonWidget);
