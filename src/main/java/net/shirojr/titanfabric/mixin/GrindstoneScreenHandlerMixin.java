@@ -5,6 +5,7 @@ import net.minecraft.screen.GrindstoneScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.shirojr.titanfabric.access.GrindstoneScreenHandlerAccessor;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +37,11 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
     @Inject(method = "getOutputStack", at = @At("HEAD"), cancellable = true)
     private void getOutputStack(ItemStack firstInput, ItemStack secondInput, CallbackInfoReturnable<ItemStack> cir) {
         titanfabric$platingAction = false;
+        if (firstInput.isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE)
+                || secondInput.isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE)) {
+            cir.setReturnValue(ItemStack.EMPTY);
+            return;
+        }
         ItemStack output = titanfabric$getCustomOutput(firstInput, secondInput);
         if (!output.isEmpty()) {
             titanfabric$platingAction = true;

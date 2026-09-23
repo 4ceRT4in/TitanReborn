@@ -339,6 +339,20 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
                 EmiStack.of(TitanFabricItems.ENCHANTED_DIAMOND_APPLE),
                 TitanFabric.getId("/enchanted_diamond_apple_smithing_repair")
         ));
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                EmiStack.of(twiceUsedApple),
+                EmiStack.of(Items.DIAMOND_BLOCK),
+                EmiStack.of(onceUsedApple),
+                TitanFabric.getId("/enchanted_diamond_apple_diamond_block_repair_twice_used")
+        ));
+        registry.addRecipe(new EmiSmithingRecipe(
+                EmiStack.EMPTY,
+                EmiStack.of(onceUsedApple),
+                EmiStack.of(Items.DIAMOND_BLOCK),
+                EmiStack.of(TitanFabricItems.ENCHANTED_DIAMOND_APPLE),
+                TitanFabric.getId("/enchanted_diamond_apple_diamond_block_repair_once_used")
+        ));
     }
 
     private void addOverpoweredEnchantedBookRecipes(EmiRegistry registry) {
@@ -363,7 +377,8 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
                     .anyMatch(stack -> stack.getItemStack().isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE));
             if (!outputsApple) return false;
 
-            if (recipe.getCategory().equals(VanillaEmiRecipeCategories.ANVIL_REPAIRING)) {
+            if (recipe.getCategory().equals(VanillaEmiRecipeCategories.ANVIL_REPAIRING)
+                    || recipe.getCategory().equals(VanillaEmiRecipeCategories.GRINDING)) {
                 return true;
             }
             if (!recipe.getCategory().equals(VanillaEmiRecipeCategories.CRAFTING)

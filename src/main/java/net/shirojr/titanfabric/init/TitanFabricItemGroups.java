@@ -32,8 +32,10 @@ public class TitanFabricItemGroups {
                     .build()
     );
 
+    // Fabric sorts modded creative tabs by registry ID. These prefixes keep the four tabs together
+    // in the intended order without changing their visible translated names.
     public static final RegistryKey<ItemGroup> SWORD_VARIANTS = register(
-            "sword_variants",
+            "titan_1_sword_variants",
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(TitanFabricItems.LEGEND_SWORD))
                     .displayName(Text.translatable("itemGroup.titanfabric.sword_variants"))
@@ -41,7 +43,7 @@ public class TitanFabricItemGroups {
     );
 
     public static final RegistryKey<ItemGroup> GREATSWORD_VARIANTS = register(
-            "greatsword_variants",
+            "titan_2_greatsword_variants",
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(TitanFabricItems.LEGEND_GREATSWORD))
                     .displayName(Text.translatable("itemGroup.titanfabric.greatsword_variants"))
@@ -49,7 +51,7 @@ public class TitanFabricItemGroups {
     );
 
     public static final RegistryKey<ItemGroup> SPEAR_VARIANTS = register(
-            "spear_variants",
+            "titan_3_spear_variants",
             FabricItemGroup.builder()
                     .icon(() -> new ItemStack(TitanFabricItems.LEGEND_SPEAR))
                     .displayName(Text.translatable("itemGroup.titanfabric.spear_variants"))

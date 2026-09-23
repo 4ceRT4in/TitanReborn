@@ -2,6 +2,7 @@ package net.shirojr.titanfabric.recipe.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.RecipeSerializer;
@@ -12,27 +13,28 @@ import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricRecipeSerializers;
 
-/** Combines two used Enchanted Diamond Apples into one fully restored apple. */
+/** Repairs a used Enchanted Diamond Apple at the smithing table. */
 public class EnchantedDiamondAppleRepairRecipe implements SmithingRecipe {
     @Override
     public boolean matches(SmithingRecipeInput input, World world) {
         return input.template().isEmpty()
                 && isDamagedApple(input.base())
-                && isDamagedApple(input.addition())
-                && componentsMatchExceptDamage(input.base(), input.addition());
+                && isValidAddition(input.base(), input.addition());
     }
 
     @Override
     public ItemStack craft(SmithingRecipeInput input, RegistryWrapper.WrapperLookup lookup) {
-        if (!isDamagedApple(input.base())
-                || !isDamagedApple(input.addition())
-                || !componentsMatchExceptDamage(input.base(), input.addition())) {
+        if (!isDamagedApple(input.base()) || !isValidAddition(input.base(), input.addition())) {
             return ItemStack.EMPTY;
         }
 
         ItemStack repaired = input.base().copy();
         repaired.setCount(1);
-        repaired.setDamage(0);
+        if (input.addition().isOf(Items.DIAMOND_BLOCK)) {
+            repaired.setDamage(repaired.getDamage() - 1);
+        } else {
+            repaired.setDamage(0);
+        }
         return repaired;
     }
 
@@ -58,13 +60,18 @@ public class EnchantedDiamondAppleRepairRecipe implements SmithingRecipe {
 
     @Override
     public boolean testAddition(ItemStack stack) {
-        return isDamagedApple(stack);
+        return isDamagedApple(stack) || stack.isOf(Items.DIAMOND_BLOCK);
     }
 
     private static boolean isDamagedApple(ItemStack stack) {
         return stack.getCount() == 1
                 && stack.isOf(TitanFabricItems.ENCHANTED_DIAMOND_APPLE)
                 && stack.isDamaged();
+    }
+
+    private static boolean isValidAddition(ItemStack base, ItemStack addition) {
+        return addition.isOf(Items.DIAMOND_BLOCK)
+                || isDamagedApple(addition) && componentsMatchExceptDamage(base, addition);
     }
 
     private static boolean componentsMatchExceptDamage(ItemStack first, ItemStack second) {
