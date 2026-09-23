@@ -14,6 +14,16 @@ import java.util.Optional;
 
 public class OverpoweredEnchantmentsHelper {
 
+    public static int getSupportedOverpoweredLevel(RegistryEntry<Enchantment> enchantment) {
+        int normalMaximum = getNormalMaximum(enchantment);
+        return normalMaximum == Integer.MAX_VALUE ? -1 : normalMaximum + 1;
+    }
+
+    public static boolean isSupportedOverpoweredCombination(RegistryEntry<Enchantment> enchantment, int inputLevel, int resultLevel) {
+        int supportedLevel = getSupportedOverpoweredLevel(enchantment);
+        return supportedLevel == resultLevel && inputLevel == resultLevel - 1;
+    }
+
     public static int getNormalMaximum(RegistryEntry<Enchantment> enchantment) {
         if (enchantment.matchesKey(Enchantments.SHARPNESS)
                 || enchantment.matchesKey(Enchantments.POWER)) {
@@ -63,9 +73,8 @@ public class OverpoweredEnchantmentsHelper {
             int sacrificeLevel = sacrificeEnchantments.getLevel(entry);
             boolean transfersExistingOverpoweredEnchantment = resultLevel == normalMaximum + 1
                     && sacrificeLevel == resultLevel;
-            boolean combinesTwoNormalMaximums = resultLevel == normalMaximum + 1
-                    && baseLevel == normalMaximum
-                    && sacrificeLevel == normalMaximum;
+            boolean combinesTwoNormalMaximums = baseLevel == sacrificeLevel
+                    && isSupportedOverpoweredCombination(entry, baseLevel, resultLevel);
             if (!transfersExistingOverpoweredEnchantment && !combinesTwoNormalMaximums) {
                 return false;
             }

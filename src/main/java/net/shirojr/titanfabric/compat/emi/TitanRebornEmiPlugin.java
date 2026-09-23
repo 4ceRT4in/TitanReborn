@@ -38,6 +38,7 @@ import net.shirojr.titanfabric.recipe.custom.EffectRecipe;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.effects.EffectHelper;
 import net.shirojr.titanfabric.util.effects.ArmorPlatingHelper;
+import net.shirojr.titanfabric.util.effects.OverpoweredEnchantmentsHelper;
 import net.shirojr.titanfabric.util.effects.WeaponEffect;
 import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
@@ -152,6 +153,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         removeEnchantedDiamondAppleLegacyRepairRecipes(registry);
         addGrindstoneEffectRemovalRecipes(registry);
         addArmorPlatingRecipes(registry);
+        addOverpoweredEnchantedBookRecipes(registry);
         removeUncraftableFurnaceRecipes(registry);
         addMissingMultiBowSmithingRecipes(registry);
 
@@ -190,7 +192,16 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
                         inputWeaponEffects.add(new WeaponEffectData(WeaponEffectType.ADDITIONAL_EFFECT, weaponEffect, 1));
                         input.set(TitanFabricDataComponents.WEAPON_EFFECTS, inputWeaponEffects);
                     }
-                    registry.addRecipe(new EmiSmithingRecipe(EmiStack.EMPTY, EmiStack.of(input), EmiStack.of(TitanFabricItems.ESSENCE.withEffect(weaponEffect)), EmiStack.of(output), TitanFabric.getId("/" + id.getPath() + "_" + weaponEffect.getId() + "_" + i + "_upgrade")));
+                    EmiStack recipeIndex = effectWeapon == TitanFabricItems.DIAMOND_SWORD
+                            ? EmiStack.of(Items.DIAMOND_SWORD)
+                            : EmiStack.of(effectWeapon);
+                    registry.addRecipe(new EffectSmithingEmiRecipe(
+                            EmiStack.of(input),
+                            EmiStack.of(TitanFabricItems.ESSENCE.withEffect(weaponEffect)),
+                            EmiStack.of(output),
+                            recipeIndex,
+                            TitanFabric.getId("/" + id.getPath() + "_" + weaponEffect.getId() + "_" + i + "_upgrade")
+                    ));
 
                 }
             }
@@ -330,6 +341,22 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         ));
     }
 
+    private void addOverpoweredEnchantedBookRecipes(EmiRegistry registry) {
+        for (Enchantment enchantment : EmiPort.getEnchantmentRegistry()) {
+            RegistryEntry<Enchantment> enchantmentEntry = EmiPort.getEnchantmentRegistry().getEntry(enchantment);
+            int outputLevel = OverpoweredEnchantmentsHelper.getSupportedOverpoweredLevel(enchantmentEntry);
+            if (outputLevel < 0) continue;
+
+            Identifier enchantmentId = EmiPort.getEnchantmentRegistry().getId(enchantment);
+            registry.addRecipe(new NetheriteAnvilEnchantedBookRecipe(
+                    enchantmentEntry,
+                    outputLevel - 1,
+                    outputLevel,
+                    TitanFabric.getId("/netherite_anvil/enchanting/book/" + EmiUtil.subId(enchantmentId) + "/" + outputLevel)
+            ));
+        }
+    }
+
     private void removeEnchantedDiamondAppleLegacyRepairRecipes(EmiRegistry registry) {
         registry.removeRecipes(recipe -> {
             boolean outputsApple = recipe.getOutputs().stream()
@@ -363,8 +390,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
                     continue;
                 }
 
-                ItemStack outputStack = inputStack.copy();
-                EffectHelper.removeAdditionalEffectsFromStack(outputStack);
+                ItemStack outputStack = EffectHelper.createStackWithoutAdditionalEffects(inputStack);
 
                 WeaponEffectData effectData = additionalEffect.get();
                 registry.addRecipe(new GrindstoneEffectRemovalRecipe(

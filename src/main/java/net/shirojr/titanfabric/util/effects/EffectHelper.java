@@ -13,6 +13,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
 import net.shirojr.titanfabric.util.LoggerUtil;
 import net.shirojr.titanfabric.util.items.WeaponEffectCrafting;
@@ -114,6 +115,14 @@ public final class EffectHelper {
         } else {
             itemStack.set(TitanFabricDataComponents.WEAPON_EFFECTS, filteredEffects);
         }
+    }
+
+    public static ItemStack createStackWithoutAdditionalEffects(ItemStack itemStack) {
+        ItemStack output = itemStack.isOf(TitanFabricItems.DIAMOND_SWORD)
+                ? itemStack.copyComponentsToNewStack(Items.DIAMOND_SWORD, itemStack.getCount())
+                : itemStack.copy();
+        removeAdditionalEffectsFromStack(output);
+        return output;
     }
 
     public static void removeEffectsFromStack(ItemStack itemStack) {

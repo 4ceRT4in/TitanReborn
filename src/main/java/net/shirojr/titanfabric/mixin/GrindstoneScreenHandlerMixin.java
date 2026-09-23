@@ -63,9 +63,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
         }
 
         if (EffectHelper.hasAdditionalWeaponEffects(inputStack)) {
-            ItemStack out = inputStack.copy();
-            EffectHelper.removeAdditionalEffectsFromStack(out);
-            return out;
+            return EffectHelper.createStackWithoutAdditionalEffects(inputStack);
         }
 
         return ItemStack.EMPTY;
