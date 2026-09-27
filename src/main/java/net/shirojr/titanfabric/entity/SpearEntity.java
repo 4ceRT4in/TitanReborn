@@ -17,6 +17,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -40,6 +41,7 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
     private int returnTicks;
     private boolean returned;
     private boolean dealtDamage;
+    private Hand thrownHand = Hand.MAIN_HAND;
 
     public SpearEntity(EntityType<? extends SpearEntity> type, World world) { super(type, world); }
 
@@ -49,7 +51,7 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         builder.add(RENDER_STACK, ItemStack.EMPTY);
     }
 
-    public SpearEntity(World world, LivingEntity owner, ItemStack stack, SpearTier tier) {
+    public SpearEntity(World world, LivingEntity owner, ItemStack stack, SpearTier tier, Hand thrownHand) {
         super(TitanFabricEntities.SPEAR, owner, world, stack, stack);
         this.spearStack = stack.copy();
         setStack(this.spearStack);
@@ -58,6 +60,7 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         this.ownerUuid = owner.getUuid();
         this.throwStart = owner.getEyePos();
         this.returnTicks = tier.throwCooldown();
+        this.thrownHand = thrownHand;
         this.pickupType = PickupPermission.DISALLOWED;
         setDamage(tier.damage());
     }
@@ -98,6 +101,9 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         }
         int finalDamage = MathHelper.ceil(MathHelper.clamp(damage, 0.0, Integer.MAX_VALUE));
         boolean damageAccepted = entity.damage(source, finalDamage);
+        if (entity instanceof LivingEntity) {
+            damageOwnerSpear();
+        }
         if (damageAccepted && entity instanceof LivingEntity target) {
             EffectHelper.applyWeaponEffectsOnTarget(getWorld(), activeSpearStack(), target);
             if (getWorld() instanceof ServerWorld serverWorld) {
@@ -157,6 +163,31 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         return trackedStack.isEmpty() ? spearStack : trackedStack;
     }
 
+    private void damageOwnerSpear() {
+        if (tier.durability() <= 0 || !(getOwner() instanceof PlayerEntity player)) return;
+
+        ItemStack handStack = player.getStackInHand(thrownHand);
+        ItemStack ownerStack = ItemStack.areItemsAndComponentsEqual(handStack, spearStack) ? handStack : ItemStack.EMPTY;
+        for (int slot = 0; ownerStack.isEmpty() && slot < player.getInventory().size(); slot++) {
+            ItemStack candidate = player.getInventory().getStack(slot);
+            if (ItemStack.areItemsAndComponentsEqual(candidate, spearStack)) {
+                ownerStack = candidate;
+            }
+        }
+        // The player may have used the spear in melee while it was in flight,
+        // which changes its damage component and prevents an exact match.
+        if (ownerStack.isEmpty() && handStack.isOf(spearStack.getItem())) {
+            ownerStack = handStack;
+        }
+        for (int slot = 0; ownerStack.isEmpty() && slot < player.getInventory().size(); slot++) {
+            ItemStack candidate = player.getInventory().getStack(slot);
+            if (candidate.isOf(spearStack.getItem())) ownerStack = candidate;
+        }
+        if (ownerStack.isEmpty()) return;
+
+        ownerStack.damage(1, player, LivingEntity.getSlotForHand(thrownHand));
+    }
+
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
@@ -166,6 +197,7 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         nbt.putDouble("SpearStartX", throwStart.x); nbt.putDouble("SpearStartY", throwStart.y); nbt.putDouble("SpearStartZ", throwStart.z);
         nbt.putInt("SpearReturn", returnTicks);
         nbt.putBoolean("SpearDealtDamage", dealtDamage);
+        nbt.putString("SpearHand", thrownHand.name());
     }
 
     @Override
@@ -181,6 +213,8 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
         throwStart = new Vec3d(nbt.getDouble("SpearStartX"), nbt.getDouble("SpearStartY"), nbt.getDouble("SpearStartZ"));
         returnTicks = nbt.getInt("SpearReturn");
         dealtDamage = nbt.getBoolean("SpearDealtDamage");
+        String savedHand = nbt.getString("SpearHand");
+        try { thrownHand = Hand.valueOf(savedHand); } catch (IllegalArgumentException ignored) { thrownHand = Hand.MAIN_HAND; }
         pickupType = PickupPermission.DISALLOWED;
     }
 }

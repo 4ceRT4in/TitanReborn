@@ -125,7 +125,7 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
                 || world.isClient || hasSpearCooldown(player)) return;
         ItemStack thrown = stack.copy();
         thrown.setCount(1);
-        SpearEntity entity = new SpearEntity(world, player, thrown, tier);
+        SpearEntity entity = new SpearEntity(world, player, thrown, tier, player.getActiveHand());
         // Calculate the direction directly from the player's rotation. The generic
         // trident helper is unreliable at the lower end of the pitch range because
         // it also mixes in the owner's movement before the projectile is spawned.
