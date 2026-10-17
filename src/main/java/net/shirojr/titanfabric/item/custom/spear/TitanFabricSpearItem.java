@@ -146,6 +146,10 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
 
     @Override
     public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!target.getWorld().isClient) {
+            target.getWorld().playSoundFromEntity(null, target, SoundEvents.ITEM_TRIDENT_HIT,
+                    SoundCategory.PLAYERS, 1.0f, 1.0f);
+        }
         EffectHelper.applyWeaponEffectsOnTarget(target.getWorld(), stack, target);
         return super.postHit(stack, target, attacker);
     }

@@ -14,6 +14,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.hit.EntityHitResult;
@@ -117,6 +118,11 @@ public class SpearEntity extends PersistentProjectileEntity implements FlyingIte
     @Override
     protected EntityHitResult getEntityCollision(Vec3d currentPosition, Vec3d nextPosition) {
         return dealtDamage ? null : super.getEntityCollision(currentPosition, nextPosition);
+    }
+
+    @Override
+    protected SoundEvent getHitSound() {
+        return SoundEvents.ITEM_TRIDENT_HIT_GROUND;
     }
 
     @Override
