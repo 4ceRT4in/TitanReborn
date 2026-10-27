@@ -25,7 +25,7 @@ public class BarrelBombEntity extends TntEntity {
     public BarrelBombEntity(World world, double x, double y, double z, LivingEntity owner, Type type) {
         super(TitanFabricEntities.BARREL_BOMB, world);
         refreshPositionAndAngles(x, y, z, 0, 0);
-        setFuse(40);
+        setFuse(20);
         this.type = type;
         setBlockState(type == Type.CITRIN
                 ? TitanFabricBlocks.CITRIN_BARREL_BOMB.getDefaultState()

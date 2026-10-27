@@ -187,7 +187,7 @@ public interface TitanFabricItems {
                     .food(new FoodComponent.Builder().nutrition(4).saturationModifier(1.2f).alwaysEdible().build()), 0, 3600));
     Item ENCHANTED_DIAMOND_APPLE = register("enchanted_diamond_apple",
             new EnchantedDiamondAppleItem(new Item.Settings().maxCount(1).maxDamage(3).rarity(Rarity.EPIC)
-                    .food(new FoodComponent(4, 1.2f, true, 2.4f, java.util.Optional.empty(), java.util.List.of()))));
+                    .food(new FoodComponent.Builder().nutrition(4).saturationModifier(1.2f).alwaysEdible().build())));
 
     BackPackItem POTION_BUNDLE = register("potion_bundle", new BackPackItem(new Item.Settings().maxCount(1), BackPackItem.Type.POTION));
 

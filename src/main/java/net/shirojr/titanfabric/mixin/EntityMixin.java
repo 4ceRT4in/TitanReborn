@@ -4,11 +4,13 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.SoulFireEntityTracker;
 import net.shirojr.titanfabric.access.EntityAccessor;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,16 +25,30 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityMixin implements EntityAccessor {
 
     @Unique
-    private boolean titanfabric$soulBurning;
+    private static final TrackedData<Boolean> TITANFABRIC_SOUL_BURNING =
+            DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.BOOLEAN);
+
+    @ModifyArg(
+            method = "<init>",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/Entity;initDataTracker(Lnet/minecraft/entity/data/DataTracker$Builder;)V"
+            ),
+            index = 0
+    )
+    private DataTracker.Builder titanfabric$trackSoulBurning(DataTracker.Builder builder) {
+        builder.add(TITANFABRIC_SOUL_BURNING, false);
+        return builder;
+    }
 
     @Override
     public boolean titanfabric$isSoulBurning() {
-        return this.titanfabric$soulBurning;
+        return ((Entity) (Object) this).getDataTracker().get(TITANFABRIC_SOUL_BURNING);
     }
 
     @Override
     public void titanfabric$setSoulBurning(boolean value) {
-        this.titanfabric$soulBurning = value;
+        ((Entity) (Object) this).getDataTracker().set(TITANFABRIC_SOUL_BURNING, value);
     }
 
     @ModifyArg(
@@ -50,23 +66,20 @@ public class EntityMixin implements EntityAccessor {
     @Inject(method = "baseTick", at = @At("HEAD"))
     private void baseTick(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
+        if (self.getWorld().isClient()) return;
+
         boolean touchingSoulFire = self.getWorld().getBlockState(self.getBlockPos()).isOf(Blocks.SOUL_FIRE);
         if (touchingSoulFire) {
             titanfabric$setSoulBurning(true);
         } else if (!self.isOnFire()) {
             titanfabric$setSoulBurning(false);
         }
-        if (self.getWorld().isClient()) {
-            if (titanfabric$isSoulBurning()) SoulFireEntityTracker.SOUL_FIRE_ENTITIES.add(self.getUuid());
-            else handleClientSide(self);
-        }
     }
 
     @ModifyExpressionValue(method = "doesRenderOnFire", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isOnFire()Z"))
     private boolean isOnFire(boolean original) {
         Entity self = (Entity) (Object) this;
-        boolean soulFire = titanfabric$isSoulBurning()
-                || (self.getWorld().isClient() && SoulFireEntityTracker.SOUL_FIRE_ENTITIES.contains(self.getUuid()));
+        boolean soulFire = titanfabric$isSoulBurning();
         if (!(self instanceof LivingEntity livingEntity)) return original || soulFire;
         return (original || soulFire) && ArmorHelper.getEmberArmorCount(livingEntity) < 4;
     }
@@ -75,15 +88,8 @@ public class EntityMixin implements EntityAccessor {
     private void updateMovementInFluid(TagKey<Fluid> tag, double speed, CallbackInfoReturnable<Boolean> cir) {
         Entity entity = (Entity)(Object)this;
         World world = entity.getWorld();
+        if (world.isClient()) return;
         if (!(world.getFluidState(entity.getBlockPos()).getFluid() == Fluids.LAVA || world.getFluidState(entity.getBlockPos()).getFluid() == Fluids.FLOWING_LAVA)) return;
         titanfabric$setSoulBurning(false);
-        if (world.isClient()) {
-            handleClientSide(entity);
-        }
-    }
-
-    @Unique
-    private void handleClientSide(Entity entity) {
-        SoulFireEntityTracker.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
     }
 }

@@ -11,7 +11,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.shirojr.titanfabric.SoulFireEntityTracker;
 import net.shirojr.titanfabric.access.EntityAccessor;
 import net.shirojr.titanfabric.util.items.ArmorHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,14 +31,12 @@ public abstract class AbstractFireBlockMixin extends Block {
         boolean soulFire = state.isOf(Blocks.SOUL_FIRE);
         boolean fire = state.isOf(Blocks.FIRE);
 
-        if (soulFire) {
-            ((EntityAccessor) entity).titanfabric$setSoulBurning(true);
-        } else if (fire) {
-            ((EntityAccessor) entity).titanfabric$setSoulBurning(false);
-        }
-
-        if (world.isClient) {
-            handleClientSide(soulFire, fire, entity);
+        if (!world.isClient) {
+            if (soulFire) {
+                ((EntityAccessor) entity).titanfabric$setSoulBurning(true);
+            } else if (fire) {
+                ((EntityAccessor) entity).titanfabric$setSoulBurning(false);
+            }
         }
     }
 
@@ -104,12 +101,4 @@ public abstract class AbstractFireBlockMixin extends Block {
         return Math.max(0, Math.round(baseTicks * durationMultiplier));
     }
 
-    @Unique
-    private void handleClientSide(boolean soulFire, boolean fire, Entity entity) {
-        if (soulFire) {
-            SoulFireEntityTracker.SOUL_FIRE_ENTITIES.add(entity.getUuid());
-        } else if (fire) {
-            SoulFireEntityTracker.SOUL_FIRE_ENTITIES.remove(entity.getUuid());
-        }
-    }
 }

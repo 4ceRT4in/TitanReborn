@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import net.shirojr.titanfabric.util.SoulFireStateHelper;
 
 public class FlintAndEmberItem extends FlintAndSteelItem {
     public FlintAndEmberItem(Settings settings) {
@@ -84,8 +85,8 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
         if (isReplaceablePlant(current)) {
             removePlantAt(world, pos, current);
         }
-        if (world.getBlockState(pos).isAir() && AbstractFireBlock.canPlaceAt(world, pos, Direction.UP)) {
-            BlockState soul = Blocks.SOUL_FIRE.getDefaultState();
+        if (world.getBlockState(pos).isAir() && SoulFireStateHelper.canPlaceAt(world, pos)) {
+            BlockState soul = SoulFireStateHelper.getStateForPosition(world, pos);
             world.setBlockState(pos, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
             world.emitGameEvent(player, GameEvent.BLOCK_PLACE, pos);
             return 1;

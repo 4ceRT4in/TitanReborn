@@ -30,7 +30,6 @@ public class TitanFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        SoulFireEntityTracker.SOUL_FIRE_ENTITIES.clear();
         TitanFabricEvents.registerClientEvents();
         TitanFabricKeyBinds.register();
         TitanFabricColorProviders.register();
