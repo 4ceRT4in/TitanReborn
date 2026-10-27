@@ -2,7 +2,6 @@ package net.shirojr.titanfabric.item.custom.misc;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FlintAndSteelItem;
@@ -17,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import net.shirojr.titanfabric.util.FirePlacementHelper;
 import net.shirojr.titanfabric.util.SoulFireStateHelper;
 
 public class FlintAndEmberItem extends FlintAndSteelItem {
@@ -42,9 +42,9 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
             return ActionResult.success(world.isClient());
         }
 
-        BlockPos firePos = pos.offset(context.getSide());
+        BlockPos firePos = FirePlacementHelper.getPlacementPos(world, pos, context.getSide());
         if (!AbstractFireBlock.canPlaceAt(world, firePos, Direction.UP)) {
-            if (!isReplaceablePlant(world.getBlockState(firePos))) return ActionResult.FAIL;
+            if (!FirePlacementHelper.prepareSoulFirePlacement(world, firePos)) return ActionResult.FAIL;
         }
 
         world.playSound(player, firePos, SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.BLOCKS, 1.0f, world.getRandom().nextFloat() * 0.4f + 0.8f);
@@ -60,31 +60,7 @@ public class FlintAndEmberItem extends FlintAndSteelItem {
         return ActionResult.success(world.isClient());
     }
 
-    private boolean isReplaceablePlant(BlockState state) {
-        return state.getBlock() instanceof PlantBlock
-                || state.getBlock() instanceof TallPlantBlock
-                || state.isOf(Blocks.SHORT_GRASS)
-                || state.isOf(Blocks.TALL_GRASS);
-    }
-
-    private void removePlantAt(World world, BlockPos pos, BlockState state) {
-        if (state.getBlock() instanceof TallPlantBlock && state.contains(Properties.DOUBLE_BLOCK_HALF)) {
-            DoubleBlockHalf half = state.get(Properties.DOUBLE_BLOCK_HALF);
-            BlockPos other = half == DoubleBlockHalf.UPPER ? pos.down() : pos.up();
-            world.breakBlock(pos, false);
-            if (world.getBlockState(other).getBlock() instanceof TallPlantBlock) {
-                world.breakBlock(other, false);
-            }
-        } else {
-            world.breakBlock(pos, false);
-        }
-    }
-
     private int tryPlaceSoulFire(World world, BlockPos pos, PlayerEntity player) {
-        BlockState current = world.getBlockState(pos);
-        if (isReplaceablePlant(current)) {
-            removePlantAt(world, pos, current);
-        }
         if (world.getBlockState(pos).isAir() && SoulFireStateHelper.canPlaceAt(world, pos)) {
             BlockState soul = SoulFireStateHelper.getStateForPosition(world, pos);
             world.setBlockState(pos, soul, Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
