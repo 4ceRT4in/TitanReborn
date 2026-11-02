@@ -84,11 +84,10 @@ public class TitanFabricClientTickEvents {
         cleanupImmunityStatusDesync(client);
 
         KeyBindRegistry keyBinds = KeyBindRegistry.getInstance();
-        int selectedSlot = client.player.getInventory().selectedSlot;
 
         if (TitanFabricKeyBinds.ARROW_SELECTION_KEY.isPressed()) {
             if (!keyBinds.wasPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY)) {
-                new ArrowSelectionPacket(selectedSlot).sendPacket();
+                new ArrowSelectionPacket().sendPacket();
                 keyBinds.setPressed(TitanFabricKeyBinds.ARROW_SELECTION_KEY, true);
             }
         } else {

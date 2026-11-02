@@ -2,11 +2,9 @@ package net.shirojr.titanfabric.network.packet;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -19,14 +17,12 @@ import net.shirojr.titanfabric.util.items.SelectableArrow;
 import java.util.List;
 import java.util.Optional;
 
-public record ArrowSelectionPacket(int weaponStackIndex) implements CustomPayload {
+public record ArrowSelectionPacket() implements CustomPayload {
     public static final Id<ArrowSelectionPacket> IDENTIFIER =
             new Id<>(TitanFabric.getId("arrow_selection"));
 
-    public static final PacketCodec<RegistryByteBuf, ArrowSelectionPacket> CODEC = PacketCodec.tuple(
-            PacketCodecs.VAR_INT, ArrowSelectionPacket::weaponStackIndex,
-            ArrowSelectionPacket::new
-    );
+    public static final PacketCodec<RegistryByteBuf, ArrowSelectionPacket> CODEC =
+            PacketCodec.unit(new ArrowSelectionPacket());
 
     @Override
     public Id<? extends CustomPayload> getId() {
@@ -39,8 +35,14 @@ public record ArrowSelectionPacket(int weaponStackIndex) implements CustomPayloa
 
     public void handlePacket(ServerPlayNetworking.Context context) {
         ServerPlayerEntity player = context.player();
-        PlayerInventory inventory = player.getInventory();
-        ItemStack weaponStack = inventory.getStack(weaponStackIndex);
+        ItemStack weaponStack;
+        if (player.getMainHandStack().getItem() instanceof SelectableArrow) {
+            weaponStack = player.getMainHandStack();
+        } else if (player.getOffHandStack().getItem() instanceof SelectableArrow) {
+            weaponStack = player.getOffHandStack();
+        } else {
+            return;
+        }
         if (!(weaponStack.getItem() instanceof SelectableArrow selectionHandler)) return;
         List<ItemStack> arrowStacks = ArrowSelectionHelper.findAllSupportedArrowStacks(player, selectionHandler);
         List<ItemStack> processedStacks = new ProjectileStackSorter(player, arrowStacks)

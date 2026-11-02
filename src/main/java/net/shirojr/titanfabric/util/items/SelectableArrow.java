@@ -64,7 +64,7 @@ public interface SelectableArrow {
         DefaultedList<ItemStack> playerInventory = player.getInventory().main;
 
         if (selectedIndexOfBag == null) {
-            if (selectedIndex >= playerInventory.size() - 1) return null;
+            if (selectedIndex < 0 || selectedIndex >= playerInventory.size()) return null;
             return playerInventory.get(selectedIndex);
         } else if (selectedIndexOfBag.equals(-1)) {
             bagStack = player.getOffHandStack();
@@ -74,7 +74,7 @@ public interface SelectableArrow {
         if (bagStack == null || !(bagStack.getItem() instanceof BackPackItem bagItem)) return null;
         if (!bagItem.getBackpackType().equals(BackPackItem.Type.POTION)) return null;
         Inventory bagInventory = BackPackItem.getInventoryFromComponents(bagStack, BackPackItem.Type.POTION);
-        if (selectedIndex >= bagInventory.size()) return null;
+        if (selectedIndex < 0 || selectedIndex >= bagInventory.size()) return null;
         return bagInventory.getStack(selectedIndex);
     }
 
