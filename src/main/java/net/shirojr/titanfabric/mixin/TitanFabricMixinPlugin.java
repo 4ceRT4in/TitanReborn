@@ -22,6 +22,9 @@ public class TitanFabricMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (mixinClassName.endsWith(".LegacyCombatCoreHeldItemRendererMixin")) {
+            return FabricLoader.getInstance().isModLoaded("legacycombatcore");
+        }
         if (mixinClassName.contains("EmiAnvilEnchantRecipeMixin")  && !FabricLoader.getInstance().isModLoaded("emi")) {
             return false;
         }

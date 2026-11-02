@@ -77,6 +77,7 @@
     "client.InGameOverlayRendererMixin",
     "client.InventoryScreenMixin",
     "client.ItemRendererMixin",
+    "client.LegacyCombatCoreHeldItemRendererMixin",
     "client.PlayerEntityRendererMixin",
     "client.PlayerHeldItemFeatureRendererMixin",
     "client.StatusEffectSpriteManagerMixin"
