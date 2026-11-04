@@ -7,8 +7,10 @@ import net.minecraft.entity.damage.DamageSource;
 import net.shirojr.titanfabric.item.custom.bow.NetheriteBowItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class NetheriteBowShieldMixin {
@@ -29,5 +31,18 @@ public abstract class NetheriteBowShieldMixin {
         float half = blockedDamage.get() * 0.5F;
         blockedDamage.set(half);
         return half;
+    }
+
+    @Inject(method = "damage", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/World;sendEntityStatus(Lnet/minecraft/entity/Entity;B)V",
+            shift = At.Shift.AFTER))
+    private void titanfabric$notifyDamageThroughShield(DamageSource source, float amount,
+                                                       CallbackInfoReturnable<Boolean> cir) {
+        if (amount <= 0.0F || !NetheriteBowItem.isNetheriteBowArrow(source)) return;
+
+        // Vanilla sends only the shield-block status here, skipping the damage packet
+        // that plays the hurt sound for the victim. A partial block needs both packets.
+        LivingEntity entity = (LivingEntity) (Object) this;
+        entity.getWorld().sendEntityDamage(entity, source);
     }
 }
