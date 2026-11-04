@@ -137,6 +137,7 @@ public class TitanFabricItemGroups {
                     TitanFabricItems.MULTI_BOW_2,
                     TitanFabricItems.MULTI_BOW_3,
                     TitanFabricItems.LEGEND_BOW,
+                    TitanFabricItems.NETHERITE_BOW,
                     TitanFabricItems.TITAN_CROSSBOW
             );
 

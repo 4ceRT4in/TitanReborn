@@ -1,0 +1,6 @@
+{
+  "textures": {
+    "layer0": "titanfabric:item/netherite_bow_pulling_2"
+  },
+  "parent": "titanfabric:item/netherite_bow"
+}

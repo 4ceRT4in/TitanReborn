@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "titanfabric:netherite_bow",
     "titanfabric:legend_bow",
     "titanfabric:multi_bow_1",
     "titanfabric:multi_bow_2",

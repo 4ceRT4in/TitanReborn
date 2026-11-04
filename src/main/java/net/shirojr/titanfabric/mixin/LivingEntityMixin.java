@@ -32,6 +32,7 @@ import net.shirojr.titanfabric.init.TitanFabricDamageTypes;
 import net.shirojr.titanfabric.init.TitanFabricGamerules;
 import net.shirojr.titanfabric.init.TitanFabricStatusEffects;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.item.custom.bow.NetheriteBowItem;
 import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
 import net.shirojr.titanfabric.item.custom.misc.ParachuteItem;
 import net.shirojr.titanfabric.util.effects.DiamondAbsorptionHelper;
@@ -326,6 +327,7 @@ public abstract class LivingEntityMixin implements HealthAccessor {
 
     @Inject(method = "blockedByShield", at = @At("HEAD"))
     private void blockedByShield(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        if (NetheriteBowItem.isNetheriteBowArrow(source)) return;
         LivingEntity self = (LivingEntity) (Object) this;
 
         if (source.getAttacker() instanceof PlayerEntity attacker) {

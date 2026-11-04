@@ -37,6 +37,7 @@
     "ItemStackMixin",
     "LingeringPotionItemMixin",
     "LivingEntityMixin",
+    "NetheriteBowShieldMixin",
     "LootTableMixin",
     "OreFeatureMixin",
     "PlayerEntityMixin",

@@ -61,6 +61,7 @@ public class ModelPredicateProviders {
         registerShieldProviders(TitanFabricItems.LEGEND_SHIELD);
 
         registerLegendBowProviders();
+        registerBowProviders(TitanFabricItems.NETHERITE_BOW);
         registerBowProviders(TitanFabricItems.MULTI_BOW_1);
         registerBowArrowCount(TitanFabricItems.MULTI_BOW_1);
         registerBowProviders(TitanFabricItems.MULTI_BOW_2);

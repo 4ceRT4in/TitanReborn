@@ -14,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.init.TitanFabricTags;
+import net.shirojr.titanfabric.item.custom.bow.NetheriteBowItem;
 import net.shirojr.titanfabric.util.items.FireEnchantmentBanHelper;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
 import net.shirojr.titanfabric.util.items.SelectableArrow;
@@ -79,7 +80,9 @@ public abstract class BowItemMixin implements SelectableArrow {
             LivingEntity target,
             Operation<Void> original
     ) {
-        ItemStack sanitizedBowStack = FireEnchantmentBanHelper.getSanitizedCombatStackForEffects(world, bowStack);
+        // NetheriteBowItem sanitizes projectile creation itself, keeping durability on the real stack.
+        ItemStack sanitizedBowStack = instance instanceof NetheriteBowItem ? bowStack
+                : FireEnchantmentBanHelper.getSanitizedCombatStackForEffects(world, bowStack);
         original.call(instance, world, shooter, hand, sanitizedBowStack, projectiles, speed, divergence, critical, target);
     }
 

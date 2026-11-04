@@ -22,6 +22,7 @@ import net.shirojr.titanfabric.item.custom.armor.EmberArmorItem;
 import net.shirojr.titanfabric.item.custom.armor.LegendArmorItem;
 import net.shirojr.titanfabric.item.custom.bow.LegendBowItem;
 import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
+import net.shirojr.titanfabric.item.custom.bow.NetheriteBowItem;
 import net.shirojr.titanfabric.item.custom.bow.TitanCrossBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.misc.*;
@@ -134,6 +135,8 @@ public interface TitanFabricItems {
     LegendBowItem LEGEND_BOW = register("legend_bow", new LegendBowItem(new Item.Settings().maxCount(1)
             .component(DataComponentTypes.UNBREAKABLE, new UnbreakableComponent(true)))
     );
+    NetheriteBowItem NETHERITE_BOW = register("netherite_bow", new NetheriteBowItem(
+            new Item.Settings().maxDamage(500).fireproof()));
     MultiBowItem MULTI_BOW_1 = register("multi_bow_1", new MultiBowItem(
             new Item.Settings().maxCount(1).maxDamage(500), 1, 10));
     MultiBowItem MULTI_BOW_2 = register("multi_bow_2", new MultiBowItem(

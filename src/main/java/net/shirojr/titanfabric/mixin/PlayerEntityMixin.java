@@ -28,6 +28,7 @@ import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.effects.DiamondAbsorptionHelper;
 import net.shirojr.titanfabric.item.custom.TitanFabricShieldItem;
 import net.shirojr.titanfabric.item.custom.TitanFabricSwordItem;
+import net.shirojr.titanfabric.item.custom.bow.NetheriteBowItem;
 import net.shirojr.titanfabric.item.custom.material.TitanFabricToolMaterials;
 import net.shirojr.titanfabric.item.custom.spear.SpearTier;
 import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
@@ -121,6 +122,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ArrowSho
     private void titanfabric$handleArrowSelection(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack selectedArrowStack = SelectableArrow.getSelectedArrowStack(stack, (PlayerEntity) (Object) this);
         if (selectedArrowStack == null) return;
+        // A selected inventory slot can change while the bow is being drawn.
+        if (stack.getItem() instanceof NetheriteBowItem bow
+                && !bow.getProjectiles().test(selectedArrowStack)) return;
         cir.setReturnValue(selectedArrowStack);
     }
 
