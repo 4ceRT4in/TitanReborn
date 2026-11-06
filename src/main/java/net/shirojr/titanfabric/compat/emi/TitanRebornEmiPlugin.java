@@ -7,10 +7,12 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiCraftingRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.VanillaEmiRecipeCategories;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.recipe.EmiAnvilRecipe;
 import dev.emi.emi.recipe.EmiSmithingRecipe;
 import dev.emi.emi.runtime.EmiReloadLog;
 import net.minecraft.component.DataComponentTypes;
@@ -31,6 +33,7 @@ import net.shirojr.titanfabric.init.TitanFabricDataComponents;
 import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.init.TitanFabricTags;
 import net.shirojr.titanfabric.item.custom.armor.ArmorPlatingItem;
+import net.shirojr.titanfabric.item.custom.bow.MultiBowItem;
 import net.shirojr.titanfabric.item.custom.sword.CitrinSwordItem;
 import net.shirojr.titanfabric.item.custom.sword.EmberSwordItem;
 import net.shirojr.titanfabric.item.custom.spear.TitanFabricSpearItem;
@@ -44,6 +47,7 @@ import net.shirojr.titanfabric.util.effects.WeaponEffectData;
 import net.shirojr.titanfabric.util.effects.WeaponEffectType;
 
 import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -74,6 +78,13 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
+        // EMI registers ToolItem material repairs before our spear and bow recipes.
+        // Keep all material repairs first regardless of when their plugin adds them.
+        Comparator<EmiRecipe> materialRepairsFirst = Comparator.comparingInt(recipe ->
+                recipe instanceof EmiAnvilRecipe || recipe instanceof NetheriteAnvilRecipe ? 0 : 1);
+        VanillaEmiRecipeCategories.ANVIL_REPAIRING.sorter = materialRepairsFirst;
+        NETHERITE_ANVIL_CATEGORY.sorter = materialRepairsFirst;
+
         registry.addCategory(DIAMOND_FURNACE_CATEGORY);
         registry.addCategory(NETHERITE_ANVIL_CATEGORY);
         registry.addCategory(ARMOR_PLATING_CATEGORY);
@@ -149,6 +160,7 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         addArrowRecipe(registry, Potions.FIRE_RESISTANCE, WeaponEffect.FIRE, "fire_resistance_arrow");
         addArrowRecipe(registry, Potions.HARMING, WeaponEffect.WITHER, "wither_arrow");
         addArrowRecipe(registry, Potions.WEAKNESS, WeaponEffect.WEAK, "weakness_arrow");
+        addMaterialRepairRecipes(registry);
         addEnchantedDiamondAppleRepairRecipes(registry);
         removeEnchantedDiamondAppleLegacyRepairRecipes(registry);
         addGrindstoneEffectRemovalRecipes(registry);
@@ -321,6 +333,35 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
         ItemStack output = EffectHelper.applyEffectToStack(new ItemStack(TitanFabricItems.EFFECT_ARROW), additionalEffectData, false);
 
         registry.addRecipe(new EmiCraftingRecipe(inputs, EmiStack.of(output, 2), TitanFabric.getId("/" + id), false));
+    }
+
+    private void addMaterialRepairRecipes(EmiRegistry registry) {
+        // EMI only discovers material repairs automatically for armor and ToolItem subclasses.
+        for (Item item : TitanFabricItems.ALL_ITEMS) {
+            if (item.getComponents().getOrDefault(DataComponentTypes.MAX_DAMAGE, 0) <= 0) continue;
+
+            Ingredient repairIngredient;
+            if (item instanceof TitanFabricSpearItem spear) {
+                repairIngredient = spear.getTier().material().getRepairIngredient();
+            } else if (item == TitanFabricItems.NETHERITE_BOW) {
+                repairIngredient = Ingredient.ofItems(Items.NETHERITE_INGOT);
+            } else if (item instanceof MultiBowItem || item == TitanFabricItems.FLINT_AND_EMBER) {
+                repairIngredient = Ingredient.ofItems(TitanFabricItems.EMBER_INGOT);
+            } else if (item == TitanFabricItems.DIAMOND_SHIELD) {
+                repairIngredient = Ingredient.ofItems(Items.DIAMOND);
+            } else if (item == TitanFabricItems.NETHERITE_SHIELD) {
+                repairIngredient = Ingredient.ofItems(Items.NETHERITE_INGOT);
+            } else {
+                continue;
+            }
+
+            EmiStack tool = EmiStack.of(item);
+            EmiIngredient material = EmiIngredient.of(repairIngredient);
+            String recipePath = "/repairing/material/" + EmiUtil.subId(item) + "/"
+                    + EmiUtil.subId(repairIngredient.getMatchingStacks()[0].getItem());
+            registry.addRecipe(new EmiAnvilRecipe(tool, material, TitanFabric.getId("/anvil" + recipePath)));
+            registry.addRecipe(new NetheriteAnvilRecipe(tool, material, TitanFabric.getId("/netherite_anvil" + recipePath)));
+        }
     }
 
     private void addEnchantedDiamondAppleRepairRecipes(EmiRegistry registry) {

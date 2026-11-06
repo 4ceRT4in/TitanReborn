@@ -16,12 +16,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.util.FirePlacementHelper;
 import net.shirojr.titanfabric.util.SoulFireStateHelper;
 
 public class FlintAndEmberItem extends FlintAndSteelItem {
     public FlintAndEmberItem(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return ingredient.isOf(TitanFabricItems.EMBER_INGOT);
     }
 
     @Override

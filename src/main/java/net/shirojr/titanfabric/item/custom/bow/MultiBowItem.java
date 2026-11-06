@@ -18,6 +18,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import net.shirojr.titanfabric.color.TitanFabricDyeProviders;
 import net.shirojr.titanfabric.init.TitanFabricDataComponents;
+import net.shirojr.titanfabric.init.TitanFabricItems;
 import net.shirojr.titanfabric.item.custom.TitanFabricBowItem;
 import net.shirojr.titanfabric.util.handler.ArrowShootingHandler;
 import net.shirojr.titanfabric.util.items.ArrowSelectionHelper;
@@ -37,6 +38,11 @@ public class MultiBowItem extends TitanFabricBowItem implements SelectableArrow 
         );
         this.maxArrowCount = maxArrowCount;
         this.coolDownTicks = tickCooldown;
+    }
+
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return ingredient.isOf(TitanFabricItems.EMBER_INGOT);
     }
 
     @Override

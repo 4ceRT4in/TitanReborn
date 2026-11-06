@@ -27,6 +27,11 @@ public class NetheriteBowItem extends TitanFabricBowItem {
     }
 
     @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return ingredient.isOf(Items.NETHERITE_INGOT);
+    }
+
+    @Override
     public List<Item> titanFabric$supportedArrows() {
         return List.of(Items.ARROW, Items.SPECTRAL_ARROW);
     }

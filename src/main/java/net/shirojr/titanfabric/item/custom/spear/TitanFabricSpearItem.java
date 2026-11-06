@@ -74,6 +74,12 @@ public class TitanFabricSpearItem extends TridentItem implements WeaponEffectCra
     }
 
     @Override public int getEnchantability() { return tier.material().getEnchantability(); }
+
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return tier.durability() > 0 && tier.material().getRepairIngredient().test(ingredient);
+    }
+
     @Override public UseAction getUseAction(ItemStack stack) { return UseAction.SPEAR; }
     @Override public int getMaxUseTime(ItemStack stack, LivingEntity user) { return 72000; }
     public SpearTier getTier() { return tier; }
