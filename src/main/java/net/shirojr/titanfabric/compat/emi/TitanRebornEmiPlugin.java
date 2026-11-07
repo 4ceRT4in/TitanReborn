@@ -14,6 +14,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.recipe.EmiAnvilRecipe;
 import dev.emi.emi.recipe.EmiSmithingRecipe;
+import dev.emi.emi.recipe.special.EmiAnvilRepairItemRecipe;
 import dev.emi.emi.runtime.EmiReloadLog;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -78,12 +79,12 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry registry) {
-        // EMI registers ToolItem material repairs before our spear and bow recipes.
-        // Keep all material repairs first regardless of when their plugin adds them.
-        Comparator<EmiRecipe> materialRepairsFirst = Comparator.comparingInt(recipe ->
-                recipe instanceof EmiAnvilRecipe || recipe instanceof NetheriteAnvilRecipe ? 0 : 1);
-        VanillaEmiRecipeCategories.ANVIL_REPAIRING.sorter = materialRepairsFirst;
-        NETHERITE_ANVIL_CATEGORY.sorter = materialRepairsFirst;
+        // Keep material repairs before repairs using a second copy of the item.
+        Comparator<EmiRecipe> repairOrder = Comparator.comparingInt(recipe ->
+                recipe instanceof EmiAnvilRecipe || recipe instanceof NetheriteAnvilRecipe ? 0
+                        : recipe instanceof EmiAnvilRepairItemRecipe ? 1 : 2);
+        VanillaEmiRecipeCategories.ANVIL_REPAIRING.sorter = repairOrder;
+        NETHERITE_ANVIL_CATEGORY.sorter = repairOrder;
 
         registry.addCategory(DIAMOND_FURNACE_CATEGORY);
         registry.addCategory(NETHERITE_ANVIL_CATEGORY);
@@ -131,6 +132,12 @@ public class TitanRebornEmiPlugin implements EmiPlugin {
                     }
                 }
             } catch (Throwable ignored) {
+            }
+
+            if (i != TitanFabricItems.ENCHANTED_DIAMOND_APPLE
+                    && i.getComponents().getOrDefault(DataComponentTypes.MAX_DAMAGE, 0) > 0) {
+                registry.addRecipe(new NetheriteAnvilRepairItemRecipe(i,
+                        TitanFabric.getId("/netherite_anvil/repairing/tool" + EmiUtil.subId(i))));
             }
 
             try {
