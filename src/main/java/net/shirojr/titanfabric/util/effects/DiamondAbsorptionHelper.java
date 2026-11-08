@@ -57,12 +57,12 @@ public final class DiamondAbsorptionHelper {
         return source != null && source.isOf(TitanFabricDamageTypes.FROSTBURN.get());
     }
 
-    /** Diamond hearts do not participate in Frostburn's absorption calculation. */
+    /** Frostburn affects only regular health; other hits can use blue hearts twice. */
     public static float getDamageableAbsorption(LivingEntity entity, DamageSource source) {
+        if (isFrostburn(source)) return 0.0f;
         float total = entity.getAbsorptionAmount();
-        if (!isFrostburn(source)) return total;
         float diamond = Math.min(DiamondAbsorptionComponent.get(entity).getDiamondAbsorptionAmount(), total);
-        return Math.max(0.0f, total - diamond);
+        return total + diamond;
     }
 
     /**
@@ -112,7 +112,10 @@ public final class DiamondAbsorptionHelper {
         component.setEffectAbsorptionAmount(remainingEffectAmount, !entity.getWorld().isClient());
 
         if (entity.getWorld().isClient() || remainingEffectAmount > 0.01f) return;
-        entity.removeStatusEffect(TitanFabricStatusEffects.DIAMOND_ABSORPTION);
+        if (entity.hasStatusEffect(TitanFabricStatusEffects.DIAMOND_ABSORPTION)) {
+            component.markPreserveAbsorptionOnRemoval();
+            entity.removeStatusEffect(TitanFabricStatusEffects.DIAMOND_ABSORPTION);
+        }
         if (entity.getAbsorptionAmount() > 0.01f) {
             applyMaxAbsorptionModifier(entity.getAttributes(), entity.getAbsorptionAmount());
         } else {

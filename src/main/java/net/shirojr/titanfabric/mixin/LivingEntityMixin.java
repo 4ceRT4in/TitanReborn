@@ -397,8 +397,8 @@ public abstract class LivingEntityMixin implements HealthAccessor {
     }
 
     @WrapOperation(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getAbsorptionAmount()F", ordinal = 0))
-    private float titanfabric$excludeDiamondAbsorptionFromFrostburn(LivingEntity instance, Operation<Float> original,
-                                                                    @Local(argsOnly = true) DamageSource source) {
+    private float titanfabric$countConvertedDiamondAbsorption(LivingEntity instance, Operation<Float> original,
+                                                             @Local(argsOnly = true) DamageSource source) {
         return DiamondAbsorptionHelper.getDamageableAbsorption(instance, source);
     }
 
